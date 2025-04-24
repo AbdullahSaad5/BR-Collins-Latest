@@ -83,7 +83,7 @@ const Cart = () => {
               onClick={() => {
                 setCart(false)
               }}
-              href={'/viewCart'}
+              href={'/viewcart'}
               className='w-1/2 p-2 rounded-full border border-gray-400 text-gray-800 text-sm md:text-md line-clamp-1 text-center'>
               View Cart
             </Link>
