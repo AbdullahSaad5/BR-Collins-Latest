@@ -37,7 +37,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   
       {/* Title & Lessons */}
       <div className="w-full">
-      <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-snug text-neutral-900">
+      <h3 className="text-lg sm:text-xl md:text-1xl font-bold leading-snug text-neutral-900">
             {title}
           </h3>
         <div className="flex gap-1.5 items-center mt-3.5 text-lg text-gray-500">

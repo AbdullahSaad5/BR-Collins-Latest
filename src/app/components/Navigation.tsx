@@ -1,7 +1,3 @@
-
-
-
-
 "use client";
 
 import Link from "next/link";
@@ -15,7 +11,7 @@ export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="relative flex flex-wrap items-center justify-between p-1 mt-5 max-md:max-w-full lg:px-20 sm:px-1">
+    <nav className="relative flex flex-wrap items-center justify-between p-1 mt-5 max-md:max-w-full lg:px-20 sm:px-1 mb-5">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full md:hidden">
         <div className="flex items-center gap-4">
@@ -35,10 +31,7 @@ export const Navigation = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => setCart(true)}
-            className="relative p-2"
-          >
+          <button onClick={() => setCart(true)} className="relative p-2">
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
               <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">
@@ -58,7 +51,7 @@ export const Navigation = () => {
             alt="Logo"
           />
         </a>
-        
+
         <div className="flex gap-2.5 items-center">
           <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
             <div className="flex gap-2 justify-center items-center w-full">
@@ -76,9 +69,7 @@ export const Navigation = () => {
           </div>
 
           <div className="relative w-full max-w-[138px]">
-            <select
-              className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer"
-            >
+            <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
               <option value="">Courses</option>
               <option value="course1">Course 1</option>
               <option value="course2">Course 2</option>
@@ -95,35 +86,43 @@ export const Navigation = () => {
       {/* Desktop Right Section */}
       <div className="items-center flex-grow hidden md:flex gap-10 justify-between">
         <div className="flex gap-8 items-center font-medium">
-          <a href="/" className="hover:text-sky-600">Home</a>
-          <Link href="/about" className="hover:text-sky-600">About</Link>
-          <a href="/" className="hover:text-sky-600">Contact Us</a>
-          <Link href="/dashboard" className="hover:text-sky-600">Dashboard</Link>
+          <a href="/" className="hover:text-sky-600">
+            Home
+          </a>
+          <Link href="/about" className="hover:text-sky-600">
+            About
+          </Link>
+          <a href="/contact" className="hover:text-sky-600">
+            Contact Us
+          </a>
+          <Link href="/dashboard" className="hover:text-sky-600">
+            Dashboard
+          </Link>
         </div>
 
         <div className="flex gap-4 items-center">
-         <button
-onClick={() => setCart(true)}
-className="relative"
->
-<ShoppingCart className="w-6 h-6" />
-{items.length > 0 && (
-  <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">
-    {items.length}
-  </div>
-)}
-</button>
-          
+          <button onClick={() => setCart(true)} className="relative">
+            <ShoppingCart className="w-6 h-6" />
+            {items.length > 0 && (
+              <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">
+                {items.length}
+              </div>
+            )}
+          </button>
+          <Link href="/login">
           <button className="overflow-hidden gap-1.5 px-6 py-4 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px]">
             Login
           </button>
+          </Link>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
-        isMenuOpen ? "translate-x-0" : "-translate-x-full"
-      }`}>
+      <div
+        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <div className="p-4 space-y-6 mt-4">
           {/* Search and Courses in Mobile Menu */}
           <div className="flex flex-col gap-4">
@@ -143,9 +142,7 @@ className="relative"
             </div>
 
             <div className="relative w-full">
-              <select
-                className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer"
-              >
+              <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
                 <option value="">Courses</option>
                 <option value="course1">Course 1</option>
                 <option value="course2">Course 2</option>
@@ -160,22 +157,34 @@ className="relative"
 
           {/* Navigation Links */}
           <div className="flex flex-col gap-4 text-lg">
-            <a href="/" className="p-2 hover:bg-gray-100 rounded">Home</a>
-            <a href="/about" className="p-2 hover:bg-gray-100 rounded">About</a>
-            <a href="/" className="p-2 hover:bg-gray-100 rounded">Contact Us</a>
-            <a href="/dashboard" className="p-2 hover:bg-gray-100 rounded">Dashboard</a>
+            <a href="/" className="p-2 hover:bg-gray-100 rounded">
+              Home
+            </a>
+            <a href="/about" className="p-2 hover:bg-gray-100 rounded">
+              About
+            </a>
+            <a href="/contact" className="p-2 hover:bg-gray-100 rounded">
+              Contact Us
+            </a>
+            <a href="/dashboard" className="p-2 hover:bg-gray-100 rounded">
+              Dashboard
+            </a>
           </div>
 
-          <button className="w-full px-6 py-4 bg-white border border-solid border-zinc-200 rounded-[56px] mt-4">
-            Login
-          </button>
+          <Link href="/login">
+            <button className="w-full px-6 py-4 bg-white border border-solid border-zinc-200 rounded-[56px] mt-4">
+              Login
+            </button>
+          </Link>
         </div>
       </div>
 
       {/* Cart Overlay */}
-      <div className={`fixed z-50 top-0 right-0 w-full h-full transform transition-transform duration-300 ease-in-out ${
-        cart ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
-      }`}>
+      <div
+        className={`fixed z-50 top-0 right-0 w-full h-full transform transition-transform duration-300 ease-in-out ${
+          cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+        }`}
+      >
         <Cart />
       </div>
     </nav>

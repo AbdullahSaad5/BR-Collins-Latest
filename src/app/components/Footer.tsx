@@ -199,7 +199,7 @@ const SocialIcon = ({ icon: Icon, label }: { icon: React.ElementType, label: str
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col items-center px-20 pt-20 pb-8 mt-24 w-full bg-neutral-900 max-md:px-5 max-md:mt-10 max-md:max-w-full">
+    <footer className="flex flex-col items-center px-20 pt-20 pb-8 w-full bg-neutral-900 max-md:px-5 max-md:max-w-full">
       <div className="w-full max-w-[1326px] max-md:max-w-full">
         <div className="flex flex-wrap gap-10 max-w-full w-[1264px]">
           <div className="flex-auto max-md:max-w-full">

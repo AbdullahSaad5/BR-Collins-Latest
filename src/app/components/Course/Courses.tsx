@@ -152,7 +152,7 @@ export default function Courses() {
       <HeroSection />
 
       <section className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
-        <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full">
+        <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
           <div className="text-neutral-900 max-md:max-w-full">
             <h2 className="text-3xl font-bold max-md:max-w-full">
               Featured courses
@@ -205,11 +205,11 @@ export default function Courses() {
       </section>
 
       <section className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
-        <h2 className="self-start text-3xl font-bold text-center text-neutral-900 max-md:max-w-full">
+        <h2 className="self-start text-3xl font-bold text-center text-neutral-900 max-md:max-w-full p-5">
           All Accountability in the Workplace courses
         </h2>
 
-        <div className="mt-16 max-md:mt-10 max-md:max-w-full">
+        <div className="mt-16 max-md:mt-10 max-md:max-w-full p-5">
           <div className="flex gap-5 max-md:flex-col">
             <aside className="w-[31%] max-md:w-full">
               <FilterSection />
