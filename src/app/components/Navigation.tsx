@@ -1,5 +1,7 @@
 "use client";
 
+
+import Link from "next/link";
 import React from "react";
 import { useUser } from "./context/CartContext";
 import Cart from "./Cart/Cart";
@@ -15,11 +17,11 @@ export const Navigation = () => {
                 <Cart />
             </div>
       <div className="flex flex-wrap gap-10 items-center self-stretch my-auto font-semibold min-w-60 max-md:max-w-full">
-        <img
+        <a href="/"><img
           src="/img/logo.svg"
           className="object-contain self-stretch my-auto aspect-[4.22] min-w-60 w-[241px]"
           alt="Logo"
-        />
+        /></a>
         <div className="flex gap-2.5 items-center self-stretch my-auto min-w-60 max-md:max-w-full">
           <div className="self-stretch my-auto text-base text-gray-400 rounded-none min-w-60 w-[321px]">
             <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px] max-md:px-5">
@@ -48,15 +50,26 @@ export const Navigation = () => {
           <a href="/" className="hover:text-sky-600">
             Home
           </a>
-          <a href="/" className="hover:text-sky-600">
+          <Link href="/about" className="hover:text-sky-600">
             About
-          </a>
+          </Link>
           <a href="/" className="hover:text-sky-600">
             Contact Us
           </a>
+          <Link href="/dashboard" className="hover:text-sky-600">
+            Dashboard
+          </Link>
         </div>
+<<<<<<< HEAD
         <div className="flex gap-4 items-center self-stretch my-auto whitespace-nowrap">
           {/* <img
+=======
+        <a
+          href="https://ds-internship-task-6.vercel.app/viewCart"
+          className="flex gap-4 items-center self-stretch my-auto whitespace-nowrap"
+        >
+          <img
+>>>>>>> owais/main
             src="/img/card.svg"
             className="object-contain shrink-0 self-stretch my-auto w-9 aspect-square"
             alt="User icon"
@@ -74,7 +87,7 @@ export const Navigation = () => {
           <button className="overflow-hidden gap-1.5 self-stretch px-6 py-4 my-auto bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] max-md:px-5">
             Login
           </button>
-        </div>
+        </a>
       </div>
     </nav>
   );

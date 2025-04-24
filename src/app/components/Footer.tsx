@@ -1,19 +1,9 @@
 import { Send, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import Link from "next/link";
 
-const socialIcons = [
-  { Icon: Facebook },
-  { Icon: Twitter },
-  { Icon: Linkedin },
-  { Icon: Instagram },
-];
+const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
 
-const footerLinks = [
-  "Courses",
-  "Subscriptions",
-  "About",
-  "Contact Us",
-  "Login & Register",
-];
+const footerLinks = ["Courses", "Subscriptions", "About", "Contact Us", "Login & Register"];
 
 export default function Footer() {
   return (
@@ -32,12 +22,8 @@ export default function Footer() {
 
             <div>
               <h4 className="text-lg font-semibold mb-4">Get Contact</h4>
-              <p className="text-orange-400 font-semibold text-xl">
-                (406) 555-0120
-              </p>
-              <p className="text-sm text-gray-300 mt-1">
-                b.r.collins@example.com
-              </p>
+              <p className="text-orange-400 font-semibold text-xl">(406) 555-0120</p>
+              <p className="text-sm text-gray-300 mt-1">b.r.collins@example.com</p>
               <div className="flex items-center gap-2 mt-2 text-sm text-gray-300">
                 <span>North America, USA</span>
               </div>
@@ -46,9 +32,7 @@ export default function Footer() {
 
           <div>
             <h4 className="text-lg font-semibold mb-4">Join the Community</h4>
-            <p className="text-sm text-gray-300 mb-3">
-              2,000+ Students Globally – Connect & Say Hello!
-            </p>
+            <p className="text-sm text-gray-300 mb-3">2,000+ Students Globally – Connect & Say Hello!</p>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <input
                 type="email"
@@ -73,6 +57,9 @@ export default function Footer() {
               </a>
               <a href="#" className="underline text-gray-300 ml-2">
                 Privacy Policy
+              </a>
+              <a href="/dashboard" className="underline text-gray-300 ml-2">
+                Dashboard
               </a>
             </p>
           </div>
