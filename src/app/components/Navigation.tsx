@@ -1,10 +1,19 @@
 "use client";
 
 import React from "react";
+import { useUser } from "./context/CartContext";
+import Cart from "./Cart/Cart";
+import CartIcon from '../../../public/img/cart/cart.svg';
+import { ShoppingCart } from "lucide-react";
 
 export const Navigation = () => {
+  const { cart, setCart,items } = useUser();
   return (
     <nav className="flex flex-wrap gap-10 items-center self-center mt-5 max-md:max-w-full p-1">
+       {/* Cart  */}
+       <div className={`fixed z-50 top-0 right-0 w-full h-full transform transition-transform duration-300 ease-in-out ${cart ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
+                <Cart />
+            </div>
       <div className="flex flex-wrap gap-10 items-center self-stretch my-auto font-semibold min-w-60 max-md:max-w-full">
         <img
           src="/img/logo.svg"
@@ -47,11 +56,21 @@ export const Navigation = () => {
           </a>
         </div>
         <div className="flex gap-4 items-center self-stretch my-auto whitespace-nowrap">
-          <img
+          {/* <img
             src="/img/card.svg"
             className="object-contain shrink-0 self-stretch my-auto w-9 aspect-square"
             alt="User icon"
-          />
+          /> */}
+               <button
+                        onClick={() => {
+                            setCart(true);
+                        }}
+                        className="relative py-2 px-5 border-[#D9E2E6] text-[#AEB5B9] hover:cursor-pointer hover:scale-105 transition-all duration-300"
+                    ><ShoppingCart className="w-6 h-6 text-current" />
+                        <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200 flex justify-center items-center text-black">
+                            {items.length}
+                        </div>
+                    </button>
           <button className="overflow-hidden gap-1.5 self-stretch px-6 py-4 my-auto bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] max-md:px-5">
             Login
           </button>
