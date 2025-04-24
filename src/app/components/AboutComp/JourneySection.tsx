@@ -8,7 +8,7 @@ const JourneySection = () => {
       <div className="grid md:grid-cols-2 gap-8 items-center">
         <div>
           <p className="text-orange-600 font-semibold mb-2">OUR STORY</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+          <h2 className="text-gray-900 text-3xl md:text-4xl font-bold mb-4 leading-snug">
             Our Journey: <br />
             Revolutionizing Education, <br />
             Empowering Learners
