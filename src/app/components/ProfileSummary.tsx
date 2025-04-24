@@ -1,5 +1,5 @@
 import React from "react";
-import { FaBook, FaCertificate, FaUserPlus } from "react-icons/fa";
+import { BookOpen, BadgeCheck, UserPlus } from "lucide-react";
 import Image from "next/image";
 
 const ProfileSummary = () => {
@@ -26,7 +26,7 @@ const ProfileSummary = () => {
           
           <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-5 mt-3">
             <div className="flex items-center gap-1.5 text-sm">
-              <FaBook className="text-blue-500 w-4 h-4" />
+              <BookOpen className="text-blue-500 w-4 h-4" />
               <span className="text-gray-700">
                 <span className="font-medium text-blue-500">(5)</span> Courses
               </span>
@@ -35,7 +35,7 @@ const ProfileSummary = () => {
             <div className="hidden sm:block w-px h-4 bg-gray-200 my-auto" />
             
             <div className="flex items-center gap-1.5 text-sm">
-              <FaCertificate className="text-blue-500 w-4 h-4" />
+              <BadgeCheck className="text-blue-500 w-4 h-4" />
               <span className="text-gray-700">
                 <span className="font-medium text-blue-500">(4)</span> Certificates
               </span>
@@ -46,7 +46,7 @@ const ProfileSummary = () => {
       
       {/* Action Button */}
       <button className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm font-medium text-orange-500 hover:text-orange-600 border border-orange-500 hover:border-orange-600 rounded-full transition-all duration-200 hover:shadow-md whitespace-nowrap w-full sm:w-auto justify-center">
-        <FaUserPlus className="w-4 h-4" />
+        <UserPlus className="w-4 h-4" />
         <span>Add New User</span>
       </button>
     </section>

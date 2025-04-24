@@ -1,14 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import {
-  FaSearch,
-  FaChevronDown,
-  FaBell,
-  FaBars,
-  FaMoon,
-  FaSun,
-  FaTimes,
-} from "react-icons/fa";
+  Search,
+  ChevronDown,
+  Bell,
+  Menu,
+  Moon,
+  Sun,
+  X
+} from "lucide-react";
+
 import Image from "next/image";
 
 const Header = () => {
@@ -67,7 +68,7 @@ const Header = () => {
                   : "bg-white border-gray-300"
               }`}
             >
-              <FaSearch className="text-gray-400" />
+              <Search className="text-gray-400" />
               <input
                 type="text"
                 placeholder="Search for anything"
@@ -112,9 +113,9 @@ const Header = () => {
             aria-label="Toggle menu"
           >
             {showMobileMenu ? (
-              <FaTimes className="w-5 none h-5" />
+              <X className="w-5 none h-5" />
             ) : (
-              <FaBars className="w-5 h-5" />
+              <Menu className="w-5 h-5" />
             )}
           </button>
 
@@ -127,7 +128,7 @@ const Header = () => {
                 className="flex gap-2 items-center px-4 py-1.5 border border-orange-500 rounded-full text-orange-500 hover:bg-orange-50 dark:hover:bg-gray-800"
               >
                 Courses{" "}
-                <FaChevronDown
+                <ChevronDown
                   className={`transition-transform ${
                     showCourses ? "rotate-180" : ""
                   }`}
@@ -168,9 +169,9 @@ const Header = () => {
               aria-label="Toggle dark:hover:text-gray-200 Dark Mode"
             >
               {darkMode ? (
-                <FaSun className="text-yellow-400 dark:hover:text-gray-200" />
+                <Sun className="text-yellow-400 dark:hover:text-gray-200" />
               ) : (
-                <FaMoon className="text-gray-700 dark:hover:text-gray-200" />
+                <Moon className="text-gray-700 dark:hover:text-gray-200" />
               )}
             </button>
 
@@ -179,7 +180,7 @@ const Header = () => {
               aria-label="Notifications"
               className="relative p-2 rounded-full hover:bg-gray-200 dark:hover:text-gray-200 dark:hover:bg-gray-700"
             >
-              <FaBell className="w-5 h-5 dark:hover:text-gray-200" />
+              <Bell className="w-5 h-5 dark:hover:text-gray-200" />
               <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
             </button>
 
@@ -226,7 +227,7 @@ const Header = () => {
                   className="flex justify-between items-center w-full px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   <span>Courses</span>
-                  <FaChevronDown
+                  <ChevronDown
                     className={`transition-transform ${
                       showCourses ? "rotate-180" : ""
                     }`}
@@ -283,15 +284,15 @@ const Header = () => {
                 className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 {darkMode ? (
-                  <FaSun className="text-yellow-400" />
+                  <Sun className="text-yellow-400" />
                 ) : (
-                  <FaMoon className="text-gray-700" />
+                  <Moon className="text-gray-700" />
                 )}
                 <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
               </button>
 
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 relative">
-                <FaBell className="w-5 h-5" />
+                <Bell className="w-5 h-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500"></span>
               </button>
             </div>

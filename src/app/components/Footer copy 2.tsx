@@ -1,14 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { IoIosSend } from "react-icons/io";
+// import { Send } from "react-icons/io";
+import { Send, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
-import {
-  FaMapMarkerAlt,
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedin
-} from "react-icons/fa";
+
+
 
 const QuickLinks = () => {
   return (
@@ -55,7 +51,7 @@ const ContactInfo = () => {
           </a>
         </div>
         <div className="flex gap-1.5 justify-center items-center self-start mt-5 text-base font-medium text-slate-400">
-          <FaMapMarkerAlt className="w-5 h-5 text-slate-400" />
+          <MapPin className="w-5 h-5 text-slate-400" />
           <address className="gap-1 self-stretch my-auto not-italic hover:text-white transition-colors">
             North America, USA
           </address>
@@ -90,7 +86,7 @@ const Newsletter = () => {
                       />
                     </div>
                     <div className="rounded-full text-white bg-org">
-                      <IoIosSend className="w-12 h-12 p-2" />
+                      <Send className="w-12 h-12 p-2" />
                     </div>
       </form>
     </div>
@@ -139,10 +135,10 @@ const Footer = () => {
 
   {/* Right Block - Fills Remaining Space */}
   <div className="flex flex-1 justify-end gap-4 items-center min-h-[52px]">
-    <SocialIcon icon={FaFacebook} label="Facebook" />
-    <SocialIcon icon={FaTwitter} label="Twitter" />
-    <SocialIcon icon={FaInstagram} label="Instagram" />
-    <SocialIcon icon={FaLinkedin} label="LinkedIn" />
+    <SocialIcon icon={Facebook} label="Facebook" />
+    <SocialIcon icon={Twitter} label="Twitter" />
+    <SocialIcon icon={Instagram} label="Instagram" />
+    <SocialIcon icon={Linkedin} label="LinkedIn" />
   </div>
 </div>
 

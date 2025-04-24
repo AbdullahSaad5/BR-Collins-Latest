@@ -1,4 +1,4 @@
-import { IoLocationSharp } from "react-icons/io5";
+// import { IoLocationSharp } from "react-icons/io5";
 import { Send, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 export default function Footer() {
@@ -29,7 +29,7 @@ export default function Footer() {
                   b.r.collins@example.com
                 </p>
                 <div className="flex items-center gap-2 mt-2 text-sm text-gray-300">
-                  <IoLocationSharp className="text-lg" />
+                  {/* <IoLocationSharp className="text-lg" /> */}
                   <span>North America, USA</span>
                 </div>
               </div>

@@ -1,9 +1,14 @@
 import React from "react";
-import { 
-  FiBook, 
-  FiBookOpen, 
-  FiCheckCircle 
-} from "react-icons/fi";
+// import { 
+//   Book, 
+//   BookOpen, 
+//   CheckCircle 
+// } from "react-icons/fi";
+import {
+  Book,
+  BookOpen,
+  CheckCircle,
+} from "lucide-react";
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -39,21 +44,21 @@ const DashboardStats = () => {
       </h2>
       <div className="flex flex-nowrap gap-3 flex-row items-center mt-5 max-md:max-w-full">
         <StatCard
-          icon={<FiBook className="text-2xl" />}
+          icon={<Book className="text-2xl" />}
           count="30"
           label="Enrolled Courses"
           bgColor="bg-blue-50"
           textColor="text-sky-500"
         />
         <StatCard
-          icon={<FiBookOpen className="text-2xl" />}
+          icon={<BookOpen className="text-2xl" />}
           count="10"
           label="Active Courses"
           bgColor="bg-rose-50"
           textColor="text-orange-500"
         />
         <StatCard
-          icon={<FiCheckCircle className="text-2xl" />}
+          icon={<CheckCircle className="text-2xl" />}
           count="12"
           label="Completed Courses"
           bgColor="bg-emerald-50"

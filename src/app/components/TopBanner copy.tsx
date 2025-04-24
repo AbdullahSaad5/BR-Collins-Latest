@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { X } from "lucide-react";
+
 
 const TopBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -22,7 +23,7 @@ const TopBanner = () => {
         aria-label="Close banner"
         className="hover:bg-sky-700 rounded-full p-1 transition-colors duration-200"
       >
-        <FaTimes className="object-contain shrink-0 w-6 aspect-square" />
+        <X className="object-contain shrink-0 w-6 aspect-square" />
       </button>
     </header>
   );

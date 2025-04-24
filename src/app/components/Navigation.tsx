@@ -60,16 +60,8 @@ export const Navigation = () => {
             Dashboard
           </Link>
         </div>
-<<<<<<< HEAD
         <div className="flex gap-4 items-center self-stretch my-auto whitespace-nowrap">
           {/* <img
-=======
-        <a
-          href="https://ds-internship-task-6.vercel.app/viewCart"
-          className="flex gap-4 items-center self-stretch my-auto whitespace-nowrap"
-        >
-          <img
->>>>>>> owais/main
             src="/img/card.svg"
             className="object-contain shrink-0 self-stretch my-auto w-9 aspect-square"
             alt="User icon"
@@ -87,7 +79,8 @@ export const Navigation = () => {
           <button className="overflow-hidden gap-1.5 self-stretch px-6 py-4 my-auto bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] max-md:px-5">
             Login
           </button>
-        </a>
+      
+      </div>
       </div>
     </nav>
   );
