@@ -1,13 +1,13 @@
-import Header from "../components/Header";
-import ImpactSection from "../components/ImpactSection";
-import JourneySection from "../components/JourneySection";
-import Testimonials from "../components/Testimonials";
+import Header from "../components/AboutComp/Header";
+import ImpactSection from "../components/AboutComp/ImpactSection";
+import JourneySection from "../components/AboutComp/JourneySection";
+import Testimonials from "../components/AboutComp/Testimonials";
 import React from "react";
 
 const page = () => {
   return (
     <>
-      <div className="about">
+      <div className="about pt-5">
         <Header />
         <ImpactSection />
         <Testimonials />

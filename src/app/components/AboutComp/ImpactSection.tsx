@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import images from "../../../public/assets/images/images";
+import images from "../../../../public/assets/images/images";
 const ImpactSection = () => {
   return (
     <section className="px-4 py-12 md:py-20 bg-white text-center">

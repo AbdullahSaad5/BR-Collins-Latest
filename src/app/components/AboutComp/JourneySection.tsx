@@ -1,7 +1,7 @@
 import React from "react";
-import images from "../../../public/assets/images/images";
+import images from "../../../../public/assets/images/images";
 import Image from "next/image";
-import colors from "../../../public/assets/colors/colors";
+import colors from "../../../../public/assets/colors/colors";
 const JourneySection = () => {
   return (
     <section className="px-6 py-12 md:py-20 max-w-7xl mx-auto md:px-[120px]">

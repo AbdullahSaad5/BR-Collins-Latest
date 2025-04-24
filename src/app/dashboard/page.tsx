@@ -2,18 +2,18 @@
 import * as React from "react";
 // import TopBanner from "../components/TopBanner copy";
 // import Header from "../components/Header copy";
-import Breadcrumb from "../components/Breadcrumb";
-import ProfileSummary from "../components/ProfileSummary";
-import Sidebar from "../components/Sidebar";
-import DashboardStats from "../components/DashboardStats";
-import MyProfile from "../components/MyProfile";
-import EnrolledCourses from "../components/EnrolledCourses";
-// import Footer from "../components/Footer";
-import AddUser from "../components/AddUser";
-import ViewUser from "../components/ViewUser";
-import Setting from "../components/Setting";
-import CourseHistory from "../components/CourseHistory";
-import AddCourses from "../components/AddCourses";
+import Breadcrumb from "../components/dashboradComp/Breadcrumb";
+import ProfileSummary from "../components/dashboradComp/ProfileSummary";
+import Sidebar from "../components/dashboradComp/Sidebar";
+import DashboardStats from "../components/dashboradComp/DashboardStats";
+import MyProfile from "../components/dashboradComp/MyProfile";
+import EnrolledCourses from "../components/dashboradComp/EnrolledCourses";
+// import Footer from "../components/dashboradComp/Footer";
+import AddUser from "../components/dashboradComp/AddUser";
+import ViewUser from "../components/dashboradComp/ViewUser";
+import Setting from "../components/dashboradComp/Setting";
+import CourseHistory from "../components/dashboradComp/CourseHistory";
+import AddCourses from "../components/dashboradComp/AddCourses";
 
 function StudentDashboard() {
   const [activeItem, setActiveItem] = React.useState("dashboard");
