@@ -22,7 +22,7 @@ export default function Navbar() {
           <div className="rounded-full border-1 md:h-[40px] md:w-60 w-50 h-[20px] flex">
             <Search
               className="mx-3 my-1.5 "
-              style={{ fontSize: "13px", color: colors.gray }}
+              style={{ fontSize: "13px", color: 'black' }}
             />
 
             <input
@@ -43,7 +43,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex gap-2 items-center md:mr-5">
-          <Link href={'/'} className="text-sm mx-1">
+          <Link href={'/'} style={{ textDecoration: "none",color:colors.gray}} className="text-sm mx-1 text-gray-900">
             About
           </Link>
           <Link href={'/terms'} className="text-sm mx-1">
