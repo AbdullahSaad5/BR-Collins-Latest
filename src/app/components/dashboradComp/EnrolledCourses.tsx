@@ -1,6 +1,6 @@
-import React from 'react';
-import { List, Tag, Progress, Button, Avatar } from 'antd';
-import styled from 'styled-components';
+import React from "react";
+import { List, Tag, Progress, Button, Avatar } from "antd";
+import styled from "styled-components";
 
 const Container = styled.div`
   padding: 20px;
@@ -20,7 +20,7 @@ const CourseItem = styled(List.Item)`
   border-radius: 4px;
   margin-bottom: 16px;
   transition: all 0.3s;
-  
+
   &:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
     border-color: transparent;
@@ -67,37 +67,37 @@ const EnrolledCourses = () => {
   const enrolledCourses = [
     {
       id: 1,
-      title: 'Introduction to React',
-      instructor: 'Jane Smith',
+      title: "Introduction to React",
+      instructor: "Jane Smith",
       progress: 65,
-      thumbnail: 'https://via.placeholder.com/150',
-      category: 'Web Development',
-      lastAccessed: '2 days ago',
+      thumbnail: "https://via.placeholder.com/150",
+      category: "Web Development",
+      lastAccessed: "2 days ago",
     },
     {
       id: 2,
-      title: 'Advanced JavaScript',
-      instructor: 'John Doe',
+      title: "Advanced JavaScript",
+      instructor: "John Doe",
       progress: 30,
-      thumbnail: 'https://via.placeholder.com/150',
-      category: 'Programming',
-      lastAccessed: '1 week ago',
+      thumbnail: "https://via.placeholder.com/150",
+      category: "Programming",
+      lastAccessed: "1 week ago",
     },
     {
       id: 3,
-      title: 'UI/UX Design Principles',
-      instructor: 'Alex Johnson',
+      title: "UI/UX Design Principles",
+      instructor: "Alex Johnson",
       progress: 90,
-      thumbnail: 'https://via.placeholder.com/150',
-      category: 'Design',
-      lastAccessed: 'Yesterday',
+      thumbnail: "https://via.placeholder.com/150",
+      category: "Design",
+      lastAccessed: "Yesterday",
     },
   ];
 
   return (
     <Container>
       <Header>My Enrolled Courses</Header>
-      
+
       <List
         dataSource={enrolledCourses}
         renderItem={(course) => (
@@ -111,11 +111,7 @@ const EnrolledCourses = () => {
                   <Tag color="blue">{course.category}</Tag>
                   <span>Last accessed: {course.lastAccessed}</span>
                 </MetaRow>
-                <Progress 
-                  percent={course.progress} 
-                  status="active" 
-                  showInfo={false}
-                />
+                <Progress percent={course.progress} status="active" showInfo={false} />
                 <span>{course.progress}% complete</span>
               </CourseInfo>
               <CourseActions>
