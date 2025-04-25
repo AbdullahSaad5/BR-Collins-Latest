@@ -187,16 +187,6 @@ export default function AddCourseStepper() {
               required
             />
             <FormField
-              label="Description *"
-              description="Provide a detailed description of the course content."
-              placeholder="Course description..."
-              name="description"
-              value={courseData.description || ""}
-              onChange={handleChange}
-              textarea
-              required
-            />
-            <FormField
               label="Overview *"
               description="A brief overview of what students will learn."
               placeholder="Course overview..."
@@ -206,6 +196,93 @@ export default function AddCourseStepper() {
               textarea
               required
             />
+            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
+              <div className="grow shrink-0 basis-0 w-fit">
+                <label className="text-base text-neutral-900">What You'll Learn *</label>
+                <p className="mt-1 text-sm text-gray-500">Add key learning outcomes for this course</p>
+              </div>
+              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
+                <div className="space-y-2">
+                  {(courseData.whatYouWillLearn || []).map((point, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={point}
+                        onChange={(e) => handleBulletPointChange("whatYouWillLearn", index, e.target.value)}
+                        placeholder="Enter a learning point"
+                        className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveBulletPoint("whatYouWillLearn", index)}
+                        className="p-2 text-red-500 hover:text-red-600"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => handleAddBulletPoint("whatYouWillLearn")}
+                    className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
+                  >
+                    + Add Learning Point
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
+              <div className="grow shrink-0 basis-0 w-fit">
+                <label className="text-base text-neutral-900">Requirements *</label>
+                <p className="mt-1 text-sm text-gray-500">Add prerequisites for this course</p>
+              </div>
+              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
+                <div className="space-y-2">
+                  {(courseData.requirements || []).map((requirement, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={requirement}
+                        onChange={(e) => handleBulletPointChange("requirements", index, e.target.value)}
+                        placeholder="Enter a requirement"
+                        className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveBulletPoint("requirements", index)}
+                        className="p-2 text-red-500 hover:text-red-600"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => handleAddBulletPoint("requirements")}
+                    className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
+                  >
+                    + Add Requirement
+                  </button>
+                </div>
+              </div>
+            </div>
+            <FormField
+              label="Description *"
+              description="Provide a detailed description of the course content."
+              placeholder="Course description..."
+              name="description"
+              value={courseData.description || ""}
+              onChange={handleChange}
+              textarea
+              required
+            />
+
             <FormField
               label="Instructor *"
               description="Name of the course instructor."
@@ -248,22 +325,23 @@ export default function AddCourseStepper() {
                 { value: "Advanced", label: "Advanced" },
               ]}
             />
-            <FormField
-              label="Number of Hours *"
-              description="Total duration of the course in hours."
-              placeholder="10"
-              name="noOfHours"
-              value={courseData.noOfHours?.toString() || ""}
-              onChange={handleChange}
-              type="number"
-              required
-            />
+
             <FormField
               label="Number of Lessons *"
               description="Total number of lessons in the course."
               placeholder="20"
               name="noOfLessons"
               value={courseData.noOfLessons?.toString() || ""}
+              onChange={handleChange}
+              type="number"
+              required
+            />
+            <FormField
+              label="Number of Hours *"
+              description="Total duration of the course in hours."
+              placeholder="10"
+              name="noOfHours"
+              value={courseData.noOfHours?.toString() || ""}
               onChange={handleChange}
               type="number"
               required
@@ -341,7 +419,7 @@ export default function AddCourseStepper() {
                       }))
                     }
                   />
-                  <ToggleOption
+                  {/* <ToggleOption
                     label="Publish Course"
                     description="Make this course available to students"
                     checked={courseData.isPublished || false}
@@ -351,83 +429,7 @@ export default function AddCourseStepper() {
                         isPublished: e.target.checked,
                       }))
                     }
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-              <div className="grow shrink-0 basis-0 w-fit">
-                <label className="text-base text-neutral-900">What You'll Learn *</label>
-                <p className="mt-1 text-sm text-gray-500">Add key learning outcomes for this course</p>
-              </div>
-              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-                <div className="space-y-2">
-                  {(courseData.whatYouWillLearn || []).map((point, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={point}
-                        onChange={(e) => handleBulletPointChange("whatYouWillLearn", index, e.target.value)}
-                        placeholder="Enter a learning point"
-                        className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveBulletPoint("whatYouWillLearn", index)}
-                        className="p-2 text-red-500 hover:text-red-600"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleAddBulletPoint("whatYouWillLearn")}
-                    className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
-                  >
-                    + Add Learning Point
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-              <div className="grow shrink-0 basis-0 w-fit">
-                <label className="text-base text-neutral-900">Requirements *</label>
-                <p className="mt-1 text-sm text-gray-500">Add prerequisites for this course</p>
-              </div>
-              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-                <div className="space-y-2">
-                  {(courseData.requirements || []).map((requirement, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={requirement}
-                        onChange={(e) => handleBulletPointChange("requirements", index, e.target.value)}
-                        placeholder="Enter a requirement"
-                        className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveBulletPoint("requirements", index)}
-                        className="p-2 text-red-500 hover:text-red-600"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleAddBulletPoint("requirements")}
-                    className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
-                  >
-                    + Add Requirement
-                  </button>
+                  /> */}
                 </div>
               </div>
             </div>
@@ -486,7 +488,7 @@ export default function AddCourseStepper() {
               value={courseData.previewVideoUrl || ""}
               onChange={handleChange}
             />
-            <FormField
+            {/* <FormField
               label="Number of Quizzes"
               description="Total number of quizzes in the course."
               placeholder="5"
@@ -524,7 +526,7 @@ export default function AddCourseStepper() {
                 type="number"
                 required
               />
-            )}
+            )} */}
           </>
         );
       default:
