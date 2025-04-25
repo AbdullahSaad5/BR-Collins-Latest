@@ -286,6 +286,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           )}
         </div>
 
+        <SidebarItem
+          icon={BookOpen}
+          label="Subscribed Courses"
+          isActive={activeItem === "courses"}
+          onClick={() => onItemClick("courses")}
+          collapsed={collapsed}
+        />
         {/* Transactions Section */}
         <SidebarItem
           icon={CreditCard}

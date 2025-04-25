@@ -23,18 +23,11 @@ export const Navigation = () => {
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full md:hidden">
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 text-neutral-900"
-          >
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-neutral-900">
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <a href="/">
-            <img
-              src="/img/logo.svg"
-              className="object-contain aspect-[4.22] w-[241px]"
-              alt="Logo"
-            />
+            <img src="/img/logo.svg" className="object-contain aspect-[4.22] w-[241px]" alt="Logo" />
           </a>
         </div>
 
@@ -42,9 +35,7 @@ export const Navigation = () => {
           <button onClick={() => setCart(true)} className="relative p-2">
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
-              <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">
-                {items.length}
-              </div>
+              <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
             )}
           </button>
         </div>
@@ -53,21 +44,13 @@ export const Navigation = () => {
       {/* Desktop Left Section */}
       <div className="items-center flex-grow hidden md:flex gap-10">
         <a href="/">
-          <img
-            src="/img/logo.svg"
-            className="object-contain aspect-[4.22] min-w-60 w-[241px]"
-            alt="Logo"
-          />
+          <img src="/img/logo.svg" className="object-contain aspect-[4.22] min-w-60 w-[241px]" alt="Logo" />
         </a>
 
         <div className="flex gap-2.5 items-center">
           <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
             <div className="flex gap-2 justify-center items-center w-full">
-              <img
-                src="/img/search.svg"
-                className="object-contain w-5 aspect-square"
-                alt="Search icon"
-              />
+              <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
               <input
                 type="text"
                 placeholder="Search for anything"
@@ -82,7 +65,7 @@ export const Navigation = () => {
               defaultValue="/course" // Make sure this matches one of your option values
               className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer"
             >
-              <option value="/course">Course</option>
+              <option value="/course">Courses</option>
               <option value="/about">About</option>
               <option value="/contact">Contact</option>
             </select>
@@ -99,17 +82,17 @@ export const Navigation = () => {
       <div className="items-center flex-grow hidden md:flex gap-10 justify-between">
         <div className="flex gap-8 items-center font-medium">
           <Link href="/course" className="hover:text-sky-600">
-            course
+            Courses
+          </Link>
+          <Link href="/subscriptions" className="hover:text-sky-600">
+            Subscriptions
           </Link>
           <Link href="/about" className="hover:text-sky-600">
-            About
+            About Us
           </Link>
           <a href="/contact" className="hover:text-sky-600">
             Contact Us
           </a>
-          <Link href="/subscriptions" className="hover:text-sky-600">
-            Dashboard
-          </Link>
           <Link href="/dashboard" className="hover:text-sky-600">
             Dashboard
           </Link>
@@ -119,9 +102,7 @@ export const Navigation = () => {
           <button onClick={() => setCart(true)} className="relative">
             <ShoppingCart className="w-6 h-6" />
             {items.length > 0 && (
-              <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">
-                {items.length}
-              </div>
+              <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
             )}
           </button>
           <Link href="/login">
@@ -143,11 +124,7 @@ export const Navigation = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
               <div className="flex gap-2 justify-center items-center w-full">
-                <img
-                  src="/img/search.svg"
-                  className="object-contain w-5 aspect-square"
-                  alt="Search icon"
-                />
+                <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
                 <input
                   type="text"
                   placeholder="Search for anything"
