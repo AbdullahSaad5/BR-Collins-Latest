@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useState } from "react";
 // import TopBanner from "../components/TopBanner copy";
 // import Header from "../components/Header copy";
 import Breadcrumb from "../components/dashboradComp/Breadcrumb";
@@ -15,21 +15,31 @@ import Setting from "../components/dashboradComp/Setting";
 import CourseHistory from "../components/dashboradComp/CourseHistory";
 import AddCourses from "../components/dashboradComp/AddCourseStepper";
 import AddInstructor from "../components/dashboradComp/AddInstructor";
+import AddCourseCategory from "../components/dashboradComp/AddCourseCategory";
+import ViewCourseCategories from "../components/dashboradComp/ViewCourseCategories";
 
-function StudentDashboard() {
-  const [activeItem, setActiveItem] = React.useState("dashboard");
-  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+export default function Dashboard() {
+  const [activeItem, setActiveItem] = useState("dashboard");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const handleItemClick = (item: string) => {
+    setActiveItem(item);
+  };
 
   const handleSidebarToggle = (collapsed: boolean) => {
     setSidebarCollapsed(collapsed);
   };
 
-  const renderComponent = () => {
+  const renderContent = () => {
     switch (activeItem) {
       case "dashboard":
         return <DashboardStats />;
       case "profile":
         return <MyProfile />;
+      case "addCourseCategory":
+        return <AddCourseCategory />;
+      case "viewCourseCategory":
+        return <ViewCourseCategories />;
       case "courses":
         return <EnrolledCourses />;
       case "addUser":
@@ -62,7 +72,7 @@ function StudentDashboard() {
 
           <div className="flex flex-col md:flex-row gap-6 p-6">
             <div className={`shrink-0 transition-all duration-300 ${sidebarCollapsed ? "w-20" : "w-64"}`}>
-              <Sidebar activeItem={activeItem} onItemClick={setActiveItem} onToggle={handleSidebarToggle} />
+              <Sidebar activeItem={activeItem} onItemClick={handleItemClick} onToggle={handleSidebarToggle} />
             </div>
 
             {/* <div className="hidden md:block w-px bg-slate-200" /> */}
@@ -72,7 +82,7 @@ function StudentDashboard() {
                 sidebarCollapsed ? " md:w-[calc(100%-20px+44px)]" : "md:w-[calc(100%-256px)]"
               }`}
             >
-              {renderComponent()}
+              {renderContent()}
             </div>
           </div>
         </article>
@@ -82,5 +92,3 @@ function StudentDashboard() {
     </main>
   );
 }
-
-export default StudentDashboard;
