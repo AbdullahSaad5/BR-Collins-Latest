@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { CourseCreatePayload } from "@/app/types/course.contract";
+import FormField from "./FormField";
+import ToggleOption from "./ToggleOption";
 
 export default function AddCourseStepper() {
   const [activeStep, setActiveStep] = useState(0);
@@ -598,112 +600,6 @@ export default function AddCourseStepper() {
           )}
         </div>
       </form>
-    </div>
-  );
-}
-
-interface FormFieldProps {
-  label: string;
-  description: string;
-  placeholder?: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  required?: boolean;
-  textarea?: boolean;
-  select?: boolean;
-  type?: string;
-  options?: { value: string; label: string }[];
-}
-
-function FormField({
-  label,
-  description,
-  placeholder,
-  name,
-  value,
-  onChange,
-  required = false,
-  textarea = false,
-  select = false,
-  type = "text",
-  options = [],
-}: FormFieldProps) {
-  return (
-    <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-      <div className="grow shrink-0 basis-0 w-fit">
-        <label className="text-base text-neutral-900">{label}</label>
-        <p className="mt-1 text-sm text-gray-500">{description}</p>
-      </div>
-      <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-        {textarea ? (
-          <textarea
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px]"
-            required={required}
-          />
-        ) : select ? (
-          <select
-            name={name}
-            value={value}
-            onChange={onChange}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-            required={required}
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-            required={required}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
-interface ToggleOptionProps {
-  label: string;
-  description: string;
-  checked: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-function ToggleOption({ label, description, checked, onChange }: ToggleOptionProps) {
-  return (
-    <div className="flex items-start gap-4 p-4 rounded-lg border border-zinc-200 hover:border-zinc-300 transition-colors">
-      <div className="flex-1 min-w-0">
-        <label className="text-sm font-medium text-gray-900">{label}</label>
-        <p className="text-sm text-gray-500">{description}</p>
-      </div>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={checked}
-        onClick={() => onChange({ target: { checked: !checked } } as React.ChangeEvent<HTMLInputElement>)}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 ${
-          checked ? "bg-orange-500" : "bg-gray-200"
-        }`}
-      >
-        <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            checked ? "translate-x-6" : "translate-x-1"
-          }`}
-        />
-      </button>
     </div>
   );
 }

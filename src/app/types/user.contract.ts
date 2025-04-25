@@ -39,3 +39,5 @@ export type UserUpdatePayload = Omit<
 >;
 
 export type ResetPasswordPayload = Pick<IUser, "email">;
+
+export type UserRole = (typeof ENUMS.USER_TYPES)[number];

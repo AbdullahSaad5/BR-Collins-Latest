@@ -12,28 +12,47 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  UserCog,
+  BookOpenCheck,
+  FolderPlus,
+  FolderOpen,
+  FilePlus,
+  FileText,
+  BookPlus,
 } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 
 interface SidebarProps {
   activeItem: string;
   onItemClick: (item: string) => void;
-  onToggle?: (collapsed: boolean) => void; // Add this prop
+  onToggle: (collapsed: boolean) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick, onToggle }) => {
+export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const [usersExpanded, setUsersExpanded] = useState(false);
+  const [coursesExpanded, setCoursesExpanded] = useState(false);
 
   const toggleSidebar = () => {
     const newCollapsed = !collapsed;
     setCollapsed(newCollapsed);
-    onToggle && onToggle(newCollapsed); // Notify parent component
+    onToggle(newCollapsed);
+  };
+
+  const toggleUsersSection = () => {
+    setUsersExpanded(!usersExpanded);
+  };
+
+  const toggleCoursesSection = () => {
+    setCoursesExpanded(!coursesExpanded);
   };
 
   return (
     <nav
       className={`relative flex flex-col p-4 h-full bg-white rounded-xl shadow-sm transition-all duration-300 ${
-        collapsed ? "w-20" : "w-64"
+        collapsed ? "w-20" : "w-68"
       }`}
     >
       {/* Toggle Button */}
@@ -65,34 +84,144 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick, onToggle }) 
           onClick={() => onItemClick("profile")}
           collapsed={collapsed}
         />
-        <SidebarItem
-          icon={BookOpen}
-          label="Enrolled Courses"
-          isActive={activeItem === "courses"}
-          onClick={() => onItemClick("courses")}
-          collapsed={collapsed}
-        />
-        <SidebarItem
-          icon={BookOpen}
-          label="Add Courses"
-          isActive={activeItem === "addcourses"}
-          onClick={() => onItemClick("addcourses")}
-          collapsed={collapsed}
-        />
-        <SidebarItem
-          icon={UserPlus}
-          label="Add New User"
-          isActive={activeItem === "addUser"}
-          onClick={() => onItemClick("addUser")}
-          collapsed={collapsed}
-        />
-        <SidebarItem
-          icon={Users}
-          label="View Users"
-          isActive={activeItem === "viewUsers"}
-          onClick={() => onItemClick("viewUsers")}
-          collapsed={collapsed}
-        />
+
+        {/* Courses Section */}
+        <div className="w-full">
+          <div
+            className={`flex items-center w-full cursor-pointer group ${
+              activeItem === "addCourseCategory" ||
+              activeItem === "viewCourseCategory" ||
+              activeItem === "addCourse" ||
+              activeItem === "viewCourses" ||
+              activeItem === "addCourseContent" ||
+              activeItem === "viewCourseContent"
+                ? "bg-gray-50 rounded-lg"
+                : ""
+            }`}
+            onClick={toggleCoursesSection}
+          >
+            <div className="flex items-center w-full p-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700">
+              <BookOpenCheck className="text-gray-500 w-5 h-5" />
+              {!collapsed && <span className="ml-3">Manage Courses</span>}
+              {!collapsed && (
+                <button className="ml-auto p-2 group-hover:bg-gray-100 rounded-lg transition-colors">
+                  {coursesExpanded ? (
+                    <ChevronUp className="w-4 h-4 text-gray-600" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+          {coursesExpanded && !collapsed && (
+            <div className="pl-6 mt-1">
+              <div className="relative">
+                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                <div className="space-y-0.5">
+                  <SidebarItem
+                    icon={FolderPlus}
+                    label="Add Course Category"
+                    isActive={activeItem === "addCourseCategory"}
+                    onClick={() => onItemClick("addCourseCategory")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={FolderOpen}
+                    label="View Course Categories"
+                    isActive={activeItem === "viewCourseCategory"}
+                    onClick={() => onItemClick("viewCourseCategory")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={BookPlus}
+                    label="Add Course"
+                    isActive={activeItem === "addCourse"}
+                    onClick={() => onItemClick("addCourse")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={BookOpen}
+                    label="View Courses"
+                    isActive={activeItem === "viewCourses"}
+                    onClick={() => onItemClick("viewCourses")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={FilePlus}
+                    label="Add Course Content"
+                    isActive={activeItem === "addCourseContent"}
+                    onClick={() => onItemClick("addCourseContent")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={FileText}
+                    label="View Course Content"
+                    isActive={activeItem === "viewCourseContent"}
+                    onClick={() => onItemClick("viewCourseContent")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Users Section */}
+        <div className="w-full">
+          <div
+            className={`flex items-center w-full cursor-pointer group ${
+              activeItem === "viewUsers" || activeItem === "addUser" ? "bg-gray-50 rounded-lg" : ""
+            }`}
+            onClick={toggleUsersSection}
+          >
+            <div className="flex items-center w-full p-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700">
+              <UserCog className="text-gray-500 w-5 h-5" />
+              {!collapsed && <span className="ml-3">Manage Users</span>}
+              {!collapsed && (
+                <button className="ml-auto p-2 group-hover:bg-gray-100 rounded-lg transition-colors">
+                  {usersExpanded ? (
+                    <ChevronUp className="w-4 h-4 text-gray-600" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+          {usersExpanded && !collapsed && (
+            <div className="pl-6 mt-1">
+              <div className="relative">
+                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                <div className="space-y-0.5">
+                  <SidebarItem
+                    icon={Users}
+                    label="View Users"
+                    isActive={activeItem === "viewUsers"}
+                    onClick={() => onItemClick("viewUsers")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={UserPlus}
+                    label="Add New User"
+                    isActive={activeItem === "addUser"}
+                    onClick={() => onItemClick("addUser")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
         <SidebarItem
           icon={History}
           label="Course History"
@@ -120,6 +249,4 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem, onItemClick, onToggle }) 
       </div>
     </nav>
   );
-};
-
-export default Sidebar;
+}
