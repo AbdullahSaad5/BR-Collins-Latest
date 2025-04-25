@@ -1,42 +1,19 @@
 import React from "react";
 
 export const CloseIcon: React.FC = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="close-icon"
-  >
-    <path
-      d="M18 6L6 18M18 18L6 6"
-      stroke="white"
-      strokeOpacity="0.7"
-      strokeWidth="2"
-      strokeLinecap="round"
-    ></path>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="close-icon">
+    <path d="M18 6L6 18M18 18L6 6" stroke="white" strokeOpacity="0.7" strokeWidth="2" strokeLinecap="round"></path>
   </svg>
 );
 
 export const LogoIcon: React.FC = () => (
-  <svg
-    width="241"
-    height="57"
-    viewBox="0 0 241 57"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="logo"
-  >
+  <svg width="241" height="57" viewBox="0 0 241 57" fill="none" xmlns="http://www.w3.org/2000/svg" className="logo">
     <g clipPath="url(#clip0_3016_883)">
       <path
         d="M40.5655 29.6535L38.1441 28.2293L39.2876 27.5722C47.7863 22.6882 49.3653 10.9612 42.1635 4.33986C39.3636 1.7655 35.2371 -0.0174669 29.1788 0.00403083C33.8927 4.03486 37.7697 13.4119 34.9386 19.1518C34.8925 19.2445 34.8315 19.352 34.7582 19.4716C33.593 21.3607 31.4876 22.4786 29.2534 22.4786H12.1585V10.8376H28.7434C31.082 10.8376 33.2484 12.0576 34.4449 14.0488C34.3295 13.3864 34.1749 12.7334 33.9809 12.0912C31.7996 4.84506 24.9017 0 17.2685 0H0V57H16.4804C19.4634 57 22.4247 56.4478 25.1879 55.3312C25.4457 55.2264 25.6586 55.1351 25.8024 55.0598C30.8718 52.4667 32.756 48.2921 34.4516 43.1541L33.8778 43.7439C32.3734 45.2891 30.2993 46.1611 28.1316 46.1611H12.1585V33.3162H28.2808C29.8991 33.3162 31.5039 33.7784 32.7953 34.7444C32.7967 34.7444 32.798 34.7471 32.8007 34.7485C37.8524 38.6382 37.3424 46.5346 36.679 50.5843C36.3426 52.6386 36.1541 54.7145 36.1541 56.7944V57H47.8215V42.2754C47.8215 37.0944 45.0637 32.2977 40.5668 29.6548L40.5655 29.6535Z"
         fill="url(#paint0_linear_3016_883)"
       ></path>
-      <path
-        d="M61.7168 37.6438H64.7011V46.6944H66.6084V37.6438H69.5968V36.0771H61.7168V37.6438Z"
-        fill="#1176C1"
-      ></path>
+      <path d="M61.7168 37.6438H64.7011V46.6944H66.6084V37.6438H69.5968V36.0771H61.7168V37.6438Z" fill="#1176C1"></path>
       <path
         d="M82.9353 38.9028C82.9353 37.0499 81.53 36.0771 79.5508 36.0771H75.3809V46.6944H77.2434V42.157H78.8427C80.3674 42.157 80.8504 42.6407 80.8504 43.9547V44.2114C80.8504 45.4502 80.8924 46.2563 81.0443 46.6944H82.8797C82.778 46.0884 82.7346 45.1841 82.7346 44.2302V43.983C82.7346 42.6219 82.3195 41.7754 81.237 41.3858C82.1133 41.0713 82.9353 40.3807 82.9353 38.9041V38.9028ZM78.9933 40.6535H77.2434V37.582H79.2985C80.3118 37.582 81.0471 38.02 81.0471 39.0559C81.0471 40.3377 80.1545 40.6548 78.9933 40.6548V40.6535Z"
         fill="#1176C1"
@@ -45,18 +22,12 @@ export const LogoIcon: React.FC = () => (
         d="M91.7487 36.0771C91.3566 37.2461 88.7494 45.6638 88.3994 46.6944H90.2673L91.122 43.9292H94.7968L95.7002 46.6944H97.6957L94.1836 36.0771H91.7487ZM91.4977 42.3626C92.1204 40.3834 92.6304 38.7348 92.9031 37.5296H92.9234C93.154 38.4715 93.6559 40.0112 94.4047 42.3626H91.4977Z"
         fill="#1176C1"
       ></path>
-      <path
-        d="M105.356 36.0771H103.465V46.6944H105.356V36.0771Z"
-        fill="#1176C1"
-      ></path>
+      <path d="M105.356 36.0771H103.465V46.6944H105.356V36.0771Z" fill="#1176C1"></path>
       <path
         d="M118.862 39.67C118.862 41.4005 118.877 43.1271 118.982 44.4398H118.955C118.78 43.948 118.244 42.9108 114.688 36.0771H112.25V46.6944H113.988V43.0895C113.988 41.1896 113.986 39.3744 113.908 38.0227H113.924C114.106 38.4365 114.473 39.2212 118.285 46.6957H120.605V36.0785H118.862V39.6713V39.67Z"
         fill="#1176C1"
       ></path>
-      <path
-        d="M129.384 36.0771H127.493V46.6944H129.384V36.0771Z"
-        fill="#1176C1"
-      ></path>
+      <path d="M129.384 36.0771H127.493V46.6944H129.384V36.0771Z" fill="#1176C1"></path>
       <path
         d="M142.89 39.67C142.89 41.4005 142.905 43.1271 143.011 44.4398H142.984C142.809 43.948 142.273 42.9108 138.716 36.0771H136.278V46.6944H138.016V43.0895C138.016 41.1896 138.015 39.3744 137.936 38.0227H137.952C138.134 38.4365 138.502 39.2212 142.313 46.6957H144.633V36.0785H142.89V39.6713V39.67Z"
         fill="#1176C1"
@@ -89,18 +60,12 @@ export const LogoIcon: React.FC = () => (
         d="M75.1202 19.7949C76.5527 19.2346 77.9119 17.981 77.9119 15.4953C77.9119 12.7167 76.0019 10.0752 70.8715 10.0752H61.3867V31.2384H70.725C75.7265 31.2384 78.6064 28.6936 78.6064 24.82C78.6064 21.9312 76.7656 20.4304 75.1202 19.7949ZM67.099 13.977H69.6629C71.2066 13.977 72.1955 14.6368 72.1955 16.1308C72.1955 17.6249 71.3938 18.2645 69.5313 18.2645H67.0977V13.977H67.099ZM69.7239 27.3567H67.099V22.0589H69.4797C71.5837 22.0589 72.5645 22.9591 72.5645 24.7219C72.5645 26.6527 71.2934 27.3554 69.7239 27.3554V27.3567Z"
         fill="url(#paint1_linear_3016_883)"
       ></path>
-      <path
-        d="M85.1935 25.5928H80.0645V31.2279H85.1935V25.5928Z"
-        fill="url(#paint2_linear_3016_883)"
-      ></path>
+      <path d="M85.1935 25.5928H80.0645V31.2279H85.1935V25.5928Z" fill="url(#paint2_linear_3016_883)"></path>
       <path
         d="M104.169 15.8769C104.169 12.5179 101.608 10.0752 96.9171 10.0752H87.1719V31.2384H92.9059V23.1096H94.9407C97.2115 23.1096 97.944 23.7733 97.944 25.9849V26.5828C97.944 29.0107 98.0485 30.3637 98.3605 31.2384H104.013C103.835 30.2052 103.765 28.3564 103.765 26.5882V25.9352C103.765 23.5006 103.102 21.7095 100.88 20.8644C102.711 20.1429 104.168 18.7186 104.168 15.8756L104.169 15.8769ZM95.3829 18.9551H92.9073V14.2081H95.756C97.2508 14.2081 98.37 14.8477 98.37 16.5057C98.37 18.2981 97.1328 18.9565 95.3829 18.9565V18.9551Z"
         fill="url(#paint3_linear_3016_883)"
       ></path>
-      <path
-        d="M111.344 25.5928H106.215V31.2279H111.344V25.5928Z"
-        fill="url(#paint4_linear_3016_883)"
-      ></path>
+      <path d="M111.344 25.5928H106.215V31.2279H111.344V25.5928Z" fill="url(#paint4_linear_3016_883)"></path>
       <path
         d="M128.221 27.3499C125.468 27.3499 124.571 24.6143 124.571 20.6788C124.571 16.7434 125.458 13.9823 128.213 13.9823C130.514 13.9823 131.043 15.4105 131.349 17.0202H137.13C136.963 13.7619 134.8 9.7002 128.303 9.7002C121.805 9.7002 118.464 14.642 118.464 20.699C118.464 26.756 120.876 31.6346 128.094 31.6346C133.943 31.6346 136.649 28.3791 137.233 24.2098H131.432C131.154 25.6556 130.537 27.3512 128.22 27.3512L128.221 27.3499Z"
         fill="url(#paint5_linear_3016_883)"
@@ -117,10 +82,7 @@ export const LogoIcon: React.FC = () => (
         d="M183.394 10.0752H177.5V31.2384H191.829L192.427 26.8193H183.394V10.0752Z"
         fill="url(#paint8_linear_3016_883)"
       ></path>
-      <path
-        d="M199.777 10.0752H193.883V31.2384H199.777V10.0752Z"
-        fill="url(#paint9_linear_3016_883)"
-      ></path>
+      <path d="M199.777 10.0752H193.883V31.2384H199.777V10.0752Z" fill="url(#paint9_linear_3016_883)"></path>
       <path
         d="M215.667 14.7281C215.667 18.0159 215.742 21.641 215.96 24.1146H215.854C215.597 23.2251 214.676 20.7865 210.154 10.0752H203.024V31.2384H208.404V26.5076C208.404 22.8449 208.395 19.2212 208.206 16.5635H208.27C208.54 17.3576 209.255 19.2615 214.179 31.2384H221.058V10.0752H215.667V14.7281Z"
         fill="url(#paint10_linear_3016_883)"
@@ -296,14 +258,7 @@ export const SearchIcon: React.FC = () => (
 );
 
 export const CartIcon: React.FC = () => (
-  <svg
-    width="24"
-    height="25"
-    viewBox="0 0 24 25"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="cart-icon"
-  >
+  <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg" className="cart-icon">
     <g clipPath="url(#clip0_3016_931)">
       <path
         d="M10.3098 19.0234C9.87414 19.0234 9.45627 19.1965 9.14817 19.5046C8.84008 19.8127 8.66699 20.2306 8.66699 20.6663C8.66699 21.102 8.84008 21.5199 9.14817 21.828C9.45627 22.1361 9.87414 22.3092 10.3098 22.3092C10.7456 22.3092 11.1634 22.1361 11.4715 21.828C11.7796 21.5199 11.9527 21.102 11.9527 20.6663C11.9527 20.2306 11.7796 19.8127 11.4715 19.5046C11.1634 19.1965 10.7456 19.0234 10.3098 19.0234Z"
@@ -338,34 +293,17 @@ export const CartIcon: React.FC = () => (
     </g>
     <defs>
       <clipPath id="clip0_3016_931">
-        <rect
-          width="24"
-          height="24"
-          fill="white"
-          transform="translate(0 0.5)"
-        ></rect>
+        <rect width="24" height="24" fill="white" transform="translate(0 0.5)"></rect>
       </clipPath>
       <clipPath id="clip1_3016_931">
-        <rect
-          width="23"
-          height="23"
-          fill="white"
-          transform="translate(1 1.5)"
-        ></rect>
+        <rect width="23" height="23" fill="white" transform="translate(1 1.5)"></rect>
       </clipPath>
     </defs>
   </svg>
 );
 
 export const CartBadgeIcon: React.FC = () => (
-  <svg
-    width="18"
-    height="19"
-    viewBox="0 0 18 19"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="cart-badge"
-  >
+  <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg" className="cart-badge">
     <circle cx="9" cy="9.5" r="9" fill="#C0E8FF"></circle>
     <text
       fill="#082331"
@@ -420,16 +358,8 @@ export const UserAvatarIcon: React.FC = () => (
       </tspan>
     </text>
     <defs>
-      <pattern
-        id="pattern0_3016_941"
-        patternContentUnits="objectBoundingBox"
-        width="1"
-        height="1"
-      >
-        <use
-          xlinkHref="#image0_3016_941"
-          transform="translate(-1.27622) scale(0.00338724)"
-        ></use>
+      <pattern id="pattern0_3016_941" patternContentUnits="objectBoundingBox" width="1" height="1">
+        <use xlinkHref="#image0_3016_941" transform="translate(-1.27622) scale(0.00338724)"></use>
       </pattern>
     </defs>
   </svg>
@@ -455,14 +385,7 @@ export const ChevronRightIcon: React.FC = () => (
 );
 
 export const BookCheckIcon: React.FC = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="icon"
-  >
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="icon">
     <path
       d="M4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2H19C19.2652 2 19.5196 2.10536 19.7071 2.29289C19.8946 2.48043 20 2.73478 20 3V21C20 21.2652 19.8946 21.5196 19.7071 21.7071C19.5196 21.8946 19.2652 22 19 22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5ZM4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20"
       stroke="#7C9AA9"
@@ -481,14 +404,7 @@ export const BookCheckIcon: React.FC = () => (
 );
 
 export const AwardIcon: React.FC = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="icon"
-  >
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="icon">
     <path
       d="M15.4768 12.8896L16.9918 21.4156C17.0087 21.516 16.9946 21.6192 16.9514 21.7114C16.9081 21.8036 16.8377 21.8803 16.7497 21.9314C16.6616 21.9825 16.56 22.0055 16.4586 21.9974C16.3571 21.9892 16.2605 21.9502 16.1818 21.8856L12.6018 19.1986C12.4289 19.0695 12.219 18.9998 12.0033 18.9998C11.7875 18.9998 11.5776 19.0695 11.4048 19.1986L7.81875 21.8846C7.74007 21.9491 7.64361 21.988 7.54225 21.9962C7.44088 22.0044 7.33942 21.9815 7.25141 21.9305C7.16341 21.8796 7.09303 21.803 7.04967 21.711C7.00631 21.619 6.99204 21.516 7.00875 21.4156L8.52275 12.8896"
       stroke="#7C9AA9"
@@ -507,14 +423,7 @@ export const AwardIcon: React.FC = () => (
 );
 
 export const LogoutIcon: React.FC = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="menu-icon"
-  >
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="menu-icon">
     <path
       d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
       stroke="#0A1419"
@@ -522,20 +431,8 @@ export const LogoutIcon: React.FC = () => (
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>
-    <path
-      d="M16 17L21 12L16 7"
-      stroke="#0A1419"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    ></path>
-    <path
-      d="M21 12H9"
-      stroke="#0A1419"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    ></path>
+    <path d="M16 17L21 12L16 7" stroke="#0A1419" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+    <path d="M21 12H9" stroke="#0A1419" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
   </svg>
 );
 
@@ -546,7 +443,7 @@ export const AddUserIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`add-icon ${props.className || ''}`}
+    className={`add-icon ${props.className || ""}`}
   >
     <path
       d="M2 21.0004C1.99992 19.4608 2.44413 17.9538 3.27935 16.6603C4.11456 15.3669 5.30527 14.3419 6.7086 13.7085C8.11193 13.075 9.66824 12.8599 11.1908 13.0891C12.7133 13.3183 14.1373 13.9819 15.292 15.0004"
@@ -562,20 +459,8 @@ export const AddUserIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
       strokeLinecap="round"
       strokeLinejoin="round"
     ></path>
-    <path
-      d="M19 16V22"
-      stroke="#F86537"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    ></path>
-    <path
-      d="M22 19H16"
-      stroke="#F86537"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    ></path>
+    <path d="M19 16V22" stroke="#F86537" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+    <path d="M22 19H16" stroke="#F86537" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
   </svg>
 );
 
@@ -586,7 +471,8 @@ export const ViewIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`action-icon ${props.className || ''}`}>
+    className={`action-icon ${props.className || ""}`}
+  >
     <path
       d="M2.06153 12.3484C1.97819 12.1238 1.97819 11.8769 2.06153 11.6524C2.87323 9.68421 4.25104 8.0014 6.0203 6.81726C7.78955 5.63312 9.87057 5.00098 11.9995 5.00098C14.1285 5.00098 16.2095 5.63312 17.9788 6.81726C19.748 8.0014 21.1258 9.68421 21.9375 11.6524C22.0209 11.8769 22.0209 12.1238 21.9375 12.3484C21.1258 14.3165 19.748 15.9993 17.9788 17.1835C16.2095 18.3676 14.1285 18.9997 11.9995 18.9997C9.87057 18.9997 7.78955 18.3676 6.0203 17.1835C4.25104 15.9993 2.87323 14.3165 2.06153 12.3484Z"
       stroke="#2490E0"
@@ -611,7 +497,7 @@ export const ArrowLeftIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) =>
     viewBox="0 0 20 21"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`page-icon ${props.className || ''}`}
+    className={`page-icon ${props.className || ""}`}
   >
     <path
       d="M8.88922 4.66602L3.33366 10.4994M3.33366 10.4994L8.88922 16.3327M3.33366 10.4994L16.667 10.4993"
@@ -630,8 +516,7 @@ export const ArrowRightIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) =
     viewBox="0 0 20 21"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`page-icon ${props.className || ''}`}
-
+    className={`page-icon ${props.className || ""}`}
   >
     <path
       d="M11.1108 4.66602L16.6663 10.4994M16.6663 10.4994L11.1108 16.3327M16.6663 10.4994L3.33301 10.4993"
@@ -662,18 +547,36 @@ export const LocationIcon: React.FC = () => (
 );
 
 export const SendIcon: React.FC = () => (
-  <svg
-    width="58"
-    height="58"
-    viewBox="0 0 58 58"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className="send-icon"
-  >
+  <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg" className="send-icon">
     <rect width="58" height="58" rx="29" fill="#F86537"></rect>
     <path
       d="M36.9201 18.0799L15.0801 30.3679L22.0641 32.9359L32.8161 22.8559L24.6321 33.8959V39.9199L28.5441 35.3599L33.5121 37.1839L36.9201 18.0799Z"
       fill="white"
     ></path>
+  </svg>
+);
+
+export const CalendarIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path
+      d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3 10H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export const TableIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <path d="M3 3H21V21H3V3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3 9H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M3 15H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M9 3V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M15 3V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
