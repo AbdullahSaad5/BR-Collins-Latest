@@ -21,6 +21,10 @@ import {
   FilePlus,
   FileText,
   BookPlus,
+  CreditCard,
+  Calendar,
+  Eye,
+  Plus,
 } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 
@@ -34,6 +38,8 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
   const [collapsed, setCollapsed] = useState(false);
   const [usersExpanded, setUsersExpanded] = useState(false);
   const [coursesExpanded, setCoursesExpanded] = useState(false);
+  const [transactionsExpanded, setTransactionsExpanded] = useState(false);
+  const [appointmentsExpanded, setAppointmentsExpanded] = useState(false);
 
   const toggleSidebar = () => {
     const newCollapsed = !collapsed;
@@ -47,6 +53,14 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
 
   const toggleCoursesSection = () => {
     setCoursesExpanded(!coursesExpanded);
+  };
+
+  const toggleTransactionsSection = () => {
+    setTransactionsExpanded(!transactionsExpanded);
+  };
+
+  const toggleAppointmentsSection = () => {
+    setAppointmentsExpanded(!appointmentsExpanded);
   };
 
   return (
@@ -85,7 +99,57 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           collapsed={collapsed}
         />
 
+        {/* Users Section */}
+        <div className="w-full">
+          <div
+            className={`flex items-center w-full cursor-pointer group ${
+              activeItem === "viewUsers" || activeItem === "addUser" ? "bg-gray-50 rounded-lg" : ""
+            }`}
+            onClick={toggleUsersSection}
+          >
+            <div className="flex items-center w-full p-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700">
+              <UserCog className="text-gray-500 w-5 h-5" />
+              {!collapsed && <span className="ml-3">Manage Users</span>}
+              {!collapsed && (
+                <button className="ml-auto p-2 group-hover:bg-gray-100 rounded-lg transition-colors">
+                  {usersExpanded ? (
+                    <ChevronUp className="w-4 h-4 text-gray-600" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-gray-600" />
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+          {usersExpanded && !collapsed && (
+            <div className="pl-6 mt-1">
+              <div className="relative">
+                <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                <div className="space-y-0.5">
+                  <SidebarItem
+                    icon={UserPlus}
+                    label="Add New User"
+                    isActive={activeItem === "addUser"}
+                    onClick={() => onItemClick("addUser")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={Users}
+                    label="View All Users"
+                    isActive={activeItem === "viewUsers"}
+                    onClick={() => onItemClick("viewUsers")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Courses Section */}
+
         <div className="w-full">
           <div
             className={`flex items-center w-full cursor-pointer group ${
@@ -173,20 +237,20 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           )}
         </div>
 
-        {/* Users Section */}
+        {/* Appointments Section */}
         <div className="w-full">
           <div
             className={`flex items-center w-full cursor-pointer group ${
-              activeItem === "viewUsers" || activeItem === "addUser" ? "bg-gray-50 rounded-lg" : ""
+              activeItem === "appointments" || activeItem === "addAppointment" ? "bg-gray-50 rounded-lg" : ""
             }`}
-            onClick={toggleUsersSection}
+            onClick={toggleAppointmentsSection}
           >
             <div className="flex items-center w-full p-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700">
-              <UserCog className="text-gray-500 w-5 h-5" />
-              {!collapsed && <span className="ml-3">Manage Users</span>}
+              <Calendar className="text-gray-500 w-5 h-5" />
+              {!collapsed && <span className="ml-3">Appointments</span>}
               {!collapsed && (
                 <button className="ml-auto p-2 group-hover:bg-gray-100 rounded-lg transition-colors">
-                  {usersExpanded ? (
+                  {appointmentsExpanded ? (
                     <ChevronUp className="w-4 h-4 text-gray-600" />
                   ) : (
                     <ChevronDown className="w-4 h-4 text-gray-600" />
@@ -195,24 +259,24 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
               )}
             </div>
           </div>
-          {usersExpanded && !collapsed && (
+          {appointmentsExpanded && !collapsed && (
             <div className="pl-6 mt-1">
               <div className="relative">
                 <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
                 <div className="space-y-0.5">
                   <SidebarItem
-                    icon={UserPlus}
-                    label="Add New User"
-                    isActive={activeItem === "addUser"}
-                    onClick={() => onItemClick("addUser")}
+                    icon={Plus}
+                    label="Add Appointment"
+                    isActive={activeItem === "addAppointment"}
+                    onClick={() => onItemClick("addAppointment")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
                   <SidebarItem
-                    icon={Users}
-                    label="View All Users"
-                    isActive={activeItem === "viewUsers"}
-                    onClick={() => onItemClick("viewUsers")}
+                    icon={Eye}
+                    label="View Appointments"
+                    isActive={activeItem === "appointments"}
+                    onClick={() => onItemClick("appointments")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -222,13 +286,22 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           )}
         </div>
 
+        {/* Transactions Section */}
         <SidebarItem
+          icon={CreditCard}
+          label="Transactions"
+          isActive={activeItem === "transactions"}
+          onClick={() => onItemClick("transactions")}
+          collapsed={collapsed}
+        />
+
+        {/* <SidebarItem
           icon={History}
           label="Course History"
           isActive={activeItem === "history"}
           onClick={() => onItemClick("history")}
           collapsed={collapsed}
-        />
+        /> */}
         <SidebarItem
           icon={Settings}
           label="Settings"

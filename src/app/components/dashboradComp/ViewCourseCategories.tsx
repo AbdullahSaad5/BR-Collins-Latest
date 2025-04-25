@@ -45,27 +45,27 @@ const mockCategories: CourseCategory[] = [
 ];
 
 export default function ViewCourseCategories() {
-  const [categories, setCategories] = useState<CourseCategory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [categories, setCategories] = useState<CourseCategory[]>(mockCategories);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // Simulate API call with setTimeout
-    const fetchCategories = async () => {
-      try {
-        setIsLoading(true);
-        // Simulate network delay
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setCategories(mockCategories);
-      } catch (error) {
-        toast.error("Failed to fetch course categories");
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   // Simulate API call with setTimeout
+  //   const fetchCategories = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       // Simulate network delay
+  //       await new Promise((resolve) => setTimeout(resolve, 1000));
+  //       setCategories(mockCategories);
+  //     } catch (error) {
+  //       toast.error("Failed to fetch course categories");
+  //       console.error(error);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   if (isLoading) {
     return (

@@ -20,6 +20,9 @@ import ViewCourseCategories from "../components/dashboradComp/ViewCourseCategori
 import ViewCourses from "../components/dashboradComp/ViewCourses";
 import AddCourseContent from "../components/dashboradComp/AddCourseContent";
 import ViewCourseContent from "../components/dashboradComp/ViewCourseContent";
+import Transactions from "../components/dashboradComp/Transactions";
+import Appointments from "../components/dashboradComp/Appointments";
+import AddAppointment from "../components/dashboradComp/AddAppointment";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -63,6 +66,12 @@ export default function Dashboard() {
         return <AddCourseContent />;
       case "viewCourseContent":
         return <ViewCourseContent />;
+      case "transactions":
+        return <Transactions />;
+      case "appointments":
+        return <Appointments />;
+      case "addAppointment":
+        return <AddAppointment />;
       default:
         return <DashboardStats />;
     }
