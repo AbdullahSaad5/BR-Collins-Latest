@@ -17,6 +17,9 @@ import AddCourses from "../components/dashboradComp/AddCourseStepper";
 import AddInstructor from "../components/dashboradComp/AddInstructor";
 import AddCourseCategory from "../components/dashboradComp/AddCourseCategory";
 import ViewCourseCategories from "../components/dashboradComp/ViewCourseCategories";
+import ViewCourses from "../components/dashboradComp/ViewCourses";
+import AddCourseContent from "../components/dashboradComp/AddCourseContent";
+import ViewCourseContent from "../components/dashboradComp/ViewCourseContent";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -44,8 +47,10 @@ export default function Dashboard() {
         return <EnrolledCourses />;
       case "addUser":
         return <AddUser />;
-      case "addcourses":
+      case "addCourse":
         return <AddCourses />;
+      case "viewCourses":
+        return <ViewCourses />;
       case "viewUsers":
         return <ViewUser />;
       case "history":
@@ -54,6 +59,10 @@ export default function Dashboard() {
         return <Setting />;
       case "addInstructor":
         return <AddInstructor />;
+      case "addCourseContent":
+        return <AddCourseContent />;
+      case "viewCourseContent":
+        return <ViewCourseContent />;
       default:
         return <DashboardStats />;
     }

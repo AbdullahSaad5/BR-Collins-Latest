@@ -201,18 +201,18 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                 <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
                 <div className="space-y-0.5">
                   <SidebarItem
-                    icon={Users}
-                    label="View Users"
-                    isActive={activeItem === "viewUsers"}
-                    onClick={() => onItemClick("viewUsers")}
-                    collapsed={collapsed}
-                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
-                  />
-                  <SidebarItem
                     icon={UserPlus}
                     label="Add New User"
                     isActive={activeItem === "addUser"}
                     onClick={() => onItemClick("addUser")}
+                    collapsed={collapsed}
+                    className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                  />
+                  <SidebarItem
+                    icon={Users}
+                    label="View All Users"
+                    isActive={activeItem === "viewUsers"}
+                    onClick={() => onItemClick("viewUsers")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
