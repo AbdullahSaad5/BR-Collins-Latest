@@ -121,7 +121,7 @@ export const Homepage = () => {
       description: "Explore how AI is transforming business operations and what it means for the future of work.",
       category: "Technology",
       date: "May 15, 2024",
-      image: "../../src/public/assets/abouthome.png",
+      image: "/assets/abouthome.png",
     },
     {
       id: 2,
@@ -129,7 +129,7 @@ export const Homepage = () => {
       description: "Learn proven techniques to boost your productivity and achieve more in less time.",
       category: "Business",
       date: "April 28, 2024",
-      image: "../../src/public/assets/congrateicon.png",
+      image: "/assets/congrateicon.png",
     },
     {
       id: 3,
@@ -137,7 +137,7 @@ export const Homepage = () => {
       description: "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
       category: "Marketing",
       date: "April 15, 2024",
-      image: "../../src/public/assets/lowerlogo.png",
+      image: "/assets/lowerlogo.png",
     },
     {
       id: 4,
@@ -145,7 +145,7 @@ export const Homepage = () => {
       description: "Discover how minimalist design can improve user experience and conversion rates.",
       category: "Design",
       date: "March 30, 2024",
-      image: "../../src/public/assets/sendericon.png",
+      image: "/assets/sendericon.png",
     },
     {
       id: 5,
@@ -154,7 +154,7 @@ export const Homepage = () => {
         "Practical strategies to develop mental toughness and adaptability in your personal and professional life.",
       category: "Personal Development",
       date: "March 22, 2024",
-      image: "../../src/public/assets/person.png",
+      image: "/assets/person.png",
     },
     {
       id: 6,
@@ -162,7 +162,7 @@ export const Homepage = () => {
       description: "How companies are adapting to the remote work revolution and what it means for the future.",
       category: "Business",
       date: "March 10, 2024",
-      image: "../../src/public/assets",
+      image: "/assets/person.png",
     },
   ];
 
@@ -404,7 +404,7 @@ export const Homepage = () => {
                     : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
                 }`}
               >
-                E-learning
+                E-Learning
               </button>
               <button
                 onClick={() => setActiveTab("blogs")}
@@ -414,7 +414,7 @@ export const Homepage = () => {
                     : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
                 }`}
               >
-                Blogs
+                In-Person
               </button>
             </div>
 
@@ -423,98 +423,98 @@ export const Homepage = () => {
         </div>
       </section>
 
-      {activeTab === "e-learning" ? (
-        <>
-          <section className="relative text-gray-900">
-            <div className="w-full px-4 mx-auto max-w-[1100px] relative">
-              <button
-                onClick={scrollLeft}
-                className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+      {/* {activeTab === "e-learning" ? ( */}
+      <>
+        <section className="relative text-gray-900">
+          <div className="w-full px-4 mx-auto max-w-[1100px] relative">
+            <button
+              onClick={scrollLeft}
+              className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-              <div ref={sliderRef} className="flex flex-row overflow-x-hidden pb-4 -mx-4 px-4 scroll-smooth">
-                <div className="flex flex-nowrap gap-4">
-                  {sliderItems.map((item, index) => (
-                    <div key={index} className="flex-shrink-0 w-fit py-2">
-                      <div className="flex flex-col rounded-4xl bg-gray-100 px-5 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
-                        <h2 className="font-bold font-dm text-xl text-gray-800 mb-2">{item.title}</h2>
-                        <p className="text-sm text-gray-600">{item.courses} courses available</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={scrollRight}
-                className="absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </div>
-          </section>
-          <section className="relative text-gray-900">
-            <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
-              <div className="flex flex-nowrap overflow-auto gap-3 py-6 custom-scroll scrollbar-hide">
-                {courses.map((course) => (
-                  <div className="flex flex-row w-[178px]" key={course.id}>
-                    <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                      <div className="py-2 px-4 text-sm font-medium">
-                        <h1 className="bg-blu p-2 w-fit rounded-4xl text-white">{course.duration}</h1>
-                      </div>
-
-                      <div className="p-4">
-                        <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">{course.title}</h3>
-
-                        <div className="flex items-center text-gray-600 mb-4">
-                          <FaBook className="mr-2 text-blue-500" />
-                          <span className="text-sm">{course.lessons} Lessons</span>
-                        </div>
-
-                        <hr className="border-t border-gray-200 my-2" />
-
-                        <div className="flex flex-col items-start gap-12 mb-3">
-                          <div className="flex items-center">
-                            <div className="flex mr-2">{renderStars(course.rating)}</div>
-                            <span className="text-sm font-medium">{course.rating}</span>
-                          </div>
-
-                          <span className="text-lg font-bold">${course.price}</span>
-                        </div>
-
-                        <Link
-                          href="/course/1"
-                          className="text-center text-org underline font-medium py-2 transition-colors"
-                        >
-                          View Details
-                        </Link>
-                      </div>
+            <div ref={sliderRef} className="flex flex-row overflow-x-hidden pb-4 -mx-4 px-4 scroll-smooth">
+              <div className="flex flex-nowrap gap-4">
+                {sliderItems.map((item, index) => (
+                  <div key={index} className="flex-shrink-0 w-fit py-2">
+                    <div className="flex flex-col rounded-4xl bg-gray-100 px-5 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
+                      <h2 className="font-bold font-dm text-xl text-gray-800 mb-2">{item.title}</h2>
+                      <p className="text-sm text-gray-600">{item.courses} courses available</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          </section>
-        </>
-      ) : (
+
+            <button
+              onClick={scrollRight}
+              className="absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </section>
+        <section className="relative text-gray-900">
+          <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
+            <div className="flex flex-nowrap overflow-auto gap-3 py-6 custom-scroll scrollbar-hide">
+              {courses.map((course) => (
+                <div className="flex flex-row w-[178px]" key={course.id}>
+                  <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
+                    <div className="py-2 px-4 text-sm font-medium">
+                      <h1 className="bg-blu p-2 w-fit rounded-4xl text-white">{course.duration}</h1>
+                    </div>
+
+                    <div className="p-4">
+                      <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">{course.title}</h3>
+
+                      <div className="flex items-center text-gray-600 mb-4">
+                        <FaBook className="mr-2 text-blue-500" />
+                        <span className="text-sm">{course.lessons} Lessons</span>
+                      </div>
+
+                      <hr className="border-t border-gray-200 my-2" />
+
+                      <div className="flex flex-col items-start gap-12 mb-3">
+                        <div className="flex items-center">
+                          <div className="flex mr-2">{renderStars(course.rating)}</div>
+                          <span className="text-sm font-medium">{course.rating}</span>
+                        </div>
+
+                        <span className="text-lg font-bold">${course.price}</span>
+                      </div>
+
+                      <Link
+                        href="/course/1"
+                        className="text-center text-org underline font-medium py-2 transition-colors"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </>
+      {/* ) : (
         <>
           <section className="relative text-gray-900">
             <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
@@ -604,7 +604,7 @@ export const Homepage = () => {
             </div>
           </section>
         </>
-      )}
+      )} */}
       <section className="bg-[#081B25] text-gray-900 ">
         <div className="w-full px-4  mx-auto max-w-[1100px] py-14">
           <div className="flex flex-col justify-center items-center text-center mb-6">
