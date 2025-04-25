@@ -1,9 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { InstructorCreatePayload } from "@/app/types/instructor.contract";
 
 export default function AddInstructor() {
-  const [instructorData, setInstructorData] = useState<InstructorCreatePayload>({
+  const [instructorData, setInstructorData] = useState<{
+    userId: string;
+    bio: string;
+    expertise: string[];
+    isActive: boolean;
+  }>({
     userId: "",
     bio: "",
     expertise: [],

@@ -15,7 +15,12 @@ export default function AddUser() {
     profilePicture: "",
   });
 
-  const [instructorData, setInstructorData] = useState<InstructorCreatePayload>({
+  const [instructorData, setInstructorData] = useState<{
+    userId: string;
+    bio: string;
+    expertise: string[];
+    isActive: boolean;
+  }>({
     userId: "",
     bio: "",
     expertise: [],
@@ -87,27 +92,27 @@ export default function AddUser() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      if (userData.role === "instructor") {
-        console.log("Instructor Data:", {
-          "User Info": {
-            "First Name": userData.firstName,
-            "Last Name": userData.lastName,
-            Email: userData.email,
-          },
-          "Instructor Info": {
-            Bio: instructorData.bio,
-            Expertise: instructorData.expertise,
-            Status: instructorData.isActive ? "Active" : "Inactive",
-          },
-        });
-      } else {
-        console.log("User Data:", {
-          "First Name": userData.firstName,
-          "Last Name": userData.lastName,
-          Email: userData.email,
-          Role: userData.role,
-        });
-      }
+      // if (userData.role === "instructor") {
+      //   console.log("Instructor Data:", {
+      //     "User Info": {
+      //       "First Name": userData.firstName,
+      //       "Last Name": userData.lastName,
+      //       Email: userData.email,
+      //     },
+      //     "Instructor Info": {
+      //       Bio: instructorData.bio,
+      //       Expertise: instructorData.expertise,
+      //       Status: instructorData.isActive ? "Active" : "Inactive",
+      //     },
+      //   });
+      // } else {
+      console.log("User Data:", {
+        "First Name": userData.firstName,
+        "Last Name": userData.lastName,
+        Email: userData.email,
+        Role: userData.role,
+      });
+      // }
 
       setSuccess(true);
       // Reset form data
@@ -236,7 +241,7 @@ export default function AddUser() {
           </div>
         </div>
 
-        {userData.role === "instructor" && (
+        {/* {userData.role === "instructor" && (
           <>
             <FormField
               label="Bio *"
@@ -325,7 +330,7 @@ export default function AddUser() {
               </div>
             </div>
           </>
-        )}
+        )} */}
 
         <div className="flex justify-end mt-8">
           <button

@@ -1,5 +1,10 @@
 export const ENUMS = {
-  USER_TYPES: ["student", "instructor", "admin", "manager"] as const,
+  USER_TYPES: [
+    "student",
+    // "instructor",
+    "admin",
+    "manager",
+  ] as const,
   DEVICE_TYPES: ["web", "android", "ios"] as const,
   USER_STATUS: ["active", "inactive", "blocked", "deleted", "reported"] as const,
   BUSINESS_STATUS: ["active", "inactive", "blocked", "pending", "deleted", "rejected"] as const,
