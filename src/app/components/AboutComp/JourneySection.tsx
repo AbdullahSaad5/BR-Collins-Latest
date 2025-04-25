@@ -2,6 +2,7 @@ import React from "react";
 import images from "../../../../public/assets/images/images";
 import Image from "next/image";
 import colors from "../../../../public/assets/colors/colors";
+import Link from "next/link";
 const JourneySection = () => {
   return (
     <section className="py-12 md:py-20 px-4 mx-auto w-full max-w-[1350px]">
@@ -50,9 +51,12 @@ const JourneySection = () => {
           <p className="mb-6 text-sm md:text-base">
             At B.R. Collins, we believe in the transformative power of education.
           </p>
-          <button className="bg-orange-500 hover:bg-orange-600 transition px-5 py-2 rounded-full text-white font-semibold text-sm">
+          <Link
+            href="/login"
+            className="bg-orange-500 hover:bg-orange-600 transition px-5 py-2 rounded-full text-white font-semibold text-sm"
+          >
             Log In To Start
-          </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -21,12 +21,8 @@ const Login: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-4 w-full">
-              <h1 className="text-2xl font-bold font-hanken text-white">
-                Sign in to your account
-              </h1>
-              <p>
-                Build skills for today, tomorrow, and beyond. Education to future-proof your career.
-              </p>
+              <h1 className="text-2xl font-bold font-hanken text-white">Sign in to your account</h1>
+              <p>Build skills for today, tomorrow, and beyond. Education to future-proof your career.</p>
               <p className="text-gray-300">
                 Asterisks (<span className="text-org font-bold">*</span>) indicate required fields.
               </p>
@@ -46,12 +42,12 @@ const Login: React.FC = () => {
                 placeholder="Password*"
                 className="w-full px-4 py-3 rounded-lg bg-white border border-gray-400 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-org"
               />
-              <button
-                type="submit"
+              <Link
+                href="/dashboard"
                 className="bg-org text-white py-3 px-6 rounded-full font-bold hover:bg-opacity-90 transition-colors"
               >
                 Login
-              </button>
+              </Link>
             </form>
 
             <p className="text-sm">

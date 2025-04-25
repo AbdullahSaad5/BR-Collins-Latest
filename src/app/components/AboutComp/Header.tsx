@@ -1,5 +1,6 @@
 import React from "react";
 import "../../../styles/header.css"; // Assuming you have a CSS file for styles
+import Link from "next/link";
 const Header = () => {
   return (
     <>
@@ -11,9 +12,12 @@ const Header = () => {
               Learning Transforms Lives,
               <br /> Anywhere, Anytime.
             </h2>
-            <button className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition">
+            <Link
+              href="/login"
+              className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition"
+            >
               Login to Start
-            </button>
+            </Link>
           </div>
         </div>
       </div>
