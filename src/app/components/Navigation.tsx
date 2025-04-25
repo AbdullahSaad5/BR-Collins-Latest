@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useUser } from "./context/CartContext";
 import Cart from "./Cart/Cart";
@@ -9,9 +10,16 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 export const Navigation = () => {
   const { cart, setCart, items } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [DropdownMenu, setDropDownMenu] = useState(false);
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedRoute = e.target.value;
+    router.push(selectedRoute);
+  };
 
   return (
-    <nav className="relative flex flex-wrap items-center justify-between p-1 mt-5 max-md:max-w-full lg:px-20 sm:px-1 mb-5">
+    <nav className="relative text-gray-900 flex flex-wrap items-center justify-between p-1 mt-5 max-md:max-w-full lg:px-20 sm:px-1 mb-5">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full md:hidden">
         <div className="flex items-center gap-4">
@@ -69,10 +77,14 @@ export const Navigation = () => {
           </div>
 
           <div className="relative w-full max-w-[138px]">
-            <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
-              <option value="">Courses</option>
-              <option value="course1">Course 1</option>
-              <option value="course2">Course 2</option>
+            <select
+              onChange={handleChange}
+              defaultValue="/course" // Make sure this matches one of your option values
+              className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer"
+            >
+              <option value="/course">Course</option>
+              <option value="/about">About</option>
+              <option value="/contact">Contact</option>
             </select>
             <img
               src="/img/downarrow.svg"
@@ -86,15 +98,18 @@ export const Navigation = () => {
       {/* Desktop Right Section */}
       <div className="items-center flex-grow hidden md:flex gap-10 justify-between">
         <div className="flex gap-8 items-center font-medium">
-          <a href="/" className="hover:text-sky-600">
-            Home
-          </a>
+          <Link href="/course" className="hover:text-sky-600">
+            course
+          </Link>
           <Link href="/about" className="hover:text-sky-600">
             About
           </Link>
           <a href="/contact" className="hover:text-sky-600">
             Contact Us
           </a>
+          <Link href="/subscriptions" className="hover:text-sky-600">
+            Dashboard
+          </Link>
           <Link href="/dashboard" className="hover:text-sky-600">
             Dashboard
           </Link>
@@ -110,9 +125,9 @@ export const Navigation = () => {
             )}
           </button>
           <Link href="/login">
-          <button className="overflow-hidden gap-1.5 px-6 py-4 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px]">
-            Login
-          </button>
+            <button className="overflow-hidden gap-1.5 px-6 py-4 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px]">
+              Login
+            </button>
           </Link>
         </div>
       </div>

@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 ${
+      className={`sticky top-0 z-50 text-gray-900 ${
         darkMode ? "bg-gray-900 text-white" : "bg-white text-black"
       } border-b border-slate-300 shadow-md`}
     >
@@ -41,7 +41,7 @@ const Header = () => {
           width={120}
           height={60}
           alt="Logo"
-          className="h-8 w-auto"
+          className="h-8  w-auto"
         />
       </div>
       <div className="container mx-auto px-4 py-3">

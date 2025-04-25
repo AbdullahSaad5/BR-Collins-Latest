@@ -1,12 +1,10 @@
-import Courses from "./components/Course/Courses";
-import Footer from "./components/Footer";
-
+import { Homepage } from "./home/page";
 
 export default function Home() {
   return (
     <div >
     
-    <Courses/>
+    <Homepage/>
     
     </div>
   );
