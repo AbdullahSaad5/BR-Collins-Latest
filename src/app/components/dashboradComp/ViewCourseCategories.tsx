@@ -1,7 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { toast } from "react-hot-toast";
 import { AddUserIcon, ViewIcon, ArrowLeftIcon, ArrowRightIcon } from "./Icons";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
 
 interface CourseCategory {
   id: string;
@@ -10,62 +12,21 @@ interface CourseCategory {
   createdAt: string;
 }
 
-// Mock data for demonstration
-const mockCategories: CourseCategory[] = [
-  {
-    id: "1",
-    name: "Web Development",
-    description: "Courses covering frontend and backend web development technologies",
-    createdAt: "2024-03-15T10:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Data Science",
-    description: "Courses on data analysis, machine learning, and statistical methods",
-    createdAt: "2024-03-16T14:30:00Z",
-  },
-  {
-    id: "3",
-    name: "Mobile Development",
-    description: "Courses for iOS and Android app development",
-    createdAt: "2024-03-17T09:15:00Z",
-  },
-  {
-    id: "4",
-    name: "Cloud Computing",
-    description: "Courses covering AWS, Azure, and Google Cloud platforms",
-    createdAt: "2024-03-18T11:45:00Z",
-  },
-  {
-    id: "5",
-    name: "UI/UX Design",
-    description: "Courses on user interface and user experience design principles",
-    createdAt: "2024-03-19T16:20:00Z",
-  },
-];
+const fetchCategories = async (): Promise<{ data: CourseCategory[] }> => {
+  const response = await api.get("/course-categories");
+  return response.data;
+};
 
 export default function ViewCourseCategories() {
-  const [categories, setCategories] = useState<CourseCategory[]>(mockCategories);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   // Simulate API call with setTimeout
-  //   const fetchCategories = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       // Simulate network delay
-  //       await new Promise((resolve) => setTimeout(resolve, 1000));
-  //       setCategories(mockCategories);
-  //     } catch (error) {
-  //       toast.error("Failed to fetch course categories");
-  //       console.error(error);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, []);
+  const {
+    data: categories,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["course-categories"],
+    queryFn: fetchCategories,
+    select: (data) => data.data,
+  });
 
   if (isLoading) {
     return (
@@ -77,6 +38,19 @@ export default function ViewCourseCategories() {
             <div className="h-4 bg-gray-200 rounded"></div>
             <div className="h-4 bg-gray-200 rounded"></div>
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-semibold text-neutral-900">Course Categories</h1>
+        </div>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-red-500">Error loading categories. Please try again later.</p>
         </div>
       </section>
     );
@@ -102,9 +76,9 @@ export default function ViewCourseCategories() {
         </div>
 
         {/* Table Rows */}
-        {categories.map((category) => (
+        {categories?.map((category: CourseCategory) => (
           <div
-            key={category.id}
+            key={`category-${category.id}`}
             className="flex items-center p-3 border-b border-solid border-slate-100 hover:bg-slate-50 transition-colors"
           >
             <div className="flex-1 text-base text-left text-neutral-900">{category.name}</div>
