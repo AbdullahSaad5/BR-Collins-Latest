@@ -6,43 +6,52 @@ import { z } from "zod";
 import { CourseCreatePayload } from "@/app/types/course.contract";
 import FormField from "./FormField";
 import ToggleOption from "./ToggleOption";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
+import { ICourse } from "@/app/types/course.contract";
 
 type FieldArrayValue = {
   value: string;
 };
 
-interface CourseFormData {
-  title: string;
-  subtitle?: string;
-  slug: string;
-  noOfLessons: number;
-  noOfHours: number;
-  startDate: Date;
-  language: string;
-  lastUpdated: Date;
-  bestSeller: boolean;
-  price: number;
-  discountPrice?: number;
-  isDiscounted: boolean;
-  isFeatured: boolean;
-  isPublished: boolean;
-  isArchived: boolean;
-  isDeleted: boolean;
-  previewVideoUrl?: string;
-  coverImageUrl?: string;
+// interface CourseFormData {
+//   title: string;
+//   subtitle?: string;
+//   slug: string;
+//   noOfLessons: number;
+//   noOfHours: number;
+//   startDate: Date;
+//   language: string;
+//   lastUpdated: Date;
+//   bestSeller: boolean;
+//   price: number;
+//   discountPrice?: number;
+//   isDiscounted: boolean;
+//   isFeatured: boolean;
+//   isPublished: boolean;
+//   isArchived: boolean;
+//   isDeleted: boolean;
+//   previewVideoUrl?: string;
+//   coverImageUrl?: string;
+//   whatYouWillLearn: FieldArrayValue[];
+//   requirements: FieldArrayValue[];
+//   overview: string;
+//   description: string;
+//   instructor: string;
+//   skillLevel: string;
+//   noOfQuizzes: number;
+//   hasCertificate: boolean;
+//   passPercentage: number;
+// }
+
+type CourseFormData = Omit<
+  ICourse,
+  "id" | "rating" | "noOfStudents" | "createdAt" | "updatedAt" | "whatYouWillLearn" | "requirements"
+> & {
   whatYouWillLearn: FieldArrayValue[];
   requirements: FieldArrayValue[];
-  overview: string;
-  description: string;
-  instructor: string;
-  skillLevel: string;
-  noOfQuizzes: number;
-  hasCertificate: boolean;
-  passPercentage: number;
-}
+};
 
 const courseSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
@@ -81,6 +90,7 @@ const courseSchema = z.object({
   noOfQuizzes: z.number().min(0, "Number of quizzes must be non-negative"),
   hasCertificate: z.boolean(),
   passPercentage: z.number().min(0).max(100, "Pass percentage must be between 0 and 100"),
+  categoryId: z.string().min(1, "Category is required"),
 });
 
 export default function AddCourseStepper() {
@@ -89,6 +99,14 @@ export default function AddCourseStepper() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { data: categories } = useQuery({
+    queryKey: ["course-categories"],
+    queryFn: async () => {
+      const response = await api.get("/course-categories");
+      return response.data.data;
+    },
+  });
 
   const {
     register,
@@ -128,6 +146,7 @@ export default function AddCourseStepper() {
       noOfQuizzes: 0,
       hasCertificate: false,
       passPercentage: 70,
+      categoryId: "",
     },
   });
 
@@ -233,6 +252,21 @@ export default function AddCourseStepper() {
       case 0:
         return (
           <>
+            <FormField
+              label="Category *"
+              description="Select the course category"
+              {...register("categoryId")}
+              error={errors.categoryId?.message}
+              select
+              required
+              options={[
+                { value: "", label: "Select a category" },
+                ...(categories?.map((category: { id: string; name: string }) => ({
+                  value: category.id,
+                  label: category.name,
+                })) || []),
+              ]}
+            />
             <FormField
               label="Course Title *"
               description="Enter the full title of the course."

@@ -1,7 +1,8 @@
 export interface ICourse {
   id: string;
+  categoryId: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   slug: string;
   noOfLessons: number;
   noOfHours: number;
@@ -12,14 +13,14 @@ export interface ICourse {
   bestSeller: boolean;
   rating: number;
   price: number;
-  discountPrice: number;
+  discountPrice?: number;
   isDiscounted: boolean;
   isFeatured: boolean;
   isPublished: boolean;
   isArchived: boolean;
   isDeleted: boolean;
-  previewVideoUrl: string;
-  coverImageUrl: string;
+  previewVideoUrl?: string;
+  coverImageUrl?: string;
   whatYouWillLearn: string[];
   requirements: string[];
   overview: string;
