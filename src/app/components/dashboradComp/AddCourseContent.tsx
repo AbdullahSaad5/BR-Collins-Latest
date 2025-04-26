@@ -1,57 +1,54 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import FormField from "./FormField";
 
-interface CourseContent {
-  title: string;
-  description: string;
-  courseId: string;
-  contentType: string;
-  contentUrl: string;
-  duration: string;
-  order: number;
-}
+const courseContentSchema = z.object({
+  courseId: z.string().min(1, "Course is required"),
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  contentType: z.string().min(1, "Content type is required"),
+  contentUrl: z.string().min(1, "Content URL is required"),
+  duration: z.string().min(1, "Duration is required"),
+  order: z.number().min(0, "Order must be a non-negative number"),
+});
+
+type CourseContentFormData = z.infer<typeof courseContentSchema>;
 
 export default function AddCourseContent() {
-  const [contentData, setContentData] = useState<CourseContent>({
-    title: "",
-    description: "",
-    courseId: "",
-    contentType: "",
-    contentUrl: "",
-    duration: "",
-    order: 0,
-  });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setContentData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<CourseContentFormData>({
+    resolver: zodResolver(courseContentSchema),
+    defaultValues: {
+      courseId: "",
+      title: "",
+      description: "",
+      contentType: "",
+      contentUrl: "",
+      duration: "",
+      order: 0,
+    },
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: CourseContentFormData) => {
     setIsSubmitting(true);
 
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Course content submitted:", contentData);
+      console.log("Course content submitted:", data);
       setSuccess(true);
       // Reset form after successful submission
-      setContentData({
-        title: "",
-        description: "",
-        courseId: "",
-        contentType: "",
-        contentUrl: "",
-        duration: "",
-        order: 0,
-      });
+      reset();
     } catch (error) {
       console.error("Error submitting course content:", error);
     } finally {
@@ -67,13 +64,12 @@ export default function AddCourseContent() {
         <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">Course content added successfully!</div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <FormField
           label="Course *"
           description="Select the course for this content"
-          name="courseId"
-          value={contentData.courseId}
-          onChange={handleChange}
+          {...register("courseId")}
+          error={errors.courseId?.message}
           select
           required
           options={[
@@ -88,9 +84,8 @@ export default function AddCourseContent() {
           label="Content Title *"
           description="Enter the title for this content"
           placeholder="Content title"
-          name="title"
-          value={contentData.title}
-          onChange={handleChange}
+          {...register("title")}
+          error={errors.title?.message}
           required
         />
 
@@ -98,9 +93,8 @@ export default function AddCourseContent() {
           label="Description *"
           description="Provide a detailed description of the content"
           placeholder="Content description..."
-          name="description"
-          value={contentData.description}
-          onChange={handleChange}
+          {...register("description")}
+          error={errors.description?.message}
           textarea
           required
         />
@@ -108,17 +102,14 @@ export default function AddCourseContent() {
         <FormField
           label="Content Type *"
           description="Select the type of content"
-          name="contentType"
-          value={contentData.contentType}
-          onChange={handleChange}
+          {...register("contentType")}
+          error={errors.contentType?.message}
           select
           required
           options={[
             { value: "", label: "Select content type" },
             { value: "video", label: "Video" },
             { value: "document", label: "Document" },
-            // { value: "quiz", label: "Quiz" },
-            // { value: "assignment", label: "Assignment" },
           ]}
         />
 
@@ -126,9 +117,8 @@ export default function AddCourseContent() {
           label="Content URL *"
           description="Enter the URL or upload the content"
           placeholder="https://..."
-          name="contentUrl"
-          value={contentData.contentUrl}
-          onChange={handleChange}
+          {...register("contentUrl")}
+          error={errors.contentUrl?.message}
           required
         />
 
@@ -136,9 +126,8 @@ export default function AddCourseContent() {
           label="Duration (minutes) *"
           description="Enter the duration of the content in minutes"
           placeholder="30"
-          name="duration"
-          value={contentData.duration}
-          onChange={handleChange}
+          {...register("duration")}
+          error={errors.duration?.message}
           type="number"
           required
         />
@@ -147,9 +136,8 @@ export default function AddCourseContent() {
           label="Order *"
           description="Set the order of this content in the course"
           placeholder="1"
-          name="order"
-          value={contentData.order.toString()}
-          onChange={handleChange}
+          {...register("order", { valueAsNumber: true })}
+          error={errors.order?.message}
           type="number"
           required
         />
@@ -164,79 +152,6 @@ export default function AddCourseContent() {
           </button>
         </div>
       </form>
-    </div>
-  );
-}
-
-interface FormFieldProps {
-  label: string;
-  description: string;
-  placeholder?: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  required?: boolean;
-  textarea?: boolean;
-  select?: boolean;
-  type?: string;
-  options?: { value: string; label: string }[];
-}
-
-function FormField({
-  label,
-  description,
-  placeholder,
-  name,
-  value,
-  onChange,
-  required = false,
-  textarea = false,
-  select = false,
-  type = "text",
-  options = [],
-}: FormFieldProps) {
-  return (
-    <div className="flex flex-wrap gap-10 max-w-full w-[705px]">
-      <div className="grow shrink-0 basis-0 w-fit">
-        <label className="text-base text-neutral-900">{label}</label>
-        <p className="mt-1 text-sm text-gray-500">{description}</p>
-      </div>
-      <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-        {textarea ? (
-          <textarea
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px]"
-            required={required}
-          />
-        ) : select ? (
-          <select
-            name={name}
-            value={value}
-            onChange={onChange}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-            required={required}
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-            required={required}
-          />
-        )}
-      </div>
     </div>
   );
 }
