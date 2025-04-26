@@ -1,10 +1,13 @@
 "use client";
-import React from "react";
-import { ViewIcon } from "./Icons";
+import React, { useState } from "react";
+import { AddUserIcon } from "./Icons";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
 import CustomDataTable from "./CustomDataTable";
+import ActionIcons from "@/components/ActionIcons";
+import ViewCourseModal from "./ViewCourseModal";
+import { toast } from "react-hot-toast";
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
@@ -12,6 +15,9 @@ const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
 };
 
 const ViewCourses = () => {
+  const [selectedCourse, setSelectedCourse] = useState<ICourse | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
   const {
     data: courses,
     isLoading,
@@ -21,6 +27,26 @@ const ViewCourses = () => {
     queryFn: fetchCourses,
     select: (data) => data.data,
   });
+
+  const handleViewCourse = (course: ICourse) => {
+    setSelectedCourse(course);
+    setIsViewModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setSelectedCourse(null);
+  };
+
+  const handleEditCourse = (course: ICourse) => {
+    // TODO: Implement edit course functionality
+    console.log("Edit course:", course);
+  };
+
+  const handleDeleteCourse = (course: ICourse) => {
+    // TODO: Implement delete course functionality
+    console.log("Delete course:", course);
+  };
 
   const columns = [
     {
@@ -93,20 +119,35 @@ const ViewCourses = () => {
     {
       name: "Actions",
       cell: (row: ICourse) => (
-        <div className="flex gap-2">
-          <button aria-label="View course details" className="text-gray-500 hover:text-gray-700 transition-colors">
-            <ViewIcon className="w-5 h-5" />
-          </button>
-        </div>
+        <ActionIcons
+          onView={() => handleViewCourse(row)}
+          onEdit={() => handleEditCourse(row)}
+          viewTooltip="View Course Details"
+          editTooltip="Edit Course"
+          deleteTooltip="Delete Course"
+          disabled={{
+            view: false,
+            edit: row.isArchived, // Prevent editing archived courses
+            delete: row.isArchived, // Prevent deleting archived courses
+          }}
+        />
       ),
-      grow: 1,
+      grow: 0.5,
     },
   ];
+
+  if (error) {
+    toast.error("Failed to fetch courses");
+  }
 
   return (
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-neutral-900">View Courses</h2>
+        <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
+          <AddUserIcon className="w-5 h-5" />
+          <span>Add New Course</span>
+        </button>
       </div>
 
       <CustomDataTable
@@ -116,6 +157,10 @@ const ViewCourses = () => {
         error={error}
         noDataMessage="No courses found"
       />
+
+      {selectedCourse && (
+        <ViewCourseModal course={selectedCourse} isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
+      )}
     </section>
   );
 };
