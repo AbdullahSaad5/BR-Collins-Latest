@@ -101,7 +101,7 @@ export default function AddCourseStepper() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: categories } = useQuery({
-    queryKey: ["course-categories"],
+    queryKey: ["course-categories-list"],
     queryFn: async () => {
       const response = await api.get("/course-categories");
       return response.data.data;
@@ -262,7 +262,7 @@ export default function AddCourseStepper() {
               required
               options={[
                 { value: "", label: "Select a category" },
-                ...(categories?.map((category: { id: string; name: string }) => ({
+                ...((categories || [])?.map((category: { id: string; name: string }) => ({
                   value: category.id,
                   label: category.name,
                 })) || []),
