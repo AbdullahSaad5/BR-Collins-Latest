@@ -3,7 +3,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
 import FormField from "./FormField";
+
+const fetchCourses = async (): Promise<{ data: any[] }> => {
+  const response = await api.get("/courses");
+  return response.data;
+};
 
 const courseContentSchema = z.object({
   courseId: z.string().min(1, "Course is required"),
@@ -20,6 +27,16 @@ type CourseContentFormData = z.infer<typeof courseContentSchema>;
 export default function AddCourseContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const {
+    data: courses,
+    isLoading: isLoadingCourses,
+    error: coursesError,
+  } = useQuery({
+    queryKey: ["courses"],
+    queryFn: fetchCourses,
+    select: (data) => data.data,
+  });
 
   const {
     register,
@@ -73,12 +90,17 @@ export default function AddCourseContent() {
           select
           required
           options={[
-            { value: "", label: "Select a course" },
-            { value: "1", label: "Introduction to React" },
-            { value: "2", label: "Advanced JavaScript" },
-            { value: "3", label: "UI/UX Design Principles" },
+            { value: "", label: isLoadingCourses ? "Loading courses..." : "Select a course" },
+            ...(courses?.map((course) => ({
+              value: course.id,
+              label: course.title,
+            })) || []),
           ]}
         />
+
+        {isLoadingCourses && <div className="text-sm text-gray-500">Loading courses...</div>}
+
+        {coursesError && <div className="text-sm text-red-500">Error loading courses. Please try again later.</div>}
 
         <FormField
           label="Content Title *"
