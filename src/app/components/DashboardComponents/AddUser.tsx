@@ -1,32 +1,50 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { UserCreatePayload } from "@/app/types/user.contract";
 import { ENUMS } from "@/app/constants/enum";
 import FormField from "./FormField";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
 import { useAppSelector } from "@/app/store/hooks";
-
-const userSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  role: z.enum(ENUMS.USER_TYPES as unknown as [string, string, string]),
-  profilePicture: z.string().optional(),
-});
-
-type UserFormData = z.infer<typeof userSchema>;
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function AddUser() {
   const [previewImage, setPreviewImage] = React.useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const refreshToken = useAppSelector(getRefreshToken);
+  const searchParams = useSearchParams();
+  const isEditMode = searchParams.get("edit") === "true";
+  const userId = searchParams.get("userId");
+  const router = useRouter();
+
+  const userSchema = z
+    .object({
+      firstName: z.string().min(1, "First name is required"),
+      lastName: z.string().min(1, "Last name is required"),
+      email: z.string().email("Invalid email address"),
+      password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
+      role: z.enum(ENUMS.USER_TYPES as unknown as [string, string, string]),
+      profilePicture: z.string().optional(),
+    })
+    .refine(
+      (data) => {
+        // If we're in edit mode, password is optional
+        if (isEditMode) return true;
+        // If we're creating a new user, password is required
+        return !!data.password;
+      },
+      {
+        message: "Password is required",
+        path: ["password"],
+      }
+    );
+
+  type UserFormData = z.infer<typeof userSchema>;
 
   const {
     register,
@@ -47,9 +65,39 @@ export default function AddUser() {
     },
   });
 
+  // Fetch user data if in edit mode
+  const { data: userData } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: async () => {
+      const response = await api.get(`/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      return response.data.data;
+    },
+    enabled: isEditMode && !!userId,
+  });
+
+  // Set form values when user data is loaded
+  useEffect(() => {
+    if (userData) {
+      setValue("firstName", userData.firstName);
+      setValue("lastName", userData.lastName);
+      setValue("email", userData.email);
+      setValue("role", userData.role);
+      setValue("profilePicture", userData.profilePicture || "");
+      if (userData.profilePicture) {
+        setPreviewImage(userData.profilePicture);
+      }
+    }
+  }, [userData, setValue]);
+
   const createUserMutation = useMutation({
     mutationFn: async (data: UserFormData) => {
-      const response = await api.post("/users", data, {
+      const endpoint = isEditMode ? `/users/${userId}` : "/users";
+      const method = isEditMode ? "patch" : "post";
+      const response = await api[method](endpoint, data, {
         headers: {
           Authorization: `Bearer ${refreshToken}`,
         },
@@ -57,13 +105,14 @@ export default function AddUser() {
       return response.data;
     },
     onSuccess: () => {
-      showToast("User created successfully", "success");
+      showToast(`User ${isEditMode ? "updated" : "created"} successfully`, "success");
       reset();
       setPreviewImage(null);
+      router.push("/dashboard?item=viewUsers");
     },
     onError: (error) => {
-      showToast("Failed to create user", "error");
-      console.error("Error creating user:", error);
+      showToast(`Failed to ${isEditMode ? "update" : "create"} user`, "error");
+      console.error(`Error ${isEditMode ? "updating" : "creating"} user:`, error);
     },
   });
 
@@ -83,12 +132,18 @@ export default function AddUser() {
   };
 
   const onSubmit = async (data: UserFormData) => {
+    // Remove password from data if it's empty (edit mode)
+    if (isEditMode && !data.password) {
+      delete data.password;
+    }
     createUserMutation.mutate(data);
   };
 
+  console.log(errors);
+
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">Add New User</h2>
+      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">{isEditMode ? "Edit User" : "Add New User"}</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <FormField
@@ -130,17 +185,20 @@ export default function AddUser() {
           error={errors.email?.message}
           type="email"
           required
+          disabled={isEditMode}
         />
 
-        <FormField
-          label="Password *"
-          description="Enter a secure password"
-          placeholder="Enter password"
-          {...register("password")}
-          error={errors.password?.message}
-          type="password"
-          required
-        />
+        {!isEditMode && (
+          <FormField
+            label="Password *"
+            description="Enter a secure password"
+            placeholder="Enter password"
+            {...register("password")}
+            error={errors.password?.message}
+            type="password"
+            required
+          />
+        )}
 
         <div className="flex flex-wrap gap-10 max-w-full w-[705px]">
           <div className="grow shrink-0 basis-0 w-fit">
@@ -189,7 +247,7 @@ export default function AddUser() {
             disabled={createUserMutation.isPending}
             className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {createUserMutation.isPending ? "Submitting..." : "Add User"}
+            {createUserMutation.isPending ? "Submitting..." : isEditMode ? "Update User" : "Add User"}
           </button>
         </div>
       </form>

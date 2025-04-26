@@ -11,6 +11,7 @@ interface FormFieldProps {
   select?: boolean;
   type?: string;
   options?: { value: string; label: string }[];
+  disabled?: boolean;
 }
 
 export default function FormField({
@@ -23,6 +24,7 @@ export default function FormField({
   select = false,
   type = "text",
   options = [],
+  disabled = false,
   ...props
 }: FormFieldProps) {
   return (
@@ -35,14 +37,16 @@ export default function FormField({
         {textarea ? (
           <textarea
             placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px] text-black placeholder:text-gray-400"
+            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px] text-black placeholder:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             required={required}
+            disabled={disabled}
             {...props}
           />
         ) : select ? (
           <select
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black"
+            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black disabled:opacity-50 disabled:cursor-not-allowed"
             required={required}
+            disabled={disabled}
             {...props}
           >
             {options.map((option) => (
@@ -55,8 +59,9 @@ export default function FormField({
           <input
             type={type}
             placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black placeholder:text-gray-400"
+            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black placeholder:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             required={required}
+            disabled={disabled}
             {...props}
           />
         )}

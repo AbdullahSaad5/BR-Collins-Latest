@@ -10,6 +10,7 @@ import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
 import ActionIcons from "@/components/ActionIcons";
 import ViewUserModal from "./ViewUserModal";
+import { useRouter } from "next/navigation";
 
 const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
   const response = await api.get("/users", {
@@ -24,6 +25,7 @@ const UserTable: React.FC = () => {
   const refreshToken = useAppSelector(getRefreshToken);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const router = useRouter();
 
   const {
     data: users,
@@ -47,8 +49,8 @@ const UserTable: React.FC = () => {
   };
 
   const handleEditUser = (user: IUser) => {
-    // TODO: Implement edit user functionality
-    console.log("Edit user:", user);
+    // Navigate to AddUser page with user data as query parameter
+    router.push(`/dashboard?item=addUser&edit=true&userId=${user.id}`);
   };
 
   const handleDeleteUser = (user: IUser) => {
