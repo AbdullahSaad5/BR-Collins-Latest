@@ -1,15 +1,16 @@
 // components/Register.tsx
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import loginimage from '../../../public/img/login/loginimage.png';
-import B from '../../../public/img/login/Bb.png';
-import logo from '../../../public/img/login/lowerlogo.png';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Image from "next/image";
+import loginimage from "../../../public/img/login/loginimage.png";
+import B from "../../../public/img/login/Bb.png";
+import logo from "../../../public/img/login/lowerlogo.png";
+import Link from "next/link";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Register: React.FC = () => {
-  const [userType, setUserType] = useState<'student' | 'org' | null>(null);
+  const [userType, setUserType] = useState<"student" | "org" | null>(null);
 
   return (
     <section className="">
@@ -17,9 +18,16 @@ const Register: React.FC = () => {
         {/* Left Side */}
         <div className="w-full lg:w-2/3 bg-[#0365AD] text-white relative py-12 lg:py-0">
           <div className="absolute bottom-0 w-full lg:w-[712px]">
-            <Image src={B} alt="Decorative background element" className="w-full" />
+            <Image
+              src={B}
+              alt="Decorative background element"
+              className="w-full"
+            />
           </div>
-          <div className="w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start lg:h-[700px] relative z-10">
+          <div className="w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start lg:h-full relative z-10">
+            <div className="w-12 h-12 rounded-full bg-[#3584BD] flex items-center justify-center">
+              <IoArrowBackOutline className="w-7 h-7 text-white" />
+            </div>
             <div>
               <Image src={logo} alt="Company logo" className="h-10 w-auto" />
             </div>
@@ -29,16 +37,22 @@ const Register: React.FC = () => {
                 Register Your Account
               </h1>
               <p className="text-gray-300">
-                Asterisks (<span className="text-org font-bold">*</span>) indicate required fields.
+                Asterisks (<span className="text-org font-bold">*</span>)
+                indicate required fields.
               </p>
             </div>
 
             {/* User Type Selection */}
             <div className="w-full">
-              <h2 className="text-white mb-4">Select User Type <span className="text-org">*</span></h2>
+              <h2 className="text-white mb-4">
+                Select User Type <span className="text-org">*</span>
+              </h2>
               <div className="flex flex-wrap gap-6">
-                {(['student', 'org'] as const).map((type) => (
-                  <label key={type} className="inline-flex items-center cursor-pointer">
+                {(["student", "org"] as const).map((type) => (
+                  <label
+                    key={type}
+                    className="inline-flex items-center cursor-pointer"
+                  >
                     <input
                       type="radio"
                       name="userType"
@@ -108,7 +122,7 @@ const Register: React.FC = () => {
             </form>
 
             <p className="text-sm">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link href="/login" className="text-org underline">
                 Sign In
               </Link>
