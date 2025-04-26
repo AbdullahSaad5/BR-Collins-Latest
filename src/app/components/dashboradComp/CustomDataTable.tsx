@@ -74,31 +74,34 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
     },
   };
 
-  const CustomPagination = ({ currentPage, totalPages, onChangePage }: any) => (
-    <div className="flex justify-between items-center mt-6 px-2">
-      <div className="text-sm text-gray-500">
-        Page {currentPage} of {totalPages}
+  const CustomPagination = ({ currentPage, rowsPerPage, rowCount, onChangePage }: any) => {
+    const totalPages = Math.ceil(rowCount / rowsPerPage);
+    return (
+      <div className="flex justify-between items-center mt-6 px-2">
+        <div className="text-sm text-gray-500">
+          Page {currentPage} of {totalPages}
+        </div>
+        <div className="flex gap-4 items-center">
+          <button
+            aria-label="Previous page"
+            className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
+            disabled={currentPage === 1}
+            onClick={() => onChangePage(currentPage - 1)}
+          >
+            <ArrowLeftIcon className="w-5 h-5" />
+          </button>
+          <button
+            aria-label="Next page"
+            className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
+            disabled={currentPage === totalPages}
+            onClick={() => onChangePage(currentPage + 1)}
+          >
+            <ArrowRightIcon className="w-5 h-5" />
+          </button>
+        </div>
       </div>
-      <div className="flex gap-4 items-center">
-        <button
-          aria-label="Previous page"
-          className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
-          disabled={currentPage === 1}
-          onClick={() => onChangePage(currentPage - 1)}
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-        </button>
-        <button
-          aria-label="Next page"
-          className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
-          disabled={currentPage === totalPages}
-          onClick={() => onChangePage(currentPage + 1)}
-        >
-          <ArrowRightIcon className="w-5 h-5" />
-        </button>
-      </div>
-    </div>
-  );
+    );
+  };
 
   if (isLoading) {
     return <div className="text-center py-8">Loading...</div>;
