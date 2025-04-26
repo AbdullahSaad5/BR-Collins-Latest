@@ -1,72 +1,48 @@
 "use client";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-interface Appointment {
-  venueName: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  locationDetails: string;
-  instructor: string;
-  course: string;
-  date: string;
-  time: string;
-  meetingType: string;
-  notes: string;
-}
+const appointmentSchema = z.object({
+  venueName: z.string().min(1, "Venue name is required"),
+  address: z.string().min(1, "Address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(1, "State is required"),
+  zipCode: z.string().min(1, "ZIP code is required"),
+  locationDetails: z.string().optional(),
+  instructor: z.string().min(1, "Instructor name is required"),
+  course: z.string().min(1, "Course is required"),
+  date: z.string().min(1, "Date is required"),
+  time: z.string().min(1, "Time is required"),
+  meetingType: z.string().optional(),
+  notes: z.string().optional(),
+});
+
+type AppointmentFormData = z.infer<typeof appointmentSchema>;
 
 export default function AddAppointment() {
-  const [appointmentData, setAppointmentData] = useState<Appointment>({
-    venueName: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    locationDetails: "",
-    instructor: "",
-    course: "",
-    date: "",
-    time: "",
-    meetingType: "",
-    notes: "",
-  });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setAppointmentData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<AppointmentFormData>({
+    resolver: zodResolver(appointmentSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: AppointmentFormData) => {
     setIsSubmitting(true);
 
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Appointment submitted:", appointmentData);
+      console.log("Appointment submitted:", data);
       setSuccess(true);
-      // Reset form after successful submission
-      setAppointmentData({
-        venueName: "",
-        address: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        locationDetails: "",
-        instructor: "",
-        course: "",
-        date: "",
-        time: "",
-        meetingType: "",
-        notes: "",
-      });
+      reset();
     } catch (error) {
       console.error("Error submitting appointment:", error);
     } finally {
@@ -82,16 +58,15 @@ export default function AddAppointment() {
         <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">Appointment added successfully!</div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-neutral-900">Location Information</h3>
 
           <FormField
             label="Venue Name *"
             description="Name of the meeting venue or location"
-            name="venueName"
-            value={appointmentData.venueName}
-            onChange={handleChange}
+            {...register("venueName")}
+            error={errors.venueName?.message}
             required
             placeholder="e.g., Client Office, Conference Center, Hotel Name"
           />
@@ -99,9 +74,8 @@ export default function AddAppointment() {
           <FormField
             label="Street Address *"
             description="Street address of the location"
-            name="address"
-            value={appointmentData.address}
-            onChange={handleChange}
+            {...register("address")}
+            error={errors.address?.message}
             required
             placeholder="e.g., 123 Main Street"
           />
@@ -109,9 +83,8 @@ export default function AddAppointment() {
           <FormField
             label="City *"
             description="City name"
-            name="city"
-            value={appointmentData.city}
-            onChange={handleChange}
+            {...register("city")}
+            error={errors.city?.message}
             required
             placeholder="e.g., New York"
           />
@@ -119,9 +92,8 @@ export default function AddAppointment() {
           <FormField
             label="State *"
             description="State or province"
-            name="state"
-            value={appointmentData.state}
-            onChange={handleChange}
+            {...register("state")}
+            error={errors.state?.message}
             required
             placeholder="e.g., NY"
           />
@@ -129,9 +101,8 @@ export default function AddAppointment() {
           <FormField
             label="ZIP Code *"
             description="Postal code"
-            name="zipCode"
-            value={appointmentData.zipCode}
-            onChange={handleChange}
+            {...register("zipCode")}
+            error={errors.zipCode?.message}
             required
             placeholder="e.g., 10001"
           />
@@ -139,9 +110,8 @@ export default function AddAppointment() {
           <FormField
             label="Additional Location Details"
             description="Any additional information about the location"
-            name="locationDetails"
-            value={appointmentData.locationDetails}
-            onChange={handleChange}
+            {...register("locationDetails")}
+            error={errors.locationDetails?.message}
             placeholder="e.g., Floor number, suite number, parking instructions, or specific directions"
             textarea
           />
@@ -149,26 +119,18 @@ export default function AddAppointment() {
 
         <FormField
           label="Instructor *"
-          description="Select the instructor for the appointment"
-          name="instructor"
-          value={appointmentData.instructor}
-          onChange={handleChange}
-          select
+          description="Enter the instructor's name"
+          {...register("instructor")}
+          error={errors.instructor?.message}
           required
-          options={[
-            { value: "", label: "Select an instructor" },
-            { value: "1", label: "Sarah Wilson" },
-            { value: "2", label: "Mike Johnson" },
-            { value: "3", label: "Emily Brown" },
-          ]}
+          placeholder="e.g., John Smith"
         />
 
         <FormField
           label="Course *"
           description="Select the course for the appointment"
-          name="course"
-          value={appointmentData.course}
-          onChange={handleChange}
+          {...register("course")}
+          error={errors.course?.message}
           select
           required
           options={[
@@ -182,9 +144,8 @@ export default function AddAppointment() {
         <FormField
           label="Date *"
           description="Select the date for the appointment"
-          name="date"
-          value={appointmentData.date}
-          onChange={handleChange}
+          {...register("date")}
+          error={errors.date?.message}
           type="date"
           required
         />
@@ -192,35 +153,18 @@ export default function AddAppointment() {
         <FormField
           label="Time *"
           description="Select the time for the appointment"
-          name="time"
-          value={appointmentData.time}
-          onChange={handleChange}
+          {...register("time")}
+          error={errors.time?.message}
           type="time"
           required
         />
-
-        {/* <FormField
-          label="Meeting Type *"
-          description="Select the type of meeting"
-          name="meetingType"
-          value={appointmentData.meetingType}
-          onChange={handleChange}
-          select
-          required
-          options={[
-            { value: "", label: "Select meeting type" },
-            { value: "one-on-one", label: "One-on-One" },
-            { value: "group", label: "Group Session" },
-          ]}
-        /> */}
 
         <FormField
           label="Notes"
           description="Add any additional notes for the appointment"
           placeholder="Enter notes..."
-          name="notes"
-          value={appointmentData.notes}
-          onChange={handleChange}
+          {...register("notes")}
+          error={errors.notes?.message}
           textarea
         />
 
@@ -242,9 +186,7 @@ interface FormFieldProps {
   label: string;
   description: string;
   placeholder?: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  error?: string;
   required?: boolean;
   textarea?: boolean;
   select?: boolean;
@@ -256,14 +198,13 @@ function FormField({
   label,
   description,
   placeholder,
-  name,
-  value,
-  onChange,
+  error,
   required = false,
   textarea = false,
   select = false,
   type = "text",
   options = [],
+  ...props
 }: FormFieldProps) {
   return (
     <div className="flex flex-wrap gap-10 max-w-full w-[705px]">
@@ -274,20 +215,16 @@ function FormField({
       <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
         {textarea ? (
           <textarea
-            name={name}
-            value={value}
-            onChange={onChange}
             placeholder={placeholder}
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px]"
             required={required}
+            {...props}
           />
         ) : select ? (
           <select
-            name={name}
-            value={value}
-            onChange={onChange}
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
             required={required}
+            {...props}
           >
             {options.map((option) => (
               <option key={option.value} value={option.value}>
@@ -298,14 +235,13 @@ function FormField({
         ) : (
           <input
             type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
             placeholder={placeholder}
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
             required={required}
+            {...props}
           />
         )}
+        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       </div>
     </div>
   );
