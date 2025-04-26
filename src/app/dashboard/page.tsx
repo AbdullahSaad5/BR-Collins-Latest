@@ -40,8 +40,6 @@ export default function Dashboard() {
     switch (activeItem) {
       case "dashboard":
         return <DashboardStats />;
-      case "profile":
-        return <MyProfile />;
       case "addCourseCategory":
         return <AddCourseCategory />;
       case "viewCourseCategory":
@@ -58,7 +56,7 @@ export default function Dashboard() {
         return <ViewUser />;
       case "history":
         return <CourseHistory />;
-      case "settings":
+      case "profile":
         return <Setting />;
       case "addInstructor":
         return <AddInstructor />;

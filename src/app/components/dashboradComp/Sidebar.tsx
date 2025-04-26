@@ -91,13 +91,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           onClick={() => onItemClick("dashboard")}
           collapsed={collapsed}
         />
-        <SidebarItem
+        {/* <SidebarItem
           icon={User}
           label="My Profile"
           isActive={activeItem === "profile"}
           onClick={() => onItemClick("profile")}
           collapsed={collapsed}
-        />
+        /> */}
 
         {/* Users Section */}
         <div className="w-full">
@@ -311,12 +311,11 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
         /> */}
         <SidebarItem
           icon={Settings}
-          label="Settings"
-          isActive={activeItem === "settings"}
-          onClick={() => onItemClick("settings")}
+          label="My Profile"
+          isActive={activeItem === "profile"}
+          onClick={() => onItemClick("profile")}
           collapsed={collapsed}
         />
-
         <div className={`mt-6 w-full border-t border-slate-200 pt-2 ${collapsed ? "" : ""}`}>
           <SidebarItem
             icon={LogOut}
