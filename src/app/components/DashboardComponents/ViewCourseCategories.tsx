@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { AddUserIcon, ViewIcon } from "./Icons";
+import { AddUserIcon } from "./Icons";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import CustomDataTable from "./CustomDataTable";
+import ActionIcons from "@/components/ActionIcons";
+import ViewCourseCategoryModal from "./ViewCourseCategoryModal";
 
 interface CourseCategory {
   id: string;
@@ -19,6 +21,9 @@ const fetchCategories = async (): Promise<{ data: CourseCategory[] }> => {
 };
 
 export default function ViewCourseCategories() {
+  const [selectedCategory, setSelectedCategory] = useState<CourseCategory | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
   const {
     data: categories,
     isLoading,
@@ -28,6 +33,26 @@ export default function ViewCourseCategories() {
     queryFn: fetchCategories,
     select: (data) => data.data,
   });
+
+  const handleViewCategory = (category: CourseCategory) => {
+    setSelectedCategory(category);
+    setIsViewModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setSelectedCategory(null);
+  };
+
+  const handleEditCategory = (category: CourseCategory) => {
+    // TODO: Implement edit category functionality
+    console.log("Edit category:", category);
+  };
+
+  const handleDeleteCategory = (category: CourseCategory) => {
+    // TODO: Implement delete category functionality
+    console.log("Delete category:", category);
+  };
 
   const columns = [
     {
@@ -56,11 +81,12 @@ export default function ViewCourseCategories() {
     {
       name: "Actions",
       cell: (row: CourseCategory) => (
-        <div className="flex gap-2">
-          <button aria-label="View category details" className="text-gray-500 hover:text-gray-700 transition-colors">
-            <ViewIcon className="w-5 h-5" />
-          </button>
-        </div>
+        <ActionIcons
+          onView={() => handleViewCategory(row)}
+          onEdit={() => handleEditCategory(row)}
+          viewTooltip="View Category Details"
+          editTooltip="Edit Category"
+        />
       ),
       grow: 0.5,
     },
@@ -87,6 +113,10 @@ export default function ViewCourseCategories() {
         error={error}
         noDataMessage="No course categories found"
       />
+
+      {selectedCategory && (
+        <ViewCourseCategoryModal category={selectedCategory} isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
+      )}
     </section>
   );
 }
