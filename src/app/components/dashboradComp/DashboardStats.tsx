@@ -1,14 +1,10 @@
 import React from "react";
-// import { 
-//   Book, 
-//   BookOpen, 
-//   CheckCircle 
+// import {
+//   Book,
+//   BookOpen,
+//   CheckCircle
 // } from "react-icons/fi";
-import {
-  Book,
-  BookOpen,
-  CheckCircle,
-} from "lucide-react";
+import { Book, BookOpen, CheckCircle } from "lucide-react";
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -18,18 +14,10 @@ interface StatCardProps {
   textColor: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ 
-  icon, 
-  count, 
-  label, 
-  bgColor, 
-  textColor 
-}) => {
+const StatCard: React.FC<StatCardProps> = ({ icon, count, label, bgColor, textColor }) => {
   return (
     <div className={`flex flex-col ${bgColor} p-6 rounded-xl w-full max-w-xs`}>
-      <div className={`${textColor} text-2xl`}>
-        {icon}
-      </div>
+      <div className={`${textColor} text-2xl`}>{icon}</div>
       <div className="mt-4 text-3xl font-bold text-black">{count}</div>
       <div className="mt-1 text-lg text-gray-600">{label}</div>
     </div>
@@ -38,10 +26,8 @@ const StatCard: React.FC<StatCardProps> = ({
 
 const DashboardStats = () => {
   return (
-    <section className="flex flex-col mt-10 max-md:max-w-full">
-      <h2 className="self-start text-2xl font-bold text-neutral-900">
-        Dashboard
-      </h2>
+    <section className="flex flex-col px-6 py-8 mx-auto max-md:max-w-full">
+      <h2 className="self-start text-2xl font-bold text-neutral-900">Dashboard</h2>
       <div className="flex flex-nowrap gap-3 flex-row items-center mt-5 max-md:max-w-full">
         <StatCard
           icon={<Book className="text-2xl" />}
