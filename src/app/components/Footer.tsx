@@ -94,7 +94,7 @@ const Newsletter = () => {
         <div className="border-1 bg-[#16313F] border-gray-600 w-full flex flex-row  rounded-4xl p-1">
           <input
             type="text"
-            className="border-none bg-transparent p-[6px] px-5 w-full placeholder-gray-400 rounded-4xl"
+            className="border-none bg-transparent focus:outline-0 text-gray-400 p-[6px] px-5 w-full placeholder-gray-400 rounded-4xl"
             name="input"
             placeholder="Email Address"
           />
