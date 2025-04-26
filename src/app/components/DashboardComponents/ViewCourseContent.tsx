@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { ViewIcon, EditIcon } from "./Icons";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
@@ -7,6 +7,8 @@ import { showToast } from "@/app/utils/toast";
 import { ICourseContent } from "@/app/types/course-content.contract";
 import { ICourse } from "@/app/types/course.contract";
 import CustomDataTable from "./CustomDataTable";
+import ActionIcons from "@/components/ActionIcons";
+import ViewCourseContentModal from "./ViewCourseContentModal";
 
 const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
   const response = await api.get("/course-contents?populate=courseId");
@@ -14,6 +16,9 @@ const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
 };
 
 const ViewCourseContent = () => {
+  const [selectedContent, setSelectedContent] = useState<ICourseContent | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
   const {
     data: contents,
     isLoading,
@@ -23,6 +28,21 @@ const ViewCourseContent = () => {
     queryFn: fetchCourseContents,
     select: (data) => data.data,
   });
+
+  const handleView = (content: ICourseContent) => {
+    setSelectedContent(content);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (content: ICourseContent) => {
+    console.log("Edit content:", content);
+    // TODO: Implement edit functionality
+  };
+
+  const handleDelete = async (content: ICourseContent) => {
+    console.log("Delete content:", content);
+    // TODO: Implement delete functionality
+  };
 
   const columns = [
     {
@@ -73,16 +93,7 @@ const ViewCourseContent = () => {
     },
     {
       name: "Actions",
-      cell: (row: ICourseContent) => (
-        <div className="flex gap-2">
-          <button aria-label="View content details" className="text-gray-500 hover:text-gray-700 transition-colors">
-            <ViewIcon className="w-5 h-5" />
-          </button>
-          <button aria-label="Edit content" className="text-gray-500 hover:text-gray-700 transition-colors">
-            <EditIcon className="w-5 h-5" />
-          </button>
-        </div>
-      ),
+      cell: (row: ICourseContent) => <ActionIcons onView={() => handleView(row)} onEdit={() => handleEdit(row)} />,
       grow: 1.5,
     },
   ];
@@ -103,6 +114,15 @@ const ViewCourseContent = () => {
         isLoading={isLoading}
         error={error}
         noDataMessage="No course contents found"
+      />
+
+      <ViewCourseContentModal
+        content={selectedContent}
+        isOpen={isViewModalOpen}
+        onClose={() => {
+          setIsViewModalOpen(false);
+          setSelectedContent(null);
+        }}
       />
     </section>
   );
