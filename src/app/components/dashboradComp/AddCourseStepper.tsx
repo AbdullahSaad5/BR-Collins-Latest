@@ -47,7 +47,7 @@ type FieldArrayValue = {
 
 type CourseFormData = Omit<
   ICourse,
-  "id" | "rating" | "noOfStudents" | "createdAt" | "updatedAt" | "whatYouWillLearn" | "requirements"
+  "id" | "rating" | "noOfStudents" | "createdAt" | "updatedAt" | "whatYouWillLearn" | "requirements" | "_id"
 > & {
   whatYouWillLearn: FieldArrayValue[];
   requirements: FieldArrayValue[];
@@ -106,6 +106,7 @@ export default function AddCourseStepper() {
       const response = await api.get("/course-categories");
       return response.data.data;
     },
+    initialData: [],
   });
 
   const {
