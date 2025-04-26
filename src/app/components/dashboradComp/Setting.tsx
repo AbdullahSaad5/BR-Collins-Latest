@@ -1,20 +1,45 @@
 "use client";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import FormField from "./FormField";
+
+const profileSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email address"),
+  bio: z.string().optional(),
+});
+
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type ProfileFormData = z.infer<typeof profileSchema>;
+type PasswordFormData = z.infer<typeof passwordSchema>;
 
 const PasswordField = ({
   label,
   description,
-  value,
   showPassword,
   togglePassword,
+  error,
+  ...props
 }: {
   label: string;
   description: string;
-  value: string;
   showPassword: boolean;
   togglePassword: () => void;
-}) => {
+  error?: string;
+} & React.InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <div className="flex flex-wrap gap-10 max-w-full w-[705px]">
       <div className="grow shrink-0 basis-0 w-fit">
@@ -26,9 +51,8 @@ const PasswordField = ({
           <div className="flex flex-1 shrink gap-10 justify-between items-end self-stretch my-auto w-full basis-0 min-w-60">
             <input
               type={showPassword ? "text" : "password"}
-              value={value}
-              readOnly
               className="w-full bg-transparent border-none outline-none"
+              {...props}
             />
             <button
               type="button"
@@ -72,6 +96,7 @@ const PasswordField = ({
             </button>
           </div>
         </div>
+        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       </div>
     </div>
   );
@@ -83,13 +108,45 @@ const SettingsForm = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission based on active tab
-    if (activeTab === "profile") {
-      console.log("Profile updated");
-    } else {
-      console.log("Password updated");
+  const {
+    register: registerProfile,
+    handleSubmit: handleProfileSubmit,
+    formState: { errors: profileErrors, isSubmitting: isProfileSubmitting },
+  } = useForm<ProfileFormData>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      firstName: "Charlotte",
+      lastName: "Anderson",
+      email: "charlotte675@gmail.com",
+      bio: "Hi, I'm Charlotte Anderson, a college student currently pursuing a degree in Business Administration. I'm passionate about leadership, communication, and developing real-world skills.",
+    },
+  });
+
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    formState: { errors: passwordErrors, isSubmitting: isPasswordSubmitting },
+  } = useForm<PasswordFormData>({
+    resolver: zodResolver(passwordSchema),
+  });
+
+  const onProfileSubmit = async (data: ProfileFormData) => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Profile updated:", data);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
+  };
+
+  const onPasswordSubmit = async (data: PasswordFormData) => {
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Password updated:", data);
+    } catch (error) {
+      console.error("Error updating password:", error);
     }
   };
 
@@ -97,7 +154,13 @@ const SettingsForm = () => {
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-2xl font-semibold text-neutral-900 mb-8">Settings</h2>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form
+        onSubmit={
+          activeTab === "profile" ? handleProfileSubmit(onProfileSubmit) : handlePasswordSubmit(onPasswordSubmit)
+        }
+        className="space-y-6"
+        noValidate
+      >
         <div className="flex gap-6 items-center mb-6">
           <button
             type="button"
@@ -121,9 +184,8 @@ const SettingsForm = () => {
               label="First Name *"
               description="This will be displayed on your profile"
               placeholder="Enter first name"
-              name="firstName"
-              value="Charlotte"
-              onChange={() => {}}
+              {...registerProfile("firstName")}
+              error={profileErrors.firstName?.message}
               required
             />
 
@@ -131,9 +193,8 @@ const SettingsForm = () => {
               label="Last Name *"
               description="This will be displayed on your profile"
               placeholder="Enter last name"
-              name="lastName"
-              value="Anderson"
-              onChange={() => {}}
+              {...registerProfile("lastName")}
+              error={profileErrors.lastName?.message}
               required
             />
 
@@ -141,9 +202,8 @@ const SettingsForm = () => {
               label="Email Address *"
               description="Use an active email address"
               placeholder="Enter email"
-              name="email"
-              value="charlotte675@gmail.com"
-              onChange={() => {}}
+              {...registerProfile("email")}
+              error={profileErrors.email?.message}
               type="email"
               required
             />
@@ -152,9 +212,8 @@ const SettingsForm = () => {
               label="Bio / About Me"
               description="Short introduction about yourself"
               placeholder="Enter your bio"
-              name="bio"
-              value="Hi, I'm Charlotte Anderson, a college student currently pursuing a degree in Business Administration. I'm passionate about leadership, communication, and developing real-world skills."
-              onChange={() => {}}
+              {...registerProfile("bio")}
+              error={profileErrors.bio?.message}
               textarea
             />
           </>
@@ -163,25 +222,28 @@ const SettingsForm = () => {
             <PasswordField
               label="Current Password *"
               description="Enter your current password"
-              value="currentpass123"
               showPassword={showCurrentPassword}
               togglePassword={() => setShowCurrentPassword(!showCurrentPassword)}
+              {...registerPassword("currentPassword")}
+              error={passwordErrors.currentPassword?.message}
             />
 
             <PasswordField
               label="New Password *"
               description="Choose a strong password with at least 8 characters"
-              value="newpass123"
               showPassword={showNewPassword}
               togglePassword={() => setShowNewPassword(!showNewPassword)}
+              {...registerPassword("newPassword")}
+              error={passwordErrors.newPassword?.message}
             />
 
             <PasswordField
               label="Re-type New Password *"
               description="Confirm your new password"
-              value="newpass123"
               showPassword={showConfirmPassword}
               togglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+              {...registerPassword("confirmPassword")}
+              error={passwordErrors.confirmPassword?.message}
             />
           </>
         )}
@@ -189,9 +251,16 @@ const SettingsForm = () => {
         <div className="flex justify-end mt-8">
           <button
             type="submit"
-            className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600"
+            disabled={activeTab === "profile" ? isProfileSubmitting : isPasswordSubmitting}
+            className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {activeTab === "profile" ? "Update Profile" : "Update Password"}
+            {activeTab === "profile"
+              ? isProfileSubmitting
+                ? "Updating Profile..."
+                : "Update Profile"
+              : isPasswordSubmitting
+              ? "Updating Password..."
+              : "Update Password"}
           </button>
         </div>
       </form>

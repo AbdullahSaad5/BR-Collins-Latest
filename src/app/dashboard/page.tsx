@@ -29,10 +29,12 @@ export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
 
   useEffect(() => {
+    setIsClient(true);
     // Get the active item from URL query parameter
     const item = searchParams.get("item");
     if (item) {
@@ -56,7 +58,7 @@ export default function Dashboard() {
   };
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isLoading || !isClient) {
       return (
         <div className="flex items-center justify-center h-full">
           <div className="flex flex-col items-center gap-4">
