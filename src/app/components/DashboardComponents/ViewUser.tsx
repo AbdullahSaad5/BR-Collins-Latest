@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { AddUserIcon, ViewIcon } from "./Icons";
+import React, { useState } from "react";
+import { AddUserIcon } from "./Icons";
 import CustomDataTable from "./CustomDataTable";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
@@ -8,6 +8,8 @@ import { IUser } from "@/app/types/user.contract";
 import { transformUserType } from "@/app/utils/string-manipulation/transform-user-type";
 import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
+import ActionIcons from "@/components/ActionIcons";
+import ViewUserModal from "./ViewUserModal";
 
 const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
   const response = await api.get("/users", {
@@ -20,6 +22,9 @@ const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
 
 const UserTable: React.FC = () => {
   const refreshToken = useAppSelector(getRefreshToken);
+  const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
   const {
     data: users,
     isLoading,
@@ -30,6 +35,26 @@ const UserTable: React.FC = () => {
     select: (data) => data.data,
     enabled: !!refreshToken,
   });
+
+  const handleViewUser = (user: IUser) => {
+    setSelectedUser(user);
+    setIsViewModalOpen(true);
+  };
+
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleEditUser = (user: IUser) => {
+    // TODO: Implement edit user functionality
+    console.log("Edit user:", user);
+  };
+
+  const handleDeleteUser = (user: IUser) => {
+    // TODO: Implement delete user functionality
+    console.log("Delete user:", user);
+  };
 
   const columns = [
     {
@@ -85,9 +110,18 @@ const UserTable: React.FC = () => {
     {
       name: "Actions",
       cell: (row: IUser) => (
-        <button aria-label="View user details" className="text-gray-500 hover:text-gray-700 transition-colors">
-          <ViewIcon className="w-5 h-5" />
-        </button>
+        <ActionIcons
+          onView={() => handleViewUser(row)}
+          onEdit={() => handleEditUser(row)}
+          viewTooltip="View User Details"
+          editTooltip="Edit User"
+          deleteTooltip="Delete User"
+          disabled={{
+            view: false,
+            edit: row.role === "admin", // Prevent editing admin users
+            delete: row.role === "admin", // Prevent deleting admin users
+          }}
+        />
       ),
       grow: 0.5,
     },
@@ -110,6 +144,8 @@ const UserTable: React.FC = () => {
         error={error}
         noDataMessage="No users found"
       />
+
+      <ViewUserModal user={selectedUser} isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
     </section>
   );
 };

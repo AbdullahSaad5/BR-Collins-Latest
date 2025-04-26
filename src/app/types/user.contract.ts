@@ -21,6 +21,8 @@ export interface IUser {
   emailVerifiedAt?: Date;
   hasTwoFactorAuth: boolean;
   allowResetPassword: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IUserMethods {
