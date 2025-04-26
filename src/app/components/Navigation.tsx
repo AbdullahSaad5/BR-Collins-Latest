@@ -19,7 +19,7 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="relative text-gray-900 flex flex-wrap items-center justify-between p-1 mt-5 max-md:max-w-full lg:px-20 sm:px-1 mb-5">
+    <nav className="relative text-gray-900 flex items-center justify-between p-1 mt-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 mb-5">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full md:hidden">
         <div className="flex items-center gap-4">
@@ -41,75 +41,72 @@ export const Navigation = () => {
         </div>
       </div>
 
-      {/* Desktop Left Section */}
-      <div className="items-center flex-grow hidden md:flex gap-10">
-        <a href="/">
-          <img src="/img/logo.svg" className="object-contain aspect-[4.22] min-w-60 w-[241px]" alt="Logo" />
-        </a>
+      {/* Desktop Layout */}
+      <div className="hidden md:flex w-full items-center justify-between">
+        {/* Left Section */}
+        <div className="flex items-center gap-10 flex-1">
+          <a href="/">
+            <img src="/img/logo.svg" className="object-contain aspect-[4.22] min-w-60 w-[241px]" alt="Logo" />
+          </a>
 
-        <div className="flex gap-2.5 items-center">
-          <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
-            <div className="flex gap-2 justify-center items-center w-full">
-              <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
-              <input
-                type="text"
-                placeholder="Search for anything"
-                className="w-full border-none focus:outline-none text-sm placeholder-gray-500"
+          <div className="flex gap-2.5 items-center w-full max-w-[500px]">
+            <div className="flex flex-col justify-center items-start px-5 py-3 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
+              <div className="flex gap-2 justify-center items-center w-full">
+                <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
+                <input
+                  type="text"
+                  placeholder="Search for anything"
+                  className="w-full border-none focus:outline-none text-sm placeholder-gray-500"
+                />
+              </div>
+            </div>
+
+            <div className="relative w-full max-w-[120px] m-1">
+              <select
+                onChange={handleChange}
+                defaultValue="/course"
+                className="w-full appearance-none flex justify-center items-center px-1 py-1 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
+              >
+                <option value="/course">Courses</option>
+                <option value="/about">About</option>
+                <option value="/contact">Contact</option>
+              </select>
+              <img
+                src="/img/downarrow.svg"
+                className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
+                alt="Dropdown icon"
               />
             </div>
           </div>
+        </div>
 
-          <div className="relative w-full max-w-[138px]">
-            <select
-              onChange={handleChange}
-              defaultValue="/course" // Make sure this matches one of your option values
-              className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer"
-            >
-              <option value="/course">Courses</option>
-              <option value="/about">About</option>
-              <option value="/contact">Contact</option>
-            </select>
-            <img
-              src="/img/downarrow.svg"
-              className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
-              alt="Dropdown icon"
-            />
+        {/* Right Section */}
+        <div className="flex items-center gap-10">
+          <div className="flex gap-8 items-center font-medium">
+            <Link href="/subscriptions" className="hover:text-sky-600 whitespace-nowrap">
+              Subscriptions
+            </Link>
+            <Link href="/about" className="hover:text-sky-600 whitespace-nowrap">
+              About Us
+            </Link>
+            <Link href="/contact" className="hover:text-sky-600 whitespace-nowrap">
+              Contact Us
+            </Link>
           </div>
-        </div>
-      </div>
 
-      {/* Desktop Right Section */}
-      <div className="items-center flex-grow hidden md:flex gap-10 justify-between">
-        <div className="flex gap-8 items-center font-medium">
-          <Link href="/course" className="hover:text-sky-600">
-            Courses
-          </Link>
-          <Link href="/subscriptions" className="hover:text-sky-600">
-            Subscriptions
-          </Link>
-          <Link href="/about" className="hover:text-sky-600">
-            About Us
-          </Link>
-          <a href="/contact" className="hover:text-sky-600">
-            Contact Us
-          </a>
-          <Link href="/dashboard" className="hover:text-sky-600">
-            Dashboard
-          </Link>
-        </div>
-
-        <div className="flex gap-4 items-center">
-          <button onClick={() => setCart(true)} className="relative">
-            <ShoppingCart className="w-6 h-6" />
-            {items.length > 0 && (
-              <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
-            )}
-          </button>
-          <Link href="/login">
-            <button className="overflow-hidden gap-1.5 px-6 py-4 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px]">
-              Login
+          <div className="flex gap-4 items-center">
+            <button onClick={() => setCart(true)} className="relative">
+              <ShoppingCart className="w-6 h-6" />
+              {items.length > 0 && (
+                <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
+              )}
             </button>
-          </Link>
+            <Link href="/login">
+              <button className="overflow-hidden gap-1.5 px-5 py-0.5 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] whitespace-nowrap">
+                Login
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -134,7 +131,7 @@ export const Navigation = () => {
             </div>
 
             <div className="relative w-full">
-              <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-4 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
+              <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-1 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
                 <option value="">Courses</option>
                 <option value="course1">Course 1</option>
                 <option value="course2">Course 2</option>
@@ -158,13 +155,13 @@ export const Navigation = () => {
             <a href="/contact" className="p-2 hover:bg-gray-100 rounded">
               Contact Us
             </a>
-            <a href="/dashboard" className="p-2 hover:bg-gray-100 rounded">
-              Dashboard
+            <a href="/subscriptions" className="p-2 hover:bg-gray-100 rounded">
+              Subscriptions
             </a>
           </div>
 
           <Link href="/login">
-            <button className="w-full px-6 py-4 bg-white border border-solid border-zinc-200 rounded-[56px] mt-4">
+            <button className="w-full px-2 py-1 bg-white border border-solid border-zinc-200 rounded-[56px] mt-4">
               Login
             </button>
           </Link>
