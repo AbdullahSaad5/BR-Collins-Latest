@@ -7,9 +7,11 @@ import { api } from "@/app/utils/axios";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseCategoryModal from "./ViewCourseCategoryModal";
+import { useRouter } from "next/navigation";
 
 interface CourseCategory {
   id: string;
+  _id: string;
   name: string;
   description: string;
   createdAt: string;
@@ -23,6 +25,7 @@ const fetchCategories = async (): Promise<{ data: CourseCategory[] }> => {
 export default function ViewCourseCategories() {
   const [selectedCategory, setSelectedCategory] = useState<CourseCategory | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const router = useRouter();
 
   const {
     data: categories,
@@ -45,8 +48,7 @@ export default function ViewCourseCategories() {
   };
 
   const handleEditCategory = (category: CourseCategory) => {
-    // TODO: Implement edit category functionality
-    console.log("Edit category:", category);
+    router.push(`/dashboard?item=addCourseCategory&edit=true&categoryId=${category._id}`);
   };
 
   const handleDeleteCategory = (category: CourseCategory) => {
@@ -100,10 +102,13 @@ export default function ViewCourseCategories() {
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-neutral-900">Course Categories</h1>
-        <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
+        {/* <button
+          className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors"
+          onClick={() => router.push("/dashboard?item=addCourseCategory")}
+        >
           <AddUserIcon className="w-5 h-5" />
           <span>Add New Category</span>
-        </button>
+        </button> */}
       </div>
 
       <CustomDataTable

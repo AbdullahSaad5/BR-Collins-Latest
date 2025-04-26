@@ -133,10 +133,10 @@ const UserTable: React.FC = () => {
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-neutral-900">View Users</h1>
-        <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
+        {/* <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
           <AddUserIcon className="w-5 h-5" />
           <span>Add New User</span>
-        </button>
+        </button> */}
       </div>
 
       <CustomDataTable

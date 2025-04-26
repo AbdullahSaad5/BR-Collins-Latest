@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,6 +9,7 @@ import { showToast } from "@/app/utils/toast";
 import FormField from "./FormField";
 import { ICourse } from "@/app/types/course.contract";
 import { CourseContentCreatePayload } from "@/app/types/course-content.contract";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
@@ -26,6 +27,10 @@ const courseContentSchema = z.object({
 });
 
 export default function AddCourseContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const isEditMode = searchParams.get("edit") === "true";
+  const contentId = searchParams.get("contentId");
   const [success, setSuccess] = useState(false);
 
   const {
@@ -38,11 +43,21 @@ export default function AddCourseContent() {
     select: (data) => data.data,
   });
 
+  const { data: content } = useQuery({
+    queryKey: ["course-content", contentId],
+    queryFn: async () => {
+      const response = await api.get(`/course-contents/${contentId}`);
+      return response.data.data;
+    },
+    enabled: isEditMode && !!contentId,
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm<CourseContentCreatePayload>({
     resolver: zodResolver(courseContentSchema),
     defaultValues: {
@@ -56,20 +71,33 @@ export default function AddCourseContent() {
     },
   });
 
+  useEffect(() => {
+    if (content && isEditMode) {
+      setValue("courseId", content.courseId);
+      setValue("title", content.title);
+      setValue("description", content.description);
+      setValue("contentType", content.contentType);
+      setValue("contentUrl", content.contentUrl);
+      setValue("duration", content.duration);
+      setValue("order", content.order);
+    }
+  }, [content, isEditMode, setValue]);
+
   const createCourseContentMutation = useMutation({
     mutationFn: async (data: CourseContentCreatePayload) => {
-      console.log(data);
-      const response = await api.post("/course-contents", data);
+      const endpoint = isEditMode ? `/course-contents/${contentId}` : "/course-contents";
+      const method = isEditMode ? "patch" : "post";
+      const response = await api[method](endpoint, data);
       return response.data;
     },
     onSuccess: () => {
-      showToast("Course content added successfully", "success");
+      showToast(`Course content ${isEditMode ? "updated" : "added"} successfully`, "success");
       setSuccess(true);
-      reset();
+      router.push("/dashboard?item=viewCourseContent");
     },
     onError: (error) => {
-      showToast("Failed to add course content", "error");
-      console.error("Error adding course content:", error);
+      showToast(`Failed to ${isEditMode ? "update" : "add"} course content`, "error");
+      console.error(`Error ${isEditMode ? "updating" : "adding"} course content:`, error);
     },
   });
 
@@ -79,10 +107,14 @@ export default function AddCourseContent() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">Add Course Content</h2>
+      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">
+        {isEditMode ? "Edit Course Content" : "Add Course Content"}
+      </h2>
 
       {success && (
-        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">Course content added successfully!</div>
+        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
+          Course content {isEditMode ? "updated" : "added"} successfully!
+        </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
@@ -174,7 +206,7 @@ export default function AddCourseContent() {
             disabled={createCourseContentMutation.isPending}
             className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {createCourseContentMutation.isPending ? "Adding Content..." : "Add Content"}
+            {createCourseContentMutation.isPending ? "Submitting..." : isEditMode ? "Update Content" : "Add Content"}
           </button>
         </div>
       </form>

@@ -9,6 +9,7 @@ import { ICourse } from "@/app/types/course.contract";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseContentModal from "./ViewCourseContentModal";
+import { useRouter } from "next/navigation";
 
 const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
   const response = await api.get("/course-contents?populate=courseId");
@@ -18,6 +19,7 @@ const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
 const ViewCourseContent = () => {
   const [selectedContent, setSelectedContent] = useState<ICourseContent | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const router = useRouter();
 
   const {
     data: contents,
@@ -35,8 +37,7 @@ const ViewCourseContent = () => {
   };
 
   const handleEdit = (content: ICourseContent) => {
-    console.log("Edit content:", content);
-    // TODO: Implement edit functionality
+    router.push(`/dashboard?item=addCourseContent&edit=true&contentId=${content._id}`);
   };
 
   const handleDelete = async (content: ICourseContent) => {
@@ -58,15 +59,15 @@ const ViewCourseContent = () => {
     },
     {
       name: "Course",
-      selector: (row: ICourseContent) => (row.courseId as unknown as ICourse).title,
+      selector: (row: ICourseContent) => (row.courseId as unknown as ICourse)?.title,
       sortable: true,
       grow: 1.5,
       cell: (row: ICourseContent) => (
         <div
           className="text-base text-left text-neutral-900 truncate"
-          title={(row.courseId as unknown as ICourse).title}
+          title={(row.courseId as unknown as ICourse)?.title}
         >
-          {(row.courseId as unknown as ICourse).title}
+          {(row.courseId as unknown as ICourse)?.title}
         </div>
       ),
     },

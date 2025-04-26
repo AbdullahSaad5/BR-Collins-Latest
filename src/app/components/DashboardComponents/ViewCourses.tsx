@@ -8,6 +8,7 @@ import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseModal from "./ViewCourseModal";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
@@ -17,6 +18,7 @@ const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
 const ViewCourses = () => {
   const [selectedCourse, setSelectedCourse] = useState<ICourse | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const router = useRouter();
 
   const {
     data: courses,
@@ -39,8 +41,7 @@ const ViewCourses = () => {
   };
 
   const handleEditCourse = (course: ICourse) => {
-    // TODO: Implement edit course functionality
-    console.log("Edit course:", course);
+    router.push(`/dashboard?item=addCourse&edit=true&courseId=${course._id}`);
   };
 
   const handleDeleteCourse = (course: ICourse) => {
@@ -144,10 +145,10 @@ const ViewCourses = () => {
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-neutral-900">View Courses</h2>
-        <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
+        {/* <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
           <AddUserIcon className="w-5 h-5" />
           <span>Add New Course</span>
-        </button>
+        </button> */}
       </div>
 
       <CustomDataTable

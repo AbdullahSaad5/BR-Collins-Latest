@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { ICourse } from "@/app/types/course.contract";
+import { useSearchParams } from "next/navigation";
 
 type FieldArrayValue = {
   value: string;
@@ -47,7 +48,15 @@ type FieldArrayValue = {
 
 type CourseFormData = Omit<
   ICourse,
-  "id" | "rating" | "noOfStudents" | "createdAt" | "updatedAt" | "whatYouWillLearn" | "requirements" | "_id"
+  | "id"
+  | "rating"
+  | "noOfStudents"
+  | "createdAt"
+  | "updatedAt"
+  | "whatYouWillLearn"
+  | "requirements"
+  | "_id"
+  | "lastUpdated"
 > & {
   whatYouWillLearn: FieldArrayValue[];
   requirements: FieldArrayValue[];
@@ -61,7 +70,6 @@ const courseSchema = z.object({
   noOfHours: z.number().min(1, "Number of hours must be at least 1"),
   startDate: z.date(),
   language: z.string().min(1, "Language is required"),
-  lastUpdated: z.date(),
   bestSeller: z.boolean(),
   price: z.number().min(1, "Price must be at least 1"),
   discountPrice: z.number().min(0, "Discount price must be non-negative").optional(),
@@ -94,11 +102,23 @@ const courseSchema = z.object({
 });
 
 export default function AddCourseStepper() {
+  const searchParams = useSearchParams();
+  const isEditMode = searchParams.get("edit") === "true";
+  const courseId = searchParams.get("courseId");
   const [activeStep, setActiveStep] = useState(0);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { data: course } = useQuery({
+    queryKey: ["course", courseId],
+    queryFn: async () => {
+      const response = await api.get(`/courses/${courseId}`);
+      return response.data.data;
+    },
+    enabled: isEditMode && !!courseId,
+  });
 
   const { data: categories } = useQuery({
     queryKey: ["course-categories-list"],
@@ -117,6 +137,7 @@ export default function AddCourseStepper() {
     watch,
     setValue,
     trigger,
+    reset,
   } = useForm<CourseFormData>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -127,7 +148,6 @@ export default function AddCourseStepper() {
       noOfHours: 0,
       startDate: new Date(),
       language: "English",
-      lastUpdated: new Date(),
       bestSeller: false,
       price: 0,
       discountPrice: 0,
@@ -150,6 +170,19 @@ export default function AddCourseStepper() {
       categoryId: "",
     },
   });
+
+  useEffect(() => {
+    if (course && isEditMode) {
+      reset({
+        ...course,
+        whatYouWillLearn: course.whatYouWillLearn.map((point: string) => ({ value: point })),
+        requirements: course.requirements.map((req: string) => ({ value: req })),
+      });
+      if (course.coverImageUrl) {
+        setPreviewImage(course.coverImageUrl);
+      }
+    }
+  }, [course, isEditMode, reset]);
 
   const {
     fields: learningPoints,
@@ -224,7 +257,9 @@ export default function AddCourseStepper() {
 
   const createCourseMutation = useMutation({
     mutationFn: async (data: CourseFormData) => {
-      const response = await api.post("/courses", {
+      const endpoint = isEditMode ? `/courses/${courseId}` : "/courses";
+      const method = isEditMode ? "patch" : "post";
+      const response = await api[method](endpoint, {
         ...data,
         whatYouWillLearn: data.whatYouWillLearn.map((point) => point.value),
         requirements: data.requirements.map((req) => req.value),
@@ -232,13 +267,13 @@ export default function AddCourseStepper() {
       return response.data;
     },
     onSuccess: () => {
-      showToast("Course created successfully", "success");
+      showToast(`Course ${isEditMode ? "updated" : "created"} successfully`, "success");
       setSuccess(true);
       setIsSubmitting(false);
     },
     onError: (error) => {
-      showToast("Failed to create course", "error");
-      console.error("Error creating course:", error);
+      showToast(`Failed to ${isEditMode ? "update" : "create"} course`, "error");
+      console.error(`Error ${isEditMode ? "updating" : "creating"} course:`, error);
       setIsSubmitting(false);
     },
   });
@@ -247,6 +282,8 @@ export default function AddCourseStepper() {
     setIsSubmitting(true);
     createCourseMutation.mutate(data);
   };
+
+  console.log(errors);
 
   const renderStepContent = (step: number) => {
     switch (step) {
@@ -262,8 +299,8 @@ export default function AddCourseStepper() {
               required
               options={[
                 { value: "", label: "Select a category" },
-                ...((categories || [])?.map((category: { id: string; name: string }) => ({
-                  value: category.id,
+                ...((categories || [])?.map((category: { _id: string; name: string }) => ({
+                  value: category._id,
                   label: category.name,
                 })) || []),
               ]}
