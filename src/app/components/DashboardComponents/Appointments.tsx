@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ViewIcon, ArrowLeftIcon, ArrowRightIcon, CalendarIcon, TableIcon } from "./Icons";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import CustomDataTable from "./CustomDataTable";
+import ActionIcons from "@/components/ActionIcons";
 
 interface Appointment {
   id: number;
@@ -19,6 +21,8 @@ interface Appointment {
 
 const Appointments = () => {
   const [view, setView] = useState<"table" | "calendar">("table");
+  const [isScrollable, setIsScrollable] = useState(false);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([
     {
       id: 1,
@@ -52,6 +56,19 @@ const Appointments = () => {
     },
   ]);
 
+  useEffect(() => {
+    const checkScrollable = () => {
+      if (tableContainerRef.current) {
+        const { scrollWidth, clientWidth } = tableContainerRef.current;
+        setIsScrollable(scrollWidth > clientWidth);
+      }
+    };
+
+    checkScrollable();
+    window.addEventListener("resize", checkScrollable);
+    return () => window.removeEventListener("resize", checkScrollable);
+  }, [appointments]);
+
   const calendarEvents = appointments.map((appointment) => ({
     id: appointment.id.toString(),
     title: `${appointment.student} - ${appointment.course}`,
@@ -67,6 +84,112 @@ const Appointments = () => {
     // Handle event click - you can show a modal or navigate to details
     console.log("Event clicked:", info.event);
   };
+
+  const handleViewAppointment = (appointment: Appointment) => {
+    console.log("View appointment:", appointment);
+    // TODO: Implement view appointment functionality
+  };
+
+  const handleEditAppointment = (appointment: Appointment) => {
+    console.log("Edit appointment:", appointment);
+    // TODO: Implement edit appointment functionality
+  };
+
+  const handleDeleteAppointment = (appointment: Appointment) => {
+    console.log("Delete appointment:", appointment);
+    // TODO: Implement delete appointment functionality
+  };
+
+  const columns = [
+    {
+      name: "Student",
+      selector: (row: Appointment) => row.student,
+      sortable: true,
+      grow: 1.5,
+      cell: (row: Appointment) => (
+        <div className="text-base text-left text-neutral-900 truncate" title={row.student}>
+          {row.student}
+        </div>
+      ),
+    },
+    {
+      name: "Instructor",
+      selector: (row: Appointment) => row.instructor,
+      sortable: true,
+      grow: 1.5,
+      cell: (row: Appointment) => (
+        <div className="text-base text-left text-neutral-900 truncate" title={row.instructor}>
+          {row.instructor}
+        </div>
+      ),
+    },
+    {
+      name: "Course",
+      selector: (row: Appointment) => row.course,
+      sortable: true,
+      grow: 1.5,
+      cell: (row: Appointment) => (
+        <div className="text-base text-left text-neutral-900 truncate" title={row.course}>
+          {row.course}
+        </div>
+      ),
+    },
+    {
+      name: "Date",
+      selector: (row: Appointment) => row.date,
+      sortable: true,
+      grow: 1,
+      cell: (row: Appointment) => <div className="text-base text-left text-neutral-900">{row.date}</div>,
+    },
+    {
+      name: "Time",
+      selector: (row: Appointment) => row.time,
+      sortable: true,
+      grow: 1,
+      cell: (row: Appointment) => <div className="text-base text-left text-neutral-900">{row.time}</div>,
+    },
+    {
+      name: "Status",
+      selector: (row: Appointment) => row.status,
+      sortable: true,
+      grow: 1,
+      minWidth: "125px",
+      cell: (row: Appointment) => (
+        <span
+          className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+            row.status === "Scheduled"
+              ? "text-blue-600 bg-blue-50"
+              : row.status === "Completed"
+              ? "text-green-600 bg-emerald-50"
+              : "text-red-600 bg-red-50"
+          }`}
+        >
+          {row.status}
+        </span>
+      ),
+    },
+    {
+      name: "Type",
+      selector: (row: Appointment) => row.meetingType,
+      sortable: true,
+      grow: 1,
+      cell: (row: Appointment) => <div className="text-base text-left text-neutral-900">{row.meetingType}</div>,
+    },
+    {
+      name: "Actions",
+      cell: (row: Appointment) => (
+        <ActionIcons
+          onView={() => handleViewAppointment(row)}
+          onEdit={() => handleEditAppointment(row)}
+          onDelete={() => handleDeleteAppointment(row)}
+          viewTooltip="View Appointment Details"
+          editTooltip="Edit Appointment"
+          deleteTooltip="Delete Appointment"
+        />
+      ),
+      grow: 0.5,
+    },
+  ];
 
   return (
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
@@ -95,79 +218,15 @@ const Appointments = () => {
       </div>
 
       {view === "table" ? (
-        <div className="w-full border-collapse">
-          {/* Table Header */}
-          <div className="flex items-center p-3 rounded-lg bg-slate-100">
-            <div className="w-[15%] text-base font-medium text-left text-neutral-900">Student</div>
-            <div className="w-[15%] text-base font-medium text-left text-neutral-900">Instructor</div>
-            <div className="w-[15%] text-base font-medium text-left text-neutral-900">Course</div>
-            <div className="w-[10%] text-base font-medium text-left text-neutral-900">Date</div>
-            <div className="w-[10%] text-base font-medium text-left text-neutral-900">Time</div>
-            <div className="w-[15%] text-base font-medium text-left text-neutral-900">Status</div>
-            <div className="w-[10%] text-base font-medium text-left text-neutral-900">Type</div>
-            <div className="w-[10%] text-base font-medium text-left text-neutral-900">Actions</div>
-          </div>
-
-          {/* Table Body */}
-          <div className="flex flex-col divide-y divide-slate-100">
-            {appointments.map((appointment) => (
-              <div key={appointment.id} className="flex items-center p-3 hover:bg-slate-50 transition-colors">
-                <div className="w-[15%] text-base text-left text-neutral-900 truncate" title={appointment.student}>
-                  {appointment.student}
-                </div>
-                <div className="w-[15%] text-base text-left text-neutral-900 truncate" title={appointment.instructor}>
-                  {appointment.instructor}
-                </div>
-                <div className="w-[15%] text-base text-left text-neutral-900 truncate" title={appointment.course}>
-                  {appointment.course}
-                </div>
-                <div className="w-[10%] text-base text-left text-neutral-900">{appointment.date}</div>
-                <div className="w-[10%] text-base text-left text-neutral-900">{appointment.time}</div>
-                <div className="w-[15%]">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-                      appointment.status === "Scheduled"
-                        ? "text-blue-600 bg-blue-50"
-                        : appointment.status === "Completed"
-                        ? "text-green-600 bg-emerald-50"
-                        : "text-red-600 bg-red-50"
-                    }`}
-                  >
-                    {appointment.status}
-                  </span>
-                </div>
-                <div className="w-[10%] text-base text-left text-neutral-900">{appointment.meetingType}</div>
-                <div className="w-[10%]">
-                  <button
-                    aria-label="View appointment details"
-                    className="text-gray-500 hover:text-gray-700 transition-colors"
-                  >
-                    <ViewIcon className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          <div className="flex justify-between items-center mt-6 px-2">
-            <div className="text-sm text-gray-500">Page 1 of 1</div>
-            <div className="flex gap-4 items-center">
-              <button
-                aria-label="Previous page"
-                className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
-                disabled
-              >
-                <ArrowLeftIcon className="w-5 h-5" />
-              </button>
-              <button
-                aria-label="Next page"
-                className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
-                disabled
-              >
-                <ArrowRightIcon className="w-5 h-5" />
-              </button>
-            </div>
+        <div className="relative">
+          {isScrollable && (
+            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
+          )}
+          <div
+            ref={tableContainerRef}
+            className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
+          >
+            <CustomDataTable columns={columns} data={appointments} noDataMessage="No appointments found" />
           </div>
         </div>
       ) : (
