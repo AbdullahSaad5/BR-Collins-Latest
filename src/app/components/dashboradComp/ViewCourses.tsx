@@ -1,47 +1,50 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { ViewIcon, ArrowLeftIcon, ArrowRightIcon } from "./Icons";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { ICourse } from "@/app/types/course.contract";
 
-interface Course {
-  id: number;
-  title: string;
-  category: string;
-  instructor: string;
-  duration: string;
-  price: string;
-  status: string;
-}
+const fetchCourses = async (): Promise<ICourse[]> => {
+  const response = await api.get("/courses");
+  return response.data;
+};
 
 const ViewCourses = () => {
-  const [courses, setCourses] = useState<Course[]>([
-    {
-      id: 1,
-      title: "Introduction to React",
-      category: "Web Development",
-      instructor: "Jane Smith",
-      duration: "10 hours",
-      price: "$99",
-      status: "Active",
-    },
-    {
-      id: 2,
-      title: "Advanced JavaScript",
-      category: "Programming",
-      instructor: "John Doe",
-      duration: "15 hours",
-      price: "$149",
-      status: "Active",
-    },
-    {
-      id: 3,
-      title: "UI/UX Design Principles",
-      category: "Design",
-      instructor: "Alex Johnson",
-      duration: "8 hours",
-      price: "$79",
-      status: "Active",
-    },
-  ]);
+  const {
+    data: courses,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["courses"],
+    queryFn: fetchCourses,
+  });
+
+  if (isLoading) {
+    return (
+      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-neutral-900">View Courses</h2>
+        </div>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-neutral-900">View Courses</h2>
+        </div>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-red-500">Error loading courses. Please try again later.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
@@ -53,9 +56,9 @@ const ViewCourses = () => {
         {/* Table Header */}
         <div className="flex items-center p-3 rounded-lg bg-slate-100">
           <div className="w-[25%] text-base font-medium text-left text-neutral-900">Course Title</div>
-          <div className="w-[15%] text-base font-medium text-left text-neutral-900">Category</div>
           <div className="w-[15%] text-base font-medium text-left text-neutral-900">Instructor</div>
-          <div className="w-[10%] text-base font-medium text-left text-neutral-900">Duration</div>
+          <div className="w-[10%] text-base font-medium text-left text-neutral-900">Lessons</div>
+          <div className="w-[10%] text-base font-medium text-left text-neutral-900">Hours</div>
           <div className="w-[10%] text-base font-medium text-left text-neutral-900">Price</div>
           <div className="w-[10%] text-base font-medium text-left text-neutral-900">Status</div>
           <div className="w-[15%] text-base font-medium text-left text-neutral-900">Actions</div>
@@ -63,22 +66,33 @@ const ViewCourses = () => {
 
         {/* Table Body */}
         <div className="flex flex-col divide-y divide-slate-100">
-          {courses.map((course) => (
-            <div key={course.id} className="flex items-center p-3 hover:bg-slate-50 transition-colors">
+          {courses?.map((course: ICourse) => (
+            <div key={`course-${course.id}`} className="flex items-center p-3 hover:bg-slate-50 transition-colors">
               <div className="w-[25%] text-base text-left text-neutral-900 truncate" title={course.title}>
                 {course.title}
-              </div>
-              <div className="w-[15%] text-base text-left text-neutral-900 truncate" title={course.category}>
-                {course.category}
               </div>
               <div className="w-[15%] text-base text-left text-neutral-900 truncate" title={course.instructor}>
                 {course.instructor}
               </div>
-              <div className="w-[10%] text-base text-left text-neutral-900">{course.duration}</div>
-              <div className="w-[10%] text-base text-left text-neutral-900">{course.price}</div>
+              <div className="w-[10%] text-base text-left text-neutral-900">{course.noOfLessons}</div>
+              <div className="w-[10%] text-base text-left text-neutral-900">{course.noOfHours}</div>
+              <div className="w-[10%] text-base text-left text-neutral-900">
+                ${course.price}
+                {course.isDiscounted && (
+                  <span className="ml-2 text-sm text-gray-500 line-through">${course.discountPrice}</span>
+                )}
+              </div>
               <div className="w-[10%]">
-                <span className="inline-flex items-center px-3 py-1 text-sm font-medium text-green-600 bg-emerald-50 rounded-full">
-                  {course.status}
+                <span
+                  className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
+                    course.isPublished
+                      ? "text-green-600 bg-emerald-50"
+                      : course.isArchived
+                      ? "text-gray-600 bg-gray-50"
+                      : "text-red-600 bg-red-50"
+                  }`}
+                >
+                  {course.isPublished ? "Published" : course.isArchived ? "Archived" : "Draft"}
                 </span>
               </div>
               <div className="w-[15%]">

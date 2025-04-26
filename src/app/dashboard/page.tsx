@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import TopBanner from "../components/TopBanner copy";
 // import Header from "../components/Header copy";
 import Breadcrumb from "../components/dashboradComp/Breadcrumb";
@@ -23,13 +23,32 @@ import ViewCourseContent from "../components/dashboradComp/ViewCourseContent";
 import Transactions from "../components/dashboradComp/Transactions";
 import Appointments from "../components/dashboradComp/Appointments";
 import AddAppointment from "../components/dashboradComp/AddAppointment";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Get the active item from URL query parameter
+    const item = searchParams.get("item");
+    if (item) {
+      setActiveItem(item);
+    }
+    // Set loading to false after processing
+    setIsLoading(false);
+  }, [searchParams]);
 
   const handleItemClick = (item: string) => {
+    setIsLoading(true);
     setActiveItem(item);
+    // Update URL with query parameter
+    router.push(`/dashboard?item=${item}`);
+    // Set loading to false after a short delay to ensure smooth transition
+    setTimeout(() => setIsLoading(false), 300);
   };
 
   const handleSidebarToggle = (collapsed: boolean) => {
@@ -37,6 +56,17 @@ export default function Dashboard() {
   };
 
   const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center h-full">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      );
+    }
+
     switch (activeItem) {
       case "dashboard":
         return <DashboardStats />;

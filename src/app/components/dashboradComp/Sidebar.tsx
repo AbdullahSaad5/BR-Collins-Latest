@@ -27,6 +27,7 @@ import {
   Plus,
 } from "lucide-react";
 import SidebarItem from "./SidebarItem";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   activeItem: string;
@@ -40,11 +41,18 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
   const [coursesExpanded, setCoursesExpanded] = useState(false);
   const [transactionsExpanded, setTransactionsExpanded] = useState(false);
   const [appointmentsExpanded, setAppointmentsExpanded] = useState(false);
+  const router = useRouter();
 
   const toggleSidebar = () => {
     const newCollapsed = !collapsed;
     setCollapsed(newCollapsed);
     onToggle(newCollapsed);
+  };
+
+  const handleItemClick = (item: string) => {
+    onItemClick(item);
+    // Update URL with query parameter
+    router.push(`/dashboard?item=${item}`);
   };
 
   const toggleUsersSection = () => {
@@ -88,7 +96,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           icon={LayoutDashboard}
           label="Dashboard"
           isActive={activeItem === "dashboard"}
-          onClick={() => onItemClick("dashboard")}
+          onClick={() => handleItemClick("dashboard")}
           collapsed={collapsed}
         />
         {/* <SidebarItem
@@ -130,7 +138,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={UserPlus}
                     label="Add New User"
                     isActive={activeItem === "addUser"}
-                    onClick={() => onItemClick("addUser")}
+                    onClick={() => handleItemClick("addUser")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -138,7 +146,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={Users}
                     label="View All Users"
                     isActive={activeItem === "viewUsers"}
-                    onClick={() => onItemClick("viewUsers")}
+                    onClick={() => handleItemClick("viewUsers")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -187,7 +195,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={FolderPlus}
                     label="Add Course Category"
                     isActive={activeItem === "addCourseCategory"}
-                    onClick={() => onItemClick("addCourseCategory")}
+                    onClick={() => handleItemClick("addCourseCategory")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -195,7 +203,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={FolderOpen}
                     label="View Course Categories"
                     isActive={activeItem === "viewCourseCategory"}
-                    onClick={() => onItemClick("viewCourseCategory")}
+                    onClick={() => handleItemClick("viewCourseCategory")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -203,7 +211,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={BookPlus}
                     label="Add Course"
                     isActive={activeItem === "addCourse"}
-                    onClick={() => onItemClick("addCourse")}
+                    onClick={() => handleItemClick("addCourse")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -211,7 +219,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={BookOpen}
                     label="View Courses"
                     isActive={activeItem === "viewCourses"}
-                    onClick={() => onItemClick("viewCourses")}
+                    onClick={() => handleItemClick("viewCourses")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -219,7 +227,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={FilePlus}
                     label="Add Course Content"
                     isActive={activeItem === "addCourseContent"}
-                    onClick={() => onItemClick("addCourseContent")}
+                    onClick={() => handleItemClick("addCourseContent")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -227,7 +235,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={FileText}
                     label="View Course Content"
                     isActive={activeItem === "viewCourseContent"}
-                    onClick={() => onItemClick("viewCourseContent")}
+                    onClick={() => handleItemClick("viewCourseContent")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -268,7 +276,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={Plus}
                     label="Add Appointment"
                     isActive={activeItem === "addAppointment"}
-                    onClick={() => onItemClick("addAppointment")}
+                    onClick={() => handleItemClick("addAppointment")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -276,7 +284,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                     icon={Eye}
                     label="View Appointments"
                     isActive={activeItem === "appointments"}
-                    onClick={() => onItemClick("appointments")}
+                    onClick={() => handleItemClick("appointments")}
                     collapsed={collapsed}
                     className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
                   />
@@ -290,7 +298,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           icon={BookOpen}
           label="Subscribed Courses"
           isActive={activeItem === "courses"}
-          onClick={() => onItemClick("courses")}
+          onClick={() => handleItemClick("courses")}
           collapsed={collapsed}
         />
         {/* Transactions Section */}
@@ -298,7 +306,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           icon={CreditCard}
           label="Transactions"
           isActive={activeItem === "transactions"}
-          onClick={() => onItemClick("transactions")}
+          onClick={() => handleItemClick("transactions")}
           collapsed={collapsed}
         />
 
@@ -313,7 +321,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           icon={Settings}
           label="My Profile"
           isActive={activeItem === "profile"}
-          onClick={() => onItemClick("profile")}
+          onClick={() => handleItemClick("profile")}
           collapsed={collapsed}
         />
         <div className={`mt-6 w-full border-t border-slate-200 pt-2 ${collapsed ? "" : ""}`}>
@@ -321,7 +329,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
             icon={LogOut}
             label="Logout"
             isLogout
-            onClick={() => onItemClick("logout")}
+            onClick={() => handleItemClick("logout")}
             collapsed={collapsed}
           />
         </div>

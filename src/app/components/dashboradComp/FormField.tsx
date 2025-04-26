@@ -4,9 +4,8 @@ interface FormFieldProps {
   label: string;
   description: string;
   placeholder?: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  name?: string;
+  error?: string;
   required?: boolean;
   textarea?: boolean;
   select?: boolean;
@@ -18,14 +17,13 @@ export default function FormField({
   label,
   description,
   placeholder,
-  name,
-  value,
-  onChange,
+  error,
   required = false,
   textarea = false,
   select = false,
   type = "text",
   options = [],
+  ...props
 }: FormFieldProps) {
   return (
     <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
@@ -36,20 +34,16 @@ export default function FormField({
       <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
         {textarea ? (
           <textarea
-            name={name}
-            value={value}
-            onChange={onChange}
             placeholder={placeholder}
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px] text-black placeholder:text-gray-400"
             required={required}
+            {...props}
           />
         ) : select ? (
           <select
-            name={name}
-            value={value}
-            onChange={onChange}
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black"
             required={required}
+            {...props}
           >
             {options.map((option) => (
               <option key={option.value} value={option.value}>
@@ -60,14 +54,13 @@ export default function FormField({
         ) : (
           <input
             type={type}
-            name={name}
-            value={value}
-            onChange={onChange}
             placeholder={placeholder}
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black placeholder:text-gray-400"
             required={required}
+            {...props}
           />
         )}
+        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       </div>
     </div>
   );

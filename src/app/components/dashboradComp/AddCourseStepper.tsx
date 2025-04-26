@@ -1,66 +1,163 @@
 "use client";
 import React, { useState, useRef } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { CourseCreatePayload } from "@/app/types/course.contract";
 import FormField from "./FormField";
 import ToggleOption from "./ToggleOption";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+
+type FieldArrayValue = {
+  value: string;
+};
+
+interface CourseFormData {
+  title: string;
+  subtitle?: string;
+  slug: string;
+  noOfLessons: number;
+  noOfHours: number;
+  startDate: Date;
+  language: string;
+  lastUpdated: Date;
+  bestSeller: boolean;
+  price: number;
+  discountPrice?: number;
+  isDiscounted: boolean;
+  isFeatured: boolean;
+  isPublished: boolean;
+  isArchived: boolean;
+  isDeleted: boolean;
+  previewVideoUrl?: string;
+  coverImageUrl?: string;
+  whatYouWillLearn: FieldArrayValue[];
+  requirements: FieldArrayValue[];
+  overview: string;
+  description: string;
+  instructor: string;
+  skillLevel: string;
+  noOfQuizzes: number;
+  hasCertificate: boolean;
+  passPercentage: number;
+}
+
+const courseSchema = z.object({
+  title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
+  subtitle: z.string().max(200, "Subtitle must be less than 200 characters").optional(),
+  slug: z.string().min(1, "Slug is required").max(100, "Slug must be less than 100 characters"),
+  noOfLessons: z.number().min(1, "Number of lessons must be at least 1"),
+  noOfHours: z.number().min(1, "Number of hours must be at least 1"),
+  startDate: z.date(),
+  language: z.string().min(1, "Language is required"),
+  lastUpdated: z.date(),
+  bestSeller: z.boolean(),
+  price: z.number().min(1, "Price must be at least 1"),
+  discountPrice: z.number().min(0, "Discount price must be non-negative").optional(),
+  isDiscounted: z.boolean(),
+  isFeatured: z.boolean(),
+  isPublished: z.boolean(),
+  isArchived: z.boolean(),
+  isDeleted: z.boolean(),
+  previewVideoUrl: z.string().url("Invalid URL format").optional(),
+  coverImageUrl: z.string().optional(),
+  whatYouWillLearn: z.array(z.object({ value: z.string().min(1, "Learning point cannot be empty") })),
+  requirements: z.array(z.object({ value: z.string().min(1, "Requirement cannot be empty") })),
+  overview: z
+    .string()
+    .min(10, "Overview must be at least 10 characters")
+    .max(500, "Overview must be less than 500 characters"),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters")
+    .max(2000, "Description must be less than 2000 characters"),
+  instructor: z
+    .string()
+    .min(1, "Instructor name is required")
+    .max(100, "Instructor name must be less than 100 characters"),
+  skillLevel: z.string().min(1, "Skill level is required"),
+  noOfQuizzes: z.number().min(0, "Number of quizzes must be non-negative"),
+  hasCertificate: z.boolean(),
+  passPercentage: z.number().min(0).max(100, "Pass percentage must be between 0 and 100"),
+});
 
 export default function AddCourseStepper() {
   const [activeStep, setActiveStep] = useState(0);
-  const [courseData, setCourseData] = useState<Partial<CourseCreatePayload>>({
-    title: "",
-    subtitle: "",
-    slug: "",
-    noOfLessons: 0,
-    noOfHours: 0,
-    startDate: new Date(),
-    language: "English",
-    lastUpdated: new Date(),
-    bestSeller: false,
-    price: 0,
-    discountPrice: 0,
-    isDiscounted: false,
-    isFeatured: false,
-    isPublished: false,
-    isArchived: false,
-    isDeleted: false,
-    previewVideoUrl: "",
-    coverImageUrl: "",
-    whatYouWillLearn: [],
-    requirements: [],
-    overview: "",
-    description: "",
-    instructor: "",
-    skillLevel: "Beginner",
-    noOfQuizzes: 0,
-    hasCertificate: false,
-    passPercentage: 70,
-  });
-
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const steps = ["Basic Information", "Course Details", "Pricing & Features", "Media & Completion"];
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    watch,
+    setValue,
+    trigger,
+  } = useForm<CourseFormData>({
+    resolver: zodResolver(courseSchema),
+    defaultValues: {
+      title: "",
+      subtitle: "",
+      slug: "",
+      noOfLessons: 0,
+      noOfHours: 0,
+      startDate: new Date(),
+      language: "English",
+      lastUpdated: new Date(),
+      bestSeller: false,
+      price: 0,
+      discountPrice: 0,
+      isDiscounted: false,
+      isFeatured: false,
+      isPublished: false,
+      isArchived: false,
+      isDeleted: false,
+      previewVideoUrl: "",
+      coverImageUrl: "",
+      whatYouWillLearn: [],
+      requirements: [],
+      overview: "",
+      description: "",
+      instructor: "",
+      skillLevel: "Beginner",
+      noOfQuizzes: 0,
+      hasCertificate: false,
+      passPercentage: 70,
+    },
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    setCourseData((prev) => ({
-      ...prev,
-      [name]: type === "number" ? Number(value) : value,
-    }));
-  };
+  const {
+    fields: learningPoints,
+    append: appendLearningPoint,
+    remove: removeLearningPoint,
+  } = useFieldArray<CourseFormData>({
+    control,
+    name: "whatYouWillLearn",
+    rules: { required: true },
+  });
+
+  const {
+    fields: requirements,
+    append: appendRequirement,
+    remove: removeRequirement,
+  } = useFieldArray<CourseFormData>({
+    control,
+    name: "requirements",
+    rules: { required: true },
+  });
+
+  const steps = ["Basic Information", "Course Details", "Pricing & Features", "Media & Completion"];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      // In a real implementation, you would upload the file and get the URL
-      setCourseData((prev) => ({
-        ...prev,
-        coverImageUrl: URL.createObjectURL(file),
-      }));
+      setValue("coverImageUrl", URL.createObjectURL(file));
 
-      // Create preview URL
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result as string);
@@ -69,90 +166,66 @@ export default function AddCourseStepper() {
     }
   };
 
-  const handleAddBulletPoint = (name: keyof CourseCreatePayload) => {
-    setCourseData((prev) => ({
-      ...prev,
-      [name]: [...((prev[name] as string[]) || []), ""],
-    }));
+  const handleNext = async () => {
+    let isValid = true;
+    const currentStepFields = getCurrentStepFields(activeStep);
+
+    // Validate all fields in the current step
+    for (const field of currentStepFields) {
+      const result = await trigger(field as any);
+      if (!result) {
+        isValid = false;
+      }
+    }
+
+    if (isValid) {
+      setActiveStep((prev) => prev + 1);
+    }
   };
 
-  const handleRemoveBulletPoint = (name: keyof CourseCreatePayload, index: number) => {
-    setCourseData((prev) => ({
-      ...prev,
-      [name]: (prev[name] as string[]).filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleBulletPointChange = (name: keyof CourseCreatePayload, index: number, value: string) => {
-    setCourseData((prev) => {
-      const newArray = [...(prev[name] as string[])];
-      newArray[index] = value;
-      return {
-        ...prev,
-        [name]: newArray,
-      };
-    });
-  };
-
-  const handleNext = () => {
-    setActiveStep((prev) => prev + 1);
+  const getCurrentStepFields = (step: number): string[] => {
+    switch (step) {
+      case 0:
+        return ["title", "slug", "overview", "whatYouWillLearn", "requirements", "description", "instructor"];
+      case 1:
+        return ["language", "skillLevel", "noOfLessons", "noOfHours", "startDate"];
+      case 2:
+        return ["price", "discountPrice", "isDiscounted", "bestSeller", "isFeatured"];
+      case 3:
+        return ["coverImageUrl", "previewVideoUrl"];
+      default:
+        return [];
+    }
   };
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Print all course data in a readable format
-      console.log("Course Data:", {
-        "Basic Information": {
-          Title: courseData.title,
-          Subtitle: courseData.subtitle,
-          Slug: courseData.slug,
-          Description: courseData.description,
-          Overview: courseData.overview,
-          Instructor: courseData.instructor,
-        },
-        "Course Details": {
-          Language: courseData.language,
-          "Skill Level": courseData.skillLevel,
-          "Duration (hours)": courseData.noOfHours,
-          "Number of Lessons": courseData.noOfLessons,
-          "Start Date": courseData.startDate?.toLocaleDateString(),
-          "Last Updated": courseData.lastUpdated?.toLocaleDateString(),
-        },
-        "Pricing & Features": {
-          Price: `$${courseData.price}`,
-          "Discount Price": courseData.isDiscounted ? `$${courseData.discountPrice}` : "No discount",
-          "Is Discounted": courseData.isDiscounted ? "Yes" : "No",
-          "Best Seller": courseData.bestSeller ? "Yes" : "No",
-          "Is Featured": courseData.isFeatured ? "Yes" : "No",
-          "Is Published": courseData.isPublished ? "Yes" : "No",
-        },
-        "Learning Outcomes": courseData.whatYouWillLearn?.map((point, index) => `${index + 1}. ${point}`),
-        Requirements: courseData.requirements?.map((req, index) => `${index + 1}. ${req}`),
-        "Media & Completion": {
-          "Cover Image": courseData.coverImageUrl ? "Uploaded" : "Not uploaded",
-          "Preview Video URL": courseData.previewVideoUrl || "Not provided",
-          "Number of Quizzes": courseData.noOfQuizzes,
-          Certificate: courseData.hasCertificate ? "Yes" : "No",
-          "Pass Percentage": courseData.hasCertificate ? `${courseData.passPercentage}%` : "N/A",
-        },
+  const createCourseMutation = useMutation({
+    mutationFn: async (data: CourseFormData) => {
+      const response = await api.post("/courses", {
+        ...data,
+        whatYouWillLearn: data.whatYouWillLearn.map((point) => point.value),
+        requirements: data.requirements.map((req) => req.value),
       });
-
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("Course created successfully", "success");
       setSuccess(true);
-    } catch (error) {
-      console.error("Error submitting course:", error);
-    } finally {
       setIsSubmitting(false);
-    }
+    },
+    onError: (error) => {
+      showToast("Failed to create course", "error");
+      console.error("Error creating course:", error);
+      setIsSubmitting(false);
+    },
+  });
+
+  const onSubmit = async (data: CourseFormData) => {
+    setIsSubmitting(true);
+    createCourseMutation.mutate(data);
   };
 
   const renderStepContent = (step: number) => {
@@ -164,35 +237,31 @@ export default function AddCourseStepper() {
               label="Course Title *"
               description="Enter the full title of the course."
               placeholder="Introduction to React"
-              name="title"
-              value={courseData.title || ""}
-              onChange={handleChange}
+              {...register("title")}
+              error={errors.title?.message}
               required
             />
             <FormField
               label="Subtitle"
               description="A brief subtitle for your course."
               placeholder="Learn React from scratch"
-              name="subtitle"
-              value={courseData.subtitle || ""}
-              onChange={handleChange}
+              {...register("subtitle")}
+              error={errors.subtitle?.message}
             />
             <FormField
               label="Slug *"
               description="A URL-friendly version of the title."
               placeholder="introduction-to-react"
-              name="slug"
-              value={courseData.slug || ""}
-              onChange={handleChange}
+              {...register("slug")}
+              error={errors.slug?.message}
               required
             />
             <FormField
               label="Overview *"
               description="A brief overview of what students will learn."
               placeholder="Course overview..."
-              name="overview"
-              value={courseData.overview || ""}
-              onChange={handleChange}
+              {...register("overview")}
+              error={errors.overview?.message}
               textarea
               required
             />
@@ -203,19 +272,18 @@ export default function AddCourseStepper() {
               </div>
               <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
                 <div className="space-y-2">
-                  {(courseData.whatYouWillLearn || []).map((point, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                  {learningPoints.map((field, index) => (
+                    <div key={`learning-point-${index}`} className="flex items-center gap-2">
                       <input
                         type="text"
-                        value={point}
-                        onChange={(e) => handleBulletPointChange("whatYouWillLearn", index, e.target.value)}
+                        {...register(`whatYouWillLearn.${index}.value` as const)}
                         placeholder="Enter a learning point"
                         className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
                         required
                       />
                       <button
                         type="button"
-                        onClick={() => handleRemoveBulletPoint("whatYouWillLearn", index)}
+                        onClick={() => removeLearningPoint(index)}
                         className="p-2 text-red-500 hover:text-red-600"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,7 +294,7 @@ export default function AddCourseStepper() {
                   ))}
                   <button
                     type="button"
-                    onClick={() => handleAddBulletPoint("whatYouWillLearn")}
+                    onClick={() => appendLearningPoint({ value: "" })}
                     className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
                   >
                     + Add Learning Point
@@ -241,19 +309,18 @@ export default function AddCourseStepper() {
               </div>
               <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
                 <div className="space-y-2">
-                  {(courseData.requirements || []).map((requirement, index) => (
-                    <div key={index} className="flex items-center gap-2">
+                  {requirements.map((field, index) => (
+                    <div key={`requirement-${index}`} className="flex items-center gap-2">
                       <input
                         type="text"
-                        value={requirement}
-                        onChange={(e) => handleBulletPointChange("requirements", index, e.target.value)}
+                        {...register(`requirements.${index}.value` as const)}
                         placeholder="Enter a requirement"
                         className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
                         required
                       />
                       <button
                         type="button"
-                        onClick={() => handleRemoveBulletPoint("requirements", index)}
+                        onClick={() => removeRequirement(index)}
                         className="p-2 text-red-500 hover:text-red-600"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,7 +331,7 @@ export default function AddCourseStepper() {
                   ))}
                   <button
                     type="button"
-                    onClick={() => handleAddBulletPoint("requirements")}
+                    onClick={() => appendRequirement({ value: "" })}
                     className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
                   >
                     + Add Requirement
@@ -276,20 +343,17 @@ export default function AddCourseStepper() {
               label="Description *"
               description="Provide a detailed description of the course content."
               placeholder="Course description..."
-              name="description"
-              value={courseData.description || ""}
-              onChange={handleChange}
+              {...register("description")}
+              error={errors.description?.message}
               textarea
               required
             />
-
             <FormField
               label="Instructor *"
               description="Name of the course instructor."
               placeholder="John Doe"
-              name="instructor"
-              value={courseData.instructor || ""}
-              onChange={handleChange}
+              {...register("instructor")}
+              error={errors.instructor?.message}
               required
             />
           </>
@@ -300,9 +364,8 @@ export default function AddCourseStepper() {
             <FormField
               label="Language *"
               description="Select the primary language of instruction."
-              name="language"
-              value={courseData.language || ""}
-              onChange={handleChange}
+              {...register("language")}
+              error={errors.language?.message}
               select
               required
               options={[
@@ -314,9 +377,8 @@ export default function AddCourseStepper() {
             <FormField
               label="Skill Level *"
               description="Select the target skill level for this course."
-              name="skillLevel"
-              value={courseData.skillLevel || ""}
-              onChange={handleChange}
+              {...register("skillLevel")}
+              error={errors.skillLevel?.message}
               select
               required
               options={[
@@ -325,14 +387,12 @@ export default function AddCourseStepper() {
                 { value: "Advanced", label: "Advanced" },
               ]}
             />
-
             <FormField
               label="Number of Lessons *"
               description="Total number of lessons in the course."
               placeholder="20"
-              name="noOfLessons"
-              value={courseData.noOfLessons?.toString() || ""}
-              onChange={handleChange}
+              {...register("noOfLessons", { valueAsNumber: true })}
+              error={errors.noOfLessons?.message}
               type="number"
               required
             />
@@ -340,18 +400,16 @@ export default function AddCourseStepper() {
               label="Number of Hours *"
               description="Total duration of the course in hours."
               placeholder="10"
-              name="noOfHours"
-              value={courseData.noOfHours?.toString() || ""}
-              onChange={handleChange}
+              {...register("noOfHours", { valueAsNumber: true })}
+              error={errors.noOfHours?.message}
               type="number"
               required
             />
             <FormField
               label="Start Date *"
               description="When the course will be available."
-              name="startDate"
-              value={courseData.startDate?.toISOString().split("T")[0] || ""}
-              onChange={handleChange}
+              {...register("startDate", { valueAsDate: true })}
+              error={errors.startDate?.message}
               type="date"
               required
             />
@@ -364,9 +422,8 @@ export default function AddCourseStepper() {
               label="Price (USD) *"
               description="Set the price for this course in US dollars."
               placeholder="99"
-              name="price"
-              value={courseData.price?.toString() || ""}
-              onChange={handleChange}
+              {...register("price", { valueAsNumber: true })}
+              error={errors.price?.message}
               type="number"
               required
             />
@@ -374,9 +431,8 @@ export default function AddCourseStepper() {
               label="Discount Price (USD)"
               description="Optional discounted price for the course."
               placeholder="79"
-              name="discountPrice"
-              value={courseData.discountPrice?.toString() || ""}
-              onChange={handleChange}
+              {...register("discountPrice", { valueAsNumber: true })}
+              error={errors.discountPrice?.message}
               type="number"
             />
             <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
@@ -386,50 +442,42 @@ export default function AddCourseStepper() {
               </div>
               <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
                 <div className="space-y-4">
-                  <ToggleOption
-                    label="Enable Discount"
-                    description="Offer this course at a discounted price"
-                    checked={courseData.isDiscounted || false}
-                    onChange={(e) =>
-                      setCourseData((prev) => ({
-                        ...prev,
-                        isDiscounted: e.target.checked,
-                      }))
-                    }
+                  <Controller
+                    name="isDiscounted"
+                    control={control}
+                    render={({ field }) => (
+                      <ToggleOption
+                        label="Enable Discount"
+                        description="Offer this course at a discounted price"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    )}
                   />
-                  <ToggleOption
-                    label="Mark as Best Seller"
-                    description="Display a best seller badge on the course"
-                    checked={courseData.bestSeller || false}
-                    onChange={(e) =>
-                      setCourseData((prev) => ({
-                        ...prev,
-                        bestSeller: e.target.checked,
-                      }))
-                    }
+                  <Controller
+                    name="bestSeller"
+                    control={control}
+                    render={({ field }) => (
+                      <ToggleOption
+                        label="Mark as Best Seller"
+                        description="Display a best seller badge on the course"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    )}
                   />
-                  <ToggleOption
-                    label="Feature this Course"
-                    description="Show this course in featured sections"
-                    checked={courseData.isFeatured || false}
-                    onChange={(e) =>
-                      setCourseData((prev) => ({
-                        ...prev,
-                        isFeatured: e.target.checked,
-                      }))
-                    }
+                  <Controller
+                    name="isFeatured"
+                    control={control}
+                    render={({ field }) => (
+                      <ToggleOption
+                        label="Feature this Course"
+                        description="Show this course in featured sections"
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    )}
                   />
-                  {/* <ToggleOption
-                    label="Publish Course"
-                    description="Make this course available to students"
-                    checked={courseData.isPublished || false}
-                    onChange={(e) =>
-                      setCourseData((prev) => ({
-                        ...prev,
-                        isPublished: e.target.checked,
-                      }))
-                    }
-                  /> */}
                 </div>
               </div>
             </div>
@@ -474,7 +522,7 @@ export default function AddCourseStepper() {
                       onClick={() => fileInputRef.current?.click()}
                       className="px-4 py-2 text-sm font-medium rounded-lg border border-zinc-200 bg-white text-neutral-900 hover:bg-slate-50 transition-colors"
                     >
-                      {courseData.coverImageUrl ? "Change Image" : "Upload Image"}
+                      {watch("coverImageUrl") ? "Change Image" : "Upload Image"}
                     </button>
                   </div>
                 </div>
@@ -484,49 +532,9 @@ export default function AddCourseStepper() {
               label="Preview Video URL"
               description="Optional URL for a course preview video."
               placeholder="https://youtube.com/watch?v=..."
-              name="previewVideoUrl"
-              value={courseData.previewVideoUrl || ""}
-              onChange={handleChange}
+              {...register("previewVideoUrl")}
+              error={errors.previewVideoUrl?.message}
             />
-            {/* <FormField
-              label="Number of Quizzes"
-              description="Total number of quizzes in the course."
-              placeholder="5"
-              name="noOfQuizzes"
-              value={courseData.noOfQuizzes?.toString() || ""}
-              onChange={handleChange}
-              type="number"
-            />
-            <div className="flex items-center gap-4">
-              <input
-                type="checkbox"
-                id="hasCertificate"
-                name="hasCertificate"
-                checked={courseData.hasCertificate || false}
-                onChange={(e) =>
-                  setCourseData((prev) => ({
-                    ...prev,
-                    hasCertificate: e.target.checked,
-                  }))
-                }
-                className="h-4 w-4 rounded border-gray-300"
-              />
-              <label htmlFor="hasCertificate" className="text-sm text-gray-700">
-                Offer completion certificate
-              </label>
-            </div>
-            {courseData.hasCertificate && (
-              <FormField
-                label="Pass Percentage *"
-                description="Minimum percentage required to pass the course."
-                placeholder="70"
-                name="passPercentage"
-                value={courseData.passPercentage?.toString() || ""}
-                onChange={handleChange}
-                type="number"
-                required
-              />
-            )} */}
           </>
         );
       default:
@@ -571,7 +579,7 @@ export default function AddCourseStepper() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit as any)}>
         {renderStepContent(activeStep)}
 
         <div className="flex justify-between mt-8">
