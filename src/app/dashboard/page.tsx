@@ -115,10 +115,10 @@ export default function Dashboard() {
       <section className="flex flex-col self-center mt-5 w-full max-w-[1326px] max-md:max-w-full">
         <Breadcrumb />
 
-        <article className="flex flex-col pt-6 mt-6 w-full bg-white rounded-3xl max-md:mt-4 max-md:max-w-full">
-          <ProfileSummary />
+        <article className="flex flex-col pt-6 mt-6 w-full bg-white rounded-3xl max-md:mt-4 max-md:max-w-full px-6">
+          <ProfileSummary onItemClick={handleItemClick} />
 
-          <div className="flex flex-col md:flex-row gap-6 p-6">
+          <div className="flex flex-col md:flex-row gap-6 my-6">
             <div className={`shrink-0 transition-all duration-300 ${sidebarCollapsed ? "w-20" : "w-64"}`}>
               <Sidebar activeItem={activeItem} onItemClick={handleItemClick} onToggle={handleSidebarToggle} />
             </div>

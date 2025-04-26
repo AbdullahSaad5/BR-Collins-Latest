@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
 
-const fetchCourses = async (): Promise<ICourse[]> => {
+const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
   return response.data;
 };
@@ -18,6 +18,7 @@ const ViewCourses = () => {
   } = useQuery({
     queryKey: ["courses"],
     queryFn: fetchCourses,
+    select: (data) => data.data,
   });
 
   if (isLoading) {

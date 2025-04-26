@@ -1,10 +1,10 @@
 import React from "react";
-import { BookOpen, BadgeCheck, UserPlus } from "lucide-react";
+import { BookOpen, BadgeCheck, UserPlus, Settings } from "lucide-react";
 import Image from "next/image";
 
-const ProfileSummary = () => {
+const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }) => {
   return (
-    <section className="flex flex-col sm:flex-row gap-5 justify-between items-center p-4 sm:p-6 bg-white rounded-xl shadow-sm w-full max-w-6xl mx-auto">
+    <section className="flex flex-col sm:flex-row gap-5 justify-between items-center p-4 sm:p-6 bg-white rounded-xl shadow-sm w-full mx-auto">
       {/* Profile Info */}
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center w-full sm:w-auto">
         {/* Avatar */}
@@ -15,15 +15,14 @@ const ProfileSummary = () => {
             height={112}
             alt="Profile Picture"
             className="w-full h-full object-cover"
-            
           />
         </div>
-        
+
         {/* Details */}
         <div className="text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Charlotte Anderson</h1>
           <p className="text-sm text-gray-500 mt-1">UX Designer & Developer</p>
-          
+
           <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-5 mt-3">
             <div className="flex items-center gap-1.5 text-sm">
               <BookOpen className="text-blue-500 w-4 h-4" />
@@ -31,9 +30,9 @@ const ProfileSummary = () => {
                 <span className="font-medium text-blue-500">(5)</span> Courses
               </span>
             </div>
-            
+
             <div className="hidden sm:block w-px h-4 bg-gray-200 my-auto" />
-            
+
             <div className="flex items-center gap-1.5 text-sm">
               <BadgeCheck className="text-blue-500 w-4 h-4" />
               <span className="text-gray-700">
@@ -43,11 +42,14 @@ const ProfileSummary = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Action Button */}
-      <button className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm font-medium text-orange-500 hover:text-orange-600 border border-orange-500 hover:border-orange-600 rounded-full transition-all duration-200 hover:shadow-md whitespace-nowrap w-full sm:w-auto justify-center">
-        <UserPlus className="w-4 h-4" />
-        <span>Add New User</span>
+      <button
+        onClick={() => onItemClick("profile")}
+        className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm font-medium text-orange-500 hover:text-orange-600 border border-orange-500 hover:border-orange-600 rounded-full transition-all duration-200 hover:shadow-md whitespace-nowrap w-full sm:w-auto justify-center"
+      >
+        <Settings className="w-4 h-4" />
+        <span>My Profile</span>
       </button>
     </section>
   );
