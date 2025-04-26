@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
 import FormField from "./FormField";
+import { ICourse } from "@/app/types/course.contract";
 
-const fetchCourses = async (): Promise<{ data: any[] }> => {
+const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
   return response.data;
 };
@@ -25,7 +27,6 @@ const courseContentSchema = z.object({
 type CourseContentFormData = z.infer<typeof courseContentSchema>;
 
 export default function AddCourseContent() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const {
@@ -56,21 +57,25 @@ export default function AddCourseContent() {
     },
   });
 
-  const onSubmit = async (data: CourseContentFormData) => {
-    setIsSubmitting(true);
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Course content submitted:", data);
+  const createCourseContentMutation = useMutation({
+    mutationFn: async (data: CourseContentFormData) => {
+      console.log(data);
+      const response = await api.post("/course-contents", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("Course content added successfully", "success");
       setSuccess(true);
-      // Reset form after successful submission
       reset();
-    } catch (error) {
-      console.error("Error submitting course content:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    },
+    onError: (error) => {
+      showToast("Failed to add course content", "error");
+      console.error("Error adding course content:", error);
+    },
+  });
+
+  const onSubmit = async (data: CourseContentFormData) => {
+    createCourseContentMutation.mutate(data);
   };
 
   return (
@@ -92,7 +97,7 @@ export default function AddCourseContent() {
           options={[
             { value: "", label: isLoadingCourses ? "Loading courses..." : "Select a course" },
             ...(courses?.map((course) => ({
-              value: course.id,
+              value: course._id,
               label: course.title,
             })) || []),
           ]}
@@ -167,10 +172,10 @@ export default function AddCourseContent() {
         <div className="flex justify-end mt-8">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={createCourseContentMutation.isPending}
             className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {isSubmitting ? "Adding Content..." : "Add Content"}
+            {createCourseContentMutation.isPending ? "Adding Content..." : "Add Content"}
           </button>
         </div>
       </form>

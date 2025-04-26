@@ -1,5 +1,6 @@
 export interface ICourse {
   id: string;
+  _id: string;
   categoryId: string;
   title: string;
   subtitle?: string;
