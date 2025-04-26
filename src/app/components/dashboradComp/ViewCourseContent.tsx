@@ -1,47 +1,50 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { ViewIcon, ArrowLeftIcon, ArrowRightIcon } from "./Icons";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+import { ICourseContent } from "@/app/types/course-content.contract";
+import { ICourse } from "@/app/types/course.contract";
 
-interface CourseContent {
-  id: number;
-  title: string;
-  course: string;
-  contentType: string;
-  duration: string;
-  order: number;
-  status: string;
-}
+const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
+  const response = await api.get("/course-contents?populate=courseId");
+  return response.data;
+};
 
 const ViewCourseContent = () => {
-  const [contents, setContents] = useState<CourseContent[]>([
-    {
-      id: 1,
-      title: "Introduction to React Components",
-      course: "Introduction to React",
-      contentType: "Video",
-      duration: "45 minutes",
-      order: 1,
-      status: "Active",
-    },
-    {
-      id: 2,
-      title: "State and Props",
-      course: "Introduction to React",
-      contentType: "Video",
-      duration: "30 minutes",
-      order: 2,
-      status: "Active",
-    },
-    {
-      id: 3,
-      title: "React Hooks Basics",
-      course: "Introduction to React",
-      contentType: "Document",
-      duration: "20 minutes",
-      order: 3,
-      status: "Active",
-    },
-  ]);
+  const {
+    data: contents,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["course-contents"],
+    queryFn: fetchCourseContents,
+    select: (data) => data.data,
+  });
+
+  if (isLoading) {
+    return (
+      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-neutral-900">View Course Content</h2>
+        </div>
+        <div className="text-center py-8">Loading...</div>
+      </section>
+    );
+  }
+
+  if (error) {
+    showToast("Failed to fetch course contents", "error");
+    return (
+      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-semibold text-neutral-900">View Course Content</h2>
+        </div>
+        <div className="text-center py-8 text-red-500">Error loading course contents</div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
@@ -57,28 +60,25 @@ const ViewCourseContent = () => {
           <div className="w-[15%] text-base font-medium text-left text-neutral-900">Type</div>
           <div className="w-[10%] text-base font-medium text-left text-neutral-900">Duration</div>
           <div className="w-[10%] text-base font-medium text-left text-neutral-900">Order</div>
-          <div className="w-[10%] text-base font-medium text-left text-neutral-900">Status</div>
           <div className="w-[15%] text-base font-medium text-left text-neutral-900">Actions</div>
         </div>
 
         {/* Table Body */}
         <div className="flex flex-col divide-y divide-slate-100">
-          {contents.map((content) => (
+          {contents?.map((content) => (
             <div key={content.id} className="flex items-center p-3 hover:bg-slate-50 transition-colors">
               <div className="w-[25%] text-base text-left text-neutral-900 truncate" title={content.title}>
                 {content.title}
               </div>
-              <div className="w-[15%] text-base text-left text-neutral-900 truncate" title={content.course}>
-                {content.course}
+              <div
+                className="w-[15%] text-base text-left text-neutral-900 truncate"
+                title={(content.courseId as unknown as ICourse).title}
+              >
+                {(content.courseId as unknown as ICourse).title}
               </div>
               <div className="w-[15%] text-base text-left text-neutral-900">{content.contentType}</div>
               <div className="w-[10%] text-base text-left text-neutral-900">{content.duration}</div>
               <div className="w-[10%] text-base text-left text-neutral-900">{content.order}</div>
-              <div className="w-[10%]">
-                <span className="inline-flex items-center px-3 py-1 text-sm font-medium text-green-600 bg-emerald-50 rounded-full">
-                  {content.status}
-                </span>
-              </div>
               <div className="w-[15%]">
                 <button
                   aria-label="View content details"

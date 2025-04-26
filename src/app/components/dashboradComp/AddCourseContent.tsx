@@ -8,6 +8,7 @@ import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import FormField from "./FormField";
 import { ICourse } from "@/app/types/course.contract";
+import { CourseContentCreatePayload } from "@/app/types/course-content.contract";
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
@@ -23,8 +24,6 @@ const courseContentSchema = z.object({
   duration: z.string().min(1, "Duration is required"),
   order: z.number().min(0, "Order must be a non-negative number"),
 });
-
-type CourseContentFormData = z.infer<typeof courseContentSchema>;
 
 export default function AddCourseContent() {
   const [success, setSuccess] = useState(false);
@@ -44,7 +43,7 @@ export default function AddCourseContent() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CourseContentFormData>({
+  } = useForm<CourseContentCreatePayload>({
     resolver: zodResolver(courseContentSchema),
     defaultValues: {
       courseId: "",
@@ -58,7 +57,7 @@ export default function AddCourseContent() {
   });
 
   const createCourseContentMutation = useMutation({
-    mutationFn: async (data: CourseContentFormData) => {
+    mutationFn: async (data: CourseContentCreatePayload) => {
       console.log(data);
       const response = await api.post("/course-contents", data);
       return response.data;
@@ -74,7 +73,7 @@ export default function AddCourseContent() {
     },
   });
 
-  const onSubmit = async (data: CourseContentFormData) => {
+  const onSubmit = async (data: CourseContentCreatePayload) => {
     createCourseContentMutation.mutate(data);
   };
 
