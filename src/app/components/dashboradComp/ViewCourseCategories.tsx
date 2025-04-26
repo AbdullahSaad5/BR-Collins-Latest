@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
 import { toast } from "react-hot-toast";
-import { AddUserIcon, ViewIcon, ArrowLeftIcon, ArrowRightIcon } from "./Icons";
+import { AddUserIcon, ViewIcon } from "./Icons";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
+import CustomDataTable from "./CustomDataTable";
 
 interface CourseCategory {
   id: string;
@@ -28,32 +29,45 @@ export default function ViewCourseCategories() {
     select: (data) => data.data,
   });
 
-  if (isLoading) {
-    return (
-      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="space-y-3">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded"></div>
-          </div>
+  const columns = [
+    {
+      name: "Name",
+      selector: (row: CourseCategory) => row.name,
+      sortable: true,
+      grow: 1,
+      cell: (row: CourseCategory) => <div className="text-base text-left text-neutral-900">{row.name}</div>,
+    },
+    {
+      name: "Description",
+      selector: (row: CourseCategory) => row.description,
+      sortable: true,
+      grow: 2,
+      cell: (row: CourseCategory) => <div className="text-base text-left text-neutral-900">{row.description}</div>,
+    },
+    {
+      name: "Created At",
+      selector: (row: CourseCategory) => row.createdAt,
+      sortable: true,
+      grow: 1,
+      cell: (row: CourseCategory) => (
+        <div className="text-base text-left text-neutral-900">{new Date(row.createdAt).toLocaleDateString()}</div>
+      ),
+    },
+    {
+      name: "Actions",
+      cell: (row: CourseCategory) => (
+        <div className="flex gap-2">
+          <button aria-label="View category details" className="text-gray-500 hover:text-gray-700 transition-colors">
+            <ViewIcon className="w-5 h-5" />
+          </button>
         </div>
-      </section>
-    );
-  }
+      ),
+      grow: 0.5,
+    },
+  ];
 
   if (error) {
-    return (
-      <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-neutral-900">Course Categories</h1>
-        </div>
-        <div className="flex items-center justify-center h-64">
-          <p className="text-red-500">Error loading categories. Please try again later.</p>
-        </div>
-      </section>
-    );
+    toast.error("Failed to fetch course categories");
   }
 
   return (
@@ -66,58 +80,13 @@ export default function ViewCourseCategories() {
         </button>
       </div>
 
-      <div className="w-full border-collapse">
-        {/* Table Header */}
-        <div className="flex items-center p-3 rounded-lg bg-slate-100">
-          <div className="flex-1 text-base font-medium text-left text-neutral-900">Name</div>
-          <div className="flex-1 text-base font-medium text-left text-neutral-900">Description</div>
-          <div className="flex-1 text-base font-medium text-left text-neutral-900">Created At</div>
-          <div className="flex-1 text-base font-medium text-left text-neutral-900">Action</div>
-        </div>
-
-        {/* Table Rows */}
-        {categories?.map((category: CourseCategory) => (
-          <div
-            key={`category-${category.id}`}
-            className="flex items-center p-3 border-b border-solid border-slate-100 hover:bg-slate-50 transition-colors"
-          >
-            <div className="flex-1 text-base text-left text-neutral-900">{category.name}</div>
-            <div className="flex-1 text-base text-left text-neutral-900">{category.description}</div>
-            <div className="flex-1 text-base text-left text-neutral-900">
-              {new Date(category.createdAt).toLocaleDateString()}
-            </div>
-            <div className="flex-1 text-base text-left text-neutral-900">
-              <button
-                aria-label="View category details"
-                className="text-gray-500 hover:text-gray-700 transition-colors"
-              >
-                <ViewIcon className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-between items-center mt-6 px-2">
-        <div className="text-sm text-gray-500">Page 1 of 1</div>
-        <div className="flex gap-4 items-center">
-          <button
-            aria-label="Previous page"
-            className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
-            disabled
-          >
-            <ArrowLeftIcon className="w-5 h-5" />
-          </button>
-          <button
-            aria-label="Next page"
-            className="p-1 text-gray-500 hover:text-gray-700 transition-colors disabled:opacity-50"
-            disabled
-          >
-            <ArrowRightIcon className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
+      <CustomDataTable
+        columns={columns}
+        data={categories || []}
+        isLoading={isLoading}
+        error={error}
+        noDataMessage="No course categories found"
+      />
     </section>
   );
 }
