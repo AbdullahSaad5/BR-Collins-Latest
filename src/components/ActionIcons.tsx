@@ -29,7 +29,9 @@ const ActionIcons: React.FC<ActionIconsProps> = ({
       {onView && (
         <button
           className={`p-1.5 rounded-md transition-colors duration-200 ${
-            disabled.view ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
+            disabled.view
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer hover:bg-gray-100 text-gray-600 hover:text-gray-900"
           }`}
           onClick={onView}
           disabled={disabled.view}
@@ -42,7 +44,9 @@ const ActionIcons: React.FC<ActionIconsProps> = ({
       {onEdit && (
         <button
           className={`p-1.5 rounded-md transition-colors duration-200 ${
-            disabled.edit ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
+            disabled.edit
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer hover:bg-gray-100 text-gray-600 hover:text-gray-900"
           }`}
           onClick={onEdit}
           disabled={disabled.edit}
@@ -55,7 +59,9 @@ const ActionIcons: React.FC<ActionIconsProps> = ({
       {onDelete && (
         <button
           className={`p-1.5 rounded-md transition-colors duration-200 ${
-            disabled.delete ? "opacity-50 cursor-not-allowed" : "hover:bg-red-50 text-red-600 hover:text-red-700"
+            disabled.delete
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer hover:bg-red-50 text-red-600 hover:text-red-700"
           }`}
           onClick={onDelete}
           disabled={disabled.delete}
