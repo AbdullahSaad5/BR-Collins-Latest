@@ -6,6 +6,11 @@ import { z } from "zod";
 import { UserCreatePayload } from "@/app/types/user.contract";
 import { ENUMS } from "@/app/constants/enum";
 import FormField from "./FormField";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+import { getRefreshToken } from "@/app/store/features/users/userSlice";
+import { useAppSelector } from "@/app/store/hooks";
 
 const userSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -21,11 +26,12 @@ type UserFormData = z.infer<typeof userSchema>;
 export default function AddUser() {
   const [previewImage, setPreviewImage] = React.useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const refreshToken = useAppSelector(getRefreshToken);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
     reset,
@@ -38,6 +44,26 @@ export default function AddUser() {
       password: "",
       role: "student",
       profilePicture: "",
+    },
+  });
+
+  const createUserMutation = useMutation({
+    mutationFn: async (data: UserFormData) => {
+      const response = await api.post("/users", data, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("User created successfully", "success");
+      reset();
+      setPreviewImage(null);
+    },
+    onError: (error) => {
+      showToast("Failed to create user", "error");
+      console.error("Error creating user:", error);
     },
   });
 
@@ -57,17 +83,7 @@ export default function AddUser() {
   };
 
   const onSubmit = async (data: UserFormData) => {
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("User submitted:", data);
-
-      // Reset form after successful submission
-      reset();
-      setPreviewImage(null);
-    } catch (error) {
-      console.error("Error submitting user:", error);
-    }
+    createUserMutation.mutate(data);
   };
 
   return (
@@ -170,10 +186,10 @@ export default function AddUser() {
         <div className="flex justify-end mt-8">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={createUserMutation.isPending}
             className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {isSubmitting ? "Submitting..." : "Add User"}
+            {createUserMutation.isPending ? "Submitting..." : "Add User"}
           </button>
         </div>
       </form>

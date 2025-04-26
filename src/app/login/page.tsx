@@ -1,25 +1,77 @@
-import React from "react";
-import { IoMdArrowForward } from "react-icons/io";
-import Image from "next/image"; // If not using Next.js, replace with regular <img />
-import loginimage from "../../../public/img/login/loginimage.png";
-import B from "../../../public/img/login/Bb.png";
-import logo from "../../../public/img/login/lowerlogo.png";
-import { IoArrowBackOutline } from "react-icons/io5";
+"use client";
 
-import Link from "next/link"; // If using react-router-dom, import from "react-router-dom"
+import Image from "next/image";
+import React, { useState } from "react";
+import { IoMdArrowForward } from "react-icons/io";
+import { IoArrowBackOutline } from "react-icons/io5";
+import B from "../../../public/img/login/Bb.png";
+import LoginImage from "../../../public/img/login/loginimage.png";
+import logo from "../../../public/img/login/lowerlogo.png";
+
+import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useDispatch } from "react-redux";
+import { setUser, setAccessToken, setRefreshToken } from "@/app/store/features/users/userSlice";
+
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
+  const [rememberMe, setRememberMe] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginFormData) => {
+      const response = await api.post("/auth/login", data);
+      return response.data;
+    },
+    onSuccess: (res) => {
+      const data = res.data;
+
+      // Store user data in Redux
+      dispatch(setUser(data.user));
+      dispatch(setAccessToken(data.accessToken));
+      dispatch(setRefreshToken(data.refreshToken));
+
+      showToast("Login successful", "success");
+      router.push("/dashboard");
+    },
+    onError: (error) => {
+      showToast("Login failed. Please check your credentials.", "error");
+      console.error("Login error:", error);
+    },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    loginMutation.mutate(data);
+  };
+
   return (
     <section className="">
       <div className="flex flex-col lg:flex-row w-full bg-org">
         {/* Left Section */}
         <div className="w-full lg:w-2/3 bg-[#0365AD] text-white relative py-12 lg:py-0">
           <div className="absolute bottom-0 w-full lg:w-[712px]">
-            <Image
-              src={B}
-              alt="Decorative background"
-              className="w-full h-auto"
-            />
+            <Image src={B} alt="Decorative background" className="w-full h-auto" />
           </div>
 
           <div className="relative z-10 w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start min-h-[600px] lg:min-h-[700px]">
@@ -31,88 +83,74 @@ const Login: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-4 w-full">
-              <h1 className="text-2xl font-bold font-hanken text-white">
-                Sign in to your account
-              </h1>
-              <p>
-                Build skills for today, tomorrow, and beyond. Education to
-                future-proof your career.
-              </p>
+              <h1 className="text-2xl font-bold font-hanken text-white">Sign in to your account</h1>
+              <p>Build skills for today, tomorrow, and beyond. Education to future-proof your career.</p>
               <p className="text-gray-300">
-                Asterisks (<span className="text-org font-bold">*</span>)
-                indicate required fields.
+                Asterisks (<span className="text-org font-bold">*</span>) indicate required fields.
               </p>
             </div>
 
             {/* Form */}
-            <form className="w-full flex flex-col gap-3 space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full flex flex-col gap-3 space-y-4" noValidate>
               <div className="flex flex-col gap-3">
                 <input
                   type="email"
+                  {...register("email")}
                   required
                   placeholder="Email*"
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-400 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-org"
                 />
+                {errors.email && <p className="text-white text-xs">{errors.email.message}</p>}
                 <input
                   type="password"
+                  {...register("password")}
                   required
                   placeholder="Password*"
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-400 text-gray-800 placeholder-gray-500 focus:outline-none focus:border-org"
                 />
+                {errors.password && <p className="text-white text-xs">{errors.password.message}</p>}
               </div>
               <div className="flex flex-row justify-between">
                 <div className="flex items-center gap-3 cursor-pointer group">
-                  {/* Custom checkbox container */}
-                  <div className="relative">
-                    {/* Hidden original checkbox */}
+                  <label className="inline-flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      className="absolute opacity-0 h-0 w-0 peer"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="peer hidden"
                     />
-
-                    {/* Custom checkbox design */}
-                    <div
-                      className="w-5 h-5 border border-gray-400 rounded-sm flex items-center justify-center
-                   transition-all duration-200
-                   group-hover:border-blue-500
-                   peer-checked:bg-blue-500 peer-checked:border-blue-500"
-                    >
-                      {/* Checkmark icon (only visible when checked) */}
+                    <div className="h-5 w-5 rounded border-2 border-gray-300 flex items-center justify-center peer-checked:bg-org peer-checked:border-org transition-colors">
                       <svg
                         className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
-                        viewBox="0 0 20 20"
+                        viewBox="0 0 24 24"
                         fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        <path
-                          d="M3 10L8 15L17 5"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </div>
-                  </div>
-
-                  {/* Label with subtle hover effect */}
-                  <span className="text-gray-100 font-light transition-colors group-hover:text-gray-900">
-                    Remember me
-                  </span>
+                    <span className="ml-2 text-gray-100 font-light transition-colors group-hover:text-white">
+                      Remember me
+                    </span>
+                  </label>
                 </div>
                 <div>
-                  <h2 className="underline font-light">
-                    Forgot your password?
-                  </h2>
+                  <h2 className="underline font-light">Forgot your password?</h2>
                 </div>
               </div>
-              <Link
-                href="/dashboard"
-                className="bg-org text-white gap-2 items-center flex flex-row py-3 px-6 rounded-full font-base hover:bg-opacity-90 w-fit transition-colors"
+              <button
+                type="submit"
+                disabled={isSubmitting || loginMutation.isPending}
+                className="bg-org text-white gap-2 items-center flex flex-row py-3 px-6 rounded-full font-base hover:bg-opacity-90 w-fit transition-colors disabled:opacity-50"
               >
-                Login{" "}
+                {isSubmitting || loginMutation.isPending ? "Logging in..." : "Login"}{" "}
                 <span>
                   <IoMdArrowForward className="flex flex-row items-center justify-center my-auto" />
                 </span>
-              </Link>
+              </button>
             </form>
 
             <p className="text-sm">
@@ -126,11 +164,7 @@ const Login: React.FC = () => {
 
         {/* Right Section */}
         <div className="hidden lg:block lg:w-1/3">
-          <Image
-            src={loginimage}
-            alt="Login"
-            className="w-full h-full object-cover"
-          />
+          <Image src={LoginImage} alt="Login" className="w-full h-full object-cover" />
         </div>
       </div>
     </section>

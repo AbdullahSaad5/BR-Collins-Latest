@@ -9,6 +9,10 @@ import { TopBanner } from "./components/TopBanner";
 import { Navigation } from "./components/Navigation";
 import Footer from "./components/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+import { Provider } from "react-redux";
+import { store, persistor } from "./store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,21 +37,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <CourseProvider>
-        <UserProvider>
-          <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-              <main className="flex overflow-hidden flex-col bg-white">
-                <TopBanner />
-                <Navigation />
-                {children}
-                <Footer />
-              </main>
-            </body>
-          </html>
-        </UserProvider>
-      </CourseProvider>
-    </QueryClientProvider>
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <QueryClientProvider client={queryClient}>
+              <CourseProvider>
+                <UserProvider>
+                  <main className="flex overflow-hidden flex-col bg-white">
+                    <TopBanner />
+                    <Navigation />
+                    {children}
+                    <Footer />
+                  </main>
+                </UserProvider>
+              </CourseProvider>
+              <ToastContainer />
+            </QueryClientProvider>
+          </PersistGate>
+        </Provider>
+      </body>
+    </html>
   );
 }

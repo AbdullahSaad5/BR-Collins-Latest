@@ -5,17 +5,38 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useUser } from "./context/CartContext";
 import Cart from "./Cart/Cart";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, User } from "lucide-react";
+import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
+import { logout } from "@/app/store/features/users/userSlice";
+import { IUser } from "../types/user.contract";
+import Image from "next/image";
+
+const isValidProfilePicture = (url: string | undefined): url is string => {
+  return typeof url === "string" && url.length > 0;
+};
+
+const toTitleCase = (str: string) => {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 export const Navigation = () => {
   const { cart, setCart, items } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [DropdownMenu, setDropDownMenu] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
+  const user = useAppSelector((state) => state.user.user);
+  const profilePicture = (user as IUser).profilePicture;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRoute = e.target.value;
     router.push(selectedRoute);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/");
   };
 
   return (
@@ -98,14 +119,43 @@ export const Navigation = () => {
             <button onClick={() => setCart(true)} className="relative">
               <ShoppingCart className="w-6 h-6" />
               {items.length > 0 && (
-                <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
+                <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">
+                  {items.length}
+                </div>
               )}
             </button>
-            <Link href="/login">
-              <button className="overflow-hidden gap-1.5 px-5 py-0.5 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] whitespace-nowrap">
-                Login
-              </button>
-            </Link>
+            {isLoggedIn ? (
+              <div
+                className="flex items-center gap-4 cursor-pointer"
+                onClick={() => {
+                  router.push("/dashboard");
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  {isValidProfilePicture(profilePicture) ? (
+                    <div className="relative w-8 h-8 rounded-full overflow-hidden">
+                      <Image src={profilePicture} alt="Profile" fill className="object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                      <User className="w-6 h-6 text-gray-500" />
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
+                      (user as IUser).lastName
+                    }`}</span>
+                    <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link href="/login">
+                <button className="overflow-hidden gap-1.5 px-5 py-0.5 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] whitespace-nowrap">
+                  Login
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -160,11 +210,27 @@ export const Navigation = () => {
             </a>
           </div>
 
-          <Link href="/login">
-            <button className="w-full px-2 py-1 bg-white border border-solid border-zinc-200 rounded-[56px] mt-4">
-              Login
-            </button>
-          </Link>
+          {!isLoggedIn && (
+            <Link href="/login">
+              <button className="w-full px-2 py-1 bg-white border border-solid border-zinc-200 rounded-[56px] mt-4">
+                Login
+              </button>
+            </Link>
+          )}
+          {isLoggedIn && (
+            <div className="flex items-center gap-3 p-2">
+              {isValidProfilePicture(profilePicture) ? (
+                <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                  <Image src={profilePicture} alt="Profile" fill className="object-cover" />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                  <User className="w-6 h-6 text-gray-500" />
+                </div>
+              )}
+              <span className="text-lg font-medium">{`${(user as IUser).firstName} ${(user as IUser).lastName}`}</span>
+            </div>
+          )}
         </div>
       </div>
 
