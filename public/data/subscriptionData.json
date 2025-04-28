@@ -1,0 +1,39 @@
+{
+    "individualPlans": [
+      {
+        "title": "Individual Courses",
+        "description": "Take Any Course for Just $99 – One-Time Payment, Lifetime Access!",
+        "price": 99,
+        "priceText": "per course",
+        "paymentType": "One-Time Payment",
+        "buttonText": "Buy Now"
+      },
+      {
+        "title": "Yearly Subscription",
+        "description": "Access All Courses for a Full Year with Unlimited Learning!",
+        "price": 199,
+        "priceText": "All Courses",
+        "paymentType": "Yearly",
+        "buttonText": "Subscribe Now"
+      }
+    ],
+    "corporatePlans": {
+      "title": "Corporate Subscriptions",
+      "description": "Choose from 10, 20, or 50-user plans designed for organizations that value continuous development.",
+      "plans": [
+        {
+          "price": 1990,
+          "users": "10 users"
+        },
+        {
+          "price": 2990,
+          "users": "20 users"
+        },
+        {
+          "price": 4990,
+          "users": "50 users"
+        }
+      ],
+      "buttonText": "Contact Sales"
+    }
+  }
