@@ -24,6 +24,7 @@ const courseContentSchema = z.object({
   contentUrl: z.string().min(1, "Content URL is required"),
   duration: z.string().min(1, "Duration is required"),
   order: z.number().min(0, "Order must be a non-negative number"),
+  isBlocked: z.boolean(),
 });
 
 export default function AddCourseContent() {
@@ -68,6 +69,7 @@ export default function AddCourseContent() {
       contentUrl: "",
       duration: "",
       order: 0,
+      isBlocked: false,
     },
   });
 
