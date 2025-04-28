@@ -14,6 +14,7 @@ import { IAppointment } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
 import ViewAppointmentModal from "./ViewAppointmentModal";
 import { useRouter } from "next/navigation";
+import AppointmentStatusMenu from "./AppointmentStatusMenu";
 
 const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId");
@@ -91,17 +92,41 @@ const Appointments = () => {
     setSelectedAppointment(null);
   };
 
+  const handleStatusChange = async (
+    appointmentId: string,
+    status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled",
+    data?: { newDate?: string; newTime?: string; reason?: string }
+  ) => {
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status, ...data }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update appointment status");
+      }
+
+      // Refresh the appointments list
+      fetchAppointments();
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      throw error;
+    }
+  };
+
   const columns = [
     {
       name: "Course",
       selector: (row: IAppointment) => (row.courseId as unknown as ICourse).title,
       sortable: true,
       grow: 1.5,
+      minWidth: "200px",
       cell: (row: IAppointment) => (
-        <div
-          className="text-base text-left text-neutral-900 truncate"
-          title={(row.courseId as unknown as ICourse).title}
-        >
+        <div className="text-sm text-left text-neutral-900 truncate" title={(row.courseId as unknown as ICourse).title}>
           {(row.courseId as unknown as ICourse).title}
         </div>
       ),
@@ -112,7 +137,7 @@ const Appointments = () => {
       sortable: true,
       grow: 1.5,
       cell: (row: IAppointment) => (
-        <div className="text-base text-left text-neutral-900 truncate" title={row.location.venueName}>
+        <div className="text-sm text-left text-neutral-900 truncate" title={row.location.venueName}>
           {row.location.venueName}
         </div>
       ),
@@ -123,7 +148,7 @@ const Appointments = () => {
       sortable: true,
       grow: 1,
       cell: (row: IAppointment) => (
-        <div className="text-base text-left text-neutral-900">{new Date(row.startTime).toLocaleDateString()}</div>
+        <div className="text-sm text-left text-neutral-900">{new Date(row.startTime).toLocaleDateString()}</div>
       ),
     },
     {
@@ -131,8 +156,9 @@ const Appointments = () => {
       selector: (row: IAppointment) => new Date(row.startTime).toLocaleTimeString(),
       sortable: true,
       grow: 1,
+      minWidth: "200px",
       cell: (row: IAppointment) => (
-        <div className="text-base text-left text-neutral-900">
+        <div className="text-sm text-left text-neutral-900">
           {new Date(row.startTime).toLocaleTimeString()} - {new Date(row.endTime).toLocaleTimeString()}
         </div>
       ),
@@ -142,14 +168,23 @@ const Appointments = () => {
       selector: (row: IAppointment) => row.maxParticipants,
       sortable: true,
       grow: 1,
-      cell: (row: IAppointment) => <div className="text-base text-left text-neutral-900">{row.maxParticipants}</div>,
+      cell: (row: IAppointment) => <div className="text-sm text-left text-neutral-900">{row.maxParticipants}</div>,
     },
     {
       name: "Price",
       selector: (row: IAppointment) => row.price,
       sortable: true,
       grow: 1,
-      cell: (row: IAppointment) => <div className="text-base text-left text-neutral-900">${row.price}</div>,
+      cell: (row: IAppointment) => <div className="text-sm text-left text-neutral-900">${row.price}</div>,
+    },
+    {
+      name: "Status",
+      accessorKey: "status",
+      header: "Status",
+      minWidth: "200px",
+      cell: (row: IAppointment) => (
+        <AppointmentStatusMenu status={row.status} onStatusChange={(status) => handleStatusChange(row._id, status)} />
+      ),
     },
     {
       name: "Actions",
