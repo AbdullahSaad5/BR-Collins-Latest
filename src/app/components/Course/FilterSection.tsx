@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { useCategoryContext } from "../context/CategoryContext";
 
 interface FilterGroupProps {
   title: string;
@@ -9,72 +10,166 @@ interface FilterGroupProps {
 interface CheckboxItemProps {
   label?: string;
   children?: React.ReactNode;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
 }
 
 const FilterGroup: React.FC<FilterGroupProps> = ({ title, children }) => {
   return (
     <section className="flex flex-col gap-6">
-      <h3 className="text-lg font-semibold text-neutral-900 max-md:text-lg max-sm:text-base">
-        {title}
-      </h3>
+      <h3 className="text-lg font-semibold text-neutral-900 max-md:text-lg max-sm:text-base">{title}</h3>
       {children}
     </section>
   );
 };
 
-const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, children }) => {
+const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, children, checked, onChange }) => {
   return (
     <label className="flex gap-3 items-center cursor-pointer">
-      <input type="checkbox" className="hidden" />
-      <div className="w-6 h-6 bg-white rounded-md border-2 border-solid border-zinc-200" />
-      {label && (
-        <span className="text-base text-neutral-900 max-md:text-base max-sm:text-sm">
-          {label}
-        </span>
-      )}
+      <input type="checkbox" className="hidden" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <div
+        className={`w-6 h-6 rounded-md border-2 border-solid ${
+          checked ? "bg-sky-500 border-sky-500" : "bg-white border-zinc-200"
+        }`}
+      >
+        {checked && (
+          <svg className="w-full h-full text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M20 6L9 17L4 12"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
+      </div>
+      {label && <span className="text-base text-neutral-900 max-md:text-base max-sm:text-sm">{label}</span>}
       {children}
     </label>
   );
 };
 
-const ShowMoreButton: React.FC = () => {
-  const handleShowMore = () => {
-    console.log("Show more clicked");
-  };
+const ShowMoreButton: React.FC<{
+  isExpanded: boolean;
+  onToggle: () => void;
+  hasMore: boolean;
+}> = ({ isExpanded, onToggle, hasMore }) => {
+  if (!hasMore) return null;
 
   return (
-    <button
-      onClick={handleShowMore}
-      className="text-base font-semibold text-sky-500 underline cursor-pointer"
-    >
-      Show more
+    <button onClick={onToggle} className="text-base font-semibold text-sky-500 underline cursor-pointer">
+      {isExpanded ? "Show less" : "Show more"}
     </button>
   );
 };
 
-const FilterSection = () => {
+interface FilterSectionProps {
+  topicFilters: {
+    [key: string]: boolean;
+  };
+  languageFilters: {
+    [key: string]: boolean;
+  };
+  durationFilters: {
+    [key: string]: boolean;
+  };
+  onTopicFilterChange: (topic: string, checked: boolean) => void;
+  onLanguageFilterChange: (language: string, checked: boolean) => void;
+  onDurationFilterChange: (duration: string, checked: boolean) => void;
+}
+
+const FilterSection: React.FC<FilterSectionProps> = ({
+  topicFilters,
+  languageFilters,
+  durationFilters,
+  onTopicFilterChange,
+  onLanguageFilterChange,
+  onDurationFilterChange,
+}) => {
+  const { categories, isLoading, error } = useCategoryContext();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isDurationExpanded, setIsDurationExpanded] = useState(false);
+  const INITIAL_CATEGORIES_TO_SHOW = 3;
+  const INITIAL_DURATIONS_TO_SHOW = 3;
+
+  const hasMoreCategories = categories.length > INITIAL_CATEGORIES_TO_SHOW;
+  const visibleCategories = isExpanded ? categories : categories.slice(0, INITIAL_CATEGORIES_TO_SHOW);
+
+  const durationOptions = [
+    { label: "0-1 Hours", value: "0-1 Hours" },
+    { label: "1-3 Hours", value: "1-3 Hours" },
+    { label: "3-6 Hours", value: "3-6 Hours" },
+    { label: "6-12 Hours", value: "6-12 Hours" },
+    { label: "12-24 Hours", value: "12-24 Hours" },
+    { label: "24+ Hours", value: "24+ Hours" },
+  ];
+
+  const hasMoreDurations = durationOptions.length > INITIAL_DURATIONS_TO_SHOW;
+  const visibleDurations = isDurationExpanded ? durationOptions : durationOptions.slice(0, INITIAL_DURATIONS_TO_SHOW);
+
+  if (isLoading) {
+    return (
+      <aside className="flex flex-col p-0 mx-auto max-w-none bg-white w-[385px] max-md:px-4 max-md:py-0 max-md:w-full max-md:max-w-[991px] max-sm:px-3 max-sm:py-0 max-sm:max-w-screen-sm">
+        <div className="flex flex-col gap-8">
+          <div className="animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
+            <div className="space-y-3">
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    );
+  }
+
+  if (error) {
+    return (
+      <aside className="flex flex-col p-0 mx-auto max-w-none bg-white w-[385px] max-md:px-4 max-md:py-0 max-md:w-full max-md:max-w-[991px] max-sm:px-3 max-sm:py-0 max-sm:max-w-screen-sm">
+        <div className="text-red-500">{error}</div>
+      </aside>
+    );
+  }
+
   return (
     <aside className="flex flex-col p-0 mx-auto max-w-none bg-white w-[385px] max-md:px-4 max-md:py-0 max-md:w-full max-md:max-w-[991px] max-sm:px-3 max-sm:py-0 max-sm:max-w-screen-sm">
       <div className="flex flex-col gap-8">
-        <h2 className="text-xl font-bold text-neutral-900 max-md:text-lg max-sm:text-base">
-          Filter By
-        </h2>
+        <h2 className="text-xl font-bold text-neutral-900 max-md:text-lg max-sm:text-base">Filter By</h2>
 
         <FilterGroup title="Topic Categories">
           <div className="flex flex-col gap-3">
-            <CheckboxItem label="Business Writing Techniques" />
-            <CheckboxItem label="Anger Management" />
-            <CheckboxItem label="Administrative Support" />
+            {visibleCategories.map((category) => (
+              <CheckboxItem
+                key={category._id}
+                label={category.name}
+                checked={topicFilters[category._id] || false}
+                onChange={(checked) => onTopicFilterChange(category._id, checked)}
+              />
+            ))}
           </div>
-          <ShowMoreButton />
+          <ShowMoreButton
+            isExpanded={isExpanded}
+            onToggle={() => setIsExpanded(!isExpanded)}
+            hasMore={hasMoreCategories}
+          />
         </FilterGroup>
 
         <hr className="w-full h-px bg-zinc-200" />
 
         <FilterGroup title="By Language">
           <div className="flex flex-col gap-3">
-            <CheckboxItem label="English" />
-            <CheckboxItem label="Arabic" />
+            <CheckboxItem
+              label="English"
+              checked={languageFilters["English"] || false}
+              onChange={(checked) => onLanguageFilterChange("English", checked)}
+            />
+            <CheckboxItem
+              label="Arabic"
+              checked={languageFilters["Arabic"] || false}
+              onChange={(checked) => onLanguageFilterChange("Arabic", checked)}
+            />
           </div>
         </FilterGroup>
 
@@ -82,11 +177,20 @@ const FilterSection = () => {
 
         <FilterGroup title="By Video Duration">
           <div className="flex flex-col gap-3">
-            <CheckboxItem label="0-1 Hours" />
-            <CheckboxItem label="1-3 Hours" />
-            <CheckboxItem label="3-6 Hours" />
+            {visibleDurations.map((duration) => (
+              <CheckboxItem
+                key={duration.value}
+                label={duration.label}
+                checked={durationFilters[duration.value] || false}
+                onChange={(checked) => onDurationFilterChange(duration.value, checked)}
+              />
+            ))}
           </div>
-          <ShowMoreButton />
+          <ShowMoreButton
+            isExpanded={isDurationExpanded}
+            onToggle={() => setIsDurationExpanded(!isDurationExpanded)}
+            hasMore={hasMoreDurations}
+          />
         </FilterGroup>
       </div>
     </aside>

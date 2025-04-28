@@ -5,18 +5,133 @@ import { ReviewSection } from "../../components/CourseDetail/ReviewSection";
 import CourseDetail from "../../components/CourseDetail/CourseDetail";
 import { StarRating } from "@/app/components/CourseDetail/StarRating";
 import { Send, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
-import { useCourseContext } from "@/app/components/context/CourseContext";
+import { ICourse } from "@/app/types/course.contract";
 
 const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
 
-const CourseDetailPageClient = ({ slug }: { slug: string }) => {
-  const { courses: courses } = useCourseContext();
-  // Find the course by slug
-  const course = courses.find((c) => c.slug === slug);
+const toTitleCase = (str: string) => {
+  return str.replace(/\B([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
+};
 
+const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
   if (!course) {
     return <div>Course not found</div>;
   }
+
+  // Map API course data to frontend display format
+  const displayCourse = {
+    slug: course.slug,
+    duration: `${course.noOfHours} Hrs`,
+    title: toTitleCase(course.title),
+    overview: course.overview,
+    subtitle: course.subtitle,
+    instructor: course.instructor,
+    lessons: course.noOfLessons,
+    rating: course.rating,
+    price: `$${course.discountPrice ? course.discountPrice : course.price}`,
+    originalPrice: course.price,
+    isNew: course.bestSeller,
+    // imageUrl: course.coverImageUrl,
+    imageUrl: "/img/Course/Course.png",
+    courseDetails: {
+      startDate:
+        course.startDate instanceof Date
+          ? course.startDate.toLocaleDateString()
+          : new Date(course.startDate).toLocaleDateString(),
+      enrolled: course.noOfStudents || 100,
+      lectures: course.noOfLessons,
+      skillLevel: course.skillLevel,
+      language: course.language,
+      quizzes: course.noOfQuizzes,
+      certificate: course.hasCertificate ? "Yes" : "No",
+    },
+    description: course.description,
+    learningObjectives: course.whatYouWillLearn,
+    requirements:
+      course.requirements.length > 0
+        ? course.requirements
+        : ["This course is for beginners", "No prior knowledge required", "All levels welcome"],
+    sections: [
+      {
+        title: "Introduction to Course",
+        stats: "3 lectures • 1hr 30 min",
+        icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/62b824286fd0acfa901dd05cd9fdd8f82eedcc53?placeholderIfAbsent=true",
+        lectures: [
+          {
+            title: "Module 1: Introduction to Office Administration",
+            duration: "30:00",
+            type: "video",
+          },
+          {
+            title: "Module 2: Communication in the Workplace",
+            duration: "30:00",
+            type: "video",
+          },
+          {
+            title: "Module 3: Time Management & Organization",
+            duration: "30:00",
+            type: "video",
+          },
+          {
+            title: "Module 4: Time Management & Organization",
+            duration: "30:00",
+            type: "book",
+          },
+        ],
+      },
+      {
+        title: "Course Fundamentals",
+        stats: "6 lectures • 2hr 30 min",
+        icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4a9582ecadffb53b1570073486c3f4e6e7eb3ff4?placeholderIfAbsent=true",
+        lectures: [
+          {
+            title: "Module 1: Core Administrative Skills",
+            duration: "45:00",
+            type: "video",
+          },
+          {
+            title: "Module 2: Effective Communication Techniques",
+            duration: "45:00",
+            type: "video",
+          },
+        ],
+      },
+      {
+        title: "You can develop skill and setup",
+        stats: "6 lectures • 2hr 30 min",
+        icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4a9582ecadffb53b1570073486c3f4e6e7eb3ff4?placeholderIfAbsent=true",
+        lectures: [
+          {
+            title: "Module 1: Core Administrative Skills",
+            duration: "45:00",
+            type: "video",
+          },
+          {
+            title: "Module 2: Effective Communication Techniques",
+            duration: "45:00",
+            type: "video",
+          },
+        ],
+      },
+      {
+        title: "You can develop skill and setup",
+        stats: "6 lectures • 2hr 30 min",
+        icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4a9582ecadffb53b1570073486c3f4e6e7eb3ff4?placeholderIfAbsent=true",
+        lectures: [
+          {
+            title: "Module 1: Core Administrative Skills",
+            duration: "45:00",
+            type: "video",
+          },
+          {
+            title: "Module 2: Effective Communication Techniques",
+            duration: "45:00",
+            type: "video",
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
@@ -39,7 +154,7 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
                 className="object-contain shrink-0 aspect-square w-[18px]"
               />
               <a href="#" className="font-semibold text-sky-500">
-                {course.title}
+                {displayCourse.title}
               </a>
             </nav>
 
@@ -47,31 +162,31 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
             <div className="flex flex-col mt-24 w-[648px] max-md:mt-10 max-md:w-full">
               <div className="w-full text-white min-h-[196px]">
                 <h1 className="text-5xl font-bold leading-[58px] max-md:text-4xl max-md:leading-[49px]">
-                  {course.title}
+                  {displayCourse.title}
                 </h1>
-                <p className="mt-5 text-xl leading-8 max-md:text-lg max-md:leading-7">{course.description}</p>
+                <p className="mt-5 text-xl leading-8 max-md:text-lg max-md:leading-7">{displayCourse.subtitle}</p>
               </div>
 
               {/* Stats Section */}
               <div className="flex flex-col mt-10 w-[577px] max-md:w-full">
                 <div className="flex flex-wrap gap-3 items-center w-full">
                   {/* {course.isNew && ( */}
-                    <div className="flex gap-1 items-center px-3 py-1.5 text-base font-medium text-black whitespace-nowrap bg-orange-300 rounded-md max-md:text-sm">
-                      <img
-                        src="https://cdn.builder.io/api/v1/image/assets/TEMP/1099e32fc8790b4b60ad2b6a14e0383d2ac123fe?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
-                        alt="Bestseller badge"
-                        className="object-contain shrink-0 aspect-[0.81] w-[13px]"
-                      />
-                      <span>Bestseller</span>
-                    </div>
+                  <div className="flex gap-1 items-center px-3 py-1.5 text-base font-medium text-black whitespace-nowrap bg-orange-300 rounded-md max-md:text-sm">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/1099e32fc8790b4b60ad2b6a14e0383d2ac123fe?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
+                      alt="Bestseller badge"
+                      className="object-contain shrink-0 aspect-[0.81] w-[13px]"
+                    />
+                    <span>Bestseller</span>
+                  </div>
                   {/* )} */}
 
                   {/* Rating */}
                   <div className="flex gap-1.5 items-center">
-                    <span className="text-lg font-medium text-white max-md:text-base">{course.rating}</span>
-                    <StarRating rating={course.rating} />
+                    <span className="text-lg font-medium text-white max-md:text-base">{displayCourse.rating}</span>
+                    <StarRating rating={displayCourse.rating} />
                     <a href="#" className="text-base text-white underline max-md:text-sm">
-                      {course.lessons}+ rating
+                      {displayCourse.lessons}+ rating
                     </a>
                   </div>
 
@@ -86,7 +201,7 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
                         alt="Lessons icon"
                         className="object-contain shrink-0 w-5 aspect-square max-md:w-4"
                       />
-                      <span className="text-base max-md:text-sm text-white">{course.lessons} Lessons</span>
+                      <span className="text-base max-md:text-sm text-white">{displayCourse.lessons} Lessons</span>
                     </div>
                     <div className="flex gap-1.5 items-center">
                       <img
@@ -95,7 +210,7 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
                         className="object-contain shrink-0 w-5 aspect-square max-md:w-4"
                       />
                       <span className="text-base max-md:text-sm text-white">
-                        {course.courseDetails.enrolled} Students
+                        {displayCourse.courseDetails.enrolled} Students
                       </span>
                     </div>
                   </div>
@@ -137,8 +252,12 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
                 <article className="w-full max-md:max-w-full">
                   <h2 className="text-3xl font-bold max-md:max-w-full">What you'll learn</h2>
                   <div className="mt-8 w-full text-base leading-6 max-md:max-w-full">
+                    {/* Add Overview here */}
+                    <p className="mt-5 text-base leading-8 max-md:text-lg max-md:leading-7 mb-6">
+                      {displayCourse.overview}
+                    </p>
                     <div className="grid grid-cols-2 gap-8 max-md:grid-cols-1">
-                      {course.learningObjectives.map((objective, index) => (
+                      {displayCourse.learningObjectives.map((objective, index) => (
                         <div key={index} className="flex gap-2 items-start">
                           <img
                             src="https://cdn.builder.io/api/v1/image/assets/TEMP/e250ce5e477b6a62341118a96947307c91c70fef?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
@@ -155,9 +274,9 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
             </section>
 
             <CourseDetail
-              sections={course.sections}
-              requirements={course.requirements}
-              description={course.description}
+              sections={displayCourse.sections}
+              requirements={displayCourse.requirements}
+              description={displayCourse.description}
             />
             <InstructorSection />
             <ReviewSection />
@@ -171,7 +290,7 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
               {/* Course Preview */}
               <div className="relative w-full min-h-[280px] text-xl font-bold text-white rounded-2xl shadow-[0px_4px_75px_rgba(0,0,0,0.06)] overflow-hidden text-center max-md:max-w-full">
                 <img
-                  src={course.imageUrl}
+                  src={displayCourse.imageUrl}
                   alt="Course preview"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -182,10 +301,14 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
 
               {/* Price */}
               <div className="flex items-center gap-3 mt-8 font-extrabold text-center text-neutral-900">
-                <span className="text-3xl leading-none">{course.price}</span>
-                <span className="text-xl leading-tight line-through text-neutral-400">{course.originalPrice}</span>
+                <span className="text-3xl leading-none">{displayCourse.price}</span>
+                {displayCourse.originalPrice && (
+                  <span className="text-xl leading-tight line-through text-neutral-400">
+                    {displayCourse.originalPrice}
+                  </span>
+                )}
                 {/* <span className="px-3 py-1.5 text-base text-black uppercase bg-orange-300 rounded-md">
-                  {Math.round((1 - parseFloat(course.price.replace('$', '')) / parseFloat(course.originalPrice.replace('$', ''))) * 100}% off
+                  {Math.round((1 - parseFloat(course.price.replace('$', '')) / parseFloat(course.originalPrice.replace('$', ''))) * 100)}% off
                 </span> */}
               </div>
 
@@ -201,13 +324,13 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
               {/* Details Table */}
               <div className="flex flex-wrap gap-9 mt-12 text-lg text-neutral-900 w-full max-md:mt-10">
                 <div className="overflow-hidden grow shrink-0 basis-0 w-fit h-[318px] max-md:max-w-full">
-                  {Object.entries(course.courseDetails).map(([label, value], index) => (
+                  {Object.entries(displayCourse.courseDetails).map(([label, value], index) => (
                     <div key={label}>
                       <div className="flex justify-between items-center w-full">
-                        <span>{label}</span>
+                        <span>{toTitleCase(label)}</span>
                         <span className="font-semibold text-right">{value}</span>
                       </div>
-                      {index < Object.keys(course.courseDetails).length - 1 && (
+                      {index < Object.keys(displayCourse.courseDetails).length - 1 && (
                         <div className="mt-4 w-full border-t border-gray-200" />
                       )}
                     </div>

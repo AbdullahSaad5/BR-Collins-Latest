@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -10,90 +9,249 @@ import FilterSection from "./FilterSection";
 import CourseSwiper from "./CourseSwiper";
 import { FeatureCourse } from "./FetureCourse";
 import { useCourseContext } from "../context/CourseContext";
-
+import { CategoryProvider } from "../context/CategoryContext";
 
 export default function Courses() {
-  const { courses: allCourses } = useCourseContext();
+  const { courses: allCourses, isLoading, error } = useCourseContext();
+
+  const [topicFilters, setTopicFilters] = React.useState<{ [key: string]: boolean }>({});
+  const [languageFilters, setLanguageFilters] = React.useState<{ [key: string]: boolean }>({});
+  const [durationFilters, setDurationFilters] = React.useState<{ [key: string]: boolean }>({});
+
+  const handleTopicFilterChange = (topic: string, checked: boolean) => {
+    setTopicFilters((prev) => ({
+      ...prev,
+      [topic]: checked,
+    }));
+  };
+
+  const handleLanguageFilterChange = (language: string, checked: boolean) => {
+    setLanguageFilters((prev) => ({
+      ...prev,
+      [language]: checked,
+    }));
+  };
+
+  const handleDurationFilterChange = (duration: string, checked: boolean) => {
+    setDurationFilters((prev) => ({
+      ...prev,
+      [duration]: checked,
+    }));
+  };
+
+  // Filter courses based on selected filters
+  const filteredCourses = React.useMemo(() => {
+    if (!allCourses) return [];
+
+    return allCourses.filter((course) => {
+      // Check if any filters are active
+      const hasActiveTopicFilters = Object.values(topicFilters).some((value) => value);
+      const hasActiveLanguageFilters = Object.values(languageFilters).some((value) => value);
+      const hasActiveDurationFilters = Object.values(durationFilters).some((value) => value);
+
+      // If no filters are active, show all courses
+      if (!hasActiveTopicFilters && !hasActiveLanguageFilters && !hasActiveDurationFilters) {
+        return true;
+      }
+
+      // Topic filter check
+      if (hasActiveTopicFilters) {
+        const courseTopic = course.categoryId;
+        if (!topicFilters[courseTopic]) {
+          return false;
+        }
+      }
+
+      // Language filter check
+      if (hasActiveLanguageFilters) {
+        const courseLanguage = course.language;
+        if (!languageFilters[courseLanguage]) {
+          return false;
+        }
+      }
+
+      // Duration filter check
+      if (hasActiveDurationFilters) {
+        const courseDuration = course.noOfHours;
+        let durationRange = "";
+
+        if (courseDuration <= 1) {
+          durationRange = "0-1 Hours";
+        } else if (courseDuration <= 3) {
+          durationRange = "1-3 Hours";
+        } else if (courseDuration <= 6) {
+          durationRange = "3-6 Hours";
+        } else if (courseDuration <= 12) {
+          durationRange = "6-12 Hours";
+        } else if (courseDuration <= 24) {
+          durationRange = "12-24 Hours";
+        } else {
+          durationRange = "24+ Hours";
+        }
+
+        // Check if the course's duration range is selected
+        if (!durationFilters[durationRange]) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }, [allCourses, topicFilters, languageFilters, durationFilters]);
+
+  console.log(allCourses);
+
+  if (isLoading) {
+    return (
+      <main className="flex overflow-hidden flex-col bg-white">
+        <HeroSection />
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="flex overflow-hidden flex-col bg-white">
+        <HeroSection />
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="text-red-500 text-lg">{error}</div>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <main className="flex overflow-hidden flex-col bg-white">
-             
-      <HeroSection />
+    <CategoryProvider>
+      <main className="flex overflow-hidden flex-col bg-white">
+        <HeroSection />
 
-      <section className="flex flex-col self-center  w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
-        <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
-          <div className="text-neutral-900 max-md:max-w-full">
-            <h2 className="text-3xl font-bold max-md:max-w-full">
-              Featured courses
-            </h2>
-            <p className="mt-3 text-lg max-md:max-w-full">
-              Many learners enjoyed this highly rated course for its engaging
-              content.
-            </p>
-          </div>
+        <section className="flex flex-col self-center  w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
+          <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
+            <div className="text-neutral-900 max-md:max-w-full">
+              <h2 className="text-3xl font-bold max-md:max-w-full">Featured courses</h2>
+              <p className="mt-3 text-lg max-md:max-w-full">
+                Many learners enjoyed this highly rated course for its engaging content.
+              </p>
+            </div>
 
-          <div className="mt-10 w-full max-w-[1326px] max-md:max-w-full">
-          <div className="flex gap-5 max-md:flex-col">
-  {allCourses
-    .filter(course => course.isNew) // Filter courses where isNew is true
-    .map((course, index) => (
-      <div key={index} className="w-6/12 max-md:w-full">
-        <FeatureCourse {...course} />
-      </div>
-    ))}
-</div>
-          </div>
-
-          <section className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
-            <h2 className="text-3xl font-bold max-md:max-w-full">
-              Most Popular Courses
-            </h2>
-            <p className="mt-3 text-lg max-md:max-w-full">
-              Explore courses from experienced, real-world experts.
-            </p>
-          </section>
-
-          <div className="flex gap-8 items-center mt-14 text-xl whitespace-nowrap max-md:mt-10">
-            <button className="self-stretch my-auto font-bold text-neutral-900">
-              e-learning
-            </button>
-            <button className="self-stretch my-auto font-medium text-gray-500">
-              in-person
-            </button>
-          </div>
-
-          <div className="z-10 shrink-0 mt-4 h-1 border-4 border-orange-500 border-solid w-[110px]" />
-          <div className="shrink-0 max-w-full h-px bg-white border border-solid border-zinc-200 w-[1326px]" />
-
-         
-    
-       <CourseSwiper />
-
-
-        </div>
-      </section>
-
-      <section className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
-        <h2 className="self-start text-3xl font-bold text-center text-neutral-900 max-md:max-w-full p-5">
-          All Accountability in the Workplace courses
-        </h2>
-
-        <div className="mt-16 max-md:mt-10 max-md:max-w-full p-5">
-          <div className="flex gap-5 max-md:flex-col">
-            <aside className="w-[31%] max-md:w-full">
-              <FilterSection />
-            </aside>
-
-            <main className="ml-5 w-[69%] max-md:ml-0 max-md:w-full">
-              <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5">
-              {allCourses.map((course, index) => (
-                  <CourseCard key={index} {...course} />
-                ))}
+            <div className="mt-10 w-full max-w-[1326px] max-md:max-w-full">
+              <div className="flex gap-5 max-md:flex-col items-stretch">
+                {filteredCourses.slice(0, 2).map((course, index) => {
+                  const transformedCourse = {
+                    ...course,
+                    duration: `${course.noOfHours} Hrs`,
+                    lessons: course.noOfLessons,
+                    price: `$${course.discountPrice || course.price}`,
+                    originalPrice: course.price ? `$${course.price}` : undefined,
+                    isNew: course.bestSeller,
+                    imageUrl: "/img/Course/Course.png",
+                  };
+                  return (
+                    <div key={index} className="w-6/12 max-md:w-full">
+                      <FeatureCourse {...transformedCourse} />
+                    </div>
+                  );
+                })}
               </div>
-            </main>
+            </div>
+
+            <section className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
+              <h2 className="text-3xl font-bold max-md:max-w-full">Most Popular Courses</h2>
+              <p className="mt-3 text-lg max-md:max-w-full">Explore courses from experienced, real-world experts.</p>
+            </section>
+
+            <div className="flex gap-8 items-center mt-14 text-xl whitespace-nowrap max-md:mt-10">
+              <button className="self-stretch my-auto font-bold text-neutral-900">E-Learning</button>
+              <button className="self-stretch my-auto font-medium text-gray-500">In-Person</button>
+            </div>
+
+            <div className="z-10 shrink-0 mt-4 h-1 border-4 border-orange-500 border-solid w-[110px]" />
+            <div className="shrink-0 max-w-full h-px bg-white border border-solid border-zinc-200 w-[1326px]" />
+
+            <CourseSwiper />
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+
+        <section className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
+          <h2 className="self-start text-3xl font-bold text-center text-neutral-900 max-md:max-w-full p-5">
+            All Accountability in the Workplace courses
+          </h2>
+
+          <div className="mt-16 max-md:mt-10 max-md:max-w-full p-5">
+            <div className="flex gap-5 max-md:flex-col">
+              <aside className="w-[31%] max-md:w-full">
+                <FilterSection
+                  topicFilters={topicFilters}
+                  languageFilters={languageFilters}
+                  durationFilters={durationFilters}
+                  onTopicFilterChange={handleTopicFilterChange}
+                  onLanguageFilterChange={handleLanguageFilterChange}
+                  onDurationFilterChange={handleDurationFilterChange}
+                />
+              </aside>
+
+              <main className="ml-5 w-[69%] max-md:ml-0 max-md:w-full">
+                {filteredCourses.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                    <div className="w-24 h-24 mb-6">
+                      <svg
+                        className="w-full h-full text-gray-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Courses Found</h3>
+                    <p className="text-gray-500 max-w-md">
+                      We couldn't find any courses matching your filters. Try adjusting your search criteria or clear
+                      the filters to see all available courses.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setTopicFilters({});
+                        setLanguageFilters({});
+                        setDurationFilters({});
+                      }}
+                      className="mt-6 px-6 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
+                    >
+                      Clear All Filters
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5">
+                    {filteredCourses.map((course, index) => {
+                      const transformedCourse = {
+                        ...course,
+                        duration: `${course.noOfHours} Hrs`,
+                        lessons: course.noOfLessons,
+                        price: `$${course.discountPrice || course.price}`,
+                        originalPrice: course.price ? `$${course.price}` : undefined,
+                        isNew: course.bestSeller,
+                        imageUrl: course.coverImageUrl || "/img/Course/Course.png",
+                      };
+                      return (
+                        <div key={index} className="h-full">
+                          <CourseCard {...transformedCourse} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </main>
+            </div>
+          </div>
+        </section>
+      </main>
+    </CategoryProvider>
   );
 }

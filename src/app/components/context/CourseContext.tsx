@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import courseData from "../../../../public/data/courses.json"; // adjust the path as needed
+import { api } from "@/app/utils/axios";
+import { ICourse } from "@/app/types/course.contract";
 
 export interface CourseDetailsType {
   startDate: string;
@@ -42,23 +43,41 @@ export interface CourseType {
   learningObjectives: string[];
   requirements: string[];
   sections: SectionType[];
+  _id: string;
 }
 
 interface CourseContextProps {
-  courses: CourseType[];
+  courses: ICourse[];
+  isLoading: boolean;
+  error: string | null;
 }
 
-const CourseContext = createContext<CourseContextProps>({ courses: [] });
+const CourseContext = createContext<CourseContextProps>({ courses: [], isLoading: true, error: null });
 
 export const useCourseContext = () => useContext(CourseContext);
 
 export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
-  const [courses, setCourses] = useState<CourseType[]>([]);
+  const [courses, setCourses] = useState<ICourse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate API fetch
-    setCourses(courseData as CourseType[]);
+    const fetchCourses = async () => {
+      try {
+        const response = await api.get("/courses");
+        const apiCourses = response.data.data;
+
+        setCourses(apiCourses);
+      } catch (err) {
+        setError("Failed to fetch courses");
+        console.error("Error fetching courses:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCourses();
   }, []);
 
-  return <CourseContext.Provider value={{ courses }}>{children}</CourseContext.Provider>;
+  return <CourseContext.Provider value={{ courses, isLoading, error }}>{children}</CourseContext.Provider>;
 };

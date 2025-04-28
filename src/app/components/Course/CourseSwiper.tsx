@@ -23,7 +23,7 @@ const CourseSwiper: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-8 items-center self-stretch mt-10">
+    <div className="flex flex-wrap gap-8 items-center self-stretch mt-10 items-stretch">
       <Swiper
         spaceBetween={32}
         breakpoints={{
@@ -35,11 +35,22 @@ const CourseSwiper: React.FC = () => {
         }}
         className="mt-10"
       >
-        {featuredCourses.map((course, index) => (
-          <SwiperSlide key={index} className="w-full sm:max-w-[194px]">
-            <CourseCard {...course} />
-          </SwiperSlide>
-        ))}
+        {featuredCourses.map((course, index) => {
+          const transformedCourse = {
+            ...course,
+            duration: `${course.noOfHours} Hrs`,
+            lessons: course.noOfLessons,
+            price: `$${course.discountPrice || course.price}`,
+            originalPrice: course.price ? `$${course.price}` : undefined,
+            isNew: course.bestSeller,
+            imageUrl: course.coverImageUrl || "/img/Course/Course.png",
+          };
+          return (
+            <SwiperSlide key={index} className="w-full sm:max-w-[194px]">
+              <CourseCard {...transformedCourse} />
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );
