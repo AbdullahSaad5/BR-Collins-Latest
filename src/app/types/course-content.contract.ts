@@ -9,6 +9,7 @@ export interface ICourseContent {
   contentUrl: string;
   duration: string;
   order: number;
+  isBlocked: boolean;
 }
 
 export type CourseContentCreatePayload = Omit<ICourseContent, "id">;

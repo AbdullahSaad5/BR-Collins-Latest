@@ -9,6 +9,7 @@ import ActionIcons from "@/components/ActionIcons";
 import ViewCourseModal from "./ViewCourseModal";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import CourseStatusMenu from "./CourseStatusMenu";
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
@@ -47,6 +48,28 @@ const ViewCourses = () => {
   const handleDeleteCourse = (course: ICourse) => {
     // TODO: Implement delete course functionality
     console.log("Delete course:", course);
+  };
+
+  const handleStatusChange = async (courseId: string, status: { isPublished?: boolean; isArchived?: boolean }) => {
+    try {
+      const response = await fetch(`/api/courses/${courseId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(status),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update course status");
+      }
+
+      // Refresh the courses list
+      fetchCourses();
+    } catch (error) {
+      console.error("Error updating course status:", error);
+      throw error;
+    }
   };
 
   const columns = [
@@ -100,22 +123,18 @@ const ViewCourses = () => {
     },
     {
       name: "Status",
-      selector: (row: ICourse) => row.isPublished,
-      sortable: true,
-      grow: 1,
-      cell: (row: ICourse) => (
-        <span
-          className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-            row.isPublished
-              ? "text-green-600 bg-emerald-50"
-              : row.isArchived
-              ? "text-gray-600 bg-gray-50"
-              : "text-red-600 bg-red-50"
-          }`}
-        >
-          {row.isPublished ? "Published" : row.isArchived ? "Archived" : "Draft"}
-        </span>
-      ),
+      accessorKey: "status",
+      header: "Status",
+      cell: (row: ICourse) => {
+        console.log(row);
+        return (
+          <CourseStatusMenu
+            isPublished={row.isPublished}
+            isArchived={row.isArchived}
+            onStatusChange={(status) => handleStatusChange(row.id, status)}
+          />
+        );
+      },
     },
     {
       name: "Actions",
