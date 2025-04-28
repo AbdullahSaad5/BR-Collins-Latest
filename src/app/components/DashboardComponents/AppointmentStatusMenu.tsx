@@ -226,7 +226,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                     Scheduled
                   </button>
                 )}
-                {status !== "in-progress" && (
+                {/* {status !== "in-progress" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -236,7 +236,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                   >
                     In Progress
                   </button>
-                )}
+                )} */}
                 {status !== "completed" && (
                   <button
                     onClick={(e) => {
@@ -308,7 +308,13 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                         (!rescheduleData.newDate || !rescheduleData.startTime || !rescheduleData.endTime)) ||
                       (pendingStatus === "cancelled" && !cancelReason)
                     }
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`px-4 py-2 text-sm font-medium text-white ${
+                      pendingStatus === "rescheduled"
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : pendingStatus === "cancelled"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : "bg-blue-600 hover:bg-blue-700"
+                    } rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     Confirm
                   </button>
