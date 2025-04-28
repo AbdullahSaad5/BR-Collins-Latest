@@ -2,6 +2,7 @@ import { ICourse } from "./course.contract";
 
 export interface ICourseContent {
   id: string;
+  _id: string;
   courseId: string;
   title: string;
   description: string;
@@ -12,6 +13,6 @@ export interface ICourseContent {
   isBlocked: boolean;
 }
 
-export type CourseContentCreatePayload = Omit<ICourseContent, "id">;
+export type CourseContentCreatePayload = Omit<ICourseContent, "id" | "_id">;
 
 export type CourseContentUpdatePayload = Partial<CourseContentCreatePayload>;

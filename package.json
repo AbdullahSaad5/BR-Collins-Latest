@@ -17,8 +17,6 @@
     "@fullcalendar/react": "^6.1.17",
     "@fullcalendar/timegrid": "^6.1.17",
     "@hookform/resolvers": "^5.0.1",
-    "@mui/icons-material": "^7.0.2",
-    "@mui/material": "^7.0.2",
     "@reduxjs/toolkit": "^2.7.0",
     "@tanstack/react-query": "^5.74.4",
     "@types/react-datepicker": "^6.2.0",

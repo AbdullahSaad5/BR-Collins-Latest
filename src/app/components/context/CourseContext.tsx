@@ -3,7 +3,31 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import courseData from "../../../../public/data/courses.json"; // adjust the path as needed
 
+export interface CourseDetailsType {
+  startDate: string;
+  enrolled: number;
+  lectures: number;
+  skillLevel: string;
+  language: string;
+  quizzes: number;
+  certificate: string;
+}
+
+export interface LectureType {
+  title: string;
+  duration: string;
+  type: string;
+}
+
+export interface SectionType {
+  title: string;
+  stats: string;
+  icon: string;
+  lectures: LectureType[];
+}
+
 export interface CourseType {
+  slug: string;
   duration: string;
   title: string;
   instructor?: string;
@@ -13,6 +37,11 @@ export interface CourseType {
   originalPrice?: string;
   isNew?: boolean;
   imageUrl?: string;
+  courseDetails: CourseDetailsType;
+  description: string;
+  learningObjectives: string[];
+  requirements: string[];
+  sections: SectionType[];
 }
 
 interface CourseContextProps {
@@ -28,12 +57,8 @@ export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Simulate API fetch
-    setCourses(courseData);
+    setCourses(courseData as CourseType[]);
   }, []);
 
-  return (
-    <CourseContext.Provider value={{ courses }}>
-      {children}
-    </CourseContext.Provider>
-  );
+  return <CourseContext.Provider value={{ courses }}>{children}</CourseContext.Provider>;
 };
