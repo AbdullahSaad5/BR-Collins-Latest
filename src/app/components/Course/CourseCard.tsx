@@ -6,6 +6,7 @@ import React from "react";
 interface CourseCardProps {
   duration: string;
   title: string;
+  slug: string;
   instructor?: string;
   lessons: number;
   rating: number;
@@ -21,6 +22,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   lessons,
   rating,
   price,
+  slug,
   originalPrice,
   imageUrl,
 }) => {
@@ -81,7 +83,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           )}
         </div>
         <a
-  href="/course/1"
+   href={`/course/${slug}`}
   className="mt-4 inline-block text-base font-semibold text-orange-500 underline"
 >
   View Details

@@ -6,6 +6,7 @@ import React from "react";
 interface CourseCardProps {
   duration: string;
   title: string;
+  slug: string;
   instructor?: string;
   lessons: number;
   rating: number;
@@ -22,12 +23,13 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
   lessons,
   rating,
   price,
+  slug,
   originalPrice,
   isNew,
   imageUrl,
 }) => {
   return (
-    <article className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
+    <div className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
     {/* Left side: Image */}
     {imageUrl && (
   <div className="relative w-full md:w-60 h-62 rounded-xl overflow-hidden">
@@ -94,14 +96,14 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
           )}
         </div>
         <a
-  href="/course/1"
+ href={`/course/${slug}`}
   className="mt-4 inline-block text-base font-semibold text-orange-500 underline"
 >
   View Details
 </a>
       </div>
     </div>
-  </article>
+  </div>
   
   );
 };
