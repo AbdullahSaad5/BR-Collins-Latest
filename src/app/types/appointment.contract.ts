@@ -1,5 +1,6 @@
 export interface IAppointment {
   id: string;
+  _id: string;
   courseId: string;
   location: {
     venueName: string;
