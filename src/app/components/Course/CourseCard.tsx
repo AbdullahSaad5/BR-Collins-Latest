@@ -27,7 +27,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   imageUrl,
 }) => {
   return (
-    <article className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
+    <a href={`/course/${slug}`}>
+    <div className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
   
     <div className="flex flex-col flex-1">
       {/* Duration badge */}
@@ -90,7 +91,8 @@ export const CourseCard: React.FC<CourseCardProps> = ({
 </a>
       </div>
     </div>
-  </article>
+  </div>
+  </a>
   
   );
 };

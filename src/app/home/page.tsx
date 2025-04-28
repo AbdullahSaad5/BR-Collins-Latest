@@ -4,6 +4,7 @@ import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import SubscriptionCards from "../components/pricing/subscriptioncards";
+import CourseSwiper from "../components/Course/CourseSwiper";
 
 interface SliderItem {
   title: string;
@@ -38,12 +39,12 @@ export const Homepage = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const sliderItems: SliderItem[] = [
-    { title: "Business Writing Techniques", courses: 100 },
+    { title: "Business Writing ", courses: 100 },
     { title: "Anger Management", courses: 80 },
-    { title: "Administrative Support", courses: 60 },
+    { title: "Administrative", courses: 60 },
     { title: "Call Center Training", courses: 40 },
     { title: "Business Acumen", courses: 40 },
-    { title: "Application Developer", courses: 40 },
+    { title: "App Developer", courses: 40 },
     { title: "Data Analysis", courses: 75 },
     { title: "Project Management", courses: 90 },
     { title: "Digital Marketing", courses: 65 },
@@ -543,60 +544,7 @@ export const Homepage = () => {
         </section>
 
         {/* Courses Grid */}
-        <section className="relative text-gray-900 mt-6">
-          <div className="w-full mx-auto max-w-[1326px] h-auto relative">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {courses.map((course) => (
-                <div key={course.id} className="flex-shrink-0">
-                  <div className="flex flex-col w-full border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                    <div className="py-2 px-4 text-sm font-medium">
-                      <h1 className="bg-blue-400 p-1 w-fit rounded-xl text-white">
-                        {course.duration}
-                      </h1>
-                    </div>
-
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
-                        {course.title}
-                      </h3>
-
-                      <div className="flex items-center text-gray-600 mb-4">
-                        <FaBook className="mr-2 text-blue-500" />
-                        <span className="text-sm">
-                          {course.lessons} Lessons
-                        </span>
-                      </div>
-
-                      <hr className="border-t border-gray-200 my-2" />
-
-                      <div className="flex flex-col items-start gap-4 mb-3">
-                        <div className="flex items-center">
-                          <div className="flex mr-2">
-                            {renderStars(course.rating)}
-                          </div>
-                          <span className="text-sm font-medium">
-                            {course.rating}
-                          </span>
-                        </div>
-
-                        <span className="text-lg font-bold">
-                          ${course.price}
-                        </span>
-                      </div>
-
-                      <Link
-                        href="/course/1"
-                        className="text-center text-orange-500 underline font-medium py-2 transition-colors"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <CourseSwiper />
       </section>
 
       {/* Pricing Section */}
