@@ -439,11 +439,11 @@ export const Homepage = () => {
           </div>
         </div>
       </section>
-      <div className="flex flex-col justify-center items-center">
-        <section className="relative my-8 text-gray-900 w-full">
-          <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[1326px]">
+      <section className="flex flex-col w-[1920px] mx-auto  md:h-[848px] max-w-[1326px] justify-center items-center">
+        <section className="relative text-gray-900 w-full">
+          <div className="w-full   ">
             <div className="flex flex-col w-full">
-              <h2 className="font-hanken text-2xl sm:text-3xl md:text-[36px] font-medium text-start mb-4 text-gray-800">
+              <h2 className="font-hanken text-2xl sm:text-3xl md:text-[36px] font-medium text-start  text-gray-800">
                 Your Complete Skill Set Starts Here
               </h2>
 
@@ -478,7 +478,7 @@ export const Homepage = () => {
         {/* {activeTab === "e-learning" ? ( */}
         <>
           <section className="relative text-gray-900">
-            <div className="w-full px-4 mx-auto max-w-[1326px] relative">
+            <div className="w-full  max-w-[1326px] relative">
               <button
                 onClick={scrollLeft}
                 className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
@@ -541,8 +541,8 @@ export const Homepage = () => {
             </div>
           </section>
           <section className="relative text-gray-900">
-            <div className="w-full px-4 mx-auto max-w-[1326px] md:h-[848px] h-auto py-4 relative">
-              <div className="flex flex-nowrap overflow-auto gap-3  mb-16 py-6 custom-scroll scrollbar-hide">
+            <div className="w-full  mx-auto max-w-[1326px] h-auto  relative">
+              <div className="flex flex-nowrap items-start overflow-auto gap-3  mb-16 py-6 custom-scroll scrollbar-hide">
                 {courses.map((course) => (
                   <div
                     className="flex flex-row md:w-[196px] md:h-[400px]"
@@ -689,7 +689,7 @@ export const Homepage = () => {
           </section>
         </>
       )} */}
-      </div>
+      </section>
       <section className="bg-[#081B25] flex flex-row items-center justify-center md:h-[769px] text-gray-900 ">
         <div className="w-full gap-4 flex flex-col justify-center items-center  mx-auto max-w-[1326px] ">
           <div className="flex flex-col justify-center items-center text-center mb-6">
@@ -847,8 +847,8 @@ export const Homepage = () => {
           </div> */}
         </div>
       </section>
-      <div className="md:w-[1920] flex flex-col justify-around md:h-[1905]">
-        <section className="  text-gray-900  w-full max-w-[1326px] mx-auto">
+      <div className="md:w-[1920] mx-auto flex flex-col max-w-[1326px] justify-around md:h-[1905]">
+        <section className="  text-gray-900  w-full  mx-auto">
           <div className="flex flex-col w-full lg:flex-row justify-between text-gray-900">
             {/* Info Card */}
             <div className="flex flex-col items-start  text-start justify-between p-6 md:h-[420px] md:w-[422px]  bg-sky-500 rounded-xl">
@@ -895,7 +895,7 @@ export const Homepage = () => {
           </div>
         </section>
 
-        <section className="self-center mx-auto  text-gray-900 w-full max-w-[1326px] max-md:mt-10 ">
+        <section className="self-center mx-auto  text-gray-900 w-full   ">
           {/* On Site Learning Section */}
           <div className="flex flex-wrap gap-10 items-center w-full">
             <div className="grow shrink self-stretch my-auto min-w-60 w-[529px] max-md:max-w-full">
@@ -937,7 +937,7 @@ export const Homepage = () => {
 
           {/* Community Section */}
         </section>
-        <section className="mx-auto text-gray-900 w-full max-w-[1326px] md:h-[410px]">
+        <section className="mx-auto text-gray-900 w-full  md:h-[410px]">
           <div className="flex flex-wrap justify-between items-stretch h-full w-full">
             {/* Left Content Section */}
             <div className="flex flex-col justify-between h-full pr-3 md:w-[50%] max-md:w-full">
