@@ -12,37 +12,37 @@ interface Transaction {
   paymentMethod: string;
 }
 
-const Transactions = () => {
-  const [transactions] = useState<Transaction[]>([
-    {
-      id: 1,
-      student: "John Doe",
-      course: "Introduction to React",
-      amount: "$99.00",
-      date: "2024-03-15",
-      status: "Completed",
-      paymentMethod: "Credit Card",
-    },
-    {
-      id: 2,
-      student: "Jane Smith",
-      course: "Advanced JavaScript",
-      amount: "$149.00",
-      date: "2024-03-14",
-      status: "Completed",
-      paymentMethod: "PayPal",
-    },
-    {
-      id: 3,
-      student: "Mike Johnson",
-      course: "UI/UX Design Principles",
-      amount: "$79.00",
-      date: "2024-03-13",
-      status: "Pending",
-      paymentMethod: "Bank Transfer",
-    },
-  ]);
+const data: Transaction[] = [
+  {
+    id: 1,
+    student: "John Doe",
+    course: "Introduction to React",
+    amount: "$99.00",
+    date: "2024-03-15",
+    status: "Completed",
+    paymentMethod: "Credit Card",
+  },
+  {
+    id: 2,
+    student: "Jane Smith",
+    course: "Advanced JavaScript",
+    amount: "$149.00",
+    date: "2024-03-14",
+    status: "Completed",
+    paymentMethod: "PayPal",
+  },
+  {
+    id: 3,
+    student: "Mike Johnson",
+    course: "UI/UX Design Principles",
+    amount: "$79.00",
+    date: "2024-03-13",
+    status: "Pending",
+    paymentMethod: "Bank Transfer",
+  },
+];
 
+const Transactions = () => {
   const columns = [
     {
       name: "Student",
@@ -112,7 +112,7 @@ const Transactions = () => {
 
       <CustomDataTable
         columns={columns}
-        data={transactions}
+        data={data}
         isLoading={false}
         error={null}
         noDataMessage="No transactions found"

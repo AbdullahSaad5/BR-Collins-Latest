@@ -10,6 +10,7 @@ export interface IUser {
   role: (typeof ENUMS.USER_TYPES)[number];
   profilePicture?: string;
   status: (typeof ENUMS.USER_STATUS)[number];
+  isBlocked: boolean;
   notificationStatus: boolean;
   otp?: string;
   otpExpiresAt?: Date;

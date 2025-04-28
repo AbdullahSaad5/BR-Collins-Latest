@@ -1,34 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
-import React, { useState } from "react";
+import { logout } from "@/app/store/features/users/userSlice";
+import { useAppDispatch } from "@/app/store/hooks";
 import {
-  LayoutDashboard,
-  User,
-  UserPlus,
-  Users,
   BookOpen,
-  History,
-  Settings,
-  LogOut,
+  BookOpenCheck,
+  BookPlus,
+  Calendar,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   ChevronUp,
-  UserCog,
-  BookOpenCheck,
-  FolderPlus,
-  FolderOpen,
+  CreditCard,
+  Eye,
   FilePlus,
   FileText,
-  BookPlus,
-  CreditCard,
-  Calendar,
-  Eye,
+  FolderOpen,
+  FolderPlus,
+  LayoutDashboard,
+  LogOut,
   Plus,
+  Settings,
+  UserCog,
+  UserPlus,
+  Users,
 } from "lucide-react";
-import SidebarItem from "./SidebarItem";
 import { useRouter } from "next/navigation";
-
+import React, { useState } from "react";
+import SidebarItem from "./SidebarItem";
 interface SidebarProps {
   activeItem: string;
   onItemClick: (item: string) => void;
@@ -40,6 +38,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
   const [usersExpanded, setUsersExpanded] = useState(false);
   const [coursesExpanded, setCoursesExpanded] = useState(false);
   const [appointmentsExpanded, setAppointmentsExpanded] = useState(false);
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const toggleSidebar = () => {
@@ -52,9 +51,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
   };
 
   const handleItemClick = (item: string) => {
-    onItemClick(item);
-    // Update URL with query parameter
-    router.push(`/dashboard?item=${item}`);
+    if (item === "logout") {
+      dispatch(logout());
+      router.push("/login");
+    } else {
+      onItemClick(item);
+      router.push(`/dashboard?item=${item}`);
+    }
   };
 
   const handleToggle = (item: string) => {
@@ -215,7 +218,6 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
         collapsed ? "w-20" : "w-68"
       }`}
     >
-      {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
         className={`absolute -right-3 top-6 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md hover:bg-gray-100 transition-colors ${
@@ -232,9 +234,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       <div className="flex flex-col items-start w-full overflow-hidden">
         {sidebarData.map((item, index) => {
           if (item.children) {
-            // Handle items with children (expandable sections)
             const isExpanded = item.isExpanded;
-
             const toggleSection = item.handleToggle;
 
             return (
@@ -267,10 +267,10 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
                   </div>
                 </div>
                 {isExpanded && !collapsed && (
-                  <div className="pl-6 mt-1">
+                  <div className="pl-4 mt-1">
                     <div className="relative">
                       <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                      <div className="space-y-0.5">
+                      <div className="space-y-0.5 ml-0.5">
                         {item.children.map((child, childIndex) => (
                           <SidebarItem
                             key={childIndex}
@@ -290,7 +290,6 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
             );
           }
 
-          // Handle regular items
           return (
             <React.Fragment key={index}>
               {item.hasDividerOnTop && <div className="mt-6 w-full border-t border-slate-200 pt-2" />}

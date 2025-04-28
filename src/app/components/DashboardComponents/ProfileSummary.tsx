@@ -8,8 +8,8 @@ import { IUser } from "@/app/types/user.contract";
 const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }) => {
   const user = useAppSelector(selectUser) as IUser;
 
-  const toTitleCase = (str: string) => {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  const toTitleCase = (str?: string) => {
+    return str?.replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
   return (
