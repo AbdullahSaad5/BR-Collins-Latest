@@ -155,10 +155,10 @@ const Footer = () => {
 
           {/* Right Block - Fills Remaining Space */}
           <div className="flex flex-1 justify-end w-fit  gap-4 items-center  min-h-[52px]">
-            <div className="w-12 h-12  text-gray-500 bg-gray-800 rounded-full "><FaFacebookF className="w-12 h-12 p-3 "  /></div>
-            <div className="w-12 h-12  text-gray-500 bg-gray-800 rounded-full "><BsTwitterX className="w-12 h-12 p-3 "  /></div>
-            <div className="w-12 h-12  text-gray-500 bg-gray-800 rounded-full "><FaLinkedinIn className="w-12 h-12 p-3 "  /></div>
-            <div className="w-12 h-12  text-gray-500 bg-gray-800 rounded-full "><FaInstagram className="w-12 h-12 p-3 "  /></div>
+            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full "><FaFacebookF className="w-12 h-12 p-3 "  /></div>
+            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full "><BsTwitterX className="w-12 h-12 p-3 "  /></div>
+            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full "><FaLinkedinIn className="w-12 h-12 p-3 "  /></div>
+            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full "><FaInstagram className="w-12 h-12 p-3 "  /></div>
             
             
           </div>
@@ -166,7 +166,7 @@ const Footer = () => {
 
         <hr className="shrink-0 mt-8 h-px border border-solid border-gray-800 border-opacity-10 max-md:max-w-full" />
 
-        <div className="flex flex-wrap gap-5 justify-between mt-12 w-full text-base text-slate-500 max-md:mt-10 max-md:max-w-full">
+        <div className="flex flex-wrap gap-5 justify-between mt-12 w-full text-base text-[#22485c] max-md:mt-10 max-md:max-w-full">
           <div className="flex flex-wrap gap-5 items-center min-h-[21px] max-md:max-w-full">
             <p className="self-stretch my-auto">
               Copyright © 2025 B.R. Collins All Rights Reserved

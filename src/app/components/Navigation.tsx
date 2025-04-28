@@ -40,7 +40,7 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="relative text-gray-900 flex items-center justify-between p-1 mt-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 mb-5">
+    <nav className="relative text-gray-900 flex items-center justify-between my-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 ">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full md:hidden">
         <div className="flex items-center gap-4">

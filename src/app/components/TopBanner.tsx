@@ -8,10 +8,10 @@ export const TopBanner = () => {
   if (!visible) return null;
 
   return (
-    <header className="flex flex-wrap  justify-between items-center py-3.5  md:px-2 w-full text-base font-medium text-center text-white bg-sky-600">
+    <header className="flex flex-wrap  justify-between items-center md:h-[50px]  md:px-2 w-full text-base font-medium text-center text-white bg-sky-600">
       <div className="w-11/12 flex flex-row items-center justify-center">
-        <p className="text-sm md:text-base text-center md:text-left w-full md:w-auto">
-          <strong className="font-black">Courses from $149.00</strong> Gain the
+        <p className="text-sm md:text-base text-center md:text-left w-full md:w-auto">Courses from
+          <strong className="font-black"> $149.00</strong> Gain the
           skills to climb that career ladder.{" "}
           <span className="font-bold text-[#FFCA7E]">3 days left!</span>
         </p>
