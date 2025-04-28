@@ -57,12 +57,8 @@ export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     // Simulate API fetch
-    setCourses(courseData);
+    setCourses(courseData as CourseType[]);
   }, []);
 
-  return (
-    <CourseContext.Provider value={{ courses }}>
-      {children}
-    </CourseContext.Provider>
-  );
+  return <CourseContext.Provider value={{ courses }}>{children}</CourseContext.Provider>;
 };

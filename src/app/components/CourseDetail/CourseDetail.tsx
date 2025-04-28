@@ -6,7 +6,7 @@ import { Check } from "lucide-react";
 interface Lecture {
   title: string;
   duration: string;
-  type: "video" | "book";
+  type: string;
 }
 
 interface Section {
@@ -22,25 +22,21 @@ interface CourseContentProps {
   description: string;
 }
 
-export const CourseContent: React.FC<CourseContentProps> = ({ 
-  sections: propSections, 
-  requirements, 
-  description 
-}) => {
+export const CourseContent: React.FC<CourseContentProps> = ({ sections: propSections, requirements, description }) => {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(
     propSections.length > 0 ? { [propSections[0].title]: true } : {}
   );
 
   const toggleSection = (title: string) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [title]: !prev[title]
+      [title]: !prev[title],
     }));
   };
 
   const expandAll = () => {
     const allExpanded: Record<string, boolean> = {};
-    propSections.forEach(section => {
+    propSections.forEach((section) => {
       allExpanded[section.title] = true;
     });
     setExpandedSections(allExpanded);
@@ -57,15 +53,13 @@ export const CourseContent: React.FC<CourseContentProps> = ({
       <main className="box-border p-5 my-0 w-full max-md:p-4 max-sm:p-2.5 max-sm:max-w-screen-sm ml-auto">
         <section className="mb-10">
           <header className="flex justify-between items-center mb-5">
-            <h1 className="text-3xl font-bold text-neutral-900 max-md:text-3xl max-sm:text-2xl">
-              Course Content
-            </h1>
+            <h1 className="text-3xl font-bold text-neutral-900 max-md:text-3xl max-sm:text-2xl">Course Content</h1>
             <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs">
-              {propSections.length} sections • {propSections.reduce((acc, section) => acc + section.lectures.length, 0)} lectures • 
-              {/* Calculate total duration here if available */}
+              {propSections.length} sections • {propSections.reduce((acc, section) => acc + section.lectures.length, 0)}{" "}
+              lectures •{/* Calculate total duration here if available */}
             </span>
             {propSections.length > 0 && (
-              <button 
+              <button
                 className="text-base font-semibold text-orange-500 underline cursor-pointer max-md:text-sm max-sm:text-xs"
                 onClick={allExpanded ? collapseAll : expandAll}
               >
@@ -88,17 +82,11 @@ export const CourseContent: React.FC<CourseContentProps> = ({
         </section>
 
         <section className="mb-10">
-          <h2 className="mb-5 text-3xl font-bold text-neutral-900 max-md:text-sm max-sm:text-xs">
-            Requirements
-          </h2>
+          <h2 className="mb-5 text-3xl font-bold text-neutral-900 max-md:text-sm max-sm:text-xs">Requirements</h2>
           <ul>
             {requirements.map((requirement, index) => (
               <li key={index} className="flex items-center mb-2.5">
-                <Check 
-                  size={20} 
-                  className="mr-2 text-sky-600" 
-                  strokeWidth={2}
-                />
+                <Check size={20} className="mr-2 text-sky-600" strokeWidth={2} />
                 <span>{requirement}</span>
               </li>
             ))}
@@ -106,9 +94,7 @@ export const CourseContent: React.FC<CourseContentProps> = ({
         </section>
 
         <section className="mb-10">
-          <h2 className="mb-5 text-3xl font-bold text-neutral-900 max-md:text-sm max-sm:text-xs">
-            Description
-          </h2>
+          <h2 className="mb-5 text-3xl font-bold text-neutral-900 max-md:text-sm max-sm:text-xs">Description</h2>
           <p className="text-base leading-7 text-neutral-900 max-md:text-sm max-md:leading-6 max-sm:text-xs max-sm:leading-5">
             {description}
           </p>
