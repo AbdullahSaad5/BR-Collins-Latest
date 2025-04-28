@@ -55,7 +55,7 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
               {/* Stats Section */}
               <div className="flex flex-col mt-10 w-[577px] max-md:w-full">
                 <div className="flex flex-wrap gap-3 items-center w-full">
-                  {course.isNew && (
+                  {/* {course.isNew && ( */}
                     <div className="flex gap-1 items-center px-3 py-1.5 text-base font-medium text-black whitespace-nowrap bg-orange-300 rounded-md max-md:text-sm">
                       <img
                         src="https://cdn.builder.io/api/v1/image/assets/TEMP/1099e32fc8790b4b60ad2b6a14e0383d2ac123fe?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
@@ -64,7 +64,7 @@ const CourseDetailPageClient = ({ slug }: { slug: string }) => {
                       />
                       <span>Bestseller</span>
                     </div>
-                  )}
+                  {/* )} */}
 
                   {/* Rating */}
                   <div className="flex gap-1.5 items-center">

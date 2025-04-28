@@ -4,6 +4,7 @@ import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import SubscriptionCards from "../components/pricing/subscriptioncards";
+import CourseSwiper from "../components/Course/CourseSwiper";
 
 interface SliderItem {
   title: string;
@@ -38,12 +39,12 @@ export const Homepage = () => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
   const sliderItems: SliderItem[] = [
-    { title: "Business Writing Techniques", courses: 100 },
+    { title: "Business Writing ", courses: 100 },
     { title: "Anger Management", courses: 80 },
-    { title: "Administrative Support", courses: 60 },
+    { title: "Administrative", courses: 60 },
     { title: "Call Center Training", courses: 40 },
     { title: "Business Acumen", courses: 40 },
-    { title: "Application Developer", courses: 40 },
+    { title: "App Developer", courses: 40 },
     { title: "Data Analysis", courses: 75 },
     { title: "Project Management", courses: 90 },
     { title: "Digital Marketing", courses: 65 },
