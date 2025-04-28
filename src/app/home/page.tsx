@@ -506,8 +506,8 @@ export const Homepage = () => {
             >
               <div className="flex flex-nowrap gap-4">
                 {sliderItems.map((item, index) => (
-                  <div key={index} className="flex-shrink-0 w-[200px] sm:w-[240px] py-2">
-                    <div className="flex flex-col rounded-4xl bg-gray-100 px-4 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
+                  <div key={index} className="flex-shrink-0 w-[200px] sm:w-fit py-2">
+                    <div className="flex flex-col  rounded-4xl bg-gray-100 px-4 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
                       <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">
                         {item.title}
                       </h2>
@@ -543,60 +543,63 @@ export const Homepage = () => {
         </section>
 
         {/* Courses Grid */}
-        <section className="relative text-gray-900 mt-6">
-          <div className="w-full mx-auto max-w-[1326px] h-auto relative">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {courses.map((course) => (
-                <div key={course.id} className="flex-shrink-0">
-                  <div className="flex flex-col w-full border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                    <div className="py-2 px-4 text-sm font-medium">
-                      <h1 className="bg-blue-400 p-1 w-fit rounded-xl text-white">
-                        {course.duration}
-                      </h1>
-                    </div>
-
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
-                        {course.title}
-                      </h3>
-
-                      <div className="flex items-center text-gray-600 mb-4">
-                        <FaBook className="mr-2 text-blue-500" />
-                        <span className="text-sm">
-                          {course.lessons} Lessons
-                        </span>
+        <section className="relative text-gray-900">
+            <div className="w-full  mx-auto max-w-[1326px] h-auto  relative">
+              <div className="flex flex-nowrap items-start overflow-auto gap-3  mb-16 py-6 custom-scroll scrollbar-hide">
+                {courses.map((course) => (
+                  <div
+                    className="flex flex-row md:w-[196px] md:h-[400px]"
+                    key={course.id}
+                  >
+                    <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
+                      <div className="py-2 px-4 text-sm font-medium">
+                        <h1 className="bg-blu p-1 w-fit bg-blue-400 rounded-xl text-white">
+                          {course.duration}
+                        </h1>
                       </div>
 
-                      <hr className="border-t border-gray-200 my-2" />
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
+                          {course.title}
+                        </h3>
 
-                      <div className="flex flex-col items-start gap-4 mb-3">
-                        <div className="flex items-center">
-                          <div className="flex mr-2">
-                            {renderStars(course.rating)}
-                          </div>
-                          <span className="text-sm font-medium">
-                            {course.rating}
+                        <div className="flex items-center text-gray-600 mb-4">
+                          <FaBook className="mr-2 text-blue-500" />
+                          <span className="text-sm">
+                            {course.lessons} Lessons
                           </span>
                         </div>
 
-                        <span className="text-lg font-bold">
-                          ${course.price}
-                        </span>
-                      </div>
+                        <hr className="border-t border-gray-200 my-2" />
 
-                      <Link
-                        href="/course/1"
-                        className="text-center text-orange-500 underline font-medium py-2 transition-colors"
-                      >
-                        View Details
-                      </Link>
+                        <div className="flex flex-col items-start gap-12 mb-3">
+                          <div className="flex items-center">
+                            <div className="flex mr-2">
+                              {renderStars(course.rating)}
+                            </div>
+                            <span className="text-sm font-medium">
+                              {course.rating}
+                            </span>
+                          </div>
+
+                          <span className="text-lg font-bold">
+                            ${course.price}
+                          </span>
+                        </div>
+
+                        <Link
+                          href="/course/1"
+                          className="text-center text-org underline font-medium py-2 transition-colors"
+                        >
+                          View Details
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
       </section>
 
       {/* Pricing Section */}
