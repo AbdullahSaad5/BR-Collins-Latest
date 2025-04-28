@@ -142,8 +142,9 @@ export const Navigation = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${(user as IUser).lastName
-                      }`}</span>
+                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
+                      (user as IUser).lastName
+                    }`}</span>
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
@@ -161,10 +162,21 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="p-4 space-y-6 mt-4">
+          {/* Mobile Menu Header */}
+          <div className="flex items-center justify-between">
+            <a href="/" onClick={() => setIsMenuOpen(false)}>
+              <img src="/img/logo.svg" className="object-contain aspect-[4.22] w-[241px]" alt="Logo" />
+            </a>
+            <button onClick={() => setIsMenuOpen(false)} className="p-2 text-neutral-900">
+              <X size={24} />
+            </button>
+          </div>
+
           {/* Search and Courses in Mobile Menu */}
           <div className="flex flex-col gap-4">
             <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
@@ -234,8 +246,9 @@ export const Navigation = () => {
 
       {/* Cart Overlay */}
       <div
-        className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out ${cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-          }`}
+        className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out ${
+          cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+        }`}
       >
         <Cart />
       </div>
