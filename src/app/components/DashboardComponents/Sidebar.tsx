@@ -1,6 +1,6 @@
 "use client";
-import { logout } from "@/app/store/features/users/userSlice";
-import { useAppDispatch } from "@/app/store/hooks";
+import { logout, selectUser } from "@/app/store/features/users/userSlice";
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import {
   BookOpen,
   BookOpenCheck,
@@ -27,6 +27,20 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import SidebarItem from "./SidebarItem";
+import { IconType } from "react-icons/lib";
+import { ENUMS } from "@/app/constants/enum";
+type SidebarItem = {
+  icon: IconType;
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+  isExpanded?: boolean;
+  handleToggle?: () => void;
+  children?: SidebarItem[];
+  isLogout?: boolean;
+  hasDividerOnTop?: boolean;
+  access?: (typeof ENUMS.USER_TYPES)[number][];
+};
 interface SidebarProps {
   activeItem: string;
   onItemClick: (item: string) => void;
@@ -40,6 +54,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
   const [appointmentsExpanded, setAppointmentsExpanded] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const user = useAppSelector(selectUser);
 
   const toggleSidebar = () => {
     const newCollapsed = !collapsed;
@@ -82,12 +97,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
     setAppointmentsExpanded(!appointmentsExpanded);
   };
 
-  const sidebarData = [
+  const sidebarData: SidebarItem[] = [
     {
       icon: LayoutDashboard,
       label: "Dashboard",
       isActive: activeItem === "dashboard",
       onClick: () => handleItemClick("dashboard"),
+      access: ["admin", "manager", "student"],
     },
     {
       icon: UserCog,
@@ -96,6 +112,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       onClick: () => handleItemClick("viewUsers"),
       isExpanded: usersExpanded,
       handleToggle: () => handleToggle("users"),
+      access: ["admin", "manager"],
       children: [
         {
           icon: UserPlus,
@@ -124,6 +141,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       onClick: () => handleItemClick("viewCourses"),
       isExpanded: coursesExpanded,
       handleToggle: () => handleToggle("courses"),
+      access: ["admin"],
       children: [
         {
           icon: FolderPlus,
@@ -170,6 +188,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       onClick: () => handleItemClick("appointments"),
       isExpanded: appointmentsExpanded,
       handleToggle: () => handleToggle("appointments"),
+      access: ["admin", "manager"],
       children: [
         {
           icon: Plus,
@@ -190,18 +209,21 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       label: "Subscribed Courses",
       isActive: activeItem === "courses",
       onClick: () => handleItemClick("courses"),
+      access: ["manager", "student"],
     },
     {
       icon: CreditCard,
       label: "Transactions",
       isActive: activeItem === "transactions",
       onClick: () => handleItemClick("transactions"),
+      access: ["admin", "manager", "student"],
     },
     {
       icon: Settings,
       label: "My Profile",
       isActive: activeItem === "profile",
       onClick: () => handleItemClick("profile"),
+      access: ["admin", "manager", "student"],
     },
     {
       icon: LogOut,
@@ -209,6 +231,8 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       isLogout: true,
       onClick: () => handleItemClick("logout"),
       hasDividerOnTop: true,
+      isActive: false,
+      access: ["admin", "manager", "student"],
     },
   ];
 
@@ -232,78 +256,85 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       </button>
 
       <div className="flex flex-col items-start w-full overflow-hidden">
-        {sidebarData.map((item, index) => {
-          if (item.children) {
-            const isExpanded = item.isExpanded;
-            const toggleSection = item.handleToggle;
+        {sidebarData
+          .filter((item) => {
+            if (item.access && user && "role" in user) {
+              return item.access.includes(user.role as (typeof ENUMS.USER_TYPES)[number]);
+            }
+            return false;
+          })
+          .map((item, index) => {
+            if (item.children) {
+              const isExpanded = item.isExpanded;
+              const toggleSection = item.handleToggle;
 
-            return (
-              <div key={index} className="w-full">
-                <div
-                  className={`flex items-center w-full cursor-pointer group ${
-                    item.isActive ? "bg-gray-50 rounded-lg" : ""
-                  }`}
-                  onClick={() => {
-                    if (collapsed) {
-                      item.onClick();
-                      toggleSidebar();
-                    } else {
-                      toggleSection();
-                    }
-                  }}
-                >
-                  <div className="flex items-center w-full p-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700">
-                    <item.icon className="text-gray-500 w-5 h-5" />
-                    {!collapsed && <span className="ml-3">{item.label}</span>}
-                    {!collapsed && (
-                      <button className="ml-auto p-2 group-hover:bg-gray-100 rounded-lg transition-colors">
-                        {isExpanded ? (
-                          <ChevronUp className="w-4 h-4 text-gray-600" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4 text-gray-600" />
-                        )}
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {isExpanded && !collapsed && (
-                  <div className="pl-4 mt-1">
-                    <div className="relative">
-                      <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-                      <div className="space-y-0.5 ml-0.5">
-                        {item.children.map((child, childIndex) => (
-                          <SidebarItem
-                            key={childIndex}
-                            icon={child.icon}
-                            label={child.label}
-                            isActive={child.isActive}
-                            onClick={child.onClick}
-                            collapsed={collapsed}
-                            className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
-                          />
-                        ))}
-                      </div>
+              return (
+                <div key={index} className="w-full">
+                  <div
+                    className={`flex items-center w-full cursor-pointer group ${
+                      item.isActive ? "bg-gray-50 rounded-lg" : ""
+                    }`}
+                    onClick={() => {
+                      if (collapsed) {
+                        item.onClick();
+                        toggleSidebar();
+                      } else {
+                        toggleSection?.();
+                      }
+                    }}
+                  >
+                    <div className="flex items-center w-full p-3 rounded-lg transition-colors hover:bg-gray-100 text-gray-700">
+                      <item.icon className="text-gray-500 w-5 h-5" />
+                      {!collapsed && <span className="ml-3">{item.label}</span>}
+                      {!collapsed && (
+                        <button className="ml-auto p-2 group-hover:bg-gray-100 rounded-lg transition-colors">
+                          {isExpanded ? (
+                            <ChevronUp className="w-4 h-4 text-gray-600" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4 text-gray-600" />
+                          )}
+                        </button>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-            );
-          }
+                  {isExpanded && !collapsed && (
+                    <div className="pl-4 mt-1">
+                      <div className="relative">
+                        <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200"></div>
+                        <div className="space-y-0.5 ml-0.5">
+                          {item.children.map((child, childIndex) => (
+                            <SidebarItem
+                              key={childIndex}
+                              icon={child.icon}
+                              label={child.label}
+                              isActive={child.isActive}
+                              onClick={child.onClick}
+                              collapsed={collapsed}
+                              className="pl-3 hover:bg-gray-50 rounded-lg transition-colors text-sm"
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            }
 
-          return (
-            <React.Fragment key={index}>
-              {item.hasDividerOnTop && <div className="mt-6 w-full border-t border-slate-200 pt-2" />}
-              <SidebarItem
-                icon={item.icon}
-                label={item.label}
-                isActive={item.isActive}
-                onClick={item.onClick}
-                collapsed={collapsed}
-                isLogout={item.isLogout}
-              />
-            </React.Fragment>
-          );
-        })}
+            return (
+              <React.Fragment key={index}>
+                {item.hasDividerOnTop && <div className="mt-6 w-full border-t border-slate-200 pt-2" />}
+                <SidebarItem
+                  icon={item.icon}
+                  label={item.label}
+                  isActive={item.isActive}
+                  onClick={item.onClick}
+                  collapsed={collapsed}
+                  isLogout={item.isLogout}
+                />
+              </React.Fragment>
+            );
+          })}
       </div>
     </nav>
   );
