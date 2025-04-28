@@ -40,7 +40,7 @@ export const Navigation = () => {
   };
 
   return (
-    <nav className="relative text-gray-900 flex items-center justify-between p-1 mt-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 mb-5">
+    <nav className="relative text-gray-900 flex items-center justify-between my-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 ">
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full md:hidden">
         <div className="flex items-center gap-4">
@@ -142,9 +142,8 @@ export const Navigation = () => {
                     </div>
                   )}
                   <div className="flex flex-col">
-                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
-                      (user as IUser).lastName
-                    }`}</span>
+                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${(user as IUser).lastName
+                      }`}</span>
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
@@ -162,9 +161,8 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-4 space-y-6 mt-4">
           {/* Search and Courses in Mobile Menu */}
@@ -236,9 +234,8 @@ export const Navigation = () => {
 
       {/* Cart Overlay */}
       <div
-        className={`fixed z-50 top-0 right-0 w-full h-full transform transition-transform duration-300 ease-in-out ${
-          cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-        }`}
+        className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out ${cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          }`}
       >
         <Cart />
       </div>

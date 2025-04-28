@@ -2,10 +2,9 @@
 import React, { useRef, useState } from "react";
 import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
-import wall from "/assets/homepagewall.png";
-import Person from "/assets/person.png";
-import Congrate from "/assets/congrateicon.png";
+
 import Link from "next/link";
+import SubscriptionCards from "../components/pricing/subscriptioncards";
 
 interface SliderItem {
   title: string;
@@ -118,7 +117,8 @@ export const Homepage = () => {
     {
       id: 1,
       title: "The Future of Artificial Intelligence in Business",
-      description: "Explore how AI is transforming business operations and what it means for the future of work.",
+      description:
+        "Explore how AI is transforming business operations and what it means for the future of work.",
       category: "Technology",
       date: "May 15, 2024",
       image: "/assets/abouthome.png",
@@ -126,7 +126,8 @@ export const Homepage = () => {
     {
       id: 2,
       title: "Effective Time Management Strategies for Professionals",
-      description: "Learn proven techniques to boost your productivity and achieve more in less time.",
+      description:
+        "Learn proven techniques to boost your productivity and achieve more in less time.",
       category: "Business",
       date: "April 28, 2024",
       image: "/assets/congrateicon.png",
@@ -134,7 +135,8 @@ export const Homepage = () => {
     {
       id: 3,
       title: "The Psychology of Consumer Behavior",
-      description: "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
+      description:
+        "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
       category: "Marketing",
       date: "April 15, 2024",
       image: "/assets/lowerlogo.png",
@@ -142,7 +144,8 @@ export const Homepage = () => {
     {
       id: 4,
       title: "Minimalist Design Principles for Modern Websites",
-      description: "Discover how minimalist design can improve user experience and conversion rates.",
+      description:
+        "Discover how minimalist design can improve user experience and conversion rates.",
       category: "Design",
       date: "March 30, 2024",
       image: "/assets/sendericon.png",
@@ -159,7 +162,8 @@ export const Homepage = () => {
     {
       id: 6,
       title: "The Rise of Remote Work: Trends and Best Practices",
-      description: "How companies are adapting to the remote work revolution and what it means for the future.",
+      description:
+        "How companies are adapting to the remote work revolution and what it means for the future.",
       category: "Business",
       date: "March 10, 2024",
       image: "/assets/person.png",
@@ -197,7 +201,8 @@ export const Homepage = () => {
 
   const testimonials = [
     {
-      quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+      quote:
+        "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
       author: "Valerie J.",
       role: "Creasman CEO",
       avatarSrc:
@@ -207,7 +212,8 @@ export const Homepage = () => {
       hasShadow: false,
     },
     {
-      quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+      quote:
+        "B.R. Collins' business management course gave me the confidence to lead my team to success.",
       author: "Hannah R.",
       role: "Sutton CEO",
       avatarSrc:
@@ -234,9 +240,9 @@ export const Homepage = () => {
     hasShadow?: boolean;
   }) => (
     <article
-      className={`px-8 py-9 bg-white rounded-xl border border-solid border-zinc-100 ${
+      className={`px-8 py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
         hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
-      } max-md:px-5 w-full`}
+      }  w-full`}
     >
       <img
         src={
@@ -247,16 +253,26 @@ export const Homepage = () => {
         className="object-contain w-8 aspect-[1.68]"
         alt="Quote"
       />
-      <blockquote className="mt-7 text-2xl font-medium leading-8 text-neutral-900">{quote}</blockquote>
+      <blockquote className="mt-7 text-2xl font-medium leading-8 text-neutral-900">
+        {quote}
+      </blockquote>
       <div className="flex justify-between mt-16 max-md:flex-col max-md:items-start max-md:gap-4">
         <div className="flex gap-3 items-center">
-          <img src={avatarSrc} className="object-contain rounded-full aspect-square w-[50px]" alt={author} />
+          <img
+            src={avatarSrc}
+            className="object-contain rounded-full aspect-square w-[50px]"
+            alt={author}
+          />
           <div>
             <p className="text-xl font-bold text-neutral-900">{author}</p>
             <p className="text-base leading-none text-zinc-500">{role}</p>
           </div>
         </div>
-        <img src={ratingSrc} className="object-contain aspect-[2.51] w-[88px] max-md:mt-2" alt="Rating" />
+        <img
+          src={ratingSrc}
+          className="object-contain aspect-[2.51] w-[88px] max-md:mt-2"
+          alt="Rating"
+        />
       </div>
     </article>
   );
@@ -284,8 +300,12 @@ export const Homepage = () => {
           </div>
           <div className="ml-5 w-[83%] max-md:ml-0 max-md:w-full">
             <div className="grow text-neutral-900 max-md:mt-10 max-md:max-w-full">
-              <h3 className="text-2xl font-bold leading-none max-md:max-w-full">{title}</h3>
-              <p className="mt-3 text-lg leading-7 max-md:max-w-full">{description}</p>
+              <h3 className="text-2xl font-bold leading-none max-md:max-w-full">
+                {title}
+              </h3>
+              <p className="mt-3 text-lg leading-7 max-md:max-w-full">
+                {description}
+              </p>
             </div>
           </div>
         </div>
@@ -293,33 +313,56 @@ export const Homepage = () => {
     </div>
   );
 
-  const StatCard = ({ number, label, bgColor }: { number: string; label: string; bgColor: string }) => (
-    <div className={`rounded-2xl p-6 ${bgColor}`}>
-      <h3 className="text-3xl font-bold text-neutral-900">{number}</h3>
+  const StatCard = ({
+    number,
+    label,
+    bgColor,
+  }: {
+    number: string;
+    label: string;
+    bgColor: string;
+  }) => (
+    <div className={`rounded-2xl p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
+      <h3 className="md:text-[50px] font-bold text-neutral-900">{number}</h3>
       <p className="text-lg text-neutral-700 mt-2">{label}</p>
     </div>
   );
-
+  
   const StatsSection = () => (
-    <div className="grow shrink self-stretch my-auto rounded-none min-w-60 w-[440px] max-md:max-w-full">
-      <div className="max-md:max-w-full">
-        <div className="flex gap-5 max-md:flex-col">
-          <div className="w-6/12 max-md:ml-0 max-md:w-full">
-            <StatCard number="500+" label="Learners & counting" bgColor="bg-rose-50" />
-          </div>
-          <div className="ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-            <StatCard number="800+" label="Courses & Video" bgColor="bg-sky-100" />
-          </div>
+    <div className="w-full md:w-[50%] h-[410px] flex flex-col justify-between">
+      {/* Top Row */}
+      <div className="flex justify-between h-[48%] gap-4">
+        <div className="w-[48%] h-full">
+          <StatCard
+            number="500+"
+            label="Learners & counting"
+            bgColor="bg-rose-50"
+          />
+        </div>
+        <div className="w-[48%] h-full">
+          <StatCard
+            number="800+"
+            label="Courses & Video"
+            bgColor="bg-sky-100"
+          />
         </div>
       </div>
-      <div className="mt-3 max-md:max-w-full">
-        <div className="flex gap-5 max-md:flex-col">
-          <div className="w-6/12 max-md:ml-0 max-md:w-full">
-            <StatCard number="100+" label="Registered Enrolls" bgColor="bg-sky-100" />
-          </div>
-          <div className="ml-5 w-6/12 max-md:ml-0 max-md:w-full">
-            <StatCard number="1000+" label="Certified Students" bgColor="bg-rose-50" />
-          </div>
+      
+      {/* Bottom Row */}
+      <div className="flex justify-between h-[48%] gap-4">
+        <div className="w-[48%] h-full">
+          <StatCard
+            number="100+"
+            label="Registered Enrolls"
+            bgColor="bg-sky-100"
+          />
+        </div>
+        <div className="w-[48%] h-full">
+          <StatCard
+            number="1000+"
+            label="Certified Students"
+            bgColor="bg-rose-50"
+          />
         </div>
       </div>
     </div>
@@ -339,17 +382,26 @@ export const Homepage = () => {
           />
         </div>
 
-        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full max-w-[1100px] px-4 sm:px-6 lg:px-8 mx-auto">
-            <div className="flex flex-col w-full max-w-2xl pointer-events-auto">
+        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
+          <div className="w-full md:max-w-[1326px]     mx-auto">
+            <div className="flex md:flex-col  md:p-0 p-3 justify-start md:gap-3 w-full max-w-2xl pointer-events-auto">
               <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
                 IT Support Specialist Professional Certificate
               </h2>
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 gap-2">
-                <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
+                <Image
+                  src="/assets/person.png"
+                  width={40}
+                  height={40}
+                  alt="person"
+                  className="w-10 h-10"
+                />
                 <h1 className="font-light text-sm sm:text-base text-gray-800">
-                  Instructor: <span className="text-blu underline mx-2">Claudia Pruitt</span>
+                  Instructor:{" "}
+                  <span className="text-blu underline mx-2">
+                    Claudia Pruitt
+                  </span>
                 </h1>
               </div>
 
@@ -387,13 +439,13 @@ export const Homepage = () => {
           </div>
         </div>
       </section>
-
-      <section className="relative my-8 text-gray-900 w-full">
-        <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[1100px]">
-          <div className="flex flex-col w-full">
-            <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl font-bold text-start mb-4 text-gray-800">
-              Your Complete Skill Set Starts Here
-            </h2>
+      <div className="flex flex-col justify-center items-center">
+        <section className="relative my-8 text-gray-900 w-full">
+          <div className="w-full px-4 sm:px-6 lg:px-8 mx-auto max-w-[1326px]">
+            <div className="flex flex-col w-full">
+              <h2 className="font-hanken text-2xl sm:text-3xl md:text-[36px] font-medium text-start mb-4 text-gray-800">
+                Your Complete Skill Set Starts Here
+              </h2>
 
             <div className="flex flex-wrap gap-4 sm:gap-6 my-3">
               <button
@@ -418,103 +470,135 @@ export const Homepage = () => {
               </button>
             </div>
 
-            <hr className="border-gray-200" />
+              <hr className="border-gray-200" />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* {activeTab === "e-learning" ? ( */}
-      <>
-        <section className="relative text-gray-900">
-          <div className="w-full px-4 mx-auto max-w-[1100px] relative">
-            <button
-              onClick={scrollLeft}
-              className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        {/* {activeTab === "e-learning" ? ( */}
+        <>
+          <section className="relative text-gray-900">
+            <div className="w-full px-4 mx-auto max-w-[1326px] relative">
+              <button
+                onClick={scrollLeft}
+                className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
 
-            <div ref={sliderRef} className="flex flex-row overflow-x-hidden pb-4 -mx-4 px-4 scroll-smooth">
-              <div className="flex flex-nowrap gap-4">
-                {sliderItems.map((item, index) => (
-                  <div key={index} className="flex-shrink-0 w-fit py-2">
-                    <div className="flex flex-col rounded-4xl bg-gray-100 px-5 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
-                      <h2 className="font-bold font-dm text-xl text-gray-800 mb-2">{item.title}</h2>
-                      <p className="text-sm text-gray-600">{item.courses} courses available</p>
+              <div
+                ref={sliderRef}
+                className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar"
+              >
+                <div className="flex flex-nowrap gap-4">
+                  {sliderItems.map((item, index) => (
+                    <div key={index} className="flex-shrink-0 w-fit py-2">
+                      <div className="flex flex-col rounded-4xl bg-gray-100 px-5 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
+                        <h2 className="font-bold font-dm text-xl text-gray-800 mb-2">
+                          {item.title}
+                        </h2>
+                        <p className="text-sm text-gray-600">
+                          {item.courses} courses available
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={scrollRight}
+                className="absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-gray-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+          </section>
+          <section className="relative text-gray-900">
+            <div className="w-full px-4 mx-auto max-w-[1326px] md:h-[848px] h-auto py-4 relative">
+              <div className="flex flex-nowrap overflow-auto gap-3  mb-16 py-6 custom-scroll scrollbar-hide">
+                {courses.map((course) => (
+                  <div
+                    className="flex flex-row md:w-[196px] md:h-[400px]"
+                    key={course.id}
+                  >
+                    <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
+                      <div className="py-2 px-4 text-sm font-medium">
+                        <h1 className="bg-blu p-1 w-fit bg-blue-400 rounded-xl text-white">
+                          {course.duration}
+                        </h1>
+                      </div>
+
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
+                          {course.title}
+                        </h3>
+
+                        <div className="flex items-center text-gray-600 mb-4">
+                          <FaBook className="mr-2 text-blue-500" />
+                          <span className="text-sm">
+                            {course.lessons} Lessons
+                          </span>
+                        </div>
+
+                        <hr className="border-t border-gray-200 my-2" />
+
+                        <div className="flex flex-col items-start gap-12 mb-3">
+                          <div className="flex items-center">
+                            <div className="flex mr-2">
+                              {renderStars(course.rating)}
+                            </div>
+                            <span className="text-sm font-medium">
+                              {course.rating}
+                            </span>
+                          </div>
+
+                          <span className="text-lg font-bold">
+                            ${course.price}
+                          </span>
+                        </div>
+
+                        <Link
+                          href="/course/1"
+                          className="text-center text-org underline font-medium py-2 transition-colors"
+                        >
+                          View Details
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
-            <button
-              onClick={scrollRight}
-              className="absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </section>
-        <section className="relative text-gray-900">
-          <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
-            <div className="flex flex-nowrap overflow-auto gap-3 py-6 custom-scroll scrollbar-hide">
-              {courses.map((course) => (
-                <div className="flex flex-row w-[178px]" key={course.id}>
-                  <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                    <div className="py-2 px-4 text-sm font-medium">
-                      <h1 className="bg-blu p-2 w-fit rounded-4xl text-white">{course.duration}</h1>
-                    </div>
-
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">{course.title}</h3>
-
-                      <div className="flex items-center text-gray-600 mb-4">
-                        <FaBook className="mr-2 text-blue-500" />
-                        <span className="text-sm">{course.lessons} Lessons</span>
-                      </div>
-
-                      <hr className="border-t border-gray-200 my-2" />
-
-                      <div className="flex flex-col items-start gap-12 mb-3">
-                        <div className="flex items-center">
-                          <div className="flex mr-2">{renderStars(course.rating)}</div>
-                          <span className="text-sm font-medium">{course.rating}</span>
-                        </div>
-
-                        <span className="text-lg font-bold">${course.price}</span>
-                      </div>
-
-                      <Link
-                        href="/course/1"
-                        className="text-center text-org underline font-medium py-2 transition-colors"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </>
-      {/* ) : (
+          </section>
+        </>
+        {/* ) : (
         <>
           <section className="relative text-gray-900">
             <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
@@ -605,13 +689,17 @@ export const Homepage = () => {
           </section>
         </>
       )} */}
-      <section className="bg-[#081B25] text-gray-900 ">
-        <div className="w-full px-4  mx-auto max-w-[1100px] py-14">
+      </div>
+      <section className="bg-[#081B25] flex flex-row items-center justify-center md:h-[769px] text-gray-900 ">
+        <div className="w-full gap-4 flex flex-col justify-center items-center  mx-auto max-w-[1326px] ">
           <div className="flex flex-col justify-center items-center text-center mb-6">
-            <h2 className="text-white font-hanken text-xl">Flexible Pricing for Individuals and Teams</h2>
+            <h2 className="text-white font-hanken md:text-[34px] font-bold">
+              Flexible Pricing for Individuals and Teams
+            </h2>
           </div>
 
-          <div className="w-full flex h-[444px] flex-row gap-6">
+          <SubscriptionCards />
+          {/* <div className="w-full flex h-[494px] flex-row gap-6">
             <div className="w-1/2 flex h-full flex-col gap-6">
               <div className="flex flex-row h-full justify-between">
                 <div className="bg-white rounded-lg w-full  p-6  flex flex-row justify-between mr-auto">
@@ -631,7 +719,7 @@ export const Homepage = () => {
                       </h1>
                     </div>
                     <div>
-                      <h2 className="text-4xl font-bold flex items-end flex-col">$99</h2>
+                      <h2 className="text-5xl font-bold flex items-end flex-col">$99</h2>
                       <p className="flex items-end flex-col">per course</p>
                     </div>
                   </div>
@@ -655,7 +743,7 @@ export const Homepage = () => {
                       </h1>
                     </div>
                     <div>
-                      <h2 className="text-4xl font-bold flex items-end flex-col">$99</h2>
+                      <h2 className="text-5xl font-bold flex items-end flex-col">$99</h2>
                       <p className="flex items-end flex-col">per course</p>
                     </div>
                   </div>
@@ -752,130 +840,142 @@ export const Homepage = () => {
                   <hr className="text-gray-200" />
                 </ul>
               </div>
-              <Link href="/contact" className="bg-[#F86537] text-white py-2 px-6 rounded-4xl w-full">
-                Contact Sales
+              <Link href="/contact" className="bg-[#F86537] text-white py-2 px-6 rounded-4xl text-center w-full">
+                Buy Now
               </Link>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
-
-      <section className="px-4 md:px-8 lg:px-16 text-gray-900 mt-24 w-full max-w-[1326px] mx-auto">
-        <div className="flex flex-col lg:flex-row gap-8 text-gray-900">
-          {/* Info Card */}
-          <div className="flex flex-col items-start pt-10 pr-10 w-full lg:w-1/3 bg-sky-500 rounded-xl">
-            <h2 className="ml-10 text-4xl font-bold text-white max-md:ml-4">
-              What subscribers are achieving through learning
-            </h2>
-            <p className="mt-5 ml-10 text-2xl text-white max-md:ml-4">
-              <span className="font-semibold text-[#FF9270]">37,076</span>
-              <span> responses collected</span>
-            </p>
-            <div className="flex justify-between items-center mt-10 w-full px-10 max-md:px-4">
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/130d72ee6184a472ad3edb3bbba812115cae9da8?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                className="object-contain w-[150px] md:w-[200px] rounded-none"
-                alt="Learning statistics"
-              />
-              <div className="flex gap-2 items-center">
-                <button aria-label="Previous testimonial">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/86abcbed0348e0114509cab56011a93a7df8f1bf?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                    className="object-contain aspect-square w-[40px] md:w-[50px]"
-                    alt="Previous"
-                  />
-                </button>
-                <button aria-label="Next testimonial">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb2ea5548b6387d8aca0a2880a216cc986f8e138?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                    className="object-contain aspect-square w-[40px] md:w-[50px]"
-                    alt="Next"
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Testimonials */}
-          <div className="flex flex-col lg:flex-row gap-8 w-full lg:w-2/3">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="w-full">
-                <TestimonialCard {...testimonial} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="self-center mx-auto mt-32 text-gray-900 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full px-16">
-        {/* On Site Learning Section */}
-        <div className="flex flex-wrap gap-10 items-center w-full">
-          <div className="grow shrink self-stretch my-auto min-w-60 w-[529px] max-md:max-w-full">
-            <div className="w-full">
-              <div className="flex flex-col justify-center w-full font-bold">
-                <span className="self-start text-lg text-center text-orange-500 uppercase">about us</span>
-                <h2 className="mt-5 text-5xl leading-tight text-neutral-900 max-md:text-4xl">On Site Learning</h2>
-              </div>
-              <p className="mt-5 text-2xl leading-8 text-neutral-900">
-                At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
-                experiences. Blending creativity with expertise.
+      <div className="md:w-[1920] flex flex-col justify-around md:h-[1905]">
+        <section className="  text-gray-900  w-full max-w-[1326px] mx-auto">
+          <div className="flex flex-col w-full lg:flex-row justify-between text-gray-900">
+            {/* Info Card */}
+            <div className="flex flex-col items-start  text-start justify-between p-6 md:h-[420px] md:w-[422px]  bg-sky-500 rounded-xl">
+              <h2 className=" md:text-[34px] font-bold text-white ">
+                What subscribers are achieving through learning
+              </h2>
+              <p className="  text-2xl text-white ">
+                <span className="font-semibold text-[#FF9270]">37,076</span>
+                <span> responses collected</span>
               </p>
-            </div>
-            <div className="mt-10 w-full">
-              <FeatureCard
-                title="Flexible Classes"
-                description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
-                iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/0142af754e70f9fb9b82869b1b20e4421b6f04e5?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-              />
-              <FeatureCard
-                title="Expert-Led Training"
-                description="Learn from industry experts in a real-world setting. Gain practical knowledge, hands-on experience."
-                iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                className="mt-5"
-              />
-            </div>
-          </div>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-            className="object-contain grow shrink self-stretch my-auto rounded-2xl aspect-[0.93] min-w-60 w-[452px] max-md:max-w-full"
-            alt="On-site learning"
-          />
-        </div>
-
-        {/* Community Section */}
-        <div className="flex flex-wrap gap-10 items-center my-32 w-full">
-          <div className="flex flex-col grow shrink justify-center self-stretch my-auto min-w-60 w-[537px] max-md:max-w-full">
-            <div className="w-full">
-              <div className="flex flex-col justify-center w-full font-bold">
-                <span className="self-start text-lg text-center text-orange-500 uppercase">WHY CHOOSE US</span>
-                <h2 className="mt-5 text-5xl leading-[60px] text-neutral-900 max-md:text-4xl max-md:leading-[53px]">
-                  Creating A Community Of Life Long Learners
-                </h2>
+              <div className="flex justify-between bottom-0 w-full md:mb-[-22px] md:ms-[-31px] ">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/130d72ee6184a472ad3edb3bbba812115cae9da8?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                  className="object-contain w-[150px] md:w-[200px] rounded-none"
+                  alt="Learning statistics"
+                />
+                <div className="flex gap-2 items-center">
+                  <button aria-label="Previous testimonial">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/86abcbed0348e0114509cab56011a93a7df8f1bf?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                      className="object-contain aspect-square w-[40px] md:w-[50px]"
+                      alt="Previous"
+                    />
+                  </button>
+                  <button aria-label="Next testimonial">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb2ea5548b6387d8aca0a2880a216cc986f8e138?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                      className="object-contain aspect-square w-[40px] md:w-[50px]"
+                      alt="Next"
+                    />
+                  </button>
+                </div>
               </div>
-              <p className="mt-5 text-2xl leading-8 text-neutral-900">
-                At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
-                experiences.
-              </p>
             </div>
-            <div className="flex gap-2.5 items-center self-start mt-8 text-lg font-semibold">
-              <Link
-                href="/course"
-                className="overflow-hidden gap-1.5 self-stretch px-8 py-5 my-auto text-white bg-orange-500 min-h-[52px] rounded-[58px] max-md:px-5"
-              >
-                Explore Courses
-              </Link>
-              <Link
-                href="/about"
-                className="overflow-hidden gap-1.5 self-stretch px-8 py-5 my-auto border border-solid border-neutral-900 min-h-[52px] rounded-[48px] text-neutral-900 max-md:px-5"
-              >
-                Learn More
-              </Link>
+
+            {/* Testimonials */}
+            <div className="flex flex-col lg:flex-row  w-full lg:w-2/3">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="w-full md:h-[422px]">
+                  <TestimonialCard {...testimonial} />
+                </div>
+              ))}
             </div>
           </div>
+        </section>
 
-          <StatsSection />
-        </div>
-      </section>
+        <section className="self-center mx-auto  text-gray-900 w-full max-w-[1326px] max-md:mt-10 ">
+          {/* On Site Learning Section */}
+          <div className="flex flex-wrap gap-10 items-center w-full">
+            <div className="grow shrink self-stretch my-auto min-w-60 w-[529px] max-md:max-w-full">
+              <div className="w-full">
+                <div className="flex flex-col justify-center w-full font-bold">
+                  <span className="self-start text-lg text-center text-orange-500 uppercase">
+                    about us
+                  </span>
+                  <h2 className="mt-5 text-5xl leading-tight text-neutral-900 max-md:text-4xl">
+                    On Site Learning
+                  </h2>
+                </div>
+                <p className="mt-5 text-2xl leading-8 text-neutral-900">
+                  At B.R Collins, our on-site training transforms everyday
+                  lessons into engaging and interactive experiences. Blending
+                  creativity with expertise.
+                </p>
+              </div>
+              <div className="mt-10 w-full">
+                <FeatureCard
+                  title="Flexible Classes"
+                  description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
+                  iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/0142af754e70f9fb9b82869b1b20e4421b6f04e5?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                />
+                <FeatureCard
+                  title="Expert-Led Training"
+                  description="Learn from industry experts in a real-world setting. Gain practical knowledge, hands-on experience."
+                  iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                  className="mt-5"
+                />
+              </div>
+            </div>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+              className="object-contain grow shrink self-stretch my-auto rounded-2xl aspect-[0.93] min-w-60 w-[452px] max-md:max-w-full"
+              alt="On-site learning"
+            />
+          </div>
+
+          {/* Community Section */}
+        </section>
+        <section className="mx-auto text-gray-900 w-full max-w-[1326px] md:h-[410px]">
+          <div className="flex flex-wrap justify-between items-stretch h-full w-full">
+            {/* Left Content Section */}
+            <div className="flex flex-col justify-between h-full pr-3 md:w-[50%] max-md:w-full">
+              <div className="flex flex-col justify-between h-full">
+                <div className="flex flex-col justify-between h-full space-y-6">
+                  <span className="text-lg text-orange-500 uppercase font-bold">
+                    WHY CHOOSE US
+                  </span>
+                  <h2 className="text-4xl md:text-[50px] leading-[53px] md:leading-[60px] text-neutral-900 font-bold">
+                    Creating A Community Of Life Long Learners
+                  </h2>
+                  <p className="text-xl md:text-2xl leading-7 md:leading-8 text-neutral-900">
+                    At B.R Collins, our on-site training transforms everyday
+                    lessons into engaging and interactive experiences.
+                  </p>
+                  <div className="flex flex-row gap-4 mt-4">
+                    <Link
+                      href="/course"
+                      className="px-8 py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors"
+                    >
+                      Explore Courses
+                    </Link>
+                    <Link
+                      href="/about"
+                      className="px-8 py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Section - will take remaining 50% width */}
+            <StatsSection />
+          </div>
+        </section>
+      </div>
     </>
   );
 };
