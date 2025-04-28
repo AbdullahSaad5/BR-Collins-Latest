@@ -69,14 +69,14 @@ export default function AddCourseCategory() {
   };
 
   return (
-    <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
-      <h1 className="text-2xl font-semibold text-neutral-900 mb-6">
+    <div className="max-w-4xl mx-auto p-6">
+      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">
         {isEditMode ? "Edit Course Category" : "Add New Course Category"}
-      </h1>
+      </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
         <FormField
-          label="Name"
+          label="Name *"
           description="Enter the name of the course category"
           placeholder="e.g., Web Development"
           error={errors.name?.message}
@@ -85,7 +85,7 @@ export default function AddCourseCategory() {
         />
 
         <FormField
-          label="Description"
+          label="Description *"
           description="Enter a description for the course category"
           placeholder="e.g., Courses related to web development technologies"
           error={errors.description?.message}
@@ -94,16 +94,16 @@ export default function AddCourseCategory() {
           {...register("description")}
         />
 
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-8">
           <button
             type="submit"
-            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+            className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
             disabled={mutation.isPending}
           >
             {mutation.isPending ? "Saving..." : isEditMode ? "Update Category" : "Add Category"}
           </button>
         </div>
       </form>
-    </section>
+    </div>
   );
 }

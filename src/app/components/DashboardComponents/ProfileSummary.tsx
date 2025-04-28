@@ -1,8 +1,17 @@
 import React from "react";
 import { BookOpen, BadgeCheck, UserPlus, Settings } from "lucide-react";
 import Image from "next/image";
+import { useAppSelector } from "@/app/store/hooks";
+import { selectUser } from "@/app/store/features/users/userSlice";
+import { IUser } from "@/app/types/user.contract";
 
 const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }) => {
+  const user = useAppSelector(selectUser) as IUser;
+
+  const toTitleCase = (str?: string) => {
+    return str?.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
   return (
     <section className="flex flex-col sm:flex-row gap-5 justify-between items-center p-4 sm:p-6 bg-white rounded-xl shadow-sm w-full mx-auto">
       {/* Profile Info */}
@@ -10,7 +19,7 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
         {/* Avatar */}
         <div className="relative shrink-0 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-xl bg-gradient-to-br from-blue-50 to-gray-100 overflow-hidden border-2 border-white shadow-md">
           <Image
-            src="/assets/profile.jpg"
+            src={user.profilePicture || "/assets/default-avatar.jpg"}
             width={112}
             height={112}
             alt="Profile Picture"
@@ -20,8 +29,8 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
 
         {/* Details */}
         <div className="text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Charlotte Anderson</h1>
-          <p className="text-sm text-gray-500 mt-1">UX Designer & Developer</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{`${user.firstName} ${user.lastName}`}</h1>
+          <p className="text-sm text-gray-500 mt-1">{toTitleCase(user.role)}</p>
 
           <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-5 mt-3">
             <div className="flex items-center gap-1.5 text-sm">

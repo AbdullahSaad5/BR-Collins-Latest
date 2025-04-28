@@ -9,6 +9,7 @@ import { ICourse } from "@/app/types/course.contract";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseContentModal from "./ViewCourseContentModal";
+import ContentStatusMenu from "./ContentStatusMenu";
 import { useRouter } from "next/navigation";
 
 const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
@@ -43,6 +44,21 @@ const ViewCourseContent = () => {
   const handleDelete = async (content: ICourseContent) => {
     console.log("Delete content:", content);
     // TODO: Implement delete functionality
+  };
+
+  const handleStatusChange = async (contentId: string, isBlocked: boolean) => {
+    try {
+      const response = await api.patch(`/course-contents/${contentId}`, {
+        isBlocked,
+      });
+
+      if (response.data) {
+        showToast(`Content ${isBlocked ? "blocked" : "unblocked"} successfully`, "success");
+      }
+    } catch (error) {
+      showToast("Failed to update content status", "error");
+      console.error("Error updating content status:", error);
+    }
   };
 
   const columns = [
@@ -91,6 +107,18 @@ const ViewCourseContent = () => {
       sortable: true,
       grow: 1,
       cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{row.order}</div>,
+    },
+    {
+      name: "Status",
+      selector: (row: ICourseContent) => row.isBlocked,
+      sortable: true,
+      grow: 1,
+      cell: (row: ICourseContent) => (
+        <ContentStatusMenu
+          isBlocked={row.isBlocked}
+          onStatusChange={(isBlocked) => handleStatusChange(row._id, isBlocked)}
+        />
+      ),
     },
     {
       name: "Actions",

@@ -11,6 +11,9 @@ import { getRefreshToken } from "@/app/store/features/users/userSlice";
 import ActionIcons from "@/components/ActionIcons";
 import ViewUserModal from "./ViewUserModal";
 import { useRouter } from "next/navigation";
+import StatusMenu from "./StatusMenu";
+import { toast } from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
   const response = await api.get("/users", {
@@ -21,11 +24,24 @@ const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
   return response.data;
 };
 
+const updateUserStatus = async (userId: string, isBlocked: boolean, refreshToken: string): Promise<void> => {
+  await api.put(
+    `/users/${userId}`,
+    { isBlocked },
+    {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    }
+  );
+};
+
 const UserTable: React.FC = () => {
   const refreshToken = useAppSelector(getRefreshToken);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     data: users,
@@ -56,6 +72,16 @@ const UserTable: React.FC = () => {
   const handleDeleteUser = (user: IUser) => {
     // TODO: Implement delete user functionality
     console.log("Delete user:", user);
+  };
+
+  const handleToggleStatus = async (user: IUser, isBlocked: boolean) => {
+    try {
+      await updateUserStatus(user.id, isBlocked, refreshToken!);
+      // Refetch users to update the table
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    } catch (error) {
+      toast.error("Failed to update user status");
+    }
   };
 
   const columns = [
@@ -90,23 +116,11 @@ const UserTable: React.FC = () => {
     },
     {
       name: "Status",
-      selector: (row: IUser) => row.status,
+      selector: (row: IUser) => row.isBlocked,
       sortable: true,
       grow: 1,
       cell: (row: IUser) => (
-        <span
-          className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-            row.status === "active"
-              ? "text-green-600 bg-emerald-50"
-              : row.status === "inactive"
-              ? "text-gray-600 bg-gray-50"
-              : row.status === "blocked"
-              ? "text-red-600 bg-red-50"
-              : "text-gray-600 bg-gray-50"
-          }`}
-        >
-          {row.status.charAt(0).toUpperCase() + row.status.slice(1)}
-        </span>
+        <StatusMenu isBlocked={row.isBlocked} onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)} />
       ),
     },
     {

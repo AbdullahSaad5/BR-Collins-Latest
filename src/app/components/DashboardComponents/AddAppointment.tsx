@@ -1,29 +1,121 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+import FormField from "./FormField";
+import { AppointmentCreatePayload, IAppointment } from "@/app/types/appointment.contract";
+import { ICourse } from "@/app/types/course.contract";
+import { useRouter, useSearchParams } from "next/navigation";
+
+const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
+  const response = await api.get("/courses");
+  return response.data;
+};
+
+const fetchAppointment = async (id: string): Promise<{ data: IAppointment }> => {
+  const response = await api.get(`/appointments/${id}`);
+  return response.data;
+};
 
 const appointmentSchema = z.object({
-  venueName: z.string().min(1, "Venue name is required"),
-  address: z.string().min(1, "Address is required"),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  zipCode: z.string().min(1, "ZIP code is required"),
-  locationDetails: z.string().optional(),
-  instructor: z.string().min(1, "Instructor name is required"),
-  course: z.string().min(1, "Course is required"),
+  courseId: z.string().min(1, "Course is required"),
+  location: z.object({
+    venueName: z.string().min(1, "Venue name is required"),
+    streetAddress: z.string().min(1, "Street address is required"),
+    city: z.string().min(1, "City is required"),
+    state: z.string().min(1, "State is required"),
+    zipCode: z.string().min(1, "ZIP code is required"),
+    additionalInfo: z.string().optional(),
+    coordinates: z
+      .object({
+        latitude: z.number(),
+        longitude: z.number(),
+      })
+      .optional(),
+  }),
   date: z.string().min(1, "Date is required"),
-  time: z.string().min(1, "Time is required"),
-  meetingType: z.string().optional(),
-  notes: z.string().optional(),
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
+  maxParticipants: z
+    .number({
+      required_error: "Maximum participants is required",
+      invalid_type_error: "Maximum participants must be a number",
+    })
+    .min(1, "Maximum participants is required"),
+  price: z
+    .number({
+      required_error: "Price is required",
+      invalid_type_error: "Price must be a number",
+    })
+    .min(0, "Price must be a positive number"),
+  notes: z.string().min(1, "Notes are required"),
 });
 
 type AppointmentFormData = z.infer<typeof appointmentSchema>;
 
 export default function AddAppointment() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [success, setSuccess] = useState(false);
+  const editId = searchParams.get("edit");
+  const isEditMode = Boolean(editId);
+
+  const {
+    data: courses,
+    isLoading: isLoadingCourses,
+    error: coursesError,
+  } = useQuery({
+    queryKey: ["courses"],
+    queryFn: fetchCourses,
+    select: (data) => data.data,
+  });
+
+  const {
+    data: appointment,
+    isLoading: isLoadingAppointment,
+    error: appointmentError,
+  } = useQuery({
+    queryKey: ["appointment", editId],
+    queryFn: () => fetchAppointment(editId!),
+    select: (data) => data.data,
+    enabled: isEditMode,
+  });
+
+  const createAppointmentMutation = useMutation({
+    mutationFn: async (data: AppointmentCreatePayload) => {
+      const response = await api.post("/appointments", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("Appointment added successfully", "success");
+      setSuccess(true);
+      router.push("/dashboard?item=viewAppointments");
+    },
+    onError: (error) => {
+      showToast("Failed to add appointment", "error");
+      console.error("Error adding appointment:", error);
+    },
+  });
+
+  const updateAppointmentMutation = useMutation({
+    mutationFn: async (data: AppointmentCreatePayload) => {
+      const response = await api.put(`/appointments/${editId}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("Appointment updated successfully", "success");
+      setSuccess(true);
+      router.push("/dashboard?item=viewAppointments");
+    },
+    onError: (error) => {
+      showToast("Failed to update appointment", "error");
+      console.error("Error updating appointment:", error);
+    },
+  });
 
   const {
     register,
@@ -34,28 +126,67 @@ export default function AddAppointment() {
     resolver: zodResolver(appointmentSchema),
   });
 
-  const onSubmit = async (data: AppointmentFormData) => {
-    setIsSubmitting(true);
+  useEffect(() => {
+    if (appointment) {
+      const formattedDate = new Date(appointment.startTime).toISOString().split("T")[0];
+      const startTime = new Date(appointment.startTime).toTimeString().split(" ")[0].slice(0, 5);
+      const endTime = new Date(appointment.endTime).toTimeString().split(" ")[0].slice(0, 5);
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Appointment submitted:", data);
-      setSuccess(true);
-      reset();
-    } catch (error) {
-      console.error("Error submitting appointment:", error);
-    } finally {
-      setIsSubmitting(false);
+      reset({
+        courseId: appointment.courseId,
+        location: appointment.location,
+        date: formattedDate,
+        startTime,
+        endTime,
+        maxParticipants: appointment.maxParticipants,
+        price: appointment.price,
+        notes: appointment.notes,
+      });
+    }
+  }, [appointment, reset]);
+
+  const onSubmit = async (data: AppointmentFormData) => {
+    // Convert form data to AppointmentCreatePayload
+    const appointmentData: AppointmentCreatePayload = {
+      ...data,
+      date: new Date(data.date),
+      startTime: new Date(`${data.date}T${data.startTime}`),
+      endTime: new Date(`${data.date}T${data.endTime}`),
+    };
+
+    if (isEditMode) {
+      updateAppointmentMutation.mutate(appointmentData);
+    } else {
+      createAppointmentMutation.mutate(appointmentData);
     }
   };
 
+  if (isLoadingAppointment) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600">Loading appointment data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (appointmentError) {
+    showToast("Failed to load appointment data", "error");
+    return null;
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">Add New Appointment</h2>
+      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">
+        {isEditMode ? "Edit Appointment" : "Add New Appointment"}
+      </h2>
 
       {success && (
-        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">Appointment added successfully!</div>
+        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
+          {isEditMode ? "Appointment updated successfully!" : "Appointment added successfully!"}
+        </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
@@ -65,8 +196,8 @@ export default function AddAppointment() {
           <FormField
             label="Venue Name *"
             description="Name of the meeting venue or location"
-            {...register("venueName")}
-            error={errors.venueName?.message}
+            {...register("location.venueName")}
+            error={errors.location?.venueName?.message}
             required
             placeholder="e.g., Client Office, Conference Center, Hotel Name"
           />
@@ -74,8 +205,8 @@ export default function AddAppointment() {
           <FormField
             label="Street Address *"
             description="Street address of the location"
-            {...register("address")}
-            error={errors.address?.message}
+            {...register("location.streetAddress")}
+            error={errors.location?.streetAddress?.message}
             required
             placeholder="e.g., 123 Main Street"
           />
@@ -83,8 +214,8 @@ export default function AddAppointment() {
           <FormField
             label="City *"
             description="City name"
-            {...register("city")}
-            error={errors.city?.message}
+            {...register("location.city")}
+            error={errors.location?.city?.message}
             required
             placeholder="e.g., New York"
           />
@@ -92,8 +223,8 @@ export default function AddAppointment() {
           <FormField
             label="State *"
             description="State or province"
-            {...register("state")}
-            error={errors.state?.message}
+            {...register("location.state")}
+            error={errors.location?.state?.message}
             required
             placeholder="e.g., NY"
           />
@@ -101,8 +232,8 @@ export default function AddAppointment() {
           <FormField
             label="ZIP Code *"
             description="Postal code"
-            {...register("zipCode")}
-            error={errors.zipCode?.message}
+            {...register("location.zipCode")}
+            error={errors.location?.zipCode?.message}
             required
             placeholder="e.g., 10001"
           />
@@ -110,36 +241,32 @@ export default function AddAppointment() {
           <FormField
             label="Additional Location Details"
             description="Any additional information about the location"
-            {...register("locationDetails")}
-            error={errors.locationDetails?.message}
-            placeholder="e.g., Floor number, suite number, parking instructions, or specific directions"
+            {...register("location.additionalInfo")}
+            error={errors.location?.additionalInfo?.message}
+            placeholder="e.g., Floor number, suite number, parking instructions"
             textarea
           />
         </div>
 
         <FormField
-          label="Instructor *"
-          description="Enter the instructor's name"
-          {...register("instructor")}
-          error={errors.instructor?.message}
-          required
-          placeholder="e.g., John Smith"
-        />
-
-        <FormField
           label="Course *"
           description="Select the course for the appointment"
-          {...register("course")}
-          error={errors.course?.message}
+          {...register("courseId")}
+          error={errors.courseId?.message}
           select
           required
           options={[
-            { value: "", label: "Select a course" },
-            { value: "1", label: "Introduction to React" },
-            { value: "2", label: "Advanced JavaScript" },
-            { value: "3", label: "UI/UX Design Principles" },
+            { value: "", label: isLoadingCourses ? "Loading courses..." : "Select a course" },
+            ...(courses?.map((course) => ({
+              value: course._id,
+              label: course.title,
+            })) || []),
           ]}
         />
+
+        {isLoadingCourses && <div className="text-sm text-gray-500">Loading courses...</div>}
+
+        {coursesError && <div className="text-sm text-red-500">Error loading courses. Please try again later.</div>}
 
         <FormField
           label="Date *"
@@ -151,11 +278,40 @@ export default function AddAppointment() {
         />
 
         <FormField
-          label="Time *"
-          description="Select the time for the appointment"
-          {...register("time")}
-          error={errors.time?.message}
+          label="Start Time *"
+          description="Select the start time"
+          {...register("startTime")}
+          error={errors.startTime?.message}
           type="time"
+          required
+        />
+
+        <FormField
+          label="End Time *"
+          description="Select the end time"
+          {...register("endTime")}
+          error={errors.endTime?.message}
+          type="time"
+          required
+        />
+
+        <FormField
+          label="Maximum Participants *"
+          description="Maximum number of participants"
+          {...register("maxParticipants", { valueAsNumber: true })}
+          error={errors.maxParticipants?.message}
+          placeholder="e.g., 10"
+          type="number"
+          required
+        />
+
+        <FormField
+          label="Price *"
+          description="Price per participant"
+          {...register("price", { valueAsNumber: true })}
+          error={errors.price?.message}
+          placeholder="e.g., 100"
+          type="number"
           required
         />
 
@@ -171,78 +327,19 @@ export default function AddAppointment() {
         <div className="flex justify-end mt-8">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={createAppointmentMutation.isPending || updateAppointmentMutation.isPending}
             className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {isSubmitting ? "Adding Appointment..." : "Add Appointment"}
+            {createAppointmentMutation.isPending || updateAppointmentMutation.isPending
+              ? isEditMode
+                ? "Updating Appointment..."
+                : "Adding Appointment..."
+              : isEditMode
+              ? "Update Appointment"
+              : "Add Appointment"}
           </button>
         </div>
       </form>
-    </div>
-  );
-}
-
-interface FormFieldProps {
-  label: string;
-  description: string;
-  placeholder?: string;
-  error?: string;
-  required?: boolean;
-  textarea?: boolean;
-  select?: boolean;
-  type?: string;
-  options?: { value: string; label: string }[];
-}
-
-function FormField({
-  label,
-  description,
-  placeholder,
-  error,
-  required = false,
-  textarea = false,
-  select = false,
-  type = "text",
-  options = [],
-  ...props
-}: FormFieldProps) {
-  return (
-    <div className="flex flex-wrap gap-10 max-w-full w-[705px]">
-      <div className="grow shrink-0 basis-0 w-fit">
-        <label className="text-base text-neutral-900">{label}</label>
-        <p className="mt-1 text-sm text-gray-500">{description}</p>
-      </div>
-      <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-        {textarea ? (
-          <textarea
-            placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px]"
-            required={required}
-            {...props}
-          />
-        ) : select ? (
-          <select
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-            required={required}
-            {...props}
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        ) : (
-          <input
-            type={type}
-            placeholder={placeholder}
-            className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-            required={required}
-            {...props}
-          />
-        )}
-        {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-      </div>
     </div>
   );
 }

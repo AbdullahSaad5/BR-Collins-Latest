@@ -7,6 +7,7 @@ import { api } from "@/app/utils/axios";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseCategoryModal from "./ViewCourseCategoryModal";
+import StatusMenu from "./StatusMenu";
 import { useRouter } from "next/navigation";
 
 interface CourseCategory {
@@ -15,6 +16,7 @@ interface CourseCategory {
   name: string;
   description: string;
   createdAt: string;
+  isBlocked: boolean;
 }
 
 const fetchCategories = async (): Promise<{ data: CourseCategory[] }> => {
@@ -56,6 +58,16 @@ export default function ViewCourseCategories() {
     console.log("Delete category:", category);
   };
 
+  const handleToggleStatus = async (category: CourseCategory, isBlocked: boolean) => {
+    try {
+      await api.put(`/course-categories/${category._id}`, {
+        isBlocked,
+      });
+    } catch (error) {
+      throw new Error("Failed to update category status");
+    }
+  };
+
   const columns = [
     {
       name: "Name",
@@ -70,6 +82,15 @@ export default function ViewCourseCategories() {
       sortable: true,
       grow: 2,
       cell: (row: CourseCategory) => <div className="text-base text-left text-neutral-900">{row.description}</div>,
+    },
+    {
+      name: "Status",
+      selector: (row: CourseCategory) => row.isBlocked,
+      sortable: true,
+      grow: 1,
+      cell: (row: CourseCategory) => (
+        <StatusMenu isBlocked={row.isBlocked} onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)} />
+      ),
     },
     {
       name: "Created At",

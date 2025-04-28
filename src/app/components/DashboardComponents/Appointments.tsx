@@ -1,60 +1,43 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { ViewIcon, ArrowLeftIcon, ArrowRightIcon, CalendarIcon, TableIcon } from "./Icons";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
+import { IAppointment } from "@/app/types/appointment.contract";
+import { ICourse } from "@/app/types/course.contract";
+import ViewAppointmentModal from "./ViewAppointmentModal";
+import { useRouter } from "next/navigation";
+import AppointmentStatusMenu from "./AppointmentStatusMenu";
 
-interface Appointment {
-  id: number;
-  student: string;
-  instructor: string;
-  course: string;
-  date: string;
-  time: string;
-  status: string;
-  meetingType: string;
-}
+const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
+  const response = await api.get("/appointments?populate=courseId");
+  return response.data;
+};
 
 const Appointments = () => {
   const [view, setView] = useState<"table" | "calendar">("table");
   const [isScrollable, setIsScrollable] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
-  const [appointments, setAppointments] = useState<Appointment[]>([
-    {
-      id: 1,
-      student: "John Doe",
-      instructor: "Sarah Wilson",
-      course: "Introduction to React",
-      date: "2024-03-20",
-      time: "10:00 AM",
-      status: "Scheduled",
-      meetingType: "One-on-One",
-    },
-    {
-      id: 2,
-      student: "Jane Smith",
-      instructor: "Mike Johnson",
-      course: "Advanced JavaScript",
-      date: "2024-03-21",
-      time: "02:30 PM",
-      status: "Completed",
-      meetingType: "Group Session",
-    },
-    {
-      id: 3,
-      student: "Mike Johnson",
-      instructor: "Sarah Wilson",
-      course: "UI/UX Design Principles",
-      date: "2024-03-22",
-      time: "11:00 AM",
-      status: "Cancelled",
-      meetingType: "One-on-One",
-    },
-  ]);
+  const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const router = useRouter();
+
+  const {
+    data: appointments,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["appointments"],
+    queryFn: fetchAppointments,
+    select: (data) => data.data,
+  });
 
   useEffect(() => {
     const checkScrollable = () => {
@@ -69,127 +52,157 @@ const Appointments = () => {
     return () => window.removeEventListener("resize", checkScrollable);
   }, [appointments]);
 
-  const calendarEvents = appointments.map((appointment) => ({
-    id: appointment.id.toString(),
-    title: `${appointment.student} - ${appointment.course}`,
-    start: `${appointment.date}T${appointment.time}`,
-    extendedProps: {
-      instructor: appointment.instructor,
-      status: appointment.status,
-      meetingType: appointment.meetingType,
-    },
-  }));
+  const calendarEvents =
+    appointments?.map((appointment) => ({
+      id: appointment._id,
+      title: `${(appointment.courseId as unknown as ICourse).title}`,
+      start: appointment.startTime,
+      end: appointment.endTime,
+      extendedProps: {
+        location: appointment.location,
+        maxParticipants: appointment.maxParticipants,
+        price: appointment.price,
+      },
+    })) || [];
 
   const handleEventClick = (info: any) => {
-    // Handle event click - you can show a modal or navigate to details
-    console.log("Event clicked:", info.event);
+    const appointment = appointments?.find((a) => a._id === info.event.id);
+    if (appointment) {
+      setSelectedAppointment(appointment);
+      setIsViewModalOpen(true);
+    }
   };
 
-  const handleViewAppointment = (appointment: Appointment) => {
-    console.log("View appointment:", appointment);
-    // TODO: Implement view appointment functionality
+  const handleViewAppointment = (appointment: IAppointment) => {
+    setSelectedAppointment(appointment);
+    setIsViewModalOpen(true);
   };
 
-  const handleEditAppointment = (appointment: Appointment) => {
-    console.log("Edit appointment:", appointment);
-    // TODO: Implement edit appointment functionality
+  const handleEditAppointment = (appointment: IAppointment) => {
+    router.push(`/dashboard?item=addAppointment&edit=${appointment._id}`);
   };
 
-  const handleDeleteAppointment = (appointment: Appointment) => {
+  const handleDeleteAppointment = (appointment: IAppointment) => {
     console.log("Delete appointment:", appointment);
     // TODO: Implement delete appointment functionality
   };
 
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    setSelectedAppointment(null);
+  };
+
+  const handleStatusChange = async (
+    appointmentId: string,
+    status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled",
+    data?: { newDate?: string; newTime?: string; reason?: string }
+  ) => {
+    try {
+      const response = await fetch(`/api/appointments/${appointmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status, ...data }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update appointment status");
+      }
+
+      // Refresh the appointments list
+      fetchAppointments();
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      throw error;
+    }
+  };
+
   const columns = [
     {
-      name: "Student",
-      selector: (row: Appointment) => row.student,
-      sortable: true,
-      grow: 1.5,
-      cell: (row: Appointment) => (
-        <div className="text-base text-left text-neutral-900 truncate" title={row.student}>
-          {row.student}
-        </div>
-      ),
-    },
-    {
-      name: "Instructor",
-      selector: (row: Appointment) => row.instructor,
-      sortable: true,
-      grow: 1.5,
-      cell: (row: Appointment) => (
-        <div className="text-base text-left text-neutral-900 truncate" title={row.instructor}>
-          {row.instructor}
-        </div>
-      ),
-    },
-    {
       name: "Course",
-      selector: (row: Appointment) => row.course,
+      selector: (row: IAppointment) => (row.courseId as unknown as ICourse).title,
       sortable: true,
       grow: 1.5,
-      cell: (row: Appointment) => (
-        <div className="text-base text-left text-neutral-900 truncate" title={row.course}>
-          {row.course}
+      minWidth: "200px",
+      cell: (row: IAppointment) => (
+        <div className="text-sm text-left text-neutral-900 truncate" title={(row.courseId as unknown as ICourse).title}>
+          {(row.courseId as unknown as ICourse).title}
+        </div>
+      ),
+    },
+    {
+      name: "Location",
+      selector: (row: IAppointment) => row.location.venueName,
+      sortable: true,
+      grow: 1.5,
+      cell: (row: IAppointment) => (
+        <div className="text-sm text-left text-neutral-900 truncate" title={row.location.venueName}>
+          {row.location.venueName}
         </div>
       ),
     },
     {
       name: "Date",
-      selector: (row: Appointment) => row.date,
+      selector: (row: IAppointment) => new Date(row.startTime).toLocaleDateString(),
       sortable: true,
       grow: 1,
-      cell: (row: Appointment) => <div className="text-base text-left text-neutral-900">{row.date}</div>,
-    },
-    {
-      name: "Time",
-      selector: (row: Appointment) => row.time,
-      sortable: true,
-      grow: 1,
-      cell: (row: Appointment) => <div className="text-base text-left text-neutral-900">{row.time}</div>,
-    },
-    {
-      name: "Status",
-      selector: (row: Appointment) => row.status,
-      sortable: true,
-      grow: 1,
-      minWidth: "125px",
-      cell: (row: Appointment) => (
-        <span
-          className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-            row.status === "Scheduled"
-              ? "text-blue-600 bg-blue-50"
-              : row.status === "Completed"
-              ? "text-green-600 bg-emerald-50"
-              : "text-red-600 bg-red-50"
-          }`}
-        >
-          {row.status}
-        </span>
+      cell: (row: IAppointment) => (
+        <div className="text-sm text-left text-neutral-900">{new Date(row.startTime).toLocaleDateString()}</div>
       ),
     },
     {
-      name: "Type",
-      selector: (row: Appointment) => row.meetingType,
+      name: "Time",
+      selector: (row: IAppointment) => new Date(row.startTime).toLocaleTimeString(),
       sortable: true,
       grow: 1,
-      cell: (row: Appointment) => <div className="text-base text-left text-neutral-900">{row.meetingType}</div>,
+      minWidth: "200px",
+      cell: (row: IAppointment) => (
+        <div className="text-sm text-left text-neutral-900">
+          {new Date(row.startTime).toLocaleTimeString()} - {new Date(row.endTime).toLocaleTimeString()}
+        </div>
+      ),
+    },
+    {
+      name: "Max Participants",
+      selector: (row: IAppointment) => row.maxParticipants,
+      sortable: true,
+      grow: 1,
+      cell: (row: IAppointment) => <div className="text-sm text-left text-neutral-900">{row.maxParticipants}</div>,
+    },
+    {
+      name: "Price",
+      selector: (row: IAppointment) => row.price,
+      sortable: true,
+      grow: 1,
+      cell: (row: IAppointment) => <div className="text-sm text-left text-neutral-900">${row.price}</div>,
+    },
+    {
+      name: "Status",
+      accessorKey: "status",
+      header: "Status",
+      minWidth: "200px",
+      cell: (row: IAppointment) => (
+        <AppointmentStatusMenu status={row.status} onStatusChange={(status) => handleStatusChange(row._id, status)} />
+      ),
     },
     {
       name: "Actions",
-      cell: (row: Appointment) => (
+      cell: (row: IAppointment) => (
         <ActionIcons
           onView={() => handleViewAppointment(row)}
           onEdit={() => handleEditAppointment(row)}
-          onDelete={() => handleDeleteAppointment(row)}
           viewTooltip="View Appointment Details"
           editTooltip="Edit Appointment"
-          deleteTooltip="Delete Appointment"
         />
       ),
       grow: 0.5,
     },
   ];
+
+  if (error) {
+    showToast("Failed to fetch appointments", "error");
+  }
 
   return (
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
@@ -226,7 +239,13 @@ const Appointments = () => {
             ref={tableContainerRef}
             className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100"
           >
-            <CustomDataTable columns={columns} data={appointments} noDataMessage="No appointments found" />
+            <CustomDataTable
+              columns={columns}
+              data={appointments || []}
+              isLoading={isLoading}
+              error={error}
+              noDataMessage="No appointments found"
+            />
           </div>
         </div>
       ) : (
@@ -250,6 +269,8 @@ const Appointments = () => {
           />
         </div>
       )}
+
+      <ViewAppointmentModal appointment={selectedAppointment} isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
     </section>
   );
 };
