@@ -2,7 +2,6 @@
 import React, { useRef, useState } from "react";
 import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
-
 import Link from "next/link";
 import SubscriptionCards from "../components/pricing/subscriptioncards";
 
@@ -240,9 +239,9 @@ export const Homepage = () => {
     hasShadow?: boolean;
   }) => (
     <article
-      className={`px-8 py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
+      className={`px-4 md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
         hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
-      }  w-full`}
+      } w-full`}
     >
       <img
         src={
@@ -253,24 +252,24 @@ export const Homepage = () => {
         className="object-contain w-8 aspect-[1.68]"
         alt="Quote"
       />
-      <blockquote className="mt-7 text-2xl font-medium leading-8 text-neutral-900">
+      <blockquote className="mt-4 md:mt-7 text-lg md:text-2xl font-medium leading-6 md:leading-8 text-neutral-900">
         {quote}
       </blockquote>
-      <div className="flex justify-between mt-16 max-md:flex-col max-md:items-start max-md:gap-4">
+      <div className="flex flex-col md:flex-row justify-between mt-8 md:mt-16 gap-4">
         <div className="flex gap-3 items-center">
           <img
             src={avatarSrc}
-            className="object-contain rounded-full aspect-square w-[50px]"
+            className="object-contain rounded-full aspect-square w-10 md:w-[50px]"
             alt={author}
           />
           <div>
-            <p className="text-xl font-bold text-neutral-900">{author}</p>
-            <p className="text-base leading-none text-zinc-500">{role}</p>
+            <p className="text-base md:text-xl font-bold text-neutral-900">{author}</p>
+            <p className="text-sm md:text-base leading-none text-zinc-500">{role}</p>
           </div>
         </div>
         <img
           src={ratingSrc}
-          className="object-contain aspect-[2.51] w-[88px] max-md:mt-2"
+          className="object-contain aspect-[2.51] w-20 md:w-[88px]"
           alt="Rating"
         />
       </div>
@@ -289,21 +288,21 @@ export const Homepage = () => {
     className?: string;
   }) => (
     <div className={`w-full rounded-none max-md:max-w-full ${className}`}>
-      <div className="px-9 py-7 rounded-2xl bg-slate-100 max-md:px-5 max-md:max-w-full">
-        <div className="flex gap-5 max-md:flex-col">
-          <div className="w-[17%] max-md:ml-0 max-md:w-full">
+      <div className="px-4 md:px-9 py-4 md:py-7 rounded-2xl bg-slate-100 max-md:max-w-full">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-5">
+          <div className="w-full md:w-[17%] max-md:ml-0">
             <img
               src={iconSrc}
-              className="object-contain shrink-0 self-stretch my-auto aspect-[1.07] w-[93px] max-md:mt-10"
+              className="object-contain shrink-0 self-stretch my-auto aspect-[1.07] w-16 md:w-[93px]"
               alt={title}
             />
           </div>
-          <div className="ml-5 w-[83%] max-md:ml-0 max-md:w-full">
-            <div className="grow text-neutral-900 max-md:mt-10 max-md:max-w-full">
-              <h3 className="text-2xl font-bold leading-none max-md:max-w-full">
+          <div className="ml-0 md:ml-5 w-full md:w-[83%]">
+            <div className="grow text-neutral-900">
+              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">
                 {title}
               </h3>
-              <p className="mt-3 text-lg leading-7 max-md:max-w-full">
+              <p className="mt-2 md:mt-3 text-base md:text-lg leading-6 md:leading-7 max-md:max-w-full">
                 {description}
               </p>
             </div>
@@ -322,24 +321,24 @@ export const Homepage = () => {
     label: string;
     bgColor: string;
   }) => (
-    <div className={`rounded-2xl p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
-      <h3 className="md:text-[50px] font-bold text-neutral-900">{number}</h3>
-      <p className="text-lg text-neutral-700 mt-2">{label}</p>
+    <div className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
+      <h3 className="text-3xl md:text-[50px] font-bold text-neutral-900">{number}</h3>
+      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">{label}</p>
     </div>
   );
   
   const StatsSection = () => (
-    <div className="w-full md:w-[50%] h-[410px] flex flex-col justify-between">
+    <div className="w-full lg:w-[50%] h-auto md:h-[410px] flex flex-col justify-between gap-4">
       {/* Top Row */}
-      <div className="flex justify-between h-[48%] gap-4">
-        <div className="w-[48%] h-full">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
+        <div className="w-full md:w-[48%] h-[180px]">
           <StatCard
             number="500+"
             label="Learners & counting"
             bgColor="bg-rose-50"
           />
         </div>
-        <div className="w-[48%] h-full">
+        <div className="w-full sm:w-[48%] h-[180px]">
           <StatCard
             number="800+"
             label="Courses & Video"
@@ -349,15 +348,15 @@ export const Homepage = () => {
       </div>
       
       {/* Bottom Row */}
-      <div className="flex justify-between h-[48%] gap-4">
-        <div className="w-[48%] h-full">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
+        <div className="w-full sm:w-[48%] h-[180px]">
           <StatCard
             number="100+"
             label="Registered Enrolls"
             bgColor="bg-sky-100"
           />
         </div>
-        <div className="w-[48%] h-full">
+        <div className="w-full sm:w-[48%] h-[180px]">
           <StatCard
             number="1000+"
             label="Certified Students"
@@ -370,6 +369,7 @@ export const Homepage = () => {
 
   return (
     <>
+      {/* Hero Section */}
       <section className="relative w-full">
         <div className="w-full">
           <Image
@@ -377,19 +377,19 @@ export const Homepage = () => {
             width={1920}
             height={1080}
             alt="wallpaper"
-            className="w-full h-auto object-cover"
+            className="w-full h-[300px] md:h-[420px] lg:h-[500px] object-cover "
             priority
           />
         </div>
 
         <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full md:max-w-[1326px]     mx-auto">
-            <div className="flex md:flex-col  md:p-0 p-3 justify-start md:gap-3 w-full max-w-2xl pointer-events-auto">
+          <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
+            <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
               <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
                 IT Support Specialist Professional Certificate
               </h2>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 gap-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                 <Image
                   src="/assets/person.png"
                   width={40}
@@ -399,13 +399,13 @@ export const Homepage = () => {
                 />
                 <h1 className="font-light text-sm sm:text-base text-gray-800">
                   Instructor:{" "}
-                  <span className="text-blu underline mx-2">
+                  <span className="text-blue-500 underline mx-2">
                     Claudia Pruitt
                   </span>
                 </h1>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 gap-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                 <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
                   <Image
                     src="/assets/congrateicon.png"
@@ -427,8 +427,8 @@ export const Homepage = () => {
                 </h1>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 gap-3">
-                <div className="bg-org text-white rounded-full px-5 py-2 font-medium text-sm cursor-pointer">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <div className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
                   Enroll Now
                 </div>
                 <div className="text-sm text-gray-700">
@@ -439,427 +439,192 @@ export const Homepage = () => {
           </div>
         </div>
       </section>
-      <section className="flex flex-col w-[1920px] mx-auto  md:h-[848px] max-w-[1326px] justify-center items-center">
+
+      {/* Courses Section */}
+      <section className="w-full px-4 lg:px-0 max-w-[1326px] mx-auto py-8 md:py-12">
         <section className="relative text-gray-900 w-full">
-          <div className="w-full   ">
+          <div className="w-full">
             <div className="flex flex-col w-full">
-              <h2 className="font-hanken text-2xl sm:text-3xl md:text-[36px] font-medium text-start  text-gray-800">
+              <h2 className="font-hanken text-2xl sm:text-3xl md:text-[36px] font-medium text-start text-gray-800">
                 Your Complete Skill Set Starts Here
               </h2>
 
-            <div className="flex flex-wrap gap-4 sm:gap-6 my-3">
-              <button
-                onClick={() => setActiveTab("e-learning")}
-                className={`pb-2 px-1 transition-all duration-300 ${
-                  activeTab === "e-learning"
-                    ? "text-gray-800 font-bold border-b-4 border-blue-500"
-                    : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
-                }`}
-              >
-                E-Learning
-              </button>
-              <button
-                onClick={() => setActiveTab("blogs")}
-                className={`pb-2 px-1 transition-all duration-300 ${
-                  activeTab === "blogs"
-                    ? "text-gray-800 font-bold border-b-4 border-blue-500"
-                    : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
-                }`}
-              >
-                In-Person
-              </button>
-            </div>
+              <div className="flex flex-wrap gap-4 sm:gap-6 my-3">
+                <button
+                  onClick={() => setActiveTab("e-learning")}
+                  className={`pb-2 px-1 transition-all duration-300 ${
+                    activeTab === "e-learning"
+                      ? "text-gray-800 font-bold border-b-4 border-blue-500"
+                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                  }`}
+                >
+                  E-Learning
+                </button>
+                <button
+                  onClick={() => setActiveTab("blogs")}
+                  className={`pb-2 px-1 transition-all duration-300 ${
+                    activeTab === "blogs"
+                      ? "text-gray-800 font-bold border-b-4 border-blue-500"
+                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                  }`}
+                >
+                  In-Person
+                </button>
+              </div>
 
               <hr className="border-gray-200" />
             </div>
           </div>
         </section>
 
-        {/* {activeTab === "e-learning" ? ( */}
-        <>
-          <section className="relative text-gray-900">
-            <div className="w-full  max-w-[1326px] relative">
-              <button
-                onClick={scrollLeft}
-                className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+        {/* Slider Section */}
+        <section className="relative text-gray-900 mt-6">
+          <div className="w-full max-w-[1326px] relative">
+            <button
+              onClick={scrollLeft}
+              className="hidden md:flex absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
 
-              <div
-                ref={sliderRef}
-                className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar"
-              >
-                <div className="flex flex-nowrap gap-4">
-                  {sliderItems.map((item, index) => (
-                    <div key={index} className="flex-shrink-0 w-fit py-2">
-                      <div className="flex flex-col rounded-4xl bg-gray-100 px-5 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
-                        <h2 className="font-bold font-dm text-xl text-gray-800 mb-2">
-                          {item.title}
-                        </h2>
-                        <p className="text-sm text-gray-600">
-                          {item.courses} courses available
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <button
-                onClick={scrollRight}
-                className="absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </section>
-          <section className="relative text-gray-900">
-            <div className="w-full  mx-auto max-w-[1326px] h-auto  relative">
-              <div className="flex flex-nowrap items-start overflow-auto gap-3  mb-16 py-6 custom-scroll scrollbar-hide">
-                {courses.map((course) => (
-                  <div
-                    className="flex flex-row md:w-[196px] md:h-[400px]"
-                    key={course.id}
-                  >
-                    <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                      <div className="py-2 px-4 text-sm font-medium">
-                        <h1 className="bg-blu p-1 w-fit bg-blue-400 rounded-xl text-white">
-                          {course.duration}
-                        </h1>
-                      </div>
-
-                      <div className="p-4">
-                        <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
-                          {course.title}
-                        </h3>
-
-                        <div className="flex items-center text-gray-600 mb-4">
-                          <FaBook className="mr-2 text-blue-500" />
-                          <span className="text-sm">
-                            {course.lessons} Lessons
-                          </span>
-                        </div>
-
-                        <hr className="border-t border-gray-200 my-2" />
-
-                        <div className="flex flex-col items-start gap-12 mb-3">
-                          <div className="flex items-center">
-                            <div className="flex mr-2">
-                              {renderStars(course.rating)}
-                            </div>
-                            <span className="text-sm font-medium">
-                              {course.rating}
-                            </span>
-                          </div>
-
-                          <span className="text-lg font-bold">
-                            ${course.price}
-                          </span>
-                        </div>
-
-                        <Link
-                          href="/course/1"
-                          className="text-center text-org underline font-medium py-2 transition-colors"
-                        >
-                          View Details
-                        </Link>
-                      </div>
+            <div
+              ref={sliderRef}
+              className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar"
+            >
+              <div className="flex flex-nowrap gap-4">
+                {sliderItems.map((item, index) => (
+                  <div key={index} className="flex-shrink-0 w-[200px] sm:w-[240px] py-2">
+                    <div className="flex flex-col rounded-4xl bg-gray-100 px-4 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
+                      <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">
+                        {item.title}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-gray-600">
+                        {item.courses} courses available
+                      </p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          </section>
-        </>
-        {/* ) : (
-        <>
-          <section className="relative text-gray-900">
-            <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
-              <section className="relative mb-8">
-                <div className="w-full px-4 mx-auto max-w-[1100px] relative">
-                  <button
-                    onClick={scrollLeft}
-                    className="absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-gray-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
 
-                  <div ref={sliderRef} className="flex flex-row overflow-x-hidden pb-4 -mx-4 px-4 scroll-smooth">
-                    <div className="flex flex-nowrap gap-4">
-                      {blogCategories.map((category, index) => (
-                        <div key={index} className="flex-shrink-0 w-fit py-2">
-                          <div className="flex flex-col items-start justify-between px-5 py-3 bg-gray-100 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-200 transform hover:-translate-y-1 cursor-pointer">
-                            <span className="font-bold text-lg text-gray-800">{category.name}</span>
-                            <p className="ml-2 text-sm text-gray-600">
-                              ({category.count}) <span className=" text-sm text-gray-600">blogs here</span>
-                            </p>
+            <button
+              onClick={scrollRight}
+              className="hidden md:flex absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-gray-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+        </section>
+
+        {/* Courses Grid */}
+        <section className="relative text-gray-900 mt-6">
+          <div className="w-full mx-auto max-w-[1326px] h-auto relative">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {courses.map((course) => (
+                <div key={course.id} className="flex-shrink-0">
+                  <div className="flex flex-col w-full border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
+                    <div className="py-2 px-4 text-sm font-medium">
+                      <h1 className="bg-blue-400 p-1 w-fit rounded-xl text-white">
+                        {course.duration}
+                      </h1>
+                    </div>
+
+                    <div className="p-4">
+                      <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
+                        {course.title}
+                      </h3>
+
+                      <div className="flex items-center text-gray-600 mb-4">
+                        <FaBook className="mr-2 text-blue-500" />
+                        <span className="text-sm">
+                          {course.lessons} Lessons
+                        </span>
+                      </div>
+
+                      <hr className="border-t border-gray-200 my-2" />
+
+                      <div className="flex flex-col items-start gap-4 mb-3">
+                        <div className="flex items-center">
+                          <div className="flex mr-2">
+                            {renderStars(course.rating)}
                           </div>
+                          <span className="text-sm font-medium">
+                            {course.rating}
+                          </span>
                         </div>
-                      ))}
+
+                        <span className="text-lg font-bold">
+                          ${course.price}
+                        </span>
+                      </div>
+
+                      <Link
+                        href="/course/1"
+                        className="text-center text-orange-500 underline font-medium py-2 transition-colors"
+                      >
+                        View Details
+                      </Link>
                     </div>
                   </div>
-
-                  <button
-                    onClick={scrollRight}
-                    className="absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-gray-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
                 </div>
-              </section>
-
-              <div className="w-full px-4 mx-auto max-w-[1100px] py-4 relative">
-                <div ref={sliderRef} className="flex flex-nowrap overflow-auto gap-4 py-6 custom-scroll scrollbar-hide">
-                  {blogs.map((blog) => (
-                    <div key={blog.id} className="flex-shrink-0 w-[300px] sm:w-[500px]">
-                      <div className="flex flex-row w-full border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                        <div className="w-1/2 h-full">
-                          <Image
-                            src={blog.image}
-                            alt={blog.title}
-                            className="w-full h-full object-cover"
-                            width={250}
-                            height={200}
-                          />
-                        </div>
-
-                        <div className="w-1/2 p-4 flex flex-col justify-between">
-                          <div>
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="text-sm text-blue-600 font-medium">{blog.category}</span>
-                              <span className="text-sm text-gray-500">{blog.date}</span>
-                            </div>
-                            <h3 className="font-bold text-lg mb-2 line-clamp-2 h-[3rem]">{blog.title}</h3>
-                            <p className="text-gray-600 text-sm mb-4 line-clamp-3">{blog.description}</p>
-                          </div>
-
-                          <a href="#" className="text-org underline font-medium text-sm transition-colors">
-                            Read More
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
-          </section>
-        </>
-      )} */}
+          </div>
+        </section>
       </section>
-      <section className="bg-[#081B25] flex flex-row items-center justify-center md:h-[769px] text-gray-900 ">
-        <div className="w-full gap-4 flex flex-col justify-center items-center  mx-auto max-w-[1326px] ">
+
+      {/* Pricing Section */}
+      <section className="bg-[#081B25] py-12 px-4 md:px-0">
+        <div className="w-full gap-6 flex flex-col justify-center items-center mx-auto max-w-[1326px]">
           <div className="flex flex-col justify-center items-center text-center mb-6">
-            <h2 className="text-white font-hanken md:text-[34px] font-bold">
+            <h2 className="text-white font-hanken text-2xl md:text-[34px] font-bold">
               Flexible Pricing for Individuals and Teams
             </h2>
           </div>
-
           <SubscriptionCards />
-          {/* <div className="w-full flex h-[494px] flex-row gap-6">
-            <div className="w-1/2 flex h-full flex-col gap-6">
-              <div className="flex flex-row h-full justify-between">
-                <div className="bg-white rounded-lg w-full  p-6  flex flex-row justify-between mr-auto">
-                  <div className="flex flex-col justify-between  w-1/2">
-                    <div>
-                      <h1 className="text-xl font-bold text-black mb-2">Individual Courses</h1>
-                      <p className="text-gray-700">Take Any Course for Just $99 – One-Time Payment, Lifetime Access!</p>
-                    </div>
-                    <Link href="/course" className="bg-[#F86537]  text-white py-2 px-6 rounded-4xl self-start">
-                      Buy Now
-                    </Link>
-                  </div>
-                  <div className="flex flex-col justify-between  w-1/2">
-                    <div className="flex flex-col items-end">
-                      <h1 className=" flex justify-end text-white text-md uppercase bg-blu w-fit rounded-lg p-1 self-end mb-2">
-                        One-Time Payment
-                      </h1>
-                    </div>
-                    <div>
-                      <h2 className="text-5xl font-bold flex items-end flex-col">$99</h2>
-                      <p className="flex items-end flex-col">per course</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-row h-full justify-between">
-                <div className="bg-white rounded-lg w-full  p-6  flex flex-row justify-between mr-auto">
-                  <div className="flex flex-col justify-between  w-1/2">
-                    <div>
-                      <h1 className="text-xl font-bold text-black mb-2">Individual Courses</h1>
-                      <p className="text-gray-700">Take Any Course for Just $99 – One-Time Payment, Lifetime Access!</p>
-                    </div>
-                    <Link href="/subscriptions" className="bg-[#F86537]  text-white py-2 px-6 rounded-4xl self-start">
-                      Buy Now
-                    </Link>
-                  </div>
-                  <div className="flex flex-col justify-between  w-1/2">
-                    <div className="flex flex-col items-end">
-                      <h1 className=" flex justify-end text-white text-md uppercase bg-blu w-fit rounded-lg p-1 self-end mb-2">
-                        One-Time Payment
-                      </h1>
-                    </div>
-                    <div>
-                      <h2 className="text-5xl font-bold flex items-end flex-col">$99</h2>
-                      <p className="flex items-end flex-col">per course</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-1/2 bg-white rounded-lg p-6  h-full flex flex-col justify-between ml-auto">
-              <div>
-                <h1 className="text-2xl font-bold text-black mb-2">Corporate Subscriptions</h1>
-                <p className="text-gray-700 mb-4">
-                  Choose from 10, 20, or 50-user plans designed for organizations that value continuous development.
-                </p>
-                <ul className="space-y-2">
-                  <li className="flex py-2 items-center">
-                    <div className="flex flex-row w-full justify-between">
-                      <div>
-                        <h1 className="text-3xl font-bold">$1990</h1>
-                      </div>
-                      <div className="flex items-center w-1/5 justify-between flex-row">
-                        <h2>10 users</h2>
-                        <label className="inline-flex items-center cursor-pointer">
-                          <input type="checkbox" name="checkbox" className="peer hidden" />
-                          <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-org peer-checked:border-org transition">
-                            <svg
-                              className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </li>
-                  <hr className="text-gray-200" />
-                  <li className="flex py-2 items-center">
-                    <div className="flex flex-row w-full justify-between">
-                      <div>
-                        <h1 className="text-3xl font-bold">$1990</h1>
-                      </div>
-                      <div className="flex items-center w-1/5 justify-between flex-row">
-                        <h2>10 users</h2>
-                        <label className="inline-flex items-center cursor-pointer">
-                          <input type="checkbox" name="checkbox" className="peer hidden" />
-                          <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-org peer-checked:border-org transition">
-                            <svg
-                              className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </li>
-                  <hr className="text-gray-200" />
-                  <li className="flex py-2 items-center">
-                    <div className="flex flex-row w-full justify-between">
-                      <div>
-                        <h1 className="text-3xl font-bold">$1990</h1>
-                      </div>
-                      <div className="flex items-center w-1/5 justify-between flex-row">
-                        <h2>10 users</h2>
-                        <label className="inline-flex items-center cursor-pointer">
-                          <input type="checkbox" name="checkbox" className="peer hidden" />
-                          <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-org peer-checked:border-org transition">
-                            <svg
-                              className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </li>
-                  <hr className="text-gray-200" />
-                </ul>
-              </div>
-              <Link href="/contact" className="bg-[#F86537] text-white py-2 px-6 rounded-4xl text-center w-full">
-                Buy Now
-              </Link>
-            </div>
-          </div> */}
         </div>
       </section>
-      <div className="md:w-[1920] mx-auto flex flex-col max-w-[1326px] justify-around md:h-[1905]">
-        <section className="  text-gray-900  w-full  mx-auto">
-          <div className="flex flex-col w-full lg:flex-row justify-between text-gray-900">
+
+      {/* Testimonials Section */}
+      <div className="w-full px-4 h-auto lg:px-0 mx-auto flex flex-col max-w-[1326px] py-12">
+        <section className="text-gray-900 w-full mx-auto">
+          <div className="flex flex-col lg:flex-row justify-between gap-6">
             {/* Info Card */}
-            <div className="flex flex-col items-start  text-start justify-between p-6 md:h-[420px] md:w-[422px]  bg-sky-500 rounded-xl">
-              <h2 className=" md:text-[34px] font-bold text-white ">
+            <div className="flex flex-col items-start text-start justify-between p-6 h-[420px] w-full lg:w-[422px] bg-sky-500 rounded-xl">
+              <h2 className="text-2xl md:text-[34px] font-bold text-white">
                 What subscribers are achieving through learning
               </h2>
-              <p className="  text-2xl text-white ">
+              <p className="text-xl md:text-2xl text-white">
                 <span className="font-semibold text-[#FF9270]">37,076</span>
                 <span> responses collected</span>
               </p>
-              <div className="flex justify-between bottom-0 w-full md:mb-[-22px] md:ms-[-31px] ">
+              <div className="flex justify-between bottom-0 w-full">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets/TEMP/130d72ee6184a472ad3edb3bbba812115cae9da8?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
                   className="object-contain w-[150px] md:w-[200px] rounded-none"
@@ -869,14 +634,14 @@ export const Homepage = () => {
                   <button aria-label="Previous testimonial">
                     <img
                       src="https://cdn.builder.io/api/v1/image/assets/TEMP/86abcbed0348e0114509cab56011a93a7df8f1bf?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                      className="object-contain aspect-square w-[40px] md:w-[50px]"
+                      className="object-contain aspect-square w-10 md:w-[50px]"
                       alt="Previous"
                     />
                   </button>
                   <button aria-label="Next testimonial">
                     <img
                       src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb2ea5548b6387d8aca0a2880a216cc986f8e138?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                      className="object-contain aspect-square w-[40px] md:w-[50px]"
+                      className="object-contain aspect-square w-10 md:w-[50px]"
                       alt="Next"
                     />
                   </button>
@@ -885,9 +650,9 @@ export const Homepage = () => {
             </div>
 
             {/* Testimonials */}
-            <div className="flex flex-col lg:flex-row  w-full lg:w-2/3">
+            <div className="flex flex-col lg:flex-row w-full lg:w-2/3 gap-4">
               {testimonials.map((testimonial, index) => (
-                <div key={index} className="w-full md:h-[422px]">
+                <div key={index} className="w-full h-[422px]">
                   <TestimonialCard {...testimonial} />
                 </div>
               ))}
@@ -895,26 +660,26 @@ export const Homepage = () => {
           </div>
         </section>
 
-        <section className="self-center mx-auto  text-gray-900 w-full   ">
-          {/* On Site Learning Section */}
-          <div className="flex flex-wrap gap-10 items-center w-full">
-            <div className="grow shrink self-stretch my-auto min-w-60 w-[529px] max-md:max-w-full">
+        {/* On Site Learning Section */}
+        <section className="self-center mx-auto text-gray-900 w-full mt-12">
+          <div className="flex flex-col lg:p-0 p-3 justify-center lg:flex-row gap-10 items-center w-full">
+            <div className="grow shrink self-stretch my-auto w-full md:w-[529px]">
               <div className="w-full">
                 <div className="flex flex-col justify-center w-full font-bold">
                   <span className="self-start text-lg text-center text-orange-500 uppercase">
                     about us
                   </span>
-                  <h2 className="mt-5 text-5xl leading-tight text-neutral-900 max-md:text-4xl">
+                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900">
                     On Site Learning
                   </h2>
                 </div>
-                <p className="mt-5 text-2xl leading-8 text-neutral-900">
+                <p className="mt-3 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900">
                   At B.R Collins, our on-site training transforms everyday
                   lessons into engaging and interactive experiences. Blending
                   creativity with expertise.
                 </p>
               </div>
-              <div className="mt-10 w-full">
+              <div className="mt-6 md:mt-10 w-full">
                 <FeatureCard
                   title="Flexible Classes"
                   description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
@@ -924,54 +689,52 @@ export const Homepage = () => {
                   title="Expert-Led Training"
                   description="Learn from industry experts in a real-world setting. Gain practical knowledge, hands-on experience."
                   iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                  className="mt-5"
+                  className="mt-4 md:mt-5"
                 />
               </div>
             </div>
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-              className="object-contain grow shrink self-stretch my-auto rounded-2xl aspect-[0.93] min-w-60 w-[452px] max-md:max-w-full"
+              className="object-contain grow shrink self-stretch my-auto rounded-2xl aspect-[0.93] w-full md:w-[452px]"
               alt="On-site learning"
             />
           </div>
-
-          {/* Community Section */}
         </section>
-        <section className="mx-auto text-gray-900 w-full  md:h-[410px]">
-          <div className="flex flex-wrap justify-between items-stretch h-full w-full">
+
+        {/* Community Section */}
+        <section className="mx-auto text-gray-900 w-full mt-12 lg:h-[410px]">
+          <div className="flex flex-col lg:flex-row justify-between items-stretch h-full w-full gap-8">
             {/* Left Content Section */}
-            <div className="flex flex-col justify-between h-full pr-3 md:w-[50%] max-md:w-full">
-              <div className="flex flex-col justify-between h-full">
-                <div className="flex flex-col justify-between h-full space-y-6">
-                  <span className="text-lg text-orange-500 uppercase font-bold">
-                    WHY CHOOSE US
-                  </span>
-                  <h2 className="text-4xl md:text-[50px] leading-[53px] md:leading-[60px] text-neutral-900 font-bold">
-                    Creating A Community Of Life Long Learners
-                  </h2>
-                  <p className="text-xl md:text-2xl leading-7 md:leading-8 text-neutral-900">
-                    At B.R Collins, our on-site training transforms everyday
-                    lessons into engaging and interactive experiences.
-                  </p>
-                  <div className="flex flex-row gap-4 mt-4">
-                    <Link
-                      href="/course"
-                      className="px-8 py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors"
-                    >
-                      Explore Courses
-                    </Link>
-                    <Link
-                      href="/about"
-                      className="px-8 py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                      Learn More
-                    </Link>
-                  </div>
+            <div className="flex flex-col justify-between h-full md:w-[50%] w-full">
+              <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
+                <span className="text-lg text-orange-500 uppercase font-bold">
+                  WHY CHOOSE US
+                </span>
+                <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
+                  Creating A Community Of Life Long Learners
+                </h2>
+                <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
+                  At B.R Collins, our on-site training transforms everyday
+                  lessons into engaging and interactive experiences.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                  <Link
+                    href="/course"
+                    className="px-6 py-3 md:px-8 md:py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors text-center"
+                  >
+                    Explore Courses
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="px-6 py-3 md:px-8 md:py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors text-center"
+                  >
+                    Learn More
+                  </Link>
                 </div>
               </div>
             </div>
 
-            {/* Stats Section - will take remaining 50% width */}
+            {/* Stats Section */}
             <StatsSection />
           </div>
         </section>

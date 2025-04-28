@@ -56,7 +56,7 @@ const SubscriptionCards: React.FC = () => {
   if (!data) return <div>No subscription data available</div>;
 
   return (
-    <div className="w-full flex flex-col lg:flex-row gap-6 h-auto lg:h-[444px]">
+    <div className="w-full flex flex-col lg:p-0 p-3 lg:flex-row gap-6 h-auto lg:h-[444px]">
       {/* Left Column - Individual Plans */}
       <div className="w-full lg:w-1/2 flex flex-col gap-6 h-auto">
         {data.individualPlans.map((plan, index) => (

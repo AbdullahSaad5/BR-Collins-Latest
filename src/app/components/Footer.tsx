@@ -42,7 +42,7 @@ const QuickLinks = () => {
 
 const ContactInfo = () => {
   return (
-    <div className="min-h-[172px] font-sans max-md:mt-10">
+    <div className="lg:min-h-[172px] h-auto font-sans max-md:mt-10">
       <h3 className="text-xl font-medium text-white">Get Contact</h3>
       <div className="flex flex-col mt-7 w-full">
         <div className="w-full ">
@@ -87,12 +87,12 @@ const Newsletter = () => {
       </p>
       <form
         onSubmit={handleSubmit}
-        className="w-full my-4 flex flex-row justify-between gap-2"
+        className="md:w-full my-4 flex flex-row justify-center md:justify-between gap-2"
       >
         <div className="border-1 bg-[#16313F] border-gray-600 w-fit flex flex-row  rounded-4xl p-1">
           <input
             type="text"
-            className="border-none w-[473px]  bg-transparent focus:outline-0 text-gray-400 p-[6px] px-5  placeholder-gray-400 rounded-4xl"
+            className="border-none md:w-[473px]  bg-transparent focus:outline-0 text-gray-400 p-[6px] px-5  placeholder-gray-400 rounded-4xl"
             name="input"
             placeholder="Email Address"
           />
@@ -123,7 +123,7 @@ const SocialIcon = ({
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col items-center px-20 pt-20 pb-8 w-full text-[#A9BBC3] h-auto md:h-[575px] bg-[#081B25] max-md:px-5 max-md:max-w-full">
+    <footer className="flex flex-col items-center px-20 pt-20 pb-8 w-full text-[#A9BBC3] h-auto lg:h-[575px] bg-[#081B25] max-md:px-5 max-md:max-w-full">
       <div className="w-full max-w-[1326px] max-md:max-w-full">
         <div className="flex flex-wrap justify-between max-w-full w-full">
           <div className="flex-auto max-md:max-w-full">
