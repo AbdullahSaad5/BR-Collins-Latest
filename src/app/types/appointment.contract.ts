@@ -25,6 +25,6 @@ export interface IAppointment {
   updatedAt: Date;
 }
 
-export type AppointmentCreatePayload = Omit<IAppointment, "id" | "status" | "createdAt" | "updatedAt">;
+export type AppointmentCreatePayload = Omit<IAppointment, "id" | "_id" | "status" | "createdAt" | "updatedAt">;
 
 export type AppointmentUpdatePayload = Partial<AppointmentCreatePayload>;

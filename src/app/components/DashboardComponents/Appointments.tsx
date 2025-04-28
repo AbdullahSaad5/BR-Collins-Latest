@@ -13,6 +13,7 @@ import ActionIcons from "@/components/ActionIcons";
 import { IAppointment } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
 import ViewAppointmentModal from "./ViewAppointmentModal";
+import { useRouter } from "next/navigation";
 
 const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId");
@@ -25,6 +26,7 @@ const Appointments = () => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const router = useRouter();
 
   const {
     data: appointments,
@@ -76,8 +78,7 @@ const Appointments = () => {
   };
 
   const handleEditAppointment = (appointment: IAppointment) => {
-    console.log("Edit appointment:", appointment);
-    // TODO: Implement edit appointment functionality
+    router.push(`/dashboard?item=addAppointment&edit=${appointment._id}`);
   };
 
   const handleDeleteAppointment = (appointment: IAppointment) => {

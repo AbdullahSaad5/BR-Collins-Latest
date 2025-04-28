@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,12 +7,17 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import FormField from "./FormField";
-import { AppointmentCreatePayload } from "@/app/types/appointment.contract";
+import { AppointmentCreatePayload, IAppointment } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
+  return response.data;
+};
+
+const fetchAppointment = async (id: string): Promise<{ data: IAppointment }> => {
+  const response = await api.get(`/appointments/${id}`);
   return response.data;
 };
 
@@ -54,7 +59,10 @@ type AppointmentFormData = z.infer<typeof appointmentSchema>;
 
 export default function AddAppointment() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [success, setSuccess] = useState(false);
+  const editId = searchParams.get("edit");
+  const isEditMode = Boolean(editId);
 
   const {
     data: courses,
@@ -64,6 +72,17 @@ export default function AddAppointment() {
     queryKey: ["courses"],
     queryFn: fetchCourses,
     select: (data) => data.data,
+  });
+
+  const {
+    data: appointment,
+    isLoading: isLoadingAppointment,
+    error: appointmentError,
+  } = useQuery({
+    queryKey: ["appointment", editId],
+    queryFn: () => fetchAppointment(editId!),
+    select: (data) => data.data,
+    enabled: isEditMode,
   });
 
   const createAppointmentMutation = useMutation({
@@ -82,6 +101,22 @@ export default function AddAppointment() {
     },
   });
 
+  const updateAppointmentMutation = useMutation({
+    mutationFn: async (data: AppointmentCreatePayload) => {
+      const response = await api.put(`/appointments/${editId}`, data);
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("Appointment updated successfully", "success");
+      setSuccess(true);
+      router.push("/dashboard?item=viewAppointments");
+    },
+    onError: (error) => {
+      showToast("Failed to update appointment", "error");
+      console.error("Error updating appointment:", error);
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -90,6 +125,25 @@ export default function AddAppointment() {
   } = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentSchema),
   });
+
+  useEffect(() => {
+    if (appointment) {
+      const formattedDate = new Date(appointment.startTime).toISOString().split("T")[0];
+      const startTime = new Date(appointment.startTime).toTimeString().split(" ")[0].slice(0, 5);
+      const endTime = new Date(appointment.endTime).toTimeString().split(" ")[0].slice(0, 5);
+
+      reset({
+        courseId: appointment.courseId,
+        location: appointment.location,
+        date: formattedDate,
+        startTime,
+        endTime,
+        maxParticipants: appointment.maxParticipants,
+        price: appointment.price,
+        notes: appointment.notes,
+      });
+    }
+  }, [appointment, reset]);
 
   const onSubmit = async (data: AppointmentFormData) => {
     // Convert form data to AppointmentCreatePayload
@@ -100,15 +154,39 @@ export default function AddAppointment() {
       endTime: new Date(`${data.date}T${data.endTime}`),
     };
 
-    createAppointmentMutation.mutate(appointmentData);
+    if (isEditMode) {
+      updateAppointmentMutation.mutate(appointmentData);
+    } else {
+      createAppointmentMutation.mutate(appointmentData);
+    }
   };
+
+  if (isLoadingAppointment) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600">Loading appointment data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (appointmentError) {
+    showToast("Failed to load appointment data", "error");
+    return null;
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">Add New Appointment</h2>
+      <h2 className="text-2xl font-semibold text-neutral-900 mb-8">
+        {isEditMode ? "Edit Appointment" : "Add New Appointment"}
+      </h2>
 
       {success && (
-        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">Appointment added successfully!</div>
+        <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md">
+          {isEditMode ? "Appointment updated successfully!" : "Appointment added successfully!"}
+        </div>
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
@@ -249,10 +327,16 @@ export default function AddAppointment() {
         <div className="flex justify-end mt-8">
           <button
             type="submit"
-            disabled={createAppointmentMutation.isPending}
+            disabled={createAppointmentMutation.isPending || updateAppointmentMutation.isPending}
             className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
           >
-            {createAppointmentMutation.isPending ? "Adding Appointment..." : "Add Appointment"}
+            {createAppointmentMutation.isPending || updateAppointmentMutation.isPending
+              ? isEditMode
+                ? "Updating Appointment..."
+                : "Adding Appointment..."
+              : isEditMode
+              ? "Update Appointment"
+              : "Add Appointment"}
           </button>
         </div>
       </form>

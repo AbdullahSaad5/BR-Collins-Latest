@@ -132,15 +132,15 @@ export const Navigation = () => {
                 }}
               >
                 <div className="flex items-center gap-2">
-                  {isValidProfilePicture(profilePicture) ? (
-                    <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                      <Image src={profilePicture} alt="Profile" fill className="object-cover" />
-                    </div>
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                      <User className="w-6 h-6 text-gray-500" />
-                    </div>
-                  )}
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center relative overflow-hidden">
+                    <Image
+                      src={isValidProfilePicture(profilePicture) ? profilePicture : "/assets/default-avatar.jpg"}
+                      alt="Profile"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
                   <div className="flex flex-col">
                     <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
                       (user as IUser).lastName
