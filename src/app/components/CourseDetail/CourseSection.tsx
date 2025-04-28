@@ -1,5 +1,5 @@
 import React from "react";
-import { Video, BookOpenText } from "lucide-react";
+import { Video, BookOpenText, ChevronDown, ChevronUp } from "lucide-react";
 
 interface LectureProps {
   title: string;
@@ -7,7 +7,7 @@ interface LectureProps {
   type: "video" | "book";
 }
 
-const Lecture: React.FC<LectureProps> = ({ title, duration, type }) => (
+const Lecture: React.FC<LectureProps> = ({ title, duration, type, }) => (
   <div className="flex items-center px-5 py-2.5">
     {type === "video" ? (
       <Video 
@@ -32,12 +32,14 @@ const Lecture: React.FC<LectureProps> = ({ title, duration, type }) => (
     </span>
   </div>
 );
+
 interface CourseSectionProps {
   title: string;
   stats: string;
   icon: string;
   lectures?: LectureProps[];
   expanded?: boolean;
+  onToggle: () => void;
 }
 
 export const CourseSection: React.FC<CourseSectionProps> = ({
@@ -46,20 +48,38 @@ export const CourseSection: React.FC<CourseSectionProps> = ({
   icon,
   lectures = [],
   expanded = false,
+  onToggle,
 }) => {
   return (
     <article className="mb-5 rounded-xl border border-solid bg-slate-50 border-slate-200">
-      <header className="flex justify-between items-center px-5 py-2.5">
-        <img src={icon} alt="icon" className="mr-2.5 w-5 h-5" />
-        <h3 className="text-lg font-semibold text-neutral-900 max-md:text-sm max-sm:text-xs">
-          {title}
-        </h3>
-        <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs">
-          {stats}
-        </span>
+      <header 
+        className="flex justify-between items-center px-5 py-2.5 cursor-pointer"
+        onClick={onToggle}
+      >
+        <div className="flex items-center">
+        {expanded ? (
+            <ChevronUp size={20} className="text-neutral-500" />
+          ) : (
+            <ChevronDown size={20} className="text-neutral-500" />
+          )}
+          <h3 className="text-lg font-semibold text-neutral-900 max-md:text-sm max-sm:text-xs">
+            {title}
+          </h3>
+        </div>
+        <div className="flex items-center">
+          <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs mr-4">
+            {stats}
+          </span>
+         
+        </div>
       </header>
-      {expanded &&
-        lectures.map((lecture, index) => <Lecture key={index} {...lecture} />)}
+      {expanded && (
+        <div>
+          {lectures.map((lecture, index) => (
+            <Lecture key={index} {...lecture} />
+          ))}
+        </div>
+      )}
     </article>
   );
 };

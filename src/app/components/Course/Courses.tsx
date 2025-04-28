@@ -13,14 +13,14 @@ import { useCourseContext } from "../context/CourseContext";
 
 
 export default function Courses() {
-  const { courses: featuredCourses } = useCourseContext();
+  const { courses: allCourses } = useCourseContext();
 
   return (
     <main className="flex overflow-hidden flex-col bg-white">
              
       <HeroSection />
 
-      <section className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
+      <section className="flex flex-col self-center  w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
         <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
           <div className="text-neutral-900 max-md:max-w-full">
             <h2 className="text-3xl font-bold max-md:max-w-full">
@@ -34,7 +34,7 @@ export default function Courses() {
 
           <div className="mt-10 w-full max-w-[1326px] max-md:max-w-full">
           <div className="flex gap-5 max-md:flex-col">
-  {featuredCourses
+  {allCourses
     .filter(course => course.isNew) // Filter courses where isNew is true
     .map((course, index) => (
       <div key={index} className="w-6/12 max-md:w-full">
@@ -86,7 +86,7 @@ export default function Courses() {
 
             <main className="ml-5 w-[69%] max-md:ml-0 max-md:w-full">
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-5">
-              {featuredCourses.map((course, index) => (
+              {allCourses.map((course, index) => (
                   <CourseCard key={index} {...course} />
                 ))}
               </div>
