@@ -13,11 +13,16 @@ interface CheckoutPageProps {
     price: number;
     type: "subscription" | "individual";
   };
+  clientSecret: string;
   onBack: () => void;
   onClose: () => void;
 }
 
-const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => void }> = ({ plan, onBack }) => {
+const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => void; clientSecret: string }> = ({
+  plan,
+  onBack,
+  clientSecret,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const router = useRouter();
@@ -44,8 +49,16 @@ const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => vo
         return;
       }
 
-      // Here you would typically send the paymentMethod.id to your backend
-      console.log("PaymentMethod:", paymentMethod);
+      // Confirm the payment with the client secret
+      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
+
+      if (confirmError) {
+        setError(confirmError.message || "An error occurred");
+        setProcessing(false);
+        return;
+      }
 
       setSuccess(true);
       setTimeout(() => {
@@ -208,7 +221,7 @@ const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => vo
   );
 };
 
-const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack, onClose }) => {
+const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack, onClose, clientSecret }) => {
   return (
     <div
       onClick={onClose}
@@ -219,8 +232,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack, onClose }) =>
         className="bg-white rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 animate-slideIn"
       >
         <div className="p-6">
-          <Elements stripe={stripePromise}>
-            <CheckoutForm plan={plan} onBack={onBack} />
+          <Elements stripe={stripePromise} options={{ clientSecret }}>
+            <CheckoutForm plan={plan} onBack={onBack} clientSecret={clientSecret} />
           </Elements>
         </div>
       </div>

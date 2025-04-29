@@ -3,6 +3,11 @@ import React, { useState } from "react";
 import { X, CreditCard, CheckCircle2, Shield, Zap, ArrowRight, Users } from "lucide-react";
 import CheckoutPage from "./CheckoutPage";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+import { useAppSelector } from "@/app/store/hooks";
+import { getAccessToken } from "@/app/store/features/users/userSlice";
 
 interface SubscriptionConfirmationModalProps {
   isOpen: boolean;
@@ -24,7 +29,9 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
   plan,
 }) => {
   const [showCheckout, setShowCheckout] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const router = useRouter();
+  const accessToken = useAppSelector(getAccessToken);
 
   if (!isOpen) return null;
 
@@ -32,15 +39,58 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
 
   const isCorporate = plan.paymentType === "Corporate";
 
-  const handleConfirm = () => {
+  const createSubscriptionMutation = useMutation({
+    mutationFn: async (subscriptionType: "individual" | "organization_10" | "organization_20" | "organization_50") => {
+      const response = await api.post(
+        "/stripe/create-subscription",
+        {
+          subscriptionType,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setClientSecret(data.clientSecret);
+      setShowCheckout(true);
+    },
+    onError: (error) => {
+      showToast("Failed to create subscription", "error");
+      console.error("Error creating subscription:", error);
+    },
+  });
+
+  const handleConfirm = async () => {
     if (plan.type === "individual") {
       router.push("/course");
     } else {
-      setShowCheckout(true);
+      try {
+        // Determine subscription type based on plan
+        let subscriptionType: "individual" | "organization_10" | "organization_20" | "organization_50";
+
+        if (plan.type === "subscription" && !isCorporate) {
+          subscriptionType = "individual";
+        } else if (isCorporate && plan.users) {
+          if (plan.users === "10 users") subscriptionType = "organization_10";
+          else if (plan.users === "20 users") subscriptionType = "organization_20";
+          else if (plan.users === "50 users") subscriptionType = "organization_50";
+          else subscriptionType = "individual";
+        } else {
+          subscriptionType = "individual";
+        }
+
+        createSubscriptionMutation.mutate(subscriptionType);
+      } catch (error) {
+        console.error("Error creating subscription:", error);
+      }
     }
   };
 
-  if (showCheckout) {
+  if (showCheckout && clientSecret) {
     return (
       <CheckoutPage
         plan={{
@@ -48,6 +98,7 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
           price: plan.price,
           type: plan.type,
         }}
+        clientSecret={clientSecret}
         onClose={() => {
           setShowCheckout(false);
           onClose();
