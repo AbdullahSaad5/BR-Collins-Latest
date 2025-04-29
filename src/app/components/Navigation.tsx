@@ -102,7 +102,7 @@ export const Navigation = () => {
               <select
                 onChange={handleChange}
                 defaultValue="/course"
-                className="w-full appearance-none flex flex-row justify-center items-center px-3 py-2 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
+                className="w-full appearance-none  flex flex-row justify-center items-center px-3 py-2 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
               >
                 <option value="/course">Courses</option>
                 <option value="/about">About</option>
