@@ -2,7 +2,10 @@
 
 @theme {
   --color-org: #f86537;
-  
+}
+
+button {
+  cursor: pointer;
 }
 
 @keyframes fadeIn {
