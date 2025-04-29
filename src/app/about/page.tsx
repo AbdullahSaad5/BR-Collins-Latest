@@ -6,6 +6,7 @@ import Image from "next/image";
 import AboutBgImage from '../../../public/assets/ourStoryImg.svg';
 import axios from "axios";
 import images from "../../../public/assets/images/images";
+import { Quote } from "lucide-react";
 interface Testimonial {
   message: string;
   avatar: string;
@@ -195,11 +196,11 @@ const Page = () => {
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive }) => {
   return (
     <div
-      className={`rounded-xl p-6 shadow-md transition-all duration-300 ease-in-out ${isActive ? "bg-blue-400 text-white" : "bg-white text-gray-800"
-        } min-w-[250px] sm:min-w-[300px] md:min-w-[250px]`}
+      className={`rounded-xl p-6 shadow-md transition-all duration-300 ease-in-out ${isActive ? "bg-[#1176C1] text-gray-50" : "bg-white text-gray-800"
+        }2xl:h-[420px] xl:h-[420px] lg:h-[420px] md:h-[420px] sm:h-[400px] 2xl:w-[422px] xl:w-[422px] lg:w-[422px] md:w-[422px] sm:w-[400px] h-[350px] w-[350px] flex flex-col justify-between`}
     >
-      <p className="text-3xl mb-4">“</p>
-      <p className="text-sm mb-6">{testimonial.message}</p>
+      <p className="text-5xl mb-3 text-start text-gray-700"><Quote /></p>
+      <p className={`text-2xl font-semibold mb-auto text-start ${isActive ? "text-gray-50" : "text-gray-800"}`}>{testimonial.message}</p>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img
@@ -208,8 +209,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive
             className="w-8 h-8 rounded-full"
           />
           <div className="text-left">
-            <p className="font-semibold">{testimonial.name}</p>
-            <p className="text-xs">{testimonial.role}</p>
+            <p className= {`font-semibold ${isActive ? "text-gray-50" : "text-gray-800"}`}>{testimonial.name}</p>
+            <p className= {`text-xs ${isActive ? "text-gray-50" : "text-gray-800"}`}>{testimonial.role}</p>
           </div>
         </div>
         <img src={testimonial.platformLogo} alt="Platform" className="w-6 h-6" />
@@ -230,29 +231,29 @@ const ImpactSection = () => {
     </p>
 
     <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full">
-      <div className="2xl:w-[750px] xl:w-[620px] lg:w-[500px] md:w-100 w-full rounded-xl overflow-hidden shadow-md h-[400px]">
+      <div className="2xl:w-[650px] xl:w-[520px] lg:w-[450px] md:w-100 w-full rounded-xl overflow-hidden shadow-md h-[350px]">
         <Image
           src={images.Impact}
           alt="Happy learner"
-          className="object-cover w-full h-[400px]"
+          className="object-cover w-full h-[350px]"
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:gap-4 2xl:w-[640px] xl:w-[600px] lg:w-[430px] md:w-90 w-full h-[400px]">
+      <div className="grid grid-cols-2 gap-3 md:gap-4 2xl:w-[640px] xl:w-[600px] lg:w-[430px] md:w-90 w-full h-[350px]">
         <div className="bg-red-50 p-6 rounded-xl shadow-sm flex flex-col justify-center ">
-          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900 mb-2" >500+</h3>
+          <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900 mb-2" >500+</h3>
           <p className="text-sm text-gray-600">Learners & counting</p>
         </div>
         <div className="bg-blue-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
-          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900">800+</h3>
+          <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900">800+</h3>
           <p className="text-sm text-gray-600">Courses & Video</p>
         </div>
         <div className="bg-blue-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
-          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900">100+</h3>
+          <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900">100+</h3>
           <p className="text-sm text-gray-600">Registered Enrolls</p>
         </div>
         <div className="bg-red-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
-          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900">1000+</h3>
+          <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900">1000+</h3>
           <p className="text-sm text-gray-600">Certified Students</p>
         </div>
       </div>
