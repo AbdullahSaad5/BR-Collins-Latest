@@ -440,8 +440,14 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
               {/* Course Modes */}
               <div className="mt-8 w-full text-center max-md:max-w-full">
                 <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
-                  <button onClick={handleAddToCart} className="w-full min-h-[58px] bg-orange-500 rounded-[58px]">
-                    E-Learning
+                  <button
+                    onClick={handleAddToCart}
+                    className={`w-full min-h-[58px] rounded-[58px] ${
+                      items.some((item) => item._id === course._id) ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500"
+                    }`}
+                    disabled={items.some((item) => item._id === course._id)}
+                  >
+                    {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
                   </button>
                   <button
                     onClick={() => setShowInPersonPopup(true)}
