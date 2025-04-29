@@ -303,12 +303,12 @@ export const Homepage = () => {
             width={1920}
             height={1080}
             alt="wallpaper"
-            className="w-full h-[300px] md:h-[420px] lg:h-[500px] object-cover  "
+            className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
             priority
           />
         </div>
 
-        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
+        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
           <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
             <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
               <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
