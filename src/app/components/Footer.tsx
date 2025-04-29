@@ -33,7 +33,7 @@ const QuickLinks = () => {
           Contact Us
         </a>
         <a href="/login" className=" hover:text-white transition-colors">
-          Login & Register dd
+          Login & Register 
         </a>
       </nav>
     </div>
