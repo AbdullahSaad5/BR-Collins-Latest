@@ -4,7 +4,7 @@ import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import SubscriptionCards from "../components/pricing/subscriptioncards";
-import CourseSwiper from "../components/Course/CourseSwiper";
+// import CourseSwiper from "../components/Course/CourseSwiper";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
