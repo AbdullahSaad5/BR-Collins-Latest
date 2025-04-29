@@ -3,10 +3,14 @@ import { api } from "@/app/utils/axios";
 
 const CourseDetailPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
-  console.log(slug);
-  // Fetch the specific course data
-  const response = await api.get(`/courses/${slug}`);
-  const course = response.data.data;
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${slug}`, {
+    next: {
+      revalidate: 300,
+    },
+  });
+  const res = await response.json();
+  const course = res.data;
   console.log(course);
 
   return <CourseDetailPageClient course={course} />;
