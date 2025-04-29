@@ -8,11 +8,11 @@ import SubscriptionCards from "../components/pricing/SubscriptionCards";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
-import 'swiper/css';
-import 'swiper/css/autoplay';
+import "swiper/css";
+import "swiper/css/autoplay";
 
 interface SliderItem {
   title: string;
@@ -53,11 +53,9 @@ export const Homepage = () => {
   // const [currentSlide, setCurrentSlide] = useState(0);
   // const [isClient, setIsClient] = useState(false);
 
-
   // useEffect(() => {
   //   setIsClient(true);
   // }, []);
-  
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -69,7 +67,6 @@ export const Homepage = () => {
   // if (!isClient) {
   //   return <div className="h-[300px] lg:h-[500px] w-full" />;
   // }
-
 
   const {
     data: courses,
@@ -109,8 +106,7 @@ export const Homepage = () => {
     {
       id: 1,
       title: "The Future of Artificial Intelligence in Business",
-      description:
-        "Explore how AI is transforming business operations and what it means for the future of work.",
+      description: "Explore how AI is transforming business operations and what it means for the future of work.",
       category: "Technology",
       date: "May 15, 2024",
       image: "/assets/abouthome.png",
@@ -118,8 +114,7 @@ export const Homepage = () => {
     {
       id: 2,
       title: "Effective Time Management Strategies for Professionals",
-      description:
-        "Learn proven techniques to boost your productivity and achieve more in less time.",
+      description: "Learn proven techniques to boost your productivity and achieve more in less time.",
       category: "Business",
       date: "April 28, 2024",
       image: "/assets/congrateicon.png",
@@ -127,8 +122,7 @@ export const Homepage = () => {
     {
       id: 3,
       title: "The Psychology of Consumer Behavior",
-      description:
-        "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
+      description: "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
       category: "Marketing",
       date: "April 15, 2024",
       image: "/assets/lowerlogo.png",
@@ -136,8 +130,7 @@ export const Homepage = () => {
     {
       id: 4,
       title: "Minimalist Design Principles for Modern Websites",
-      description:
-        "Discover how minimalist design can improve user experience and conversion rates.",
+      description: "Discover how minimalist design can improve user experience and conversion rates.",
       category: "Design",
       date: "March 30, 2024",
       image: "/assets/sendericon.png",
@@ -154,8 +147,7 @@ export const Homepage = () => {
     {
       id: 6,
       title: "The Rise of Remote Work: Trends and Best Practices",
-      description:
-        "How companies are adapting to the remote work revolution and what it means for the future.",
+      description: "How companies are adapting to the remote work revolution and what it means for the future.",
       category: "Business",
       date: "March 10, 2024",
       image: "/assets/person.png",
@@ -193,8 +185,7 @@ export const Homepage = () => {
 
   const testimonials = [
     {
-      quote:
-        "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+      quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
       author: "Valerie J.",
       role: "Creasman CEO",
       avatarSrc:
@@ -204,8 +195,7 @@ export const Homepage = () => {
       hasShadow: false,
     },
     {
-      quote:
-        "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+      quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
       author: "Hannah R.",
       role: "Sutton CEO",
       avatarSrc:
@@ -250,25 +240,13 @@ export const Homepage = () => {
       </blockquote>
       <div className="flex flex-col md:flex-row justify-between mt-8 md:mt-16 gap-4">
         <div className="flex gap-3 items-center">
-          <img
-            src={avatarSrc}
-            className="object-contain rounded-full aspect-square w-10 md:w-[50px]"
-            alt={author}
-          />
+          <img src={avatarSrc} className="object-contain rounded-full aspect-square w-10 md:w-[50px]" alt={author} />
           <div>
-            <p className="text-base md:text-xl font-bold text-neutral-900">
-              {author}
-            </p>
-            <p className="text-sm md:text-base leading-none text-zinc-500">
-              {role}
-            </p>
+            <p className="text-base md:text-xl font-bold text-neutral-900">{author}</p>
+            <p className="text-sm md:text-base leading-none text-zinc-500">{role}</p>
           </div>
         </div>
-        <img
-          src={ratingSrc}
-          className="object-contain aspect-[2.51] w-20 md:w-[88px]"
-          alt="Rating"
-        />
+        <img src={ratingSrc} className="object-contain aspect-[2.51] w-20 md:w-[88px]" alt="Rating" />
       </div>
     </article>
   );
@@ -296,9 +274,7 @@ export const Homepage = () => {
           </div>
           <div className="ml-0 md:ml-5 w-full md:w-[83%]">
             <div className="grow text-neutral-900">
-              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">
-                {title}
-              </h3>
+              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">{title}</h3>
               <p className="mt-2 md:mt-3 text-base md:text-lg leading-6 md:leading-7 max-md:max-w-full">
                 {description}
               </p>
@@ -309,24 +285,10 @@ export const Homepage = () => {
     </div>
   );
 
-  const StatCard = ({
-    number,
-    label,
-    bgColor,
-  }: {
-    number: string;
-    label: string;
-    bgColor: string;
-  }) => (
-    <div
-      className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}
-    >
-      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">
-        {number}
-      </h3>
-      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">
-        {label}
-      </p>
+  const StatCard = ({ number, label, bgColor }: { number: string; label: string; bgColor: string }) => (
+    <div className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
+      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">{number}</h3>
+      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">{label}</p>
     </div>
   );
 
@@ -335,36 +297,20 @@ export const Homepage = () => {
       {/* Top Row */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
         <div className="w-full md:w-[48%] h-[180px]">
-          <StatCard
-            number="500+"
-            label="Learners & counting"
-            bgColor="bg-rose-50"
-          />
+          <StatCard number="500+" label="Learners & counting" bgColor="bg-rose-50" />
         </div>
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard
-            number="800+"
-            label="Courses & Video"
-            bgColor="bg-sky-100"
-          />
+          <StatCard number="800+" label="Courses & Video" bgColor="bg-sky-100" />
         </div>
       </div>
 
       {/* Bottom Row */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard
-            number="100+"
-            label="Registered Enrolls"
-            bgColor="bg-sky-100"
-          />
+          <StatCard number="100+" label="Registered Enrolls" bgColor="bg-sky-100" />
         </div>
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard
-            number="1000+"
-            label="Certified Students"
-            bgColor="bg-rose-50"
-          />
+          <StatCard number="1000+" label="Certified Students" bgColor="bg-rose-50" />
         </div>
       </div>
     </div>
@@ -486,117 +432,124 @@ export const Homepage = () => {
         </div>
       </div> */}
 
-<div className="h-[300px] lg:h-[500px] w-full">
-      <Swiper
-        spaceBetween={0}
-        slidesPerView={1}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
-        modules={[Autoplay]}
-        loop={true}
-      >
-        <SwiperSlide>
-          {/* Your first slide content */}
-          <section className="relative w-full">
-        <div className="w-full">
-          <Image
-            src="/assets/homepagewall.png"
-            width={1920}
-            height={1080}
-            alt="wallpaper"
-            className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-            priority
-          />
-        </div>
-
-        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-            <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-              <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-                IT Support Specialist Professional Certificate
-              </h2>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
-                <h1 className="font-light text-sm sm:text-base text-gray-800">
-                  Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
-                </h1>
+      <div className="h-[300px] lg:h-[500px] w-full">
+        <Swiper
+          spaceBetween={0}
+          slidesPerView={1}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+          }}
+          modules={[Autoplay]}
+          loop={true}
+        >
+          <SwiperSlide>
+            {/* Your first slide content */}
+            <section className="relative w-full">
+              <div className="w-full">
+                <Image
+                  src="/assets/homepagewall.png"
+                  width={1920}
+                  height={1080}
+                  alt="wallpaper"
+                  className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
+                  priority
+                />
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
-                  <Image
-                    src="/assets/congrateicon.png"
-                    width={16}
-                    height={16}
-                    className="mr-2 w-4 h-4"
-                    alt="congrats"
-                  />
-                  <h3>Bestseller</h3>
+              <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
+                <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
+                  <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
+                    <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
+                      IT Support Specialist Professional Certificate
+                    </h2>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                      <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
+                      <h1 className="font-light text-sm sm:text-base text-gray-800">
+                        Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
+                      </h1>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                      <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
+                        <Image
+                          src="/assets/congrateicon.png"
+                          width={16}
+                          height={16}
+                          className="mr-2 w-4 h-4"
+                          alt="congrats"
+                        />
+                        <h3>Bestseller</h3>
+                      </div>
+                      <h1 className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
+                        4.8
+                        <span className="text-yellow-500 flex items-center text-sm">
+                          {[...Array(4)].map((_, i) => (
+                            <FaStar key={i} />
+                          ))}
+                          <FaStarHalfAlt />
+                        </span>
+                      </h1>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                      <div className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
+                        Enroll Now
+                      </div>
+                      <div className="text-sm text-gray-700">
+                        Start <span className="font-bold">14 April</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h1 className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
-                  4.8
-                  <span className="text-yellow-500 flex items-center text-sm">
-                    {[...Array(4)].map((_, i) => (
-                      <FaStar key={i} />
-                    ))}
-                    <FaStarHalfAlt />
-                  </span>
-                </h1>
+              </div>
+            </section>
+          </SwiperSlide>
+          <SwiperSlide>
+            {/* Your second slide content */}
+            <section className="relative w-full">
+              <div className="w-full">
+                <Image
+                  src="/assets/homepagewall2.png"
+                  width={1920}
+                  height={1080}
+                  alt="wallpaper"
+                  className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
+                  priority
+                />
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <div className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                  Enroll Now
+              <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
+                <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
+                  <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
+                    <h2 className="font-hanken lg:w-2/3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
+                      Your Learning Journey Starts Here
+                    </h2>
+
+                    <p className="text-xl">Get the skills to achieve goals and stay competitive.</p>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                      <Link
+                        href={"/subscriptions"}
+                        className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
+                      >
+                        Plans for Individual{" "}
+                      </Link>
+                      <Link
+                        href={"/subscriptions"}
+                        className="bg-transparent text-black border-1 border-gray-600 rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
+                      >
+                        Plans for Corporate{" "}
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-700">
-                  Start <span className="font-bold">14 April</span>
-                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-        </SwiperSlide>
-        <SwiperSlide>
-          {/* Your second slide content */}
-          <section className="relative w-full">
-        <div className="w-full">
-          <Image
-            src="/assets/homepagewall2.png"
-            width={1920}
-            height={1080}
-            alt="wallpaper"
-            className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-            priority
-          />
-        </div>
-
-        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-            <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-              <h2 className="font-hanken lg:w-2/3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-              Your Learning Journey Starts Here
-              </h2>
-
-              
-             <p className="text-xl">Get the skills to achieve goals and stay competitive.</p>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <button className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                Plans for Individual                 </button>
-                <button className="bg-transparent text-black border-1 border-gray-600 rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                Plans for Corporate                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-        </SwiperSlide>
-      </Swiper>
-    </div>
+            </section>
+          </SwiperSlide>
+        </Swiper>
+      </div>
       {/* <section className="relative w-full">
         <div className="w-full">
           <Image
@@ -676,7 +629,7 @@ export const Homepage = () => {
               Your Learning Journey Starts Here
               </h2>
 
-              
+
              <p className="text-xl">Get the skills to achieve goals and stay competitive.</p>
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
@@ -741,32 +694,17 @@ export const Homepage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
-            <div
-              ref={sliderRef}
-              className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar"
-            >
+            <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
               <div className="flex flex-nowrap gap-4">
                 {sliderItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex-shrink-0 w-[200px] sm:w-fit py-2"
-                  >
+                  <div key={index} className="flex-shrink-0 w-[200px] sm:w-fit py-2">
                     <div className="flex flex-col  rounded-4xl bg-gray-100 px-4 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
-                      <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">
-                        {item.title}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-gray-600">
-                        {item.courses} courses available
-                      </p>
+                      <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">{item.title}</h2>
+                      <p className="text-xs sm:text-sm text-gray-600">{item.courses} courses available</p>
                     </div>
                   </div>
                 ))}
@@ -784,12 +722,7 @@ export const Homepage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
@@ -802,52 +735,35 @@ export const Homepage = () => {
               {isLoading ? (
                 <div className="w-full text-center">Loading courses...</div>
               ) : error ? (
-                <div className="w-full text-center text-red-500">
-                  Error loading courses
-                </div>
+                <div className="w-full text-center text-red-500">Error loading courses</div>
               ) : (
                 courses?.map((course) => (
-                  <div
-                    className="flex flex-row md:w-[196px] md:h-[400px]"
-                    key={course._id}
-                  >
+                  <div className="flex flex-row md:w-[196px] md:h-[400px]" key={course._id}>
                     <div className="flex flex-col w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
                       <div className="py-2 px-4 text-sm font-medium">
-                        <h1 className="bg-blu p-1 w-fit bg-blue-400 rounded-xl text-white">
-                          {course.noOfHours}Hrs
-                        </h1>
+                        <h1 className="bg-blu p-1 w-fit bg-blue-400 rounded-xl text-white">{course.noOfHours}Hrs</h1>
                       </div>
 
                       <div className="p-4">
-                        <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">
-                          {course.title}
-                        </h3>
+                        <h3 className="font-bold text-lg mb-3 line-clamp-2 h-[3rem]">{course.title}</h3>
 
                         <div className="flex items-center text-gray-600 mb-4">
                           <FaBook className="mr-2 text-blue-500" />
-                          <span className="text-sm">
-                            {course.noOfLessons} Lessons
-                          </span>
+                          <span className="text-sm">{course.noOfLessons} Lessons</span>
                         </div>
 
                         <hr className="border-t border-gray-200 my-2" />
 
                         <div className="flex flex-col items-start gap-12 mb-3">
                           <div className="flex items-center">
-                            <div className="flex mr-2">
-                              {renderStars(course.rating || 5)}
-                            </div>
-                            <span className="text-sm font-medium">
-                              {course.rating || 10}
-                            </span>
+                            <div className="flex mr-2">{renderStars(course.rating || 5)}</div>
+                            <span className="text-sm font-medium">{course.rating || 10}</span>
                           </div>
 
                           <span className="text-lg font-bold">
                             ${course.price}
                             {course.isDiscounted && (
-                              <span className="ml-2 text-sm text-gray-500 line-through">
-                                ${course.discountPrice}
-                              </span>
+                              <span className="ml-2 text-sm text-gray-500 line-through">${course.discountPrice}</span>
                             )}
                           </span>
                         </div>
@@ -936,17 +852,12 @@ export const Homepage = () => {
             <div className="grow shrink self-stretch my-auto w-full md:w-[529px]">
               <div className="w-full">
                 <div className="flex flex-col justify-center w-full font-bold">
-                  <span className="self-start text-lg text-center text-orange-500 uppercase">
-                    about us
-                  </span>
-                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900">
-                    On Site Learning
-                  </h2>
+                  <span className="self-start text-lg text-center text-orange-500 uppercase">about us</span>
+                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900">On Site Learning</h2>
                 </div>
                 <p className="mt-3 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900">
-                  At B.R Collins, our on-site training transforms everyday
-                  lessons into engaging and interactive experiences. Blending
-                  creativity with expertise.
+                  At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
+                  experiences. Blending creativity with expertise.
                 </p>
               </div>
               <div className="mt-6 md:mt-10 w-full">
@@ -977,15 +888,13 @@ export const Homepage = () => {
             {/* Left Content Section */}
             <div className="flex flex-col justify-between h-full md:w-[50%] w-full">
               <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
-                <span className="text-lg text-orange-500 uppercase font-bold">
-                  WHY CHOOSE US
-                </span>
+                <span className="text-lg text-orange-500 uppercase font-bold">WHY CHOOSE US</span>
                 <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
                   Creating A Community Of Life Long Learners
                 </h2>
                 <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
-                  At B.R Collins, our on-site training transforms everyday
-                  lessons into engaging and interactive experiences.
+                  At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
+                  experiences.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-4">
                   <Link
