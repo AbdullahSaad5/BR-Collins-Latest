@@ -53,20 +53,21 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
         className="bg-white rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 animate-slideIn"
       >
         <div className="p-6">
-          <div className="flex justify-between items-center mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#F86537]/10 flex items-center justify-center">
-                <CreditCard className="w-5 h-5 text-[#F86537]" />
+          {/* Progress Indicator */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-[#F86537] text-white flex items-center justify-center text-sm font-medium">
+                1
               </div>
-              <h2 className="text-2xl font-semibold text-neutral-900">Confirm Subscription</h2>
+              <span className="text-sm font-medium text-neutral-900">Plan Details</span>
             </div>
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-full"
-              aria-label="Close modal"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="h-0.5 flex-1 bg-gray-200 mx-4"></div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-sm font-medium">
+                2
+              </div>
+              <span className="text-sm font-medium text-gray-400">Payment</span>
+            </div>
           </div>
 
           <div className="space-y-8">
