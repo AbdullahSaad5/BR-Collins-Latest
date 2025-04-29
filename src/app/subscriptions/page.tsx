@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import React from "react";
-import Link from "next/link";
+import { useState } from "react";
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 const faqs = [
   {
