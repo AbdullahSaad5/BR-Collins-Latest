@@ -33,10 +33,6 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
   const router = useRouter();
   const accessToken = useAppSelector(getAccessToken);
 
-  if (!isOpen) return null;
-
-  console.log(plan);
-
   const isCorporate = plan.paymentType === "Corporate";
 
   const createSubscriptionMutation = useMutation({
@@ -89,6 +85,10 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
       }
     }
   };
+
+  if (!isOpen) return null;
+
+  console.log(plan);
 
   if (showCheckout && clientSecret) {
     return (
