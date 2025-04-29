@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { InstructorSection } from "../../components/CourseDetail/InstructorSection";
 import { ReviewSection } from "../../components/CourseDetail/ReviewSection";
 import CourseDetail from "../../components/CourseDetail/CourseDetail";
@@ -9,6 +9,7 @@ import { ICourse } from "@/app/types/course.contract";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { addToCart } from "@/app/store/features/cart/cartSlice";
 import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
+import Image from "next/image";
 
 const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
 
@@ -18,8 +19,74 @@ const toTitleCase = (str: string) => {
 
 const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
   const [showInPersonPopup, setShowInPersonPopup] = useState(false);
+  const [activeSection, setActiveSection] = useState("Overview");
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart);
+
+  const overviewRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const detailsRef = useRef<HTMLDivElement>(null);
+  const instructorRef = useRef<HTMLDivElement>(null);
+  const reviewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const section = entry.target.getAttribute("data-section");
+            if (section) {
+              setActiveSection(section);
+            }
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "-50% 0px -50% 0px", // This creates a "center" detection zone
+        threshold: 0,
+      }
+    );
+
+    const sections = [
+      { ref: overviewRef, name: "Overview" },
+      { ref: contentRef, name: "Course Content" },
+      { ref: detailsRef, name: "Details" },
+      { ref: instructorRef, name: "Instructor" },
+      { ref: reviewRef, name: "Review" },
+    ];
+
+    sections.forEach(({ ref, name }) => {
+      if (ref.current) {
+        ref.current.setAttribute("data-section", name);
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => {
+      sections.forEach(({ ref }) => {
+        if (ref.current) {
+          observer.unobserve(ref.current);
+        }
+      });
+    };
+  }, []);
+
+  const handleSectionClick = (section: string) => {
+    setActiveSection(section);
+    const refs = {
+      Overview: overviewRef,
+      "Course Content": contentRef,
+      Details: detailsRef,
+      Instructor: instructorRef,
+      Review: reviewRef,
+    };
+
+    const ref = refs[section as keyof typeof refs];
+    if (ref?.current) {
+      ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   const handleAddToCart = () => {
     const isCourseInCart = items.some((item) => item._id === course._id);
@@ -42,7 +109,7 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
     instructor: course.instructor,
     lessons: course.noOfLessons,
     rating: course.rating,
-    price: `$${course.discountPrice ? course.discountPrice : course.price}`,
+    price: course.discountPrice ? course.discountPrice : course.price,
     originalPrice: course.price,
     isNew: course.bestSeller,
     // imageUrl: course.coverImageUrl,
@@ -149,11 +216,11 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
 
   return (
     <>
-    {showInPersonPopup && (
-    <div className="fixed inset-0 bg-opacity-50 z-50 flex items-center justify-center  p-4">
-      <InPersonPopup onClose={() => setShowInPersonPopup(false)} />
-    </div>
-  )}
+      {showInPersonPopup && (
+        <div className="fixed inset-0 bg-opacity-50 z-50 flex items-center justify-center  p-4">
+          <InPersonPopup onClose={() => setShowInPersonPopup(false)} />
+        </div>
+      )}
       {/* Hero Section */}
       <div className="relative">
         <div className="bg-neutral-900">
@@ -187,7 +254,7 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
               </div>
 
               {/* Stats Section */}
-              <div className="flex flex-col mt-10 w-[577px] max-md:w-full">
+              <div className="flex flex-col mt-10  max-md:w-full">
                 <div className="flex flex-wrap gap-3 items-center w-full">
                   {/* {course.isNew && ( */}
                   <div className="flex gap-1 items-center px-3 py-1.5 text-base font-medium text-black whitespace-nowrap bg-orange-300 rounded-md max-md:text-sm">
@@ -202,18 +269,20 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
 
                   {/* Rating */}
                   <div className="flex gap-1.5 items-center">
-                    <span className="text-lg font-medium text-white max-md:text-base">{displayCourse.rating}</span>
-                    <StarRating rating={displayCourse.rating} />
+                    <span className="text-lg font-medium text-white max-md:text-base">
+                      {displayCourse.rating || 10}
+                    </span>
+                    <StarRating rating={displayCourse.rating || 4} />
                     <a href="#" className="text-base text-white underline max-md:text-sm">
                       {displayCourse.lessons}+ rating
                     </a>
                   </div>
 
                   {/* Divider - hidden on mobile */}
-                  <div className="grow shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
+                  <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
 
                   {/* Stats */}
-                  <div className="flex gap-4 items-center max-md:gap-3 max-md:w-full max-md:justify-start max-md:mt-3">
+                  <div className="flex gap-3 items-center max-md:gap-3 max-md:w-full max-md:justify-start max-md:mt-3">
                     <div className="flex gap-1 items-center">
                       <img
                         src="/img/coursedetail/lesson.svg"
@@ -249,14 +318,15 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
               <div className="flex gap-2 items-center text-3xl text-neutral-900">
                 <nav className="flex gap-3 items-center overflow-x-auto whitespace-nowrap max-md:max-w-full">
                   {[
-                    { label: "Overview", active: true },
-                    { label: "Course Content" },
-                    { label: "Details" },
-                    { label: "Instructor" },
-                    { label: "Review" },
+                    { label: "Overview", active: activeSection === "Overview" },
+                    { label: "Course Content", active: activeSection === "Course Content" },
+                    { label: "Details", active: activeSection === "Details" },
+                    { label: "Instructor", active: activeSection === "Instructor" },
+                    { label: "Review", active: activeSection === "Review" },
                   ].map((item, index) => (
                     <button
                       key={index}
+                      onClick={() => handleSectionClick(item.label)}
                       className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${
                         item.active ? "bg-sky-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                       } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
@@ -267,7 +337,11 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
                 </nav>
               </div>
 
-              <div className="mt-12 text-neutral-900 max-md:mt-10 max-md:mr-2.5 max-md:max-w-full">
+              <div
+                ref={overviewRef}
+                data-section="Overview"
+                className="mt-12 text-neutral-900 max-md:mt-10 max-md:mr-2.5 max-md:max-w-full"
+              >
                 <article className="w-full max-md:max-w-full">
                   <h2 className="text-3xl font-bold max-md:max-w-full">What you'll learn</h2>
                   <div className="mt-8 w-full text-base leading-6 max-md:max-w-full">
@@ -290,15 +364,27 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
                   </div>
                 </article>
               </div>
-            </section>
 
-            <CourseDetail
-              sections={displayCourse.sections}
-              requirements={displayCourse.requirements}
-              description={displayCourse.description}
-            />
-            <InstructorSection />
-            <ReviewSection />
+              <div ref={contentRef} data-section="Course Content">
+                <CourseDetail
+                  sections={displayCourse.sections}
+                  requirements={displayCourse.requirements}
+                  description={displayCourse.description}
+                />
+              </div>
+
+              <div ref={detailsRef} data-section="Details">
+                {/* Details section content */}
+              </div>
+
+              <div ref={instructorRef} data-section="Instructor">
+                <InstructorSection />
+              </div>
+
+              <div ref={reviewRef} data-section="Review">
+                <ReviewSection />
+              </div>
+            </section>
           </div>
         </div>
 
@@ -308,22 +394,42 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
             <div className="flex flex-col px-8 max-md:px-5 w-full">
               {/* Course Preview */}
               <div className="relative w-full min-h-[280px] text-xl font-bold text-white rounded-2xl shadow-[0px_4px_75px_rgba(0,0,0,0.06)] overflow-hidden text-center max-md:max-w-full">
+                <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-black/80 z-10"></div>
                 <img
                   src={displayCourse.imageUrl}
                   alt="Course preview"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <button className="relative pt-56 pb-6 px-16 max-md:pt-24 max-md:px-5 w-full">
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                  {/* <Image src="/assets/images/play.png" alt="Play" width={100} height={100} /> */}
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full backdrop-blur-sm bg-white/10 -m-2"></div>
+                    <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-black/70 transition-all relative">
+                      <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <button className="relative pt-56 pb-6 px-16 max-md:pt-24 max-md:px-5 w-full z-20">
                   Preview this course
                 </button>
               </div>
 
               {/* Price */}
               <div className="flex items-center gap-3 mt-8 font-extrabold text-center text-neutral-900">
-                <span className="text-3xl leading-none">{displayCourse.price}</span>
+                <span className="text-3xl leading-none">
+                  {parseInt(displayCourse.price.toString()).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </span>
                 {displayCourse.originalPrice && (
                   <span className="text-xl leading-tight line-through text-neutral-400">
-                    {displayCourse.originalPrice}
+                    {parseInt(displayCourse.originalPrice.toString()).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
                   </span>
                 )}
                 {/* <span className="px-3 py-1.5 text-base text-black uppercase bg-orange-300 rounded-md">
@@ -333,39 +439,40 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
 
               {/* Course Modes */}
               <div className="mt-8 w-full text-center max-md:max-w-full">
-  <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
-    <button onClick={handleAddToCart} className="w-full min-h-[58px] bg-orange-500 rounded-[58px]">
-      e-learning
-    </button>
-    <button
-      onClick={() => setShowInPersonPopup(true)}
-      className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
-    >
-      in-person
-    </button>
-  </div>
-  <p className="mt-5 text-base font-medium text-neutral-400">30-Day Money-Back Guarantee</p>
-  
- 
-</div>
-
+                <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
+                  <button onClick={handleAddToCart} className="w-full min-h-[58px] bg-orange-500 rounded-[58px]">
+                    E-Learning
+                  </button>
+                  <button
+                    onClick={() => setShowInPersonPopup(true)}
+                    className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
+                  >
+                    In-Person
+                  </button>
+                </div>
+                <p className="mt-5 text-base font-medium text-neutral-400">30-Day Money-Back Guarantee</p>
+              </div>
 
               {/* Details Table */}
               <div className="flex flex-wrap gap-9 mt-12 text-lg text-neutral-900 w-full max-md:mt-10">
-                <div className="overflow-hidden grow shrink-0 basis-0 w-fit h-[318px] max-md:max-w-full">
-                  {Object.entries(displayCourse.courseDetails).map(([label, value], index) => (
-                    <div key={label}>
-                      <div className="flex justify-between items-center w-full">
-                        <span>{toTitleCase(label)}</span>
-                        <span className="font-semibold text-right">{value}</span>
-                      </div>
-                      {index < Object.keys(displayCourse.courseDetails).length - 1 && (
-                        <div className="mt-4 w-full border-t border-gray-200" />
-                      )}
-                    </div>
-                  ))}
+                <div className="overflow-hidden grow shrink-0 basis-0 w-fit max-md:max-w-full">
+                  {Object.entries(displayCourse.courseDetails).map(
+                    ([label, value], index) =>
+                      label !== "certificate" &&
+                      label !== "quizzes" && (
+                        <div key={label}>
+                          <div className="flex justify-between items-center w-full">
+                            <span>{toTitleCase(label)}</span>
+                            <span className="font-semibold text-right">{value}</span>
+                          </div>
+                          {index < Object.keys(displayCourse.courseDetails).length - 1 && (
+                            <div className="my-3 w-full border-t border-gray-200" />
+                          )}
+                        </div>
+                      )
+                  )}
                 </div>
-                <div className="self-start shrink-0 w-1.5 h-[190px] bg-slate-200 rounded-xl" />
+                {/* <div className="self-start shrink-0 w-1.5 h-[190px] bg-slate-200 rounded-xl" /> */}
               </div>
             </div>
 
