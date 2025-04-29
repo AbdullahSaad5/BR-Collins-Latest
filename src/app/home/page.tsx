@@ -13,6 +13,7 @@ import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/autoplay";
+import { ICourseCategory } from "../types/course-category.contract";
 
 interface SliderItem {
   title: string;
@@ -47,6 +48,15 @@ const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   return response.data;
 };
 
+const fetchCategories = async (): Promise<{
+  data: (ICourseCategory & {
+    coursesCount: number;
+  })[];
+}> => {
+  const response = await api.get("/course-categories/with-courses-count");
+  return response.data;
+};
+
 export const Homepage = () => {
   const [activeTab, setActiveTab] = useState<string>("e-learning");
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -70,11 +80,21 @@ export const Homepage = () => {
 
   const {
     data: courses,
-    isLoading,
-    error,
+    isLoading: isCoursesLoading,
+    error: coursesError,
   } = useQuery({
     queryKey: ["courses"],
     queryFn: fetchCourses,
+    select: (data) => data.data,
+  });
+
+  const {
+    data: categories,
+    isLoading: isCategoriesLoading,
+    error: categoriesError,
+  } = useQuery({
+    queryKey: ["course-categories"],
+    queryFn: fetchCategories,
     select: (data) => data.data,
   });
 
@@ -710,7 +730,7 @@ export const Homepage = () => {
         <section className="relative text-gray-900 w-full">
           <div className="w-full">
             <div className="flex flex-col w-full">
-              <h2 className="font-hanken text-2xl sm:text-3xl md:text-[36px] font-medium text-start text-gray-800">
+              <h2 className="text-2xl sm:text-3xl md:text-[34px] font-bold text-start text-gray-800">
                 Your Complete Skill Set Starts Here
               </h2>
 
@@ -719,7 +739,7 @@ export const Homepage = () => {
                   onClick={() => setActiveTab("e-learning")}
                   className={`pb-2 px-1 transition-all duration-300 ${
                     activeTab === "e-learning"
-                      ? "text-gray-800 font-bold border-b-4 border-blue-500"
+                      ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
                       : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
                   }`}
                 >
@@ -729,7 +749,7 @@ export const Homepage = () => {
                   onClick={() => setActiveTab("blogs")}
                   className={`pb-2 px-1 transition-all duration-300 ${
                     activeTab === "blogs"
-                      ? "text-gray-800 font-bold border-b-4 border-blue-500"
+                      ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
                       : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
                   }`}
                 >
@@ -771,17 +791,10 @@ export const Homepage = () => {
             >
               <div className="flex flex-nowrap gap-4">
                 {sliderItems.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex-shrink-0 w-[200px] sm:w-fit py-2"
-                  >
+                  <div key={index} className="flex-shrink-0 w-[200px] sm:w-fit py-2">
                     <div className="flex flex-col  rounded-4xl bg-gray-100 px-4 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
-                      <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">
-                        {item.title}
-                      </h2>
-                      <p className="text-xs sm:text-sm text-gray-600">
-                        {item.courses} courses available
-                      </p>
+                      <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">{item.title}</h2>
+                      <p className="text-xs sm:text-sm text-gray-600">{item.courses} courses available</p>
                     </div>
                   </div>
                 ))}
@@ -814,12 +827,10 @@ export const Homepage = () => {
         <section className="relative text-gray-900">
           <div className="w-full mx-auto max-w-[1326px] h-auto relative">
             <div className="flex flex-nowrap items-start overflow-auto gap-3 mb-16 py-6 custom-scroll scrollbar-hide">
-              {isLoading ? (
+              {isCoursesLoading ? (
                 <div className="w-full text-center">Loading courses...</div>
               ) : error ? (
-                <div className="w-full text-center text-red-500">
-                  Error loading courses
-                </div>
+                <div className="w-full text-center text-red-500">Error loading courses</div>
               ) : (
                 courses?.map((course) => (
                   <div
