@@ -99,8 +99,6 @@ export default function Courses() {
     });
   }, [allCourses, topicFilters, languageFilters, durationFilters]);
 
-  console.log(allCourses);
-
   if (isLoading) {
     return (
       <main className="flex overflow-hidden flex-col bg-white">

@@ -65,7 +65,7 @@ export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
     const fetchCourses = async () => {
       try {
         const response = await api.get("data/courses.json");
-        const apiCourses = response.data.data;
+        const apiCourses = response.data;
 
         setCourses(apiCourses);
       } catch (err) {

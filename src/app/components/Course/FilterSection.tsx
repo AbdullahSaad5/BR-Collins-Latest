@@ -28,9 +28,8 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, children, checked, o
     <label className="flex gap-3 items-center cursor-pointer">
       <input type="checkbox" className="hidden" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <div
-        className={`w-6 h-6 rounded-md border-2 border-solid ${
-          checked ? "bg-sky-500 border-sky-500" : "bg-white border-zinc-200"
-        }`}
+        className={`w-6 h-6 rounded-md border-2 border-solid ${checked ? "bg-sky-500 border-sky-500" : "bg-white border-zinc-200"
+          }`}
       >
         {checked && (
           <svg className="w-full h-full text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,8 +92,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   const INITIAL_CATEGORIES_TO_SHOW = 3;
   const INITIAL_DURATIONS_TO_SHOW = 3;
 
-  const hasMoreCategories = categories.length > INITIAL_CATEGORIES_TO_SHOW;
-  const visibleCategories = isExpanded ? categories : categories.slice(0, INITIAL_CATEGORIES_TO_SHOW);
+  const hasMoreCategories = (categories?.length || 0) > INITIAL_CATEGORIES_TO_SHOW;
+  const visibleCategories = categories?.length > 0 ? (isExpanded ? categories : categories.slice(0, INITIAL_CATEGORIES_TO_SHOW)) : [];
 
   const durationOptions = [
     { label: "0-1 Hours", value: "0-1 Hours" },

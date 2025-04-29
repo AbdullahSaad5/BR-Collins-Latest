@@ -37,8 +37,6 @@ const SubscriptionCards: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/data/subscriptionData.json');
-
-        console.log("Response Data", response.data);
         setData(response.data);
       } catch (err) {
         setError("Failed to fetch subscription data");
