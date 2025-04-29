@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 
 const faqs = [
   {
@@ -44,8 +45,8 @@ const Subcription = () => {
               Flexible Pricing for Individuals and Teams
             </h1>
             <p className="my-4 text-gray-600 text-lg md:text-xl max-w-[795px] mx-auto leading-normal">
-              Whether you're an individual looking to upskill or a company
-              building stronger teams — we've got you covered.
+              Whether you're an individual looking to upskill or a company building stronger teams — we've got you
+              covered.
             </p>
           </div>
           <div className="w-full flex flex-col lg:flex-row gap-6 h-auto lg:h-[444px]">
@@ -55,17 +56,12 @@ const Subcription = () => {
                 <div className="bg-white border-1 border-gray-300  rounded-lg w-full  p-6  flex flex-row justify-between mr-auto">
                   <div className="flex flex-col justify-between  w-1/2">
                     <div>
-                      <h1 className="text-xl font-bold text-black mb-2">
-                        Individual Courses
-                      </h1>
-                      <p className="text-gray-700">
-                        Take Any Course for Just $99 – One-Time Payment,
-                        Lifetime Access!
-                      </p>
+                      <h1 className="text-xl font-bold text-black mb-2">Individual Courses</h1>
+                      <p className="text-gray-700">Take Any Course for Just $99 – One-Time Payment, Lifetime Access!</p>
                     </div>
-                    <button className="bg-[#F86537]  text-white py-2 px-6 rounded-4xl self-start">
+                    <Link href="/course" className="bg-[#F86537]  text-white py-2 px-6 rounded-4xl self-start">
                       Buy Now
-                    </button>
+                    </Link>
                   </div>
                   <div className="flex flex-col justify-between  w-1/2">
                     <div className="flex flex-col items-end">
@@ -74,9 +70,7 @@ const Subcription = () => {
                       </h1>
                     </div>
                     <div>
-                      <h2 className="text-6xl font-bold flex items-end flex-col">
-                        $99
-                      </h2>
+                      <h2 className="text-6xl font-bold flex items-end flex-col">$99</h2>
                       <p className="flex items-end flex-col">per course</p>
                     </div>
                   </div>
@@ -86,17 +80,10 @@ const Subcription = () => {
                 <div className="bg-white border-1 border-gray-300 rounded-lg w-full  p-6  flex flex-row justify-between mr-auto">
                   <div className="flex flex-col justify-between  w-1/2">
                     <div>
-                      <h1 className="text-xl font-bold text-black mb-2">
-                        Individual Courses
-                      </h1>
-                      <p className="text-gray-700">
-                        Take Any Course for Just $99 – One-Time Payment,
-                        Lifetime Access!
-                      </p>
+                      <h1 className="text-xl font-bold text-black mb-2">Individual Courses</h1>
+                      <p className="text-gray-700">Take Any Course for Just $99 – One-Time Payment, Lifetime Access!</p>
                     </div>
-                    <button className="bg-[#F86537]  text-white py-2 px-6 rounded-4xl self-start">
-                      Buy Now
-                    </button>
+                    <button className="bg-[#F86537]  text-white py-2 px-6 rounded-4xl self-start">Buy Now</button>
                   </div>
                   <div className="flex flex-col justify-between w-1/2">
                     <div className="flex flex-col items-end">
@@ -105,9 +92,7 @@ const Subcription = () => {
                       </h1>
                     </div>
                     <div>
-                      <h2 className="text-6xl font-bold flex items-end flex-col">
-                        $199
-                      </h2>
+                      <h2 className="text-6xl font-bold flex items-end flex-col">$199</h2>
                       <p className="flex items-end flex-col">All Courses</p>
                     </div>
                   </div>
@@ -118,12 +103,9 @@ const Subcription = () => {
             {/* Right Column - Corporate Plans */}
             <div className="w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full">
               <div>
-                <h1 className="text-2xl font-bold text-black mb-2">
-                  Corporate Subscriptions
-                </h1>
+                <h1 className="text-2xl font-bold text-black mb-2">Corporate Subscriptions</h1>
                 <p className="text-gray-700 mb-4">
-                  Choose from 10, 20, or 50-user plans designed for
-                  organizations that value continuous development.
+                  Choose from 10, 20, or 50-user plans designed for organizations that value continuous development.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex py-2 items-center">
@@ -134,11 +116,7 @@ const Subcription = () => {
                       <div className="flex items-center w-1/3 md:w-1/5 justify-between flex-row">
                         <h2>10 users</h2>
                         <label className="inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="checkbox"
-                            className="peer hidden"
-                          />
+                          <input type="checkbox" name="checkbox" className="peer hidden" />
                           <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
                             <svg
                               className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
@@ -165,11 +143,7 @@ const Subcription = () => {
                       <div className="flex items-center w-1/3 md:w-1/5 justify-between flex-row">
                         <h2>20 users</h2>
                         <label className="inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="checkbox"
-                            className="peer hidden"
-                          />
+                          <input type="checkbox" name="checkbox" className="peer hidden" />
                           <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
                             <svg
                               className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
@@ -196,11 +170,7 @@ const Subcription = () => {
                       <div className="flex items-center w-1/3 md:w-1/5 justify-between flex-row">
                         <h2>50 users</h2>
                         <label className="inline-flex items-center cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="checkbox"
-                            className="peer hidden"
-                          />
+                          <input type="checkbox" name="checkbox" className="peer hidden" />
                           <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
                             <svg
                               className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
@@ -221,9 +191,7 @@ const Subcription = () => {
                   <hr className="border-gray-200" />
                 </ul>
               </div>
-              <button className="bg-[#F86537] text-white py-2 px-6 rounded-full w-full">
-                Contact Sales
-              </button>
+              <button className="bg-[#F86537] text-white py-2 px-6 rounded-full w-full">Contact Sales</button>
             </div>
           </div>
         </div>
@@ -234,9 +202,7 @@ const Subcription = () => {
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8">
             {/* Left Section */}
             <div>
-              <p className="text-lg text-orange-600 font-semibold uppercase mb-2">
-                Have a question with B.R Collins?
-              </p>
+              <p className="text-lg text-orange-600 font-semibold uppercase mb-2">Have a question with B.R Collins?</p>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 A Few Frequently <br /> Asked Questions
               </h1>
@@ -245,10 +211,7 @@ const Subcription = () => {
               </h3>
               <p className="text-base">
                 email us directly at{" "}
-                <a
-                  href="mailto:b.r.collins@example.com"
-                  className="text-blue-600 underline"
-                >
+                <a href="mailto:b.r.collins@example.com" className="text-blue-600 underline">
                   b.r.collins@example.com
                 </a>
               </p>
@@ -262,23 +225,17 @@ const Subcription = () => {
                   <div
                     key={index}
                     className="border-b border-gray-300 pb-4 cursor-pointer"
-                    onClick={() =>
-                      setOpenIndex(index === openIndex ? -1 : index)
-                    }
+                    onClick={() => setOpenIndex(index === openIndex ? -1 : index)}
                   >
                     <div className="flex justify-between items-center">
-                      <h3 className="text-base text-lg md:text-xl font-semibold">
-                        {faq.question}
-                      </h3>
+                      <h3 className="text-base text-lg md:text-xl font-semibold">{faq.question}</h3>
                       {isOpen ? (
                         <ChevronUp className="w-5 h-5 text-gray-600" />
                       ) : (
                         <ChevronDown className="w-5 h-5 text-gray-600" />
                       )}
                     </div>
-                    {isOpen && faq.answer && (
-                      <p className="text-lg text-gray-700 mt-3">{faq.answer}</p>
-                    )}
+                    {isOpen && faq.answer && <p className="text-lg text-gray-700 mt-3">{faq.answer}</p>}
                   </div>
                 );
               })}
