@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Cart from "./Cart/Cart";
 import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
@@ -23,12 +23,26 @@ export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [DropdownMenu, setDropDownMenu] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
   const user = useAppSelector((state) => state.user.user);
   const { items, isCartOpen } = useAppSelector((state) => state.cart);
   const profilePicture = (user as IUser).profilePicture;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRoute = e.target.value;
@@ -127,6 +141,7 @@ export const Navigation = () => {
             </button>
             {isLoggedIn ? (
               <div
+                ref={dropdownRef}
                 className="flex items-center gap-4 cursor-pointer relative"
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               >
@@ -148,7 +163,7 @@ export const Navigation = () => {
                   </div>
                 </div>
                 {isProfileDropdownOpen && (
-                  <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56">
+                  <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56 z-[99999]">
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
                         (user as IUser).lastName
