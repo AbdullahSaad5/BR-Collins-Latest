@@ -1,5 +1,5 @@
 export interface ISubscription {
-  id: string;
+  _id: string;
   stripeCustomerId: string;
   subscriptionId?: string;
   isActive: boolean;
@@ -8,4 +8,5 @@ export interface ISubscription {
   lastPaymentAt?: Date;
   entityType: "user" | "organization";
   entityId: string;
+  plan: "individual" | "organization_10" | "organization_20" | "organization_50";
 }
