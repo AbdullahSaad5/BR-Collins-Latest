@@ -3,6 +3,7 @@ import { useAppSelector } from "@/app/store/hooks";
 import { getSubscription } from "@/app/store/features/users/userSlice";
 import { Crown, Calendar, CreditCard, Clock, CheckCircle2, XCircle } from "lucide-react";
 import { ISubscription } from "@/app/types/subscription.contract";
+import Link from "next/link";
 
 const SubscriptionDetails = () => {
   const subscription = useAppSelector(getSubscription) as ISubscription | null;
@@ -13,9 +14,12 @@ const SubscriptionDetails = () => {
         <XCircle className="w-12 h-12 text-gray-400 mb-4" />
         <h2 className="text-xl font-semibold text-gray-800 mb-2">No Active Subscription</h2>
         <p className="text-gray-600 mb-6">You don't have an active subscription at the moment.</p>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <Link
+          href={"/subscriptions"}
+          className="px-4 py-2 bg-[#F86537] text-white rounded-lg hover:bg-[#E55A2E] transition-colors"
+        >
           View Plans
-        </button>
+        </Link>
       </div>
     );
   }
