@@ -54,18 +54,18 @@ const SubscriptionCards: React.FC = () => {
   if (!data) return <div>No subscription data available</div>;
 
   return (
-    <div className="w-full flex flex-col lg:p-0 p-3 lg:flex-row gap-6 h-auto lg:h-[444px]">
+    <div className="w-full flex flex-col lg:p-0 p-3 lg:flex-row gap-6 h-auto lg:h-[494px]">
       {/* Left Column - Individual Plans */}
-      <div className="w-full lg:w-1/2 flex flex-col gap-6 h-auto">
+      <div className="w-full lg:w-1/2 flex flex-col lg:gap-0 gap-3 justify-between ">
         {data.individualPlans.map((plan, index) => (
-          <div key={index} className="flex flex-row h-full justify-between">
+          <div key={index} className="flex flex-row  h-auto lg:h-[237px] justify-between">
             <div className="bg-white border-1 border-gray-300 rounded-lg w-full p-6 flex flex-row justify-between mr-auto">
               <div className="flex flex-col justify-between w-1/2">
                 <div>
                   <h1 className="text-xl font-bold text-black mb-2">{plan.title}</h1>
                   <p className="text-gray-700">{plan.description}</p>
                 </div>
-                <button className="bg-[#F86537] text-white py-2 px-6 rounded-4xl self-start">
+                <button className="bg-[#F86537] text-white py-4 font-medium px-6 rounded-4xl self-start">
                   {plan.buttonText}
                 </button>
               </div>
@@ -134,7 +134,7 @@ const SubscriptionCards: React.FC = () => {
             ))}
           </ul>
         </div>
-        <button className="bg-[#F86537] text-white py-2 px-6 rounded-full w-full">
+        <button className="bg-[#F86537] text-white py-4 font-medium px-6 rounded-full w-full">
           {data.corporatePlans.buttonText}
         </button>
       </div>
