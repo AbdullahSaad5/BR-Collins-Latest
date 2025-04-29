@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { X, CreditCard, CheckCircle2, Shield, Zap, ArrowRight, Users } from "lucide-react";
+import CheckoutPage from "./CheckoutPage";
 
 interface SubscriptionConfirmationModalProps {
   isOpen: boolean;
@@ -21,18 +22,36 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
   onConfirm,
   plan,
 }) => {
+  const [showCheckout, setShowCheckout] = useState(false);
+
   if (!isOpen) return null;
 
   console.log(plan);
 
   const isCorporate = plan.paymentType === "Corporate";
 
+  if (showCheckout) {
+    return (
+      <CheckoutPage
+        plan={{
+          title: plan.title,
+          price: plan.price,
+          type: plan.type,
+        }}
+        onBack={() => setShowCheckout(false)}
+      />
+    );
+  }
+
   return (
     <div
       onClick={() => onClose()}
       className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn"
     >
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 animate-slideIn">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 animate-slideIn"
+      >
         <div className="p-6">
           <div className="flex justify-between items-center mb-8">
             <div className="flex items-center gap-3">
@@ -136,7 +155,7 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
 
           <div className="mt-8 flex flex-col gap-3">
             <button
-              onClick={onConfirm}
+              onClick={() => setShowCheckout(true)}
               className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
             >
               {plan.type === "subscription" ? "Confirm Purchase" : "Explore Courses"}

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SubscriptionConfirmationModal from "./SubscriptionConfirmationModal";
+import { useRouter } from "next/navigation";
 
 // Define TypeScript interfaces for the data structure
 interface IndividualPlan {
@@ -38,6 +39,7 @@ const SubscriptionCards: React.FC = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<IndividualPlan | CorporatePlan | null>(null);
   const [isCorporatePlan, setIsCorporatePlan] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,6 +75,11 @@ const SubscriptionCards: React.FC = () => {
     // TODO: Implement purchase logic
     console.log("Purchase confirmed for plan:", selectedPlan);
     setShowConfirmationModal(false);
+    if (selectedPlan?.type === "individual") {
+      router.push("/course");
+    } else {
+      router.push("/buy-now?type=subscription");
+    }
   };
 
   if (loading) return <div>Loading subscription plans...</div>;
