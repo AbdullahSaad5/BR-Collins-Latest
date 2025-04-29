@@ -79,19 +79,19 @@ const Page = () => {
     <div className="about flex flex-col justify-center items-center">
 
       {/* Header */}
-      <div className="h-[580px] w-screen bg-cover bg-center bg-[url('/assets/images/header.jpeg')] flex justify-center items-center ">
+      <div className="h-[580px] w-screen bg-cover bg-center bg-[url('/assets/images/header.jpeg')] flex justify-center items-center overlay-bg ">
   <div className="max-w-[1326px] w-full mx-auto px-1 max-[1334px]:px-4 flex justify-start items-center h-full">
     <div className="text-white flex flex-col items-start gap-5">
-      <h2 className="text-lg md:text-4xl font-bold leading-snug">
+      <h2 className="text-lg md:text-5xl font-bold leading-snug">
         We Envision a World Where <br />
         Learning Transforms Lives, <br />
         Anywhere, Anytime.
       </h2>
       <Link
         href="/login"
-        className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition text-sm md:text-md"
+        className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition text-lg md:text-md font-semibold"
       >
-        Login to Start
+        Log In to Start
       </Link>
     </div>
   </div>
@@ -221,7 +221,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive
 const ImpactSection = () => {
   return (
     <section className="flex flex-col items-center justify-center py-12 md:py-20 bg-white text-center max-w-[1326px] px-2">
-    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+    <h2 className="text-2xl lg:text-5xl xl:text-6xl  md:text-4xl font-bold text-gray-900 mb-4">
       Creating Impact Around The World
     </h2>
     <p className="text-gray-600 max-w-2xl mx-auto mb-10">
@@ -229,30 +229,30 @@ const ImpactSection = () => {
       everywhere are able to adapt to change and thrive.
     </p>
 
-    <div className="flex flex-col lg:flex-row items-center justify-center gap-4 h-[400px] 2xl:h-[500px] xl:h-[400px] lg:h-[400px] md:h-[400px] w-full">
-      <div className="2xl:w-[700px] xl:w-[620px] lg:w-[500px] md:w-100 w-full rounded-xl overflow-hidden shadow-md h-[280px]">
+    <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full">
+      <div className="2xl:w-[750px] xl:w-[620px] lg:w-[500px] md:w-100 w-full rounded-xl overflow-hidden shadow-md h-[400px]">
         <Image
           src={images.Impact}
           alt="Happy learner"
-          className="object-cover w-full h-[280px]"
+          className="object-cover w-full h-[400px]"
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:gap-3 2xl:w-[720px] xl:w-[640px] lg:w-[450px] md:w-90 w-full h-[280px]">
-        <div className="bg-red-50 p-6 rounded-xl shadow-sm">
-          <h3 className="text-2xl font-semibold text-gray-900">500+</h3>
+      <div className="grid grid-cols-2 gap-3 md:gap-4 2xl:w-[640px] xl:w-[600px] lg:w-[430px] md:w-90 w-full h-[400px]">
+        <div className="bg-red-50 p-6 rounded-xl shadow-sm flex flex-col justify-center ">
+          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900 mb-2" >500+</h3>
           <p className="text-sm text-gray-600">Learners & counting</p>
         </div>
-        <div className="bg-blue-50 p-6 rounded-xl shadow-sm">
-          <h3 className="text-2xl font-semibold text-gray-900">800+</h3>
+        <div className="bg-blue-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
+          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900">800+</h3>
           <p className="text-sm text-gray-600">Courses & Video</p>
         </div>
-        <div className="bg-blue-50 p-6 rounded-xl shadow-sm">
-          <h3 className="text-2xl font-semibold text-gray-900">100+</h3>
+        <div className="bg-blue-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
+          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900">100+</h3>
           <p className="text-sm text-gray-600">Registered Enrolls</p>
         </div>
-        <div className="bg-red-50 p-6 rounded-xl shadow-sm">
-          <h3 className="text-2xl font-semibold text-gray-900">1000+</h3>
+        <div className="bg-red-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
+          <h3 className="text-2xl 2xl:text-6xl xl:text-5xl md:text-4xl sm:text-3xl font-semibold text-gray-900">1000+</h3>
           <p className="text-sm text-gray-600">Certified Students</p>
         </div>
       </div>

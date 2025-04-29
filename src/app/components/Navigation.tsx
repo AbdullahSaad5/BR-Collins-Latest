@@ -58,13 +58,13 @@ export const Navigation = () => {
   return (
     <nav className="relative text-gray-900 flex items-center justify-between my-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 ">
       {/* Mobile Header */}
-      <div className="flex items-center justify-between w-full md:hidden">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between w-full lg:hidden">
+        <div className="flex items-center gap-5">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-neutral-900">
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <a href="/">
-            <img src="/img/logo.svg" className="object-contain aspect-[4.22] w-[241px]" alt="Logo" />
+            <img src="/img/logo.svg" className="object-contain aspect-[4.22] 2xl:w-[241px] xl:w-[221px] md:w-[171px] lg:w-[220px]  w-[121px]" alt="Logo" />
           </a>
         </div>
 
@@ -79,11 +79,11 @@ export const Navigation = () => {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:flex w-full items-center justify-between">
+      <div className="hidden lg:flex w-full items-center justify-between">
         {/* Left Section */}
         <div className="flex items-center gap-10 flex-1">
           <a href="/">
-            <img src="/img/logo.svg" className="object-contain aspect-[4.22] min-w-60 w-[241px]" alt="Logo" />
+            <img src="/img/logo.svg" className="object-contain aspect-[4.22] min-w-60 2xl:w-[241px] xl:w-[241px] md:w-[201px] lg:w-[221px]  w-[191px]" alt="Logo" />
           </a>
 
           <div className="flex gap-2.5 items-center w-full max-w-[500px]">
