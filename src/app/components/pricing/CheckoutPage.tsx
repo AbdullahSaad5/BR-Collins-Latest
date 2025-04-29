@@ -14,6 +14,7 @@ interface CheckoutPageProps {
     type: "subscription" | "individual";
   };
   onBack: () => void;
+  onClose: () => void;
 }
 
 const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => void }> = ({ plan, onBack }) => {
@@ -23,7 +24,6 @@ const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => vo
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"card" | "paypal" | "apple">("card");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -117,7 +117,7 @@ const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => vo
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>30-day money-back guarantee</span>
+              <span>High quality content from industry experts</span>
             </div>
           </div>
         </div>
@@ -126,88 +126,37 @@ const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => vo
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-neutral-900">Payment Method</h3>
 
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              type="button"
-              onClick={() => setSelectedPaymentMethod("card")}
-              className={`p-4 rounded-xl border-2 transition-all ${
-                selectedPaymentMethod === "card"
-                  ? "border-[#F86537] bg-[#F86537]/5"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
-            >
-              <div className="flex flex-col items-center gap-2">
-                <CreditCard className="w-6 h-6 text-gray-700" />
-                <span className="text-sm font-medium">Card</span>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSelectedPaymentMethod("paypal")}
-              className={`p-4 rounded-xl border-2 transition-all ${
-                selectedPaymentMethod === "paypal"
-                  ? "border-[#F86537] bg-[#F86537]/5"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
-            >
-              <div className="flex flex-col items-center gap-2">
-                <svg className="w-6 h-6 text-[#0070BA]" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M7.462 0h0.012c0.808 0 1.52 0.5 1.808 1.24l0.012 0.032 1.93 5.9 0.012 0.032c0.288 0.74 1.008 1.24 1.816 1.24h4.4c0.692 0 1.288 0.476 1.448 1.14l0.012 0.052 1.176 5.75c0.084 0.412-0.232 0.82-0.652 0.82h-2.62c-0.48 0-0.908-0.312-1.048-0.772l0.008-0.028-0.62-2.9-0.008-0.028c-0.14-0.46-0.568-0.772-1.048-0.772h-0.82c-0.48 0-0.908 0.312-1.048 0.772l-0.008 0.028-0.64 2.9-0.008 0.028c-0.14 0.46-0.568 0.772-1.048 0.772h-2.78c-0.2 0-0.384-0.12-0.464-0.304l-0.008-0.02-0.02-0.06-1.3-3.48-0.84-2.24-0.02-0.06c-0.08-0.184-0.264-0.304-0.464-0.304h-4.02c-0.2 0-0.384 0.12-0.464 0.304l-0.008 0.02-0.02 0.06-0.84 2.24-0.02 0.06c-0.08 0.184-0.264 0.304-0.464 0.304h-1.6c-0.552 0-1-0.448-1-1s0.448-1 1-1h1.24c0.2 0 0.384-0.12 0.464-0.304l0.008-0.02 0.02-0.06 0.84-2.24 0.02-0.06c0.08-0.184 0.264-0.304 0.464-0.304h4.02c0.2 0 0.384 0.12 0.464 0.304l0.008 0.02 0.02 0.06 0.84 2.24 0.02 0.06c0.08 0.184 0.264 0.304 0.464 0.304h0.82c0.2 0 0.384-0.12 0.464-0.304l0.008-0.02 0.02-0.06 0.64-2.9 0.02-0.06c0.08-0.184 0.264-0.304 0.464-0.304h2.78c0.2 0 0.384 0.12 0.464 0.304l0.008 0.02 0.02 0.06 1.3 3.48 0.02 0.06c0.08 0.184 0.264 0.304 0.464 0.304h2.62c0.2 0 0.384-0.12 0.464-0.304l0.008-0.02 0.02-0.06 1.176-5.75 0.02-0.06c0.08-0.184 0.264-0.304 0.464-0.304h-4.4c-0.2 0-0.384 0.12-0.464 0.304l-0.008 0.02-0.02 0.06-1.93 5.9-0.02 0.06c-0.08 0.184-0.264 0.304-0.464 0.304h-4.02c-0.2 0-0.384-0.12-0.464-0.304l-0.008-0.02-0.02-0.06-1.3-3.48-0.02-0.06c-0.08-0.184-0.264-0.304-0.464-0.304h-1.6c-0.552 0-1-0.448-1-1s0.448-1 1-1h1.24c0.2 0 0.384 0.12 0.464 0.304l0.008 0.02 0.02 0.06 1.3 3.48 0.02 0.06c0.08 0.184 0.264 0.304 0.464 0.304h4.02z" />
-                </svg>
-                <span className="text-sm font-medium">PayPal</span>
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSelectedPaymentMethod("apple")}
-              className={`p-4 rounded-xl border-2 transition-all ${
-                selectedPaymentMethod === "apple"
-                  ? "border-[#F86537] bg-[#F86537]/5"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
-            >
-              <div className="flex flex-col items-center gap-2">
-                <Apple className="w-6 h-6 text-gray-700" />
-                <span className="text-sm font-medium">Apple Pay</span>
-              </div>
-            </button>
-          </div>
-
-          {selectedPaymentMethod === "card" && (
-            <div className="space-y-4">
-              <div className="bg-white p-4 rounded-xl border border-gray-200">
-                <CardElement
-                  options={{
-                    style: {
-                      base: {
-                        fontSize: "16px",
-                        color: "#424770",
-                        "::placeholder": {
-                          color: "#aab7c4",
-                        },
-                      },
-                      invalid: {
-                        color: "#9e2146",
+          <div className="space-y-4">
+            <div className="bg-white p-4 rounded-xl border border-gray-200">
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: "16px",
+                      color: "#424770",
+                      "::placeholder": {
+                        color: "#aab7c4",
                       },
                     },
-                  }}
-                />
-              </div>
+                    invalid: {
+                      color: "#9e2146",
+                    },
+                  },
+                }}
+              />
+            </div>
 
-              <div className="flex items-center gap-3 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <Lock className="w-4 h-4" />
-                  <span>Secure payment</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
-                  <span>256-bit SSL</span>
-                </div>
+            <div className="flex items-center gap-3 text-sm text-gray-500">
+              <div className="flex items-center gap-2">
+                <Lock className="w-4 h-4" />
+                <span>Secure payment</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>256-bit SSL</span>
               </div>
             </div>
-          )}
+          </div>
 
           {error && (
             <div className="flex items-center gap-2 text-red-500 text-sm bg-red-50 p-3 rounded-lg border border-red-100">
@@ -259,9 +208,12 @@ const CheckoutForm: React.FC<{ plan: CheckoutPageProps["plan"]; onBack: () => vo
   );
 };
 
-const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack }) => {
+const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack, onClose }) => {
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn"
+    >
       <div
         onClick={(e) => e.stopPropagation()}
         className="bg-white rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 animate-slideIn"

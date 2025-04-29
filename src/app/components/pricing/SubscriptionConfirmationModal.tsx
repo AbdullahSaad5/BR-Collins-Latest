@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { X, CreditCard, CheckCircle2, Shield, Zap, ArrowRight, Users } from "lucide-react";
 import CheckoutPage from "./CheckoutPage";
+import { useRouter } from "next/navigation";
 
 interface SubscriptionConfirmationModalProps {
   isOpen: boolean;
@@ -23,12 +24,21 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
   plan,
 }) => {
   const [showCheckout, setShowCheckout] = useState(false);
+  const router = useRouter();
 
   if (!isOpen) return null;
 
   console.log(plan);
 
   const isCorporate = plan.paymentType === "Corporate";
+
+  const handleConfirm = () => {
+    if (plan.type === "individual") {
+      router.push("/course");
+    } else {
+      setShowCheckout(true);
+    }
+  };
 
   if (showCheckout) {
     return (
@@ -37,6 +47,10 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
           title: plan.title,
           price: plan.price,
           type: plan.type,
+        }}
+        onClose={() => {
+          setShowCheckout(false);
+          onClose();
         }}
         onBack={() => setShowCheckout(false)}
       />
@@ -156,15 +170,15 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
 
           <div className="mt-8 flex flex-col gap-3">
             <button
-              onClick={() => setShowCheckout(true)}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
+              onClick={handleConfirm}
+              className="cursor-pointer w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
             >
               {plan.type === "subscription" ? "Confirm Purchase" : "Explore Courses"}
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
               onClick={onClose}
-              className="w-full px-6 py-3 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              className="cursor-pointer w-full px-6 py-3 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
