@@ -242,3 +242,4 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ plan, onBack, onClose, clie
 };
 
 export default CheckoutPage;
+

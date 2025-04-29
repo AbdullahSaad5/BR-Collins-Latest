@@ -120,13 +120,13 @@ export const Navigation = () => {
         {/* Right Section */}
         <div className="flex items-center gap-10">
           <div className="flex gap-8 items-center font-base">
-            <Link href="/subscriptions" className="hover:text-sky-600 whitespace-nowrap">
+            <Link href="/subscriptions" className="hover:text-orange-600 whitespace-nowrap">
               Subscriptions
             </Link>
-            <Link href="/about" className="hover:text-sky-600 whitespace-nowrap">
+            <Link href="/about" className="hover:text-orange-600 whitespace-nowrap">
               About Us
             </Link>
-            <Link href="/contact" className="hover:text-sky-600 whitespace-nowrap">
+            <Link href="/contact" className="hover:text-orange-600 whitespace-nowrap">
               Contact Us
             </Link>
           </div>
@@ -196,7 +196,7 @@ export const Navigation = () => {
               </div>
             ) : (
               <Link href="/login">
-                <button className="overflow-hidden gap-1.5 px-5 py-0.5 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] whitespace-nowrap">
+                <button className="overflow-hidden gap-1.5 px-5 py-0.5 hover:bg-amber-500 hover:text-white hover:border-1 hover:border-gray-400 bg-white border border-solid border-zinc-200 min-h-[52px] rounded-[56px] whitespace-nowrap">
                   Login
                 </button>
               </Link>

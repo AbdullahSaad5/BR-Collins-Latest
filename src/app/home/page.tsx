@@ -486,7 +486,7 @@ export const Homepage = () => {
         </div>
       </div> */}
 
-<div className="h-[300px] lg:h-[500px] w-full">
+<div className="h-[300px] lg:h-[500px] w-full mx-auto">
       <Swiper
         spaceBetween={0}
         slidesPerView={1}
