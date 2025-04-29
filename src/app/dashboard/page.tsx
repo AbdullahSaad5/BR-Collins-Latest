@@ -20,6 +20,7 @@ import ViewCourseCategories from "../components/DashboardComponents/ViewCourseCa
 import ViewCourseContent from "../components/DashboardComponents/ViewCourseContent";
 import ViewCourses from "../components/DashboardComponents/ViewCourses";
 import ViewUser from "../components/DashboardComponents/ViewUser";
+import SubscriptionDetails from "../components/DashboardComponents/SubscriptionDetails";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -68,6 +69,8 @@ export default function Dashboard() {
     switch (activeItem) {
       case "dashboard":
         return <DashboardStats />;
+      case "subscription":
+        return <SubscriptionDetails />;
       case "addCourseCategory":
         return <AddCourseCategory />;
       case "viewCourseCategory":

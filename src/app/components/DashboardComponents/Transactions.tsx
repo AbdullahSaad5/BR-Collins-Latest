@@ -1,106 +1,180 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
 import CustomDataTable from "./CustomDataTable";
+import { useAppSelector } from "@/app/store/hooks";
+import { getAccessToken } from "@/app/store/features/users/userSlice";
+import ActionIcons from "@/components/ActionIcons";
+import { Download, ExternalLink } from "lucide-react";
+import { showToast } from "@/app/utils/toast";
 
-interface Transaction {
-  id: number;
-  student: string;
-  course: string;
-  amount: string;
-  date: string;
-  status: string;
-  paymentMethod: string;
+interface Customer {
+  id: string;
+  name: string;
+  email: string;
 }
 
-const data: Transaction[] = [
-  {
-    id: 1,
-    student: "John Doe",
-    course: "Introduction to React",
-    amount: "$99.00",
-    date: "2024-03-15",
-    status: "Completed",
-    paymentMethod: "Credit Card",
-  },
-  {
-    id: 2,
-    student: "Jane Smith",
-    course: "Advanced JavaScript",
-    amount: "$149.00",
-    date: "2024-03-14",
-    status: "Completed",
-    paymentMethod: "PayPal",
-  },
-  {
-    id: 3,
-    student: "Mike Johnson",
-    course: "UI/UX Design Principles",
-    amount: "$79.00",
-    date: "2024-03-13",
-    status: "Pending",
-    paymentMethod: "Bank Transfer",
-  },
-];
+interface DeletedCustomer {
+  id: string;
+  deleted: boolean;
+}
+
+interface PaymentMethod {
+  id: string;
+  type: string;
+  card?: {
+    brand: string;
+    last4: string;
+  };
+}
+
+interface StripeInvoice {
+  id: string;
+  amount: number;
+  date: number;
+  status: "draft" | "open" | "paid" | "uncollectible" | "void" | null;
+  subscription: string;
+  paymentBrand: string | undefined;
+  paymentLast4: string | undefined;
+  invoiceURL: string | null | undefined;
+  downloadURL: string | null | undefined;
+  currency: string;
+  customer: string | Customer | DeletedCustomer;
+  created: number;
+  paymentMethod: string | PaymentMethod | null;
+}
+
+const fetchInvoices = async (accessToken: string): Promise<{ data: StripeInvoice[] }> => {
+  const response = await api.get("/stripe/invoices", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
+};
+
+const createPortalSession = async (accessToken: string): Promise<{ url: string }> => {
+  const response = await api.get("/stripe/portal", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data.data;
+};
 
 const Transactions = () => {
+  const accessToken = useAppSelector(getAccessToken);
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["invoices"],
+    queryFn: () => fetchInvoices(accessToken!),
+    enabled: !!accessToken,
+  });
+
+  const portalSessionMutation = useMutation({
+    mutationFn: () => createPortalSession(accessToken!),
+    onSuccess: (data) => {
+      window.open(data.url, "_blank");
+    },
+    onError: (error) => {
+      showToast("Failed to open Stripe portal", "error");
+      console.error("Error creating portal session:", error);
+    },
+  });
+
+  const getPaymentMethodDisplay = (paymentMethod: string | PaymentMethod | null): string => {
+    if (!paymentMethod) return "N/A";
+    if (typeof paymentMethod === "string") return paymentMethod;
+    if (paymentMethod.card) {
+      return `${paymentMethod.card.brand} •••• ${paymentMethod.card.last4}`;
+    }
+    return paymentMethod.type;
+  };
+
   const columns = [
     {
-      name: "Student",
-      selector: (row: Transaction) => row.student,
-      sortable: true,
-      grow: 1,
-      cell: (row: Transaction) => (
-        <div className="text-base text-left text-neutral-900 truncate" title={row.student}>
-          {row.student}
-        </div>
-      ),
-    },
-    {
-      name: "Course",
-      selector: (row: Transaction) => row.course,
-      sortable: true,
-      grow: 1,
-      cell: (row: Transaction) => (
-        <div className="text-base text-left text-neutral-900 truncate" title={row.course}>
-          {row.course}
-        </div>
-      ),
-    },
-    {
       name: "Amount",
-      selector: (row: Transaction) => row.amount,
+      selector: (row: StripeInvoice) => row.amount,
       sortable: true,
       grow: 0.5,
-      cell: (row: Transaction) => <div className="text-base text-left text-neutral-900">{row.amount}</div>,
+      cell: (row: StripeInvoice) => (
+        <div className="text-base text-left text-neutral-900">
+          {new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: row.currency,
+          }).format(row.amount / 100)}
+        </div>
+      ),
     },
     {
       name: "Date",
-      selector: (row: Transaction) => row.date,
+      selector: (row: StripeInvoice) => row.created,
       sortable: true,
       grow: 0.5,
-      cell: (row: Transaction) => <div className="text-base text-left text-neutral-900">{row.date}</div>,
+      cell: (row: StripeInvoice) => (
+        <div className="text-base text-left text-neutral-900">{new Date(row.created * 1000).toLocaleDateString()}</div>
+      ),
     },
     {
       name: "Status",
-      selector: (row: Transaction) => row.status,
+      selector: (row: StripeInvoice) => row.status,
       sortable: true,
       grow: 0.5,
-      cell: (row: Transaction) => (
+      cell: (row: StripeInvoice) => (
         <span
           className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
-            row.status === "Completed" ? "text-green-600 bg-emerald-50" : "text-yellow-600 bg-yellow-50"
+            row.status === "paid"
+              ? "text-green-600 bg-emerald-50"
+              : row.status === "open"
+              ? "text-yellow-600 bg-yellow-50"
+              : row.status === "draft"
+              ? "text-gray-600 bg-gray-50"
+              : row.status === "uncollectible"
+              ? "text-red-600 bg-red-50"
+              : row.status === "void"
+              ? "text-gray-600 bg-gray-50"
+              : "text-gray-600 bg-gray-50"
           }`}
         >
-          {row.status}
+          {row.status ? row.status.charAt(0).toUpperCase() + row.status.slice(1) : "Unknown"}
         </span>
       ),
     },
     {
       name: "Payment Method",
-      selector: (row: Transaction) => row.paymentMethod,
+      selector: (row: StripeInvoice) => getPaymentMethodDisplay(row.paymentMethod),
       sortable: true,
       grow: 0.5,
-      cell: (row: Transaction) => <div className="text-base text-left text-neutral-900">{row.paymentMethod}</div>,
+      cell: (row: StripeInvoice) => (
+        <div className="text-base text-left text-neutral-900">{getPaymentMethodDisplay(row.paymentMethod)}</div>
+      ),
+    },
+    {
+      name: "Actions",
+      grow: 0.5,
+      cell: (row: StripeInvoice) => (
+        <div className="flex items-center gap-1">
+          <ActionIcons
+            onView={row.invoiceURL ? () => window.open(row.invoiceURL!, "_blank") : undefined}
+            viewTooltip="View Invoice"
+            disabled={{
+              view: !row.invoiceURL,
+              edit: true,
+              delete: true,
+            }}
+          />
+          {row.downloadURL && (
+            <button
+              onClick={() => window.open(row.downloadURL!, "_blank")}
+              className="p-1.5 rounded-md transition-colors duration-200 cursor-pointer hover:bg-gray-100 text-gray-600 hover:text-gray-900"
+              title="Download Invoice"
+            >
+              <Download className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+      ),
     },
   ];
 
@@ -108,13 +182,20 @@ const Transactions = () => {
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-neutral-900">Transactions</h2>
+        <button
+          onClick={() => portalSessionMutation.mutate()}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
+        >
+          <ExternalLink className="w-4 h-4" />
+          Manage Billing
+        </button>
       </div>
 
       <CustomDataTable
         columns={columns}
-        data={data}
-        isLoading={false}
-        error={null}
+        data={data?.data || []}
+        isLoading={isLoading}
+        error={error ? "Failed to load transactions" : null}
         noDataMessage="No transactions found"
       />
     </section>
