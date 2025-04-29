@@ -11,6 +11,7 @@ import { ICourse } from "@/app/types/course.contract";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import CourseCard from "../components/Course/CourseCard";
+import CourseCardSlider from "../components/Course/CourseCardSlider";
 
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -752,19 +753,13 @@ export const Homepage = () => {
         {/* Courses Grid */}
         <section className="relative text-gray-900">
           <div className="w-full mx-auto max-w-[1326px] h-auto relative">
-            <div className="flex flex-nowrap items-stretch overflow-auto gap-3 mb-16 py-6 custom-scroll scrollbar-hide">
-              {isCoursesLoading ? (
-                <div className="w-full text-center">Loading courses...</div>
-              ) : coursesError ? (
-                <div className="w-full text-center text-red-500">Error loading courses</div>
-              ) : (
-                courses?.map((course) => (
-                  <div>
-                    <CourseCard key={course._id} course={course} />
-                  </div>
-                ))
-              )}
-            </div>
+            {isCoursesLoading ? (
+              <div className="w-full text-center">Loading courses...</div>
+            ) : coursesError ? (
+              <div className="w-full text-center text-red-500">Error loading courses</div>
+            ) : (
+              <CourseCardSlider courses={courses || []} />
+            )}
           </div>
         </section>
       </section>

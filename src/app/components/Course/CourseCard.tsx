@@ -28,7 +28,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   };
 
   return (
-    <div className="h-full min-w-[200px] bg-white rounded-2xl shadow-md transition-all duration-300 border border-gray-200">
+    <div className="h-full min-w-[200px] w-full bg-white rounded-2xl shadow-md transition-all duration-300 border border-gray-200">
       <div className="p-4 flex flex-col h-full">
         {/* Hours Badge */}
         <div className="mb-4">
