@@ -28,7 +28,7 @@ const ViewCart = () => {
   };
 
   return (
-    <div className="w-full min-h-[100vh] flex flex-col justify-center items-center bg-blue-50">
+    <div className="w-full min-h-[100vh] flex flex-col justify-center items-center bg-gray-50">
       <div className="w-[80%] min-h-[70vh] flex flex-col justify-start items-start gap-5 py-5">
         <h2 className="text-xs md:text-md">
           {`Home > Courses > Accountablity in the workplace >`} <span className="text-blue-400">Cart</span>
@@ -44,7 +44,7 @@ const ViewCart = () => {
             {items.map((item: ICourse, index: number) => {
               return (
                 <div key={index} className="w-full h-[12vh] flex flex-col justify-center items-center gap-2">
-                  <hr className="w-[90%] text-gray-200" />
+                  <hr className="w-[100%] text-gray-200 mb-3 mt-3" />
                   <div className="relative w-full h-[12vh] flex justify-center items-start">
                     <div className="w-[30%] md:w-[20%] h-full">
                       <Image
@@ -57,7 +57,7 @@ const ViewCart = () => {
                       />
                     </div>
                     <div className="w-[70%] h-full pl-2 md:pl-4 flex flex-col justify-between items-start gap-[1px]">
-                      <div className="text-[10px] bg-blue-400 text-white py-[2px] px-1 rounded-md">
+                      <div className="text-[10px] bg-[#1176C1] text-white py-[2px] px-1 rounded-md mb-3">
                         {item.noOfHours}HRS
                       </div>
                       <h2 className="text-sm md:text-md leading-5 font-bold">{item.title}</h2>
@@ -110,9 +110,9 @@ const ViewCart = () => {
                       <Image
                         src={TrashIcon}
                         alt="trash_icon"
-                        width={20}
-                        height={20}
-                        className="absolute bottom-0 right-0"
+                        width={17}
+                        height={17}
+                        className="absolute bottom-0 top-19 right-0 cursor-pointer"
                       />
                     </div>
                   </div>
@@ -120,17 +120,18 @@ const ViewCart = () => {
               );
             })}
           </div>
-          <div className="w-full md:w-[30%] min-h-[30vh] flex flex-col justify-center items-center bg-white rounded-lg p-5 md:p-5 gap-2 md:mt-0 mt-10">
-            <div className="w-full flex justify-between items-center">
-              <div className="w-1/2 flex justify-start items-start text-blue-500 font-bold">Total:</div>
-              <div className="w-1/2 flex flex-col justify-end items-end">
-                <h1 className="text-2xl font-bold">${bill.totalDiscounted}.00</h1>
-                <h1 className="text-xl text-gray-500 line-through">${bill.totalOriginal}.00</h1>
-                <h1 className="text-lg text-gray-600">Discount {Math.round(bill.discountPercentage)}% off</h1>
-              </div>
+          <div className="w-[372px]  h-[250px] flex flex-col justify-center items-center bg-gray-50 rounded-[20px] pr-5 pl-5 gap-2 md:mt-0 mt-10 shadow-lg">
+            <div className="w-full flex justify-between items-center flex-row">
+              <div className="w-1/2 justify-start text-blue-500 font-bold mr-auto">Total:</div>
+              <div className="w-1/2 ml-[50px] justify-end text-3xl font-bold">${bill.totalDiscounted}.00</div>
             </div>
-            <hr className="w-[80%] text-gray-300" />
-            <button className="w-full p-2 rounded-full border border-[#F86537] bg-[#F86537] text-sm md:text-md line-clamp-1 text-white">
+              <div className="w-full flex flex-col justify-end items-end mb-7 mt-3">
+                <h1 className="text-2xl font-bold"></h1>
+                <h1 className="text-sm text-gray-500 line-through">${bill.totalOriginal}.00</h1>
+                <h1 className="text-sm text-gray-600">Discount {Math.round(bill.discountPercentage)}% off</h1>
+            </div>
+            <hr className="w-[80%] text-gray-300 mb-3 mt-3" />
+            <button className="w-full p-4 rounded-full border border-[#F86537] bg-[#F86537] text-sm md:text-md line-clamp-1 text-white">
               {`Proceed to checkout ->`}
             </button>
           </div>
