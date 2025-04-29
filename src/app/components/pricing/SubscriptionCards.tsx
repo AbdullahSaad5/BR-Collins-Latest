@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -31,12 +31,12 @@ const SubscriptionCards: React.FC = () => {
   const [data, setData] = useState<SubscriptionData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedCorporatePlan, setSelectedCorporatePlan] = useState<number | null>(null);
+  const [selectedCorporatePlan, setSelectedCorporatePlan] = useState<number | null>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/data/subscriptionData.json');
+        const response = await axios.get("/data/subscriptionData.json");
         setData(response.data);
       } catch (err) {
         setError("Failed to fetch subscription data");
@@ -65,7 +65,7 @@ const SubscriptionCards: React.FC = () => {
                   <h1 className="text-xl font-bold text-black mb-2">{plan.title}</h1>
                   <p className="text-gray-700">{plan.description}</p>
                 </div>
-                <button className="bg-[#F86537] text-white py-4 font-medium px-6 rounded-4xl self-start">
+                <button className="bg-[#F86537] text-white py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0">
                   {plan.buttonText}
                 </button>
               </div>
@@ -76,9 +76,7 @@ const SubscriptionCards: React.FC = () => {
                   </h1>
                 </div>
                 <div>
-                  <h2 className="text-6xl font-bold flex items-end flex-col">
-                    ${plan.price}
-                  </h2>
+                  <h2 className="text-6xl font-bold flex items-end flex-col">${plan.price}</h2>
                   <p className="flex items-end flex-col">{plan.priceText}</p>
                 </div>
               </div>
@@ -127,14 +125,12 @@ const SubscriptionCards: React.FC = () => {
                     </div>
                   </div>
                 </li>
-                {index < data.corporatePlans.plans.length - 1 && (
-                  <hr className="border-gray-200" />
-                )}
+                {index < data.corporatePlans.plans.length - 1 && <hr className="border-gray-200" />}
               </React.Fragment>
             ))}
           </ul>
         </div>
-        <button className="bg-[#F86537] text-white py-4 font-medium px-6 rounded-full w-full">
+        <button className="bg-[#F86537] text-white py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0">
           {data.corporatePlans.buttonText}
         </button>
       </div>

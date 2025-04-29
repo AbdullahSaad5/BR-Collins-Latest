@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import SubscriptionCards from "../components/pricing/subscriptioncards";
+import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
