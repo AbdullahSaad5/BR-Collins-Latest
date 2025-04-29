@@ -79,17 +79,24 @@ const Page = () => {
     <div className="about flex flex-col justify-center items-center">
 
       {/* Header */}
-      <div className="h-[580px] w-screen relative bg-cover bg-center bg-[url('/assets/images/header.jpeg')] flex justify-center items-center">
-        <div className="absolute text-white max-w-[1326px] flex flex-col justify-start items-start gap-5 2xl:left-[23%] xl:left-[5%] lg:left-[2%] md:left-[5%] left-[2%]">
-          <h2 className="text-lg md:text-4xl font-bold leading-snug">
-            We Envision a World Where <br />
-            Learning Transforms Lives, <br /> Anywhere, Anytime.
-          </h2>
-          <Link href="/login" className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition text-sm md:text-md">
-            Login to Start
-          </Link>
-        </div>
-      </div>
+      <div className="h-[580px] w-screen bg-cover bg-center bg-[url('/assets/images/header.jpeg')] flex justify-center items-center ">
+  <div className="max-w-[1326px] w-full mx-auto px-1 max-[1334px]:px-4 flex justify-start items-center h-full">
+    <div className="text-white flex flex-col items-start gap-5">
+      <h2 className="text-lg md:text-4xl font-bold leading-snug">
+        We Envision a World Where <br />
+        Learning Transforms Lives, <br />
+        Anywhere, Anytime.
+      </h2>
+      <Link
+        href="/login"
+        className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition text-sm md:text-md"
+      >
+        Login to Start
+      </Link>
+    </div>
+  </div>
+</div>
+
       <ImpactSection/>
 
       {/* Testimonials Section */}
