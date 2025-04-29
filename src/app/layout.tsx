@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CourseProvider } from "./components/context/CourseContext";
-import { UserProvider } from "./components/context/CartContext";
 import { TopBanner } from "./components/TopBanner";
 import { Navigation } from "./components/Navigation";
 import Footer from "./components/Footer";
@@ -43,14 +42,12 @@ export default function RootLayout({
           <PersistGate loading={null} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
               <CourseProvider>
-                <UserProvider>
-                  <main className="flex overflow-hidden flex-col bg-white">
-                    <TopBanner />
-                    <Navigation />
-                    {children}
-                    <Footer />
-                  </main>
-                </UserProvider>
+                <main className="flex overflow-hidden flex-col bg-white">
+                  <TopBanner />
+                  <Navigation />
+                  {children}
+                  <Footer />
+                </main>
               </CourseProvider>
               <ToastContainer />
             </QueryClientProvider>

@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useUser } from "./context/CartContext";
+import React, { useState, useRef, useEffect } from "react";
 import Cart from "./Cart/Cart";
-import { ShoppingCart, Menu, X, User } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { logout } from "@/app/store/features/users/userSlice";
+import { toggleCart } from "@/app/store/features/cart/cartSlice";
 import { IUser } from "../types/user.contract";
 import Image from "next/image";
 
@@ -20,14 +20,29 @@ const toTitleCase = (str: string) => {
 };
 
 export const Navigation = () => {
-  const { cart, setCart, items } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [DropdownMenu, setDropDownMenu] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
   const user = useAppSelector((state) => state.user.user);
+  const { items, isCartOpen } = useAppSelector((state) => state.cart);
   const profilePicture = (user as IUser).profilePicture;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedRoute = e.target.value;
@@ -53,7 +68,7 @@ export const Navigation = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button onClick={() => setCart(true)} className="relative p-2">
+          <button onClick={() => dispatch(toggleCart())} className="relative p-2">
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
               <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
@@ -116,7 +131,7 @@ export const Navigation = () => {
           </div>
 
           <div className="flex gap-4 items-center text-base">
-            <button onClick={() => setCart(true)} className="relative">
+            <button onClick={() => dispatch(toggleCart())} className="relative">
               <ShoppingCart className="w-7 h-7 text-base" />
               {items.length > 0 && (
                 <div className="absolute -top-3 -right-3 text-xs py-1 px-2 rounded-full bg-blue-200">
@@ -126,10 +141,9 @@ export const Navigation = () => {
             </button>
             {isLoggedIn ? (
               <div
-                className="flex items-center gap-4 cursor-pointer"
-                onClick={() => {
-                  router.push("/dashboard");
-                }}
+                ref={dropdownRef}
+                className="flex items-center gap-4 cursor-pointer relative"
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               >
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center relative overflow-hidden">
@@ -148,6 +162,36 @@ export const Navigation = () => {
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56 z-[99999]">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
+                        (user as IUser).lastName
+                      }`}</p>
+                      <p className="text-xs text-gray-500">{`${toTitleCase((user as IUser).role)}`}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        router.push("/dashboard");
+                        setIsProfileDropdownOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors duration-200"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      <span>Dashboard</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsProfileDropdownOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors duration-200"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <Link href="/login">
@@ -247,7 +291,7 @@ export const Navigation = () => {
       {/* Cart Overlay */}
       <div
         className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out ${
-          cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          isCartOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
         }`}
       >
         <Cart />

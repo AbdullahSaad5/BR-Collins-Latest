@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import AboutBgImage from '../../../public/assets/ourStoryImg.svg';
 import axios from "axios";
-
+import images from "../../../public/assets/images/images";
 interface Testimonial {
   message: string;
   avatar: string;
@@ -79,17 +79,25 @@ const Page = () => {
     <div className="about flex flex-col justify-center items-center">
 
       {/* Header */}
-      <div className="h-[580px] w-screen relative bg-cover bg-center bg-[url('/assets/images/header.jpeg')] flex justify-center items-center">
-        <div className="text-white w-[85%] flex flex-col justify-start items-start gap-5">
-          <h2 className="text-lg md:text-4xl font-bold leading-snug">
-            We Envision a World Where <br />
-            Learning Transforms Lives, <br /> Anywhere, Anytime.
-          </h2>
-          <Link href="/login" className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition text-sm md:text-md">
-            Login to Start
-          </Link>
-        </div>
-      </div>
+      <div className="h-[580px] w-screen bg-cover bg-center bg-[url('/assets/images/header.jpeg')] flex justify-center items-center ">
+  <div className="max-w-[1326px] w-full mx-auto px-1 max-[1334px]:px-4 flex justify-start items-center h-full">
+    <div className="text-white flex flex-col items-start gap-5">
+      <h2 className="text-lg md:text-4xl font-bold leading-snug">
+        We Envision a World Where <br />
+        Learning Transforms Lives, <br />
+        Anywhere, Anytime.
+      </h2>
+      <Link
+        href="/login"
+        className="bg-orange-500 text-white px-6 py-1 rounded-full hover:bg-orange-600 transition text-sm md:text-md"
+      >
+        Login to Start
+      </Link>
+    </div>
+  </div>
+</div>
+
+      <ImpactSection/>
 
       {/* Testimonials Section */}
       {testimonials.length > 0 && (
@@ -137,7 +145,7 @@ const Page = () => {
       )}
 
       {/* Journey Section */}
-      <section className="min-h-[120vh] w-[85%] flex flex-col justify-center items-center gap-5 py-10">
+      <section className="min-h-[120vh] max-w-[1326px] flex flex-col justify-center items-center gap-5 py-10 lg:px-5 px-2">
         <div className="flex flex-col md:flex-row justify-between items-center gap-5">
           <div className="w-full md:w-1/2 h-full">
             <p className="text-orange-600 font-semibold mb-2">OUR STORY</p>
@@ -210,4 +218,48 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive
   );
 };
 
+const ImpactSection = () => {
+  return (
+    <section className="flex flex-col items-center justify-center py-12 md:py-20 bg-white text-center max-w-[1326px] px-2">
+    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+      Creating Impact Around The World
+    </h2>
+    <p className="text-gray-600 max-w-2xl mx-auto mb-10">
+      With our global catalog spanning the latest skills and topics, people and organizations
+      everywhere are able to adapt to change and thrive.
+    </p>
+
+    <div className="flex flex-col lg:flex-row items-center justify-center gap-4 h-[400px] 2xl:h-[500px] xl:h-[400px] lg:h-[400px] md:h-[400px] w-full">
+      <div className="2xl:w-[700px] xl:w-[620px] lg:w-[500px] md:w-100 w-full rounded-xl overflow-hidden shadow-md h-[280px]">
+        <Image
+          src={images.Impact}
+          alt="Happy learner"
+          className="object-cover w-full h-[280px]"
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 md:gap-3 2xl:w-[720px] xl:w-[640px] lg:w-[450px] md:w-90 w-full h-[280px]">
+        <div className="bg-red-50 p-6 rounded-xl shadow-sm">
+          <h3 className="text-2xl font-semibold text-gray-900">500+</h3>
+          <p className="text-sm text-gray-600">Learners & counting</p>
+        </div>
+        <div className="bg-blue-50 p-6 rounded-xl shadow-sm">
+          <h3 className="text-2xl font-semibold text-gray-900">800+</h3>
+          <p className="text-sm text-gray-600">Courses & Video</p>
+        </div>
+        <div className="bg-blue-50 p-6 rounded-xl shadow-sm">
+          <h3 className="text-2xl font-semibold text-gray-900">100+</h3>
+          <p className="text-sm text-gray-600">Registered Enrolls</p>
+        </div>
+        <div className="bg-red-50 p-6 rounded-xl shadow-sm">
+          <h3 className="text-2xl font-semibold text-gray-900">1000+</h3>
+          <p className="text-sm text-gray-600">Certified Students</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  );
+};
+
 export default Page;
+
