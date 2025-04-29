@@ -82,11 +82,11 @@ export const Navigation = () => {
               </div>
             </div>
 
-            <div className="relative w-full max-w-[120px] m-1">
+            <div className="relative w-full  flex flex-row items-center justify-center max-w-[120px] m-auto">
               <select
                 onChange={handleChange}
                 defaultValue="/course"
-                className="w-full appearance-none flex justify-center items-center px-1 py-1 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
+                className="w-full appearance-none flex flex-row justify-center items-center px-3 py-2 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
               >
                 <option value="/course">Courses</option>
                 <option value="/about">About</option>
@@ -103,7 +103,7 @@ export const Navigation = () => {
 
         {/* Right Section */}
         <div className="flex items-center gap-10">
-          <div className="flex gap-8 items-center font-medium">
+          <div className="flex gap-8 items-center font-base">
             <Link href="/subscriptions" className="hover:text-sky-600 whitespace-nowrap">
               Subscriptions
             </Link>
@@ -115,11 +115,11 @@ export const Navigation = () => {
             </Link>
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center text-base">
             <button onClick={() => setCart(true)} className="relative">
-              <ShoppingCart className="w-6 h-6" />
+              <ShoppingCart className="w-7 h-7 text-base" />
               {items.length > 0 && (
-                <div className="absolute -top-1 -right-1 text-xs py-1 px-2 rounded-full bg-blue-200">
+                <div className="absolute -top-3 -right-3 text-xs py-1 px-2 rounded-full bg-blue-200">
                   {items.length}
                 </div>
               )}

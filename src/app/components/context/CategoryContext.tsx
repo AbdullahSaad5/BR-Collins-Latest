@@ -29,7 +29,7 @@ export const CategoryProvider = ({ children }: { children: React.ReactNode }) =>
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await api.get("/course-categories");
+        const response = await api.get("data/course-categories.json");
         const apiCategories = response.data.data;
         setCategories(apiCategories);
       } catch (err) {

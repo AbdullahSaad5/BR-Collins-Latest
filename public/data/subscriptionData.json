@@ -14,7 +14,7 @@
         "price": 199,
         "priceText": "All Courses",
         "paymentType": "Yearly",
-        "buttonText": "Subscribe Now"
+        "buttonText": "Buy Now"
       }
     ],
     "corporatePlans": {
@@ -34,6 +34,6 @@
           "users": "50 users"
         }
       ],
-      "buttonText": "Contact Sales"
+      "buttonText": "Buy Now"
     }
   }
