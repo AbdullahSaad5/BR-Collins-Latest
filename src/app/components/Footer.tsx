@@ -149,7 +149,7 @@ const Footer = () => {
               width={100}
               height={100}
               alt="Logo"
-              className="object-contain w-[274px]"
+              className="object-cover w-[274px]"
             />
           </div>
 

@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setUser, setAccessToken, setRefreshToken } from "@/app/store/features/users/userSlice";
 import { IoMdArrowForward } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
+import Link from "next/link";
 
 interface LoginRequiredModalProps {
   isOpen: boolean;
@@ -29,7 +30,6 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
   onClose,
   reason = "to access our subscription plans",
 }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -62,14 +62,6 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
 
   const onSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data);
-  };
-
-  const handleForgotPassword = () => {
-    router.push(`/forgot-password?next=/subscriptions`);
-  };
-
-  const handleRegister = () => {
-    router.push(`/register?next=/subscriptions`);
   };
 
   if (!isOpen) return null;
@@ -143,13 +135,12 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
                 </label>
               </div>
               <div>
-                <button
-                  type="button"
-                  onClick={handleForgotPassword}
+                <Link
+                  href={"/forgot-password?next=/subscriptions"}
                   className="text-[#F86537] hover:text-[#E55A2E] font-medium transition-colors"
                 >
                   Forgot password?
-                </button>
+                </Link>
               </div>
             </div>
             <button
@@ -166,12 +157,12 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
 
           <p className="text-sm text-center mt-6 text-gray-600">
             Don't have an account?{" "}
-            <button
-              onClick={handleRegister}
+            <Link
+              href={"/register?next=/subscriptions"}
               className="text-[#F86537] hover:text-[#E55A2E] font-medium transition-colors"
             >
               Register
-            </button>
+            </Link>
           </p>
         </div>
       </div>
