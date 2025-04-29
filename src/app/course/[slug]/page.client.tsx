@@ -404,7 +404,7 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
                   {/* <Image src="/assets/images/play.png" alt="Play" width={100} height={100} /> */}
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full backdrop-blur-sm bg-white/10 -m-2"></div>
-                    <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center cursor-pointer hover:bg-black/70 transition-all relative">
+                    <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-black/70 transition-all relative">
                       <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
                       </svg>
