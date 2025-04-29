@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
 import Cart from "./Cart/Cart";
 import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
@@ -26,11 +26,30 @@ export const Navigation = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
   const user = useAppSelector((state) => state.user.user);
   const { items, isCartOpen } = useAppSelector((state) => state.cart);
   const profilePicture = (user as IUser).profilePicture;
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Courses");
+
+  useEffect(() => {
+    switch (pathname) {
+      case "/course":
+        setSelectedOption("Courses");
+        break;
+      case "/about":
+        setSelectedOption("About");
+        break;
+      case "/contact":
+        setSelectedOption("Contact");
+        break;
+      default:
+        setSelectedOption("Courses");
+    }
+  }, [pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,7 +83,11 @@ export const Navigation = () => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <a href="/">
-            <img src="/img/logo.svg" className="object-contain aspect-[4.22] 2xl:w-[241px] xl:w-[221px] md:w-[171px] lg:w-[220px]  w-[121px]" alt="Logo" />
+            <img
+              src="/img/logo.svg"
+              className="object-contain aspect-[4.22] 2xl:w-[241px] xl:w-[221px] md:w-[171px] lg:w-[220px]  w-[121px]"
+              alt="Logo"
+            />
           </a>
         </div>
 
@@ -83,7 +106,11 @@ export const Navigation = () => {
         {/* Left Section */}
         <div className="flex items-center gap-10 flex-1">
           <a href="/">
-            <img src="/img/logo.svg" className="object-contain aspect-[4.22] min-w-60 2xl:w-[241px] xl:w-[241px] md:w-[201px] lg:w-[221px]  w-[191px]" alt="Logo" />
+            <img
+              src="/img/logo.svg"
+              className="object-contain aspect-[4.22] min-w-60 2xl:w-[241px] xl:w-[241px] md:w-[201px] lg:w-[221px]  w-[191px]"
+              alt="Logo"
+            />
           </a>
 
           <div className="flex gap-2.5 items-center w-full max-w-[500px]">
@@ -98,21 +125,52 @@ export const Navigation = () => {
               </div>
             </div>
 
-            <div className="relative w-full  flex flex-row items-center justify-center max-w-[120px] m-auto">
-              <select
-                onChange={handleChange}
-                defaultValue="/course"
-                className="w-full appearance-none  flex flex-row justify-center items-center px-3 py-2 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
+            <div className="relative w-full flex flex-row items-center justify-center max-w-[120px] m-auto">
+              <div
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-full appearance-none flex flex-row items-center px-3 py-2 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"
               >
-                <option value="/course">Courses</option>
-                <option value="/about">About</option>
-                <option value="/contact">Contact</option>
-              </select>
-              <img
-                src="/img/downarrow.svg"
-                className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
-                alt="Dropdown icon"
-              />
+                {selectedOption}
+                <img
+                  src="/img/downarrow.svg"
+                  className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
+                  alt="Dropdown icon"
+                />
+              </div>
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+                  <button
+                    onClick={() => {
+                      router.push("/course");
+                      setSelectedOption("Courses");
+                      setIsDropdownOpen(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 border-b border-gray-100 text-left"
+                  >
+                    Courses
+                  </button>
+                  <button
+                    onClick={() => {
+                      router.push("/about");
+                      setSelectedOption("About");
+                      setIsDropdownOpen(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 border-b border-gray-100 text-left"
+                  >
+                    About
+                  </button>
+                  <button
+                    onClick={() => {
+                      router.push("/contact");
+                      setSelectedOption("Contact");
+                      setIsDropdownOpen(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-gray-900 hover:bg-gray-50 text-left"
+                  >
+                    Contact
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
