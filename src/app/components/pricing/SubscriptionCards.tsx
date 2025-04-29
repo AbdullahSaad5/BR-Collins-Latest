@@ -2,7 +2,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import SubscriptionConfirmationModal from "./SubscriptionConfirmationModal";
+import LoginRequiredModal from "./LoginRequiredModal";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/app/store/hooks";
+import { isUserLoggedIn } from "@/app/store/features/users/userSlice";
 
 // Define TypeScript interfaces for the data structure
 interface IndividualPlan {
@@ -37,9 +40,11 @@ const SubscriptionCards: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedCorporatePlan, setSelectedCorporatePlan] = useState<number | null>(0);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<IndividualPlan | CorporatePlan | null>(null);
   const [isCorporatePlan, setIsCorporatePlan] = useState(false);
   const router = useRouter();
+  const isLoggedIn = useAppSelector(isUserLoggedIn);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,12 +63,20 @@ const SubscriptionCards: React.FC = () => {
   }, []);
 
   const handlePlanClick = (plan: IndividualPlan) => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
     setSelectedPlan(plan);
     setIsCorporatePlan(false);
     setShowConfirmationModal(true);
   };
 
   const handleCorporatePlanClick = () => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
     if (selectedCorporatePlan !== null && data) {
       setSelectedPlan(data.corporatePlans.plans[selectedCorporatePlan]);
       setIsCorporatePlan(true);
@@ -193,6 +206,8 @@ const SubscriptionCards: React.FC = () => {
           }}
         />
       )}
+
+      <LoginRequiredModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </>
   );
 };

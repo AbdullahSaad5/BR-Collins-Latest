@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Cart from "./Cart/Cart";
-import { ShoppingCart, Menu, X, User } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { logout } from "@/app/store/features/users/userSlice";
 import { toggleCart } from "@/app/store/features/cart/cartSlice";
@@ -22,6 +22,7 @@ const toTitleCase = (str: string) => {
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [DropdownMenu, setDropDownMenu] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
@@ -126,10 +127,8 @@ export const Navigation = () => {
             </button>
             {isLoggedIn ? (
               <div
-                className="flex items-center gap-4 cursor-pointer"
-                onClick={() => {
-                  router.push("/dashboard");
-                }}
+                className="flex items-center gap-4 cursor-pointer relative"
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               >
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center relative overflow-hidden">
@@ -148,6 +147,36 @@ export const Navigation = () => {
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
+                {isProfileDropdownOpen && (
+                  <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
+                        (user as IUser).lastName
+                      }`}</p>
+                      <p className="text-xs text-gray-500">{`${toTitleCase((user as IUser).role)}`}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        router.push("/dashboard");
+                        setIsProfileDropdownOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors duration-200"
+                    >
+                      <LayoutDashboard className="w-4 h-4" />
+                      <span>Dashboard</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsProfileDropdownOpen(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors duration-200"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <Link href="/login">
