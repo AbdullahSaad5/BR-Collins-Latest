@@ -4,12 +4,12 @@ import React from "react";
 import { TopBanner } from "../TopBanner";
 import { Navigation } from "../Navigation";
 import { HeroSection } from "./HeroSection";
-import { CourseCard } from "./CourseCard";
 import FilterSection from "./FilterSection";
 import CourseSwiper from "./CourseSwiper";
 import { FeatureCourse } from "./FetureCourse";
 import { useCourseContext } from "../context/CourseContext";
 import { CategoryProvider } from "../context/CategoryContext";
+import CourseCard from "./CourseCard";
 
 export default function Courses() {
   const { courses: allCourses, isLoading, error } = useCourseContext();
@@ -232,14 +232,14 @@ export default function Courses() {
                         ...course,
                         duration: `${course.noOfHours} Hrs`,
                         lessons: course.noOfLessons,
-                        price: `$${course.discountPrice || course.price}`,
+                        price: course.discountPrice || course.price,
                         originalPrice: course.price ? `$${course.price}` : undefined,
                         isNew: course.bestSeller,
                         imageUrl: course.coverImageUrl || "/img/Course/Course.png",
                       };
                       return (
                         <div key={index} className="h-full">
-                          <CourseCard {...transformedCourse} />
+                          <CourseCard course={transformedCourse} />
                         </div>
                       );
                     })}

@@ -3,8 +3,8 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { CourseCard } from "./CourseCard";
 import { useCourseContext } from "../context/CourseContext";
+import CourseCard from "./CourseCard";
 
 // Define the type for the course
 interface Course {
@@ -40,14 +40,14 @@ const CourseSwiper: React.FC = () => {
             ...course,
             duration: `${course.noOfHours} Hrs`,
             lessons: course.noOfLessons,
-            price: `$${course.discountPrice || course.price}`,
+            price: course.discountPrice || course.price,
             originalPrice: course.price ? `$${course.price}` : undefined,
             isNew: course.bestSeller,
             imageUrl: course.coverImageUrl || "/img/Course/Course.png",
           };
           return (
             <SwiperSlide key={index} className="w-full sm:max-w-[194px]">
-              <CourseCard {...transformedCourse} />
+              <CourseCard course={transformedCourse} />
             </SwiperSlide>
           );
         })}
