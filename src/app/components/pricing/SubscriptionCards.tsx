@@ -62,22 +62,22 @@ const SubscriptionCards: React.FC = () => {
             <div className="bg-white border-1 border-gray-300 rounded-lg w-full p-6 flex flex-row justify-between mr-auto">
               <div className="flex flex-col justify-between w-1/2">
                 <div>
-                  <h1 className="text-xl font-bold text-black mb-2">{plan.title}</h1>
-                  <p className="text-gray-700">{plan.description}</p>
+                  <h1 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.title}</h1>
+                  <p className="text-gray-700 text-sm sm:text-base">{plan.description}</p>
                 </div>
-                <button className="bg-[#F86537] text-white py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0">
+                <button className="bg-[#F86537] text-sm sm:text-base  text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0">
                   {plan.buttonText}
                 </button>
               </div>
               <div className="flex flex-col justify-between w-1/2">
                 <div className="flex flex-col items-end">
-                  <h1 className="text-white text-sm uppercase bg-blue-500 w-fit rounded-lg px-2 py-1 self-end mb-2">
+                  <h1 className="text-white text-xs sm:text-sm uppercase bg-blue-500 w-fit rounded-lg px-2 py-1 self-end mb-2">
                     {plan.paymentType}
                   </h1>
                 </div>
                 <div>
-                  <h2 className="text-6xl font-bold flex items-end flex-col">${plan.price}</h2>
-                  <p className="flex items-end flex-col">{plan.priceText}</p>
+                  <h2 className="text-5xl sm:text-6xl font-bold flex items-end flex-col">${plan.price}</h2>
+                  <p className="flex items-end flex-col text-sm sm:text-base">{plan.priceText}</p>
                 </div>
               </div>
             </div>
@@ -88,18 +88,18 @@ const SubscriptionCards: React.FC = () => {
       {/* Right Column - Corporate Plans */}
       <div className="w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full">
         <div>
-          <h1 className="text-2xl font-bold text-black mb-2">{data.corporatePlans.title}</h1>
-          <p className="text-gray-700 mb-4">{data.corporatePlans.description}</p>
+          <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data.corporatePlans.title}</h1>
+          <p className="text-gray-700 text-sm sm:text-base mb-4">{data.corporatePlans.description}</p>
           <ul className="space-y-2">
             {data.corporatePlans.plans.map((plan, index) => (
               <React.Fragment key={index}>
-                <li className="flex py-2 items-center">
+                <li className="flex py-2 items-center" onClick={() => setSelectedCorporatePlan(index)}>
                   <div className="flex flex-row w-full justify-between">
                     <div>
-                      <h1 className="text-4xl font-bold">${plan.price}</h1>
+                      <h1 className="text-3xl sm:text-4xl font-bold">${plan.price}</h1>
                     </div>
                     <div className="flex items-center w-1/3 md:w-1/5 justify-between flex-row">
-                      <h2>{plan.users}</h2>
+                      <h2 className="text-sm sm:text-base">{plan.users}</h2>
                       <label className="inline-flex items-center cursor-pointer">
                         <input
                           type="checkbox"
@@ -108,7 +108,7 @@ const SubscriptionCards: React.FC = () => {
                           checked={selectedCorporatePlan === index}
                           onChange={() => setSelectedCorporatePlan(index)}
                         />
-                        <div className="h-5 w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
+                        <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
                           <svg
                             className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
                             viewBox="0 0 24 24"
@@ -130,7 +130,7 @@ const SubscriptionCards: React.FC = () => {
             ))}
           </ul>
         </div>
-        <button className="bg-[#F86537] text-white py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0">
+        <button className="bg-[#F86537] text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0">
           {data.corporatePlans.buttonText}
         </button>
       </div>
