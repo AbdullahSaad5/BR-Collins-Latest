@@ -15,7 +15,8 @@ const isValidProfilePicture = (url: string | undefined): url is string => {
   return typeof url === "string" && url.length > 0;
 };
 
-const toTitleCase = (str: string) => {
+const toTitleCase = (str?: string) => {
+  if (!str) return "";
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
 };
 

@@ -23,6 +23,7 @@ import {
   UserCog,
   UserPlus,
   Users,
+  Crown,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -105,6 +106,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       onClick: () => handleItemClick("dashboard"),
       access: ["admin", "manager", "student"],
     },
+
     {
       icon: UserCog,
       label: "Manage Users",
@@ -216,6 +218,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       label: "Transactions",
       isActive: activeItem === "transactions",
       onClick: () => handleItemClick("transactions"),
+      access: ["admin", "manager", "student"],
+    },
+    {
+      icon: Crown,
+      label: "Subscription",
+      isActive: activeItem === "subscription",
+      onClick: () => handleItemClick("subscription"),
       access: ["admin", "manager", "student"],
     },
     {

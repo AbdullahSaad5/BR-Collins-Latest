@@ -1,13 +1,14 @@
 import React from "react";
-import { BookOpen, BadgeCheck, UserPlus, Settings } from "lucide-react";
+import { BookOpen, BadgeCheck, UserPlus, Settings, Crown } from "lucide-react";
 import Image from "next/image";
 import { useAppSelector } from "@/app/store/hooks";
-import { selectUser } from "@/app/store/features/users/userSlice";
+import { getSubscription, selectUser } from "@/app/store/features/users/userSlice";
 import { IUser } from "@/app/types/user.contract";
+import { ISubscription } from "@/app/types/subscription.contract";
 
 const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }) => {
   const user = useAppSelector(selectUser) as IUser;
-
+  const subscription = useAppSelector(getSubscription) as ISubscription | null;
   const toTitleCase = (str?: string) => {
     return str?.replace(/\b\w/g, (char) => char.toUpperCase());
   };
@@ -30,7 +31,21 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
         {/* Details */}
         <div className="text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-800">{`${user.firstName} ${user.lastName}`}</h1>
-          <p className="text-sm text-gray-500 mt-1">{toTitleCase(user.role)}</p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 justify-center sm:justify-start">
+            <p className="text-sm text-gray-500">{toTitleCase(user.role)}</p>
+            {subscription && subscription.isActive && (
+              <div className="flex items-center gap-1.5 text-xs bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-2.5 py-1 rounded-full shadow-sm">
+                <Crown className="w-3 h-3" />
+                <span className="font-medium">
+                  {subscription.entityType === "user" ? "Individual" : "Organization"} Plan
+                </span>
+                <span className="text-indigo-100">•</span>
+                <span className="text-indigo-100">
+                  {subscription.expiresAt ? new Date(subscription.expiresAt).toLocaleDateString() : "Active"}
+                </span>
+              </div>
+            )}
+          </div>
 
           <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-5 mt-3">
             <div className="flex items-center gap-1.5 text-sm">

@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import { store, persistor } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
+import UserProfileInitializer from "./components/UserProfileInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({
           <PersistGate loading={null} persistor={persistor}>
             <QueryClientProvider client={queryClient}>
               <CourseProvider>
+                <UserProfileInitializer />
                 <main className="flex overflow-hidden flex-col bg-white">
                   <TopBanner />
                   <Navigation />
