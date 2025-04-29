@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useUser } from "./context/CartContext";
 import Cart from "./Cart/Cart";
 import { ShoppingCart, Menu, X, User } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { logout } from "@/app/store/features/users/userSlice";
+import { toggleCart } from "@/app/store/features/cart/cartSlice";
 import { IUser } from "../types/user.contract";
 import Image from "next/image";
 
@@ -20,13 +20,13 @@ const toTitleCase = (str: string) => {
 };
 
 export const Navigation = () => {
-  const { cart, setCart, items } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [DropdownMenu, setDropDownMenu] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
   const user = useAppSelector((state) => state.user.user);
+  const { items, isCartOpen } = useAppSelector((state) => state.cart);
   const profilePicture = (user as IUser).profilePicture;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,7 +53,7 @@ export const Navigation = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button onClick={() => setCart(true)} className="relative p-2">
+          <button onClick={() => dispatch(toggleCart())} className="relative p-2">
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
               <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
@@ -116,7 +116,7 @@ export const Navigation = () => {
           </div>
 
           <div className="flex gap-4 items-center text-base">
-            <button onClick={() => setCart(true)} className="relative">
+            <button onClick={() => dispatch(toggleCart())} className="relative">
               <ShoppingCart className="w-7 h-7 text-base" />
               {items.length > 0 && (
                 <div className="absolute -top-3 -right-3 text-xs py-1 px-2 rounded-full bg-blue-200">
@@ -247,7 +247,7 @@ export const Navigation = () => {
       {/* Cart Overlay */}
       <div
         className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out ${
-          cart ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          isCartOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
         }`}
       >
         <Cart />

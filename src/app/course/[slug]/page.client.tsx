@@ -6,6 +6,8 @@ import CourseDetail from "../../components/CourseDetail/CourseDetail";
 import { StarRating } from "@/app/components/CourseDetail/StarRating";
 import { Send, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import { ICourse } from "@/app/types/course.contract";
+import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
+import { addToCart } from "@/app/store/features/cart/cartSlice";
 
 const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
 
@@ -14,6 +16,16 @@ const toTitleCase = (str: string) => {
 };
 
 const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
+  const dispatch = useAppDispatch();
+  const { items } = useAppSelector((state) => state.cart);
+
+  const handleAddToCart = () => {
+    const isCourseInCart = items.some((item) => item._id === course._id);
+    if (!isCourseInCart) {
+      dispatch(addToCart(course));
+    }
+  };
+
   if (!course) {
     return <div>Course not found</div>;
   }
@@ -316,7 +328,12 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
               <div className="mt-8 w-full text-center max-md:max-w-full">
                 <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
                   <button className="w-full min-h-[58px] bg-orange-500 rounded-[58px]">e-learning</button>
-                  <button className="w-full min-h-[58px] bg-sky-500 rounded-[58px]">in-person</button>
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
+                  >
+                    in-person
+                  </button>
                 </div>
                 <p className="mt-5 text-base font-medium text-neutral-400">30-Day Money-Back Guarantee</p>
               </div>
