@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import SubscriptionConfirmationModal from "./SubscriptionConfirmationModal";
 
 // Define TypeScript interfaces for the data structure
 interface IndividualPlan {
@@ -10,11 +11,13 @@ interface IndividualPlan {
   priceText: string;
   paymentType: string;
   buttonText: string;
+  type: "subscription" | "individual";
 }
 
 interface CorporatePlan {
   price: number;
   users: string;
+  type: "subscription";
 }
 
 interface SubscriptionData {
@@ -32,6 +35,9 @@ const SubscriptionCards: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCorporatePlan, setSelectedCorporatePlan] = useState<number | null>(0);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<IndividualPlan | CorporatePlan | null>(null);
+  const [isCorporatePlan, setIsCorporatePlan] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,92 +55,138 @@ const SubscriptionCards: React.FC = () => {
     fetchData();
   }, []);
 
+  const handlePlanClick = (plan: IndividualPlan) => {
+    setSelectedPlan(plan);
+    setIsCorporatePlan(false);
+    setShowConfirmationModal(true);
+  };
+
+  const handleCorporatePlanClick = () => {
+    if (selectedCorporatePlan !== null && data) {
+      setSelectedPlan(data.corporatePlans.plans[selectedCorporatePlan]);
+      setIsCorporatePlan(true);
+      setShowConfirmationModal(true);
+    }
+  };
+
+  const handleConfirmPurchase = () => {
+    // TODO: Implement purchase logic
+    console.log("Purchase confirmed for plan:", selectedPlan);
+    setShowConfirmationModal(false);
+  };
+
   if (loading) return <div>Loading subscription plans...</div>;
   if (error) return <div>{error}</div>;
   if (!data) return <div>No subscription data available</div>;
 
   return (
-    <div className="w-full flex flex-col lg:p-0 p-3 lg:flex-row gap-6 h-auto lg:h-[494px]">
-      {/* Left Column - Individual Plans */}
-      <div className="w-full lg:w-1/2 flex flex-col lg:gap-0 gap-3 justify-between ">
-        {data.individualPlans.map((plan, index) => (
-          <div key={index} className="flex flex-row  h-auto lg:h-[237px] justify-between">
-            <div className="bg-white border-1 border-gray-300 rounded-lg w-full p-6 flex flex-row justify-between mr-auto">
-              <div className="flex flex-col justify-between w-1/2">
-                <div>
-                  <h1 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.title}</h1>
-                  <p className="text-gray-700 text-sm sm:text-base">{plan.description}</p>
+    <>
+      <div className="w-full flex flex-col lg:p-0 p-3 lg:flex-row gap-6 h-auto lg:h-[494px]">
+        {/* Left Column - Individual Plans */}
+        <div className="w-full lg:w-1/2 flex flex-col lg:gap-0 gap-3 justify-between ">
+          {data.individualPlans.map((plan, index) => (
+            <div key={index} className="flex flex-row  h-auto lg:h-[237px] justify-between">
+              <div className="bg-white border-1 border-gray-300 rounded-lg w-full p-6 flex flex-row justify-between mr-auto">
+                <div className="flex flex-col justify-between w-1/2">
+                  <div>
+                    <h1 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.title}</h1>
+                    <p className="text-gray-700 text-sm sm:text-base">{plan.description}</p>
+                  </div>
+                  <button
+                    onClick={() => handlePlanClick(plan)}
+                    className="bg-[#F86537] text-sm sm:text-base cursor-pointer hover:bg-[#E55A2E] transition-all duration-300 text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0"
+                  >
+                    {plan.buttonText}
+                  </button>
                 </div>
-                <button className="bg-[#F86537] text-sm sm:text-base  text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0">
-                  {plan.buttonText}
-                </button>
-              </div>
-              <div className="flex flex-col justify-between w-1/2">
-                <div className="flex flex-col items-end">
-                  <h1 className="text-white text-xs sm:text-sm uppercase bg-blue-500 w-fit rounded-lg px-2 py-1 self-end mb-2">
-                    {plan.paymentType}
-                  </h1>
-                </div>
-                <div>
-                  <h2 className="text-5xl sm:text-6xl font-bold flex items-end flex-col">${plan.price}</h2>
-                  <p className="flex items-end flex-col text-sm sm:text-base">{plan.priceText}</p>
+                <div className="flex flex-col justify-between w-1/2">
+                  <div className="flex flex-col items-end">
+                    <h1 className="text-white text-xs sm:text-sm uppercase bg-blue-500 w-fit rounded-lg px-2 py-1 self-end mb-2">
+                      {plan.paymentType}
+                    </h1>
+                  </div>
+                  <div>
+                    <h2 className="text-5xl sm:text-6xl font-bold flex items-end flex-col">${plan.price}</h2>
+                    <p className="flex items-end flex-col text-sm sm:text-base">{plan.priceText}</p>
+                  </div>
                 </div>
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Right Column - Corporate Plans */}
+        <div className="w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full">
+          <div>
+            <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data.corporatePlans.title}</h1>
+            <p className="text-gray-700 text-sm sm:text-base mb-4">{data.corporatePlans.description}</p>
+            <ul className="space-y-2">
+              {data.corporatePlans.plans.map((plan, index) => (
+                <React.Fragment key={index}>
+                  <li className="flex py-2 items-center cursor-pointer" onClick={() => setSelectedCorporatePlan(index)}>
+                    <div className="flex flex-row w-full justify-between">
+                      <div>
+                        <h1 className="text-3xl sm:text-4xl font-bold">${plan.price}</h1>
+                      </div>
+                      <div className="flex items-center w-1/3 md:w-1/5 justify-between flex-row">
+                        <h2 className="text-sm sm:text-base">{plan.users}</h2>
+                        <label className="inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="checkbox"
+                            className="peer hidden"
+                            checked={selectedCorporatePlan === index}
+                            onChange={() => setSelectedCorporatePlan(index)}
+                          />
+                          <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
+                            <svg
+                              className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="3"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </li>
+                  {index < data.corporatePlans.plans.length - 1 && <hr className="border-gray-200" />}
+                </React.Fragment>
+              ))}
+            </ul>
           </div>
-        ))}
+          <button
+            onClick={handleCorporatePlanClick}
+            disabled={selectedCorporatePlan === null}
+            className={`bg-[#F86537] duration-300 cursor-pointer  text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
+              selectedCorporatePlan === null ? "opacity-50 cursor-not-allowed" : "hover:bg-[#E55A2E]"
+            }`}
+          >
+            {data.corporatePlans.buttonText}
+          </button>
+        </div>
       </div>
 
-      {/* Right Column - Corporate Plans */}
-      <div className="w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full">
-        <div>
-          <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data.corporatePlans.title}</h1>
-          <p className="text-gray-700 text-sm sm:text-base mb-4">{data.corporatePlans.description}</p>
-          <ul className="space-y-2">
-            {data.corporatePlans.plans.map((plan, index) => (
-              <React.Fragment key={index}>
-                <li className="flex py-2 items-center" onClick={() => setSelectedCorporatePlan(index)}>
-                  <div className="flex flex-row w-full justify-between">
-                    <div>
-                      <h1 className="text-3xl sm:text-4xl font-bold">${plan.price}</h1>
-                    </div>
-                    <div className="flex items-center w-1/3 md:w-1/5 justify-between flex-row">
-                      <h2 className="text-sm sm:text-base">{plan.users}</h2>
-                      <label className="inline-flex items-center cursor-pointer">
-                        <input
-                          type="checkbox"
-                          name="checkbox"
-                          className="peer hidden"
-                          checked={selectedCorporatePlan === index}
-                          onChange={() => setSelectedCorporatePlan(index)}
-                        />
-                        <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
-                          <svg
-                            className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                </li>
-                {index < data.corporatePlans.plans.length - 1 && <hr className="border-gray-200" />}
-              </React.Fragment>
-            ))}
-          </ul>
-        </div>
-        <button className="bg-[#F86537] text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0">
-          {data.corporatePlans.buttonText}
-        </button>
-      </div>
-    </div>
+      {selectedPlan && (
+        <SubscriptionConfirmationModal
+          isOpen={showConfirmationModal}
+          onClose={() => setShowConfirmationModal(false)}
+          onConfirm={handleConfirmPurchase}
+          plan={{
+            title: isCorporatePlan ? data.corporatePlans.title : (selectedPlan as IndividualPlan).title,
+            price: selectedPlan.price,
+            paymentType: isCorporatePlan ? "Corporate" : (selectedPlan as IndividualPlan).paymentType,
+            users: isCorporatePlan ? data.corporatePlans.plans[selectedCorporatePlan!].users : undefined,
+            type: selectedPlan.type,
+          }}
+        />
+      )}
+    </>
   );
 };
 

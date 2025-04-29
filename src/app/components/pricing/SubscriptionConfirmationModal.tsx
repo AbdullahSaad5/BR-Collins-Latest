@@ -1,0 +1,158 @@
+"use client";
+import React from "react";
+import { X, CreditCard, CheckCircle2, Shield, Zap, ArrowRight, Users } from "lucide-react";
+
+interface SubscriptionConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  plan: {
+    title: string;
+    price: number;
+    paymentType: string;
+    users?: string;
+    type: "subscription" | "individual";
+  };
+}
+
+const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  plan,
+}) => {
+  if (!isOpen) return null;
+
+  console.log(plan);
+
+  const isCorporate = plan.paymentType === "Corporate";
+
+  return (
+    <div
+      onClick={() => onClose()}
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn"
+    >
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg transform transition-all duration-300 animate-slideIn">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#F86537]/10 flex items-center justify-center">
+                <CreditCard className="w-5 h-5 text-[#F86537]" />
+              </div>
+              <h2 className="text-2xl font-semibold text-neutral-900">Confirm Subscription</h2>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-full"
+              aria-label="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <div className="space-y-8">
+            {/* Plan Summary Card */}
+            <div className="bg-gradient-to-br from-[#F86537]/5 to-[#F86537]/10 rounded-xl p-6 border border-[#F86537]/20">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-neutral-900">{plan.title}</h3>
+                <span className="px-3 py-1 text-sm font-medium text-[#F86537] bg-[#F86537]/10 rounded-full">
+                  {plan.paymentType}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-neutral-900">${plan.price}</span>
+                <span className="text-gray-500">/month</span>
+              </div>
+              {isCorporate && plan.users && (
+                <div className="mt-4 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
+                    <Users className="w-4 h-4 text-[#F86537]" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-500">Number of Users</span>
+                    <span className="text-lg font-semibold text-neutral-900">{plan.users}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Features List */}
+            <div className="space-y-4">
+              {plan.type === "subscription" ? (
+                <>
+                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-[#F86537]" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-neutral-900">One Year Plan</h4>
+                      <p className="text-sm text-gray-500">Full year access to all courses</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-[#F86537]" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-neutral-900">Complete Access</h4>
+                      <p className="text-sm text-gray-500">Unlimited access to all courses and features</p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-[#F86537]" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-neutral-900">Lifetime Access</h4>
+                      <p className="text-sm text-gray-500">Permanent access to your chosen course</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-[#F86537]" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-neutral-900">Course Selection</h4>
+                      <p className="text-sm text-gray-500">Choose any course that fits your needs</p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Confirmation Message */}
+            <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-lg border border-emerald-100">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              <p className="text-sm text-emerald-700">
+                {plan.type === "subscription"
+                  ? `You'll be charged $${plan.price} today for a full year of access to all courses. Your subscription will automatically renew each year.`
+                  : `You'll be charged $${plan.price} today for lifetime access to your chosen course.`}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3">
+            <button
+              onClick={onConfirm}
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
+            >
+              {plan.type === "subscription" ? "Confirm Purchase" : "Explore Courses"}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={onClose}
+              className="w-full px-6 py-3 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SubscriptionConfirmationModal;
