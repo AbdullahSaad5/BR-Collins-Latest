@@ -2,17 +2,24 @@
 
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar } from 'swiper/modules';
 import "swiper/css";
+import "swiper/css/scrollbar";
 import { CourseCard } from "./CourseCard";
 import { useCourseContext } from "../context/CourseContext";
 
-// Define the type for the course
 interface Course {
   id: string;
   title: string;
   description: string;
   imageUrl: string;
   isNew: boolean;
+  noOfHours: number;
+  noOfLessons: number;
+  discountPrice?: number;
+  price: number;
+  bestSeller: boolean;
+  coverImageUrl?: string;
 }
 
 const CourseSwiper: React.FC = () => {
@@ -23,17 +30,35 @@ const CourseSwiper: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-8 items-center self-stretch mt-10 items-stretch">
+    <div className="mt-10 mx-auto max-w-[1326px] px-1"> {/* Added container constraints */}
       <Swiper
         spaceBetween={32}
-        breakpoints={{
-          0: { slidesPerView: 1 },
-          500: { slidesPerView: 1 },
-          640: { slidesPerView: 3 },
-          1024: { slidesPerView: 5 },
-          1274: { slidesPerView: 6 },
+        modules={[Scrollbar]}
+        scrollbar={{
+          draggable: true,
+          hide: false,
+          dragSize: 54,
+          snapOnRelease: true
         }}
-        className="mt-10"
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+            spaceBetween: 14
+          },
+          640: {
+            slidesPerView: 3,
+            spaceBetween: 14
+          },
+          1224: {
+            slidesPerView: 5,
+            spaceBetween: 14
+          },
+          1274: {
+            slidesPerView: 6,
+            spaceBetween: 14
+          },
+        }}
+        className="custom-swiper"
       >
         {featuredCourses.map((course, index) => {
           const transformedCourse = {
@@ -46,12 +71,44 @@ const CourseSwiper: React.FC = () => {
             imageUrl: course.coverImageUrl || "/img/Course/Course.png",
           };
           return (
-            <SwiperSlide key={index} className="w-full sm:max-w-[194px]">
-              <CourseCard {...transformedCourse} />
+            <SwiperSlide 
+              key={index}
+              className="!w-[calc(100%/1.1)] sm:!w-[calc(100%/3.2)] lg:!w-[calc(100%/5.4)] xl:!w-[calc(100%/6.4)]"
+            >
+              <div className="h-full p-2">
+                <CourseCard {...transformedCourse} />
+              </div>
             </SwiperSlide>
           );
         })}
       </Swiper>
+
+      <style jsx global>{`
+        .custom-swiper {
+          padding-bottom: 30px;
+          width: 100%;
+          overflow: hidden;
+        }
+        
+        .custom-swiper .swiper-scrollbar {
+          max-width: 315px;
+          height: 1px;
+          background: rgba(0, 0, 0, 0.1);
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: 8px;
+        }
+
+        .custom-swiper .swiper-scrollbar-drag {
+          background: #2490E0;
+          height: 2px;
+          cursor: pointer;
+        }
+
+        .custom-swiper .swiper-slide {
+          height: auto;
+        }
+      `}</style>
     </div>
   );
 };

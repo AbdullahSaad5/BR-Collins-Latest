@@ -14,6 +14,7 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
 import { ICourseCategory } from "../types/course-category.contract";
+import CourseSwiper from "../components/Course/CourseSwiper";
 
 interface SliderItem {
   title: string;
@@ -824,7 +825,7 @@ export const Homepage = () => {
         </section>
 
         {/* Courses Grid */}
-        <section className="relative text-gray-900">
+        {/* <section className="relative text-gray-900">
           <div className="w-full mx-auto max-w-[1326px] h-auto relative">
             <div className="flex flex-nowrap items-start overflow-auto gap-3 mb-16 py-6 custom-scroll scrollbar-hide">
               {isCoursesLoading ? (
@@ -889,7 +890,8 @@ export const Homepage = () => {
               )}
             </div>
           </div>
-        </section>
+        </section> */}
+         <CourseSwiper />
       </section>
 
       {/* Pricing Section */}

@@ -9,6 +9,7 @@ import { ICourse } from "@/app/types/course.contract";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { addToCart } from "@/app/store/features/cart/cartSlice";
 import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
+import CourseSwiper from "@/app/components/Course/CourseSwiper";
 
 const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
 
@@ -396,7 +397,23 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
             </div>
           </div>
         </div>
+       
       </div>
+     
+
+        <div className="px-1 lg:px-3 mb-5"> {/* Outer div with responsive padding */}
+  <div className="mx-auto max-w-[1326px]">
+  <hr className="my-10"/>
+    <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">
+      More Courses By Claudia Pruitt
+    </h2>
+    
+    <CourseSwiper />
+  </div>
+</div>           
+      
+
+     
     </>
   );
 };
