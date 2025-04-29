@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import TrashIcon from "../../../public/img/cart/trash.svg";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,12 +10,21 @@ import {
   selectCartDiscountTotal,
 } from "@/app/store/features/cart/cartSlice";
 import { ICourse } from "@/app/types/course.contract";
+import CheckoutPage from "@/app/components/Cart/CheckoutPage";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
+import { useAppSelector } from "@/app/store/hooks";
+import { getAccessToken } from "@/app/store/features/users/userSlice";
 
 const ViewCart = () => {
   const dispatch = useDispatch();
   const items = useSelector(selectCartItems);
   const totalOriginal = useSelector(selectCartTotal);
   const totalDiscounted = useSelector(selectCartDiscountTotal);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const accessToken = useAppSelector(getAccessToken);
 
   const bill = {
     totalOriginal,
@@ -25,6 +34,39 @@ const ViewCart = () => {
 
   const handleRemoveItem = (courseId: string) => {
     dispatch(removeFromCart(courseId));
+  };
+
+  const createPaymentIntentMutation = useMutation({
+    mutationFn: async () => {
+      const response = await api.post(
+        "/stripe/create-payment-intent",
+        {
+          itemIds: items.map((item: ICourse) => item._id),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      setClientSecret(data.clientSecret);
+      setShowCheckout(true);
+    },
+    onError: (error) => {
+      showToast("Failed to create payment intent", "error");
+      console.error("Error creating payment intent:", error);
+    },
+  });
+
+  const handleCheckout = () => {
+    if (items.length === 0) {
+      showToast("Your cart is empty", "error");
+      return;
+    }
+    createPaymentIntentMutation.mutate();
   };
 
   return (
@@ -130,12 +172,23 @@ const ViewCart = () => {
               </div>
             </div>
             <hr className="w-[80%] text-gray-300" />
-            <button className="w-full p-2 rounded-full border border-[#F86537] bg-[#F86537] text-sm md:text-md line-clamp-1 text-white">
+            <button
+              onClick={handleCheckout}
+              className="w-full p-2 rounded-full border border-[#F86537] bg-[#F86537] text-sm md:text-md line-clamp-1 text-white hover:bg-[#E55A2E] transition-colors"
+            >
               {`Proceed to checkout ->`}
             </button>
           </div>
         </div>
       </div>
+
+      {showCheckout && clientSecret && (
+        <CheckoutPage
+          onBack={() => setShowCheckout(false)}
+          onClose={() => setShowCheckout(false)}
+          clientSecret={clientSecret}
+        />
+      )}
     </div>
   );
 };
