@@ -15,7 +15,8 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { useAppSelector } from "@/app/store/hooks";
-import { getAccessToken } from "@/app/store/features/users/userSlice";
+import { getAccessToken, isUserLoggedIn } from "@/app/store/features/users/userSlice";
+import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
 
 const ViewCart = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,9 @@ const ViewCart = () => {
   const totalDiscounted = useSelector(selectCartDiscountTotal);
   const [showCheckout, setShowCheckout] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const accessToken = useAppSelector(getAccessToken);
+  const isLoggedIn = useAppSelector(isUserLoggedIn);
 
   const bill = {
     totalOriginal,
@@ -64,6 +67,10 @@ const ViewCart = () => {
   const handleCheckout = () => {
     if (items.length === 0) {
       showToast("Your cart is empty", "error");
+      return;
+    }
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
       return;
     }
     createPaymentIntentMutation.mutate();
@@ -185,6 +192,12 @@ const ViewCart = () => {
           clientSecret={clientSecret}
         />
       )}
+
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        reason="to proceed with your purchase"
+      />
     </div>
   );
 };
