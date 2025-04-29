@@ -3,7 +3,6 @@ import React, { useState, useRef, useEffect } from "react";
 import "../../styles/header.css";
 import Link from "next/link";
 import Image from "next/image";
-import images from "../../../public/assets/images/images";
 import AboutBgImage from '../../../public/assets/ourStoryImg.svg';
 import axios from "axios";
 
@@ -21,8 +20,37 @@ interface TestimonialCardProps {
 }
 
 const Page = () => {
-  const [index, setIndex] = useState(0);
+  const containerRef = useRef(null);
+  const [index, setIndex] = useState(2);
+  const [translateX, setTranslateX] = useState(0);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    if (testimonials.length > 0) {
+      const middleIndex = Math.floor((testimonials.length - 1) / 2);
+      setIndex(middleIndex);
+    }
+  }, [testimonials]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current as HTMLDivElement;
+
+    const timeout = setTimeout(() => {
+      const card = container.children[index] as HTMLElement;
+      if (card) {
+        const containerWidth = container.offsetWidth;
+        const cardWidth = card.offsetWidth;
+        const cardOffsetLeft = card.offsetLeft;
+        const centerPosition = cardOffsetLeft - (containerWidth / 2) + (cardWidth / 2);
+        setTranslateX(-centerPosition);
+      }
+    }, 50);
+
+    return () => clearTimeout(timeout);
+  }, [index, testimonials]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,9 +102,7 @@ const Page = () => {
           </p>
 
           <div className="overflow-hidden w-full">
-            <div className="flex gap-6 transition-transform duration-500 translate-x-5" style={{
-              transform: `translateX(-${index * 5}%)`
-            }}>
+            <div ref={containerRef} className="flex gap-6 transition-transform duration-500" style={{ transform: `translateX(${translateX}px)` }}>
               {testimonials.map((t, i) => (
                 <div key={i}>
                   <TestimonialCard testimonial={t} isActive={i === index} />
@@ -111,7 +137,7 @@ const Page = () => {
       )}
 
       {/* Journey Section */}
-      <section className="h-[120vh] w-[85%] flex flex-col justify-center items-center gap-5 py-10">
+      <section className="min-h-[120vh] w-[85%] flex flex-col justify-center items-center gap-5 py-10">
         <div className="flex flex-col md:flex-row justify-between items-center gap-5">
           <div className="w-full md:w-1/2 h-full">
             <p className="text-orange-600 font-semibold mb-2">OUR STORY</p>
@@ -139,9 +165,9 @@ const Page = () => {
         </div>
 
         <div className="w-full flex flex-col justify-center items-center bg-[#1176c1] text-white rounded-2xl overflow-hidden">
-          <div className="w-full h-full flex flex-col justify-center items-center p-20 bg-[url('/assets/BAlphabetIcon.svg')] bg-no-repeat">
-            <h3 className="text-2xl md:text-3xl font-bold mb-2">Start Learning Today!</h3>
-            <p className="mb-6 text-sm md:text-base">
+          <div className="w-full h-full flex flex-col justify-center items-center p-5 md:p-20 bg-[url('/assets/BAlphabetIcon.svg')] bg-no-repeat">
+            <h3 className="text-2xl md:text-3xl font-bold mb-2 text-center">Start Learning Today!</h3>
+            <p className="mb-6 text-sm md:text-base text-center">
               At B.R. Collins, we believe in the transformative power of education.
             </p>
             <Link
