@@ -265,7 +265,7 @@ export const Homepage = () => {
 
   const StatCard = ({ number, label, bgColor }: { number: string; label: string; bgColor: string }) => (
     <div className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
-      <h3 className="text-3xl md:text-[50px] font-bold text-neutral-900">{number}</h3>
+      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">{number}</h3>
       <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">{label}</p>
     </div>
   );
@@ -304,7 +304,7 @@ export const Homepage = () => {
             width={1920}
             height={1080}
             alt="wallpaper"
-            className="w-full h-[300px] md:h-[420px] lg:h-[500px] object-cover "
+            className="w-full h-[300px] md:h-[420px] lg:h-[500px] object-cover  "
             priority
           />
         </div>
@@ -501,8 +501,8 @@ export const Homepage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="bg-[#081B25] py-12 px-4 md:px-0">
-        <div className="w-full gap-6 flex flex-col justify-center items-center mx-auto max-w-[1326px]">
+      <section className="bg-[#081B25]  px-4 h-auto md:h-[768px] md:px-0">
+        <div className="w-full  flex flex-col justify-center gap-5 h-full lg:h-[768px] items-center mx-auto max-w-[1326px]">
           <div className="flex flex-col justify-center items-center text-center mb-6">
             <h2 className="text-white font-hanken text-2xl md:text-[34px] font-bold">
               Flexible Pricing for Individuals and Teams
@@ -513,7 +513,7 @@ export const Homepage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <div className="w-full px-4 h-auto lg:px-0 mx-auto flex flex-col max-w-[1326px] py-12">
+      <div className="w-full px-4 h-auto items-center justify-around lg:px-0 mx-auto flex flex-col max-w-[1326px] md:h-[1902px] py-12">
         <section className="text-gray-900 w-full mx-auto">
           <div className="flex flex-col lg:flex-row justify-between gap-6">
             {/* Info Card */}
@@ -562,7 +562,7 @@ export const Homepage = () => {
         </section>
 
         {/* On Site Learning Section */}
-        <section className="self-center mx-auto text-gray-900 w-full mt-12">
+        <section className="self-center mx-auto flex flex-col items-center text-gray-900 w-full ">
           <div className="flex flex-col lg:p-0 p-3 justify-center lg:flex-row gap-10 items-center w-full">
             <div className="grow shrink self-stretch my-auto w-full md:w-[529px]">
               <div className="w-full">
@@ -598,7 +598,7 @@ export const Homepage = () => {
         </section>
 
         {/* Community Section */}
-        <section className="mx-auto text-gray-900 w-full mt-12 lg:h-[410px]">
+        <section className="mx-auto flex flex-col items-center text-gray-900 w-full  lg:h-[410px]">
           <div className="flex flex-col lg:flex-row justify-between items-stretch h-full w-full gap-8">
             {/* Left Content Section */}
             <div className="flex flex-col justify-between h-full md:w-[50%] w-full">
