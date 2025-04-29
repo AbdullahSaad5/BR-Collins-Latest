@@ -5,7 +5,8 @@ import SubscriptionConfirmationModal from "./SubscriptionConfirmationModal";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/app/store/hooks";
-import { isUserLoggedIn } from "@/app/store/features/users/userSlice";
+import { isUserLoggedIn, getSubscription } from "@/app/store/features/users/userSlice";
+import { ISubscription } from "@/app/types/subscription.contract";
 
 // Define TypeScript interfaces for the data structure
 interface IndividualPlan {
@@ -16,12 +17,14 @@ interface IndividualPlan {
   paymentType: string;
   buttonText: string;
   type: "subscription" | "individual";
+  plan: string;
 }
 
 interface CorporatePlan {
   price: number;
   users: string;
   type: "subscription";
+  plan: string;
 }
 
 interface SubscriptionData {
@@ -45,6 +48,36 @@ const SubscriptionCards: React.FC = () => {
   const [isCorporatePlan, setIsCorporatePlan] = useState(false);
   const router = useRouter();
   const isLoggedIn = useAppSelector(isUserLoggedIn);
+  const subscription = useAppSelector(getSubscription) as ISubscription;
+
+  const isSubscribed = () => {
+    return subscription && Object.keys(subscription).length > 0 && "isActive" in subscription && subscription.isActive;
+  };
+
+  const isCurrentPlan = (plan: IndividualPlan | CorporatePlan) => {
+    if (!isSubscribed() || !subscription) return false;
+
+    const planType = plan.type;
+    if (planType !== "subscription") {
+      return false;
+    }
+
+    if ("users" in plan) {
+      const userCount = parseInt(plan.users);
+      switch (subscription.plan) {
+        case "organization_10":
+          return userCount === 10;
+        case "organization_20":
+          return userCount === 20;
+        case "organization_50":
+          return userCount === 50;
+        default:
+          return false;
+      }
+    } else {
+      return subscription.plan === plan.plan;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +100,9 @@ const SubscriptionCards: React.FC = () => {
       setShowLoginModal(true);
       return;
     }
+    if (isSubscribed()) {
+      return;
+    }
     setSelectedPlan(plan);
     setIsCorporatePlan(false);
     setShowConfirmationModal(true);
@@ -75,6 +111,9 @@ const SubscriptionCards: React.FC = () => {
   const handleCorporatePlanClick = () => {
     if (!isLoggedIn) {
       setShowLoginModal(true);
+      return;
+    }
+    if (isSubscribed()) {
       return;
     }
     if (selectedCorporatePlan !== null && data) {
@@ -114,9 +153,14 @@ const SubscriptionCards: React.FC = () => {
                   </div>
                   <button
                     onClick={() => handlePlanClick(plan)}
-                    className="bg-[#F86537] text-sm sm:text-base cursor-pointer hover:bg-[#E55A2E] transition-all duration-300 text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0"
+                    disabled={isSubscribed()}
+                    className={`bg-[#F86537] text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${
+                      isSubscribed()
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:bg-[#E55A2E] transition-all duration-300"
+                    }`}
                   >
-                    {plan.buttonText}
+                    {isCurrentPlan(plan) ? "Current Plan" : isSubscribed() ? "Already Subscribed" : plan.buttonText}
                   </button>
                 </div>
                 <div className="flex flex-col justify-between w-1/2">
@@ -143,7 +187,10 @@ const SubscriptionCards: React.FC = () => {
             <ul className="space-y-2">
               {data.corporatePlans.plans.map((plan, index) => (
                 <React.Fragment key={index}>
-                  <li className="flex py-2 items-center cursor-pointer" onClick={() => setSelectedCorporatePlan(index)}>
+                  <li
+                    className="flex py-2 items-center cursor-pointer"
+                    onClick={() => !isSubscribed() && setSelectedCorporatePlan(index)}
+                  >
                     <div className="flex flex-row w-full justify-between">
                       <div>
                         <h1 className="text-3xl sm:text-4xl font-bold">${plan.price}</h1>
@@ -156,9 +203,14 @@ const SubscriptionCards: React.FC = () => {
                             name="checkbox"
                             className="peer hidden"
                             checked={selectedCorporatePlan === index}
-                            onChange={() => setSelectedCorporatePlan(index)}
+                            onChange={() => !isSubscribed() && setSelectedCorporatePlan(index)}
+                            disabled={isSubscribed()}
                           />
-                          <div className="h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition">
+                          <div
+                            className={`h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition ${
+                              isSubscribed() ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                          >
                             <svg
                               className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
                               viewBox="0 0 24 24"
@@ -182,12 +234,20 @@ const SubscriptionCards: React.FC = () => {
           </div>
           <button
             onClick={handleCorporatePlanClick}
-            disabled={selectedCorporatePlan === null}
-            className={`bg-[#F86537] duration-300 cursor-pointer  text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
-              selectedCorporatePlan === null ? "opacity-50 cursor-not-allowed" : "hover:bg-[#E55A2E]"
+            disabled={selectedCorporatePlan === null || isSubscribed()}
+            className={`bg-[#F86537] duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
+              selectedCorporatePlan === null || isSubscribed()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:bg-[#E55A2E]"
             }`}
           >
-            {data.corporatePlans.buttonText}
+            {isSubscribed() &&
+            selectedCorporatePlan !== null &&
+            isCurrentPlan(data.corporatePlans.plans[selectedCorporatePlan])
+              ? "Current Plan"
+              : isSubscribed()
+              ? "Already Subscribed"
+              : data.corporatePlans.buttonText}
           </button>
         </div>
       </div>

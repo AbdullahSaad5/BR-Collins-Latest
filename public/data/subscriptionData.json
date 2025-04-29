@@ -7,7 +7,8 @@
       "priceText": "per course",
       "paymentType": "One-Time Payment",
       "buttonText": "Buy Now",
-      "type": "individual"
+      "type": "individual",
+      "plan": "none"
     },
     {
       "title": "Yearly Subscription",
@@ -16,7 +17,8 @@
       "priceText": "All Courses",
       "paymentType": "Yearly",
       "buttonText": "Buy Now",
-      "type": "subscription"
+      "type": "subscription",
+      "plan": "individual"
     }
   ],
   "corporatePlans": {
@@ -26,17 +28,20 @@
       {
         "price": 1990,
         "users": "10 users",
-        "type": "subscription"
+        "type": "subscription",
+        "plan": "organization_10"
       },
       {
         "price": 2990,
         "users": "20 users",
-        "type": "subscription"
+        "type": "subscription",
+        "plan": "organization_20"
       },
       {
         "price": 4990,
         "users": "50 users",
-        "type": "subscription"
+        "type": "subscription",
+        "plan": "organization_50"
       }
     ],
     "buttonText": "Buy Now",
