@@ -1,207 +1,236 @@
-import React from "react";
-import { List, Tag, Progress, Button, Avatar } from "antd";
-import styled from "styled-components";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { useAppSelector } from "@/app/store/hooks";
+import { getAccessToken } from "@/app/store/features/users/userSlice";
+import { ICourse } from "@/app/types/course.contract";
+import { IUser } from "@/app/types/user.contract";
+import CourseDetailsModal from "./CourseDetailsModal";
 
-const Container = styled.div`
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-`;
-
-const Header = styled.h2`
-  margin-bottom: 32px;
-  font-size: 28px;
-  color: #1a1a1a;
-  font-weight: 600;
-`;
-
-const CourseItem = styled(List.Item)`
-  padding: 0;
-  border: 1px solid #f0f0f0;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  background: #fff;
-
-  &:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    border-color: transparent;
-    transform: translateY(-4px);
-  }
-`;
-
-const CourseContent = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 32px;
-  gap: 24px;
-`;
-
-const Thumbnail = styled(Avatar)`
-  width: 160px;
-  height: 120px;
-  border-radius: 8px;
-  object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const CourseInfo = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const CourseTitle = styled.h3`
-  margin: 0 0 12px 0;
-  font-size: 20px;
-  color: #1a1a1a;
-  font-weight: 600;
-  line-height: 1.4;
-`;
-
-const InstructorText = styled.p`
-  margin: 0 0 16px 0;
-  color: #666;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const MetaRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const LastAccessed = styled.span`
-  color: #8c8c8c;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-`;
-
-const ProgressContainer = styled.div`
-  margin-top: 12px;
-`;
-
-const ProgressText = styled.span`
-  display: block;
-  margin-top: 6px;
-  color: #1890ff;
-  font-size: 14px;
-  font-weight: 500;
-`;
-
-const CourseActions = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 180px;
-  gap: 12px;
-  padding-left: 24px;
-  border-left: 1px solid #f0f0f0;
-`;
-
-const ContinueButton = styled(Button)`
-  background-color: #1890ff;
-  color: white;
-  border-color: #1890ff;
-  height: 42px;
-  font-weight: 500;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #40a9ff;
-    border-color: #40a9ff;
-    transform: translateY(-1px);
-  }
-`;
-
-const ViewDetailsButton = styled(Button)`
-  height: 42px;
-  font-weight: 500;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-1px);
-  }
-`;
+interface EnrolledCourse {
+  userId: IUser;
+  courseId: ICourse;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  progress: number;
+  enrolledAt: string;
+  status: "active" | "completed" | "not-started";
+  lessonsCompleted: number;
+}
 
 const EnrolledCourses = () => {
-  const enrolledCourses = [
-    {
-      id: 1,
-      title: "Introduction to React",
-      instructor: "Jane Smith",
-      progress: 65,
-      thumbnail:
-        "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-      category: "Web Development",
-      lastAccessed: "2 days ago",
+  const accessToken = useAppSelector(getAccessToken);
+  const [selectedCourse, setSelectedCourse] = useState<EnrolledCourse | null>(null);
+
+  const {
+    data: enrolledCourses,
+    isLoading,
+    error,
+  } = useQuery<EnrolledCourse[]>({
+    queryKey: ["user-courses"],
+    queryFn: async () => {
+      const response = await api.get("/user-courses", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data.data;
     },
-    {
-      id: 2,
-      title: "Advanced JavaScript",
-      instructor: "John Doe",
-      progress: 30,
-      thumbnail:
-        "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-      category: "Programming",
-      lastAccessed: "1 week ago",
-    },
-    {
-      id: 3,
-      title: "UI/UX Design Principles",
-      instructor: "Alex Johnson",
-      progress: 90,
-      thumbnail:
-        "https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-      category: "Design",
-      lastAccessed: "Yesterday",
-    },
-  ];
+    enabled: !!accessToken,
+  });
+
+  const handleViewDetails = (course: EnrolledCourse) => {
+    setSelectedCourse(course);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCourse(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-7xl rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="mb-8 text-2xl font-semibold text-gray-900">My Enrolled Courses</h2>
+        <div className="flex justify-center p-10">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF6B00] border-t-transparent"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-7xl rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="mb-8 text-2xl font-semibold text-gray-900">My Enrolled Courses</h2>
+        <div className="rounded-md bg-red-50 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-800">Error</h3>
+              <div className="mt-2 text-sm text-red-700">
+                <p>Failed to load enrolled courses. Please try again later.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!enrolledCourses?.length) {
+    return (
+      <div className="mx-auto max-w-7xl rounded-lg bg-white p-6 shadow-sm">
+        <h2 className="mb-8 text-2xl font-semibold text-gray-900">My Enrolled Courses</h2>
+        <div className="rounded-md bg-[#FFF5E6] p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-[#FF6B00]" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-[#FF6B00]">No Courses</h3>
+              <div className="mt-2 text-sm text-[#FF6B00]">
+                <p>You haven't enrolled in any courses yet.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <Container>
-      <Header>My Enrolled Courses</Header>
+    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-900">My Enrolled Courses</h2>
+          <p className="mt-2 text-gray-500">Track your learning progress and continue your journey</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 rounded-lg bg-white p-2 shadow-sm">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-[#FF6B00]"></div>
+              <span className="text-sm text-gray-600">In Progress</span>
+            </div>
+            <div className="h-4 w-px bg-gray-200"></div>
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-[#10B981]"></div>
+              <span className="text-sm text-gray-600">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <List
-        dataSource={enrolledCourses}
-        renderItem={(course) => (
-          <CourseItem>
-            <CourseContent>
-              <Thumbnail src={course.thumbnail} shape="square" />
-              <CourseInfo>
-                <CourseTitle>{course.title}</CourseTitle>
-                <InstructorText>Instructor: {course.instructor}</InstructorText>
-                <MetaRow>
-                  <Tag color="blue">{course.category}</Tag>
-                  <LastAccessed>Last accessed: {course.lastAccessed}</LastAccessed>
-                </MetaRow>
-                <ProgressContainer>
-                  <Progress percent={course.progress} status="active" showInfo={false} />
-                  <ProgressText>{course.progress}% complete</ProgressText>
-                </ProgressContainer>
-              </CourseInfo>
-              <CourseActions>
-                <ContinueButton type="primary" block>
-                  Continue Learning
-                </ContinueButton>
-                <ViewDetailsButton block>View Details</ViewDetailsButton>
-              </CourseActions>
-            </CourseContent>
-          </CourseItem>
-        )}
-      />
-    </Container>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {enrolledCourses.map((course) => (
+          <div
+            key={course._id}
+            className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
+          >
+            <div className="relative h-48 w-full overflow-hidden">
+              <img
+                src="/img/Course/Course.png"
+                alt={course.courseId.title}
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 right-4">
+                <div className="flex items-center justify-between">
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      course.status === "completed" ? "bg-[#ECFDF5] text-[#10B981]" : "bg-[#FFF5E6] text-[#FF6B00]"
+                    }`}
+                  >
+                    {course.status === "completed" ? "Completed" : "In Progress"}
+                  </span>
+                  <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-[#6366F1]">
+                    {course.courseId.noOfLessons} Lessons
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col p-6">
+              <div className="mb-4">
+                <h3 className="mb-2 text-xl font-semibold text-gray-900 line-clamp-2">{course.courseId.title}</h3>
+                <p className="text-sm text-[#6B7280]">{course.courseId.instructor}</p>
+              </div>
+
+              <div className="mb-6 flex flex-wrap gap-2">
+                <span className="rounded-full bg-[#EEF2FF] px-3 py-1 text-xs font-medium text-[#6366F1]">
+                  {course.courseId.skillLevel}
+                </span>
+                <span className="rounded-full bg-[#F0FDF4] px-3 py-1 text-xs font-medium text-[#22C55E]">
+                  {course.courseId.language}
+                </span>
+              </div>
+
+              <div className="mt-auto">
+                <div className="mb-3">
+                  <div className="mb-2 flex justify-between text-sm text-gray-600">
+                    <span>Course Progress</span>
+                    <span>{course.progress}%</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                    <div
+                      className={`h-full rounded-full ${
+                        course.status === "completed" ? "bg-[#10B981]" : "bg-[#FF6B00]"
+                      }`}
+                      style={{ width: `${course.progress}%` }}
+                    />
+                  </div>
+                  <div className="mt-1 text-xs text-[#6B7280]">
+                    {course.lessonsCompleted} of {course.courseId.noOfLessons} lessons completed
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <button className="flex-1 rounded-xl bg-[#FF6B00] px-4 py-3 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2">
+                    {course.status === "not-started"
+                      ? "Start Learning"
+                      : course.status === "completed"
+                      ? "View Certificate"
+                      : "Continue Learning"}
+                  </button>
+                  <button
+                    onClick={() => handleViewDetails(course)}
+                    className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-[#4B5563] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2"
+                  >
+                    Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {selectedCourse && (
+        <CourseDetailsModal
+          course={selectedCourse.courseId}
+          isOpen={!!selectedCourse}
+          onClose={handleCloseModal}
+          progress={selectedCourse.progress}
+          status={selectedCourse.status}
+          lessonsCompleted={selectedCourse.lessonsCompleted}
+        />
+      )}
+    </div>
   );
 };
 
