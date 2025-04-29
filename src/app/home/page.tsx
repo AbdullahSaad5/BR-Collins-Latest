@@ -432,45 +432,7 @@ export const Homepage = () => {
         </div>
       </div> */}
 
-<<<<<<< HEAD
-<div className="h-[300px] lg:h-[500px] w-full mx-auto">
-      <Swiper
-        spaceBetween={0}
-        slidesPerView={1}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
-        modules={[Autoplay]}
-        loop={true}
-      >
-        <SwiperSlide>
-          {/* Your first slide content */}
-          <section className="relative w-full">
-        <div className="w-full">
-          <Image
-            src="/assets/homepagewall.png"
-            width={1920}
-            height={1080}
-            alt="wallpaper"
-            className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-            priority
-          />
-        </div>
 
-        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-            <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-              <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-                IT Support Specialist Professional Certificate
-              </h2>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
-                <h1 className="font-light text-sm sm:text-base text-gray-800">
-                  Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
-                </h1>
-=======
       <div className="h-[300px] lg:h-[500px] w-full">
         <Swiper
           spaceBetween={0}
@@ -494,7 +456,6 @@ export const Homepage = () => {
                   className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
                   priority
                 />
->>>>>>> abd2c85993b4414979b7c8fc7ab7833bd6f18f17
               </div>
 
               <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
