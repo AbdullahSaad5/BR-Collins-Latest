@@ -5,9 +5,7 @@ interface BookingSummaryProps {
   bookingState: BookingState;
 }
 
-export const BookingSummary: React.FC<BookingSummaryProps> = ({
-  bookingState,
-}) => {
+export const BookingSummary: React.FC<BookingSummaryProps> = ({ bookingState }) => {
   return (
     <div className="flex flex-col grow pt-7 pb-14 w-full text-lg bg-gray-300 rounded-3xl text-neutral-900">
       <img
@@ -21,9 +19,7 @@ export const BookingSummary: React.FC<BookingSummaryProps> = ({
           <div className="flex flex-col justify-center max-w-full min-h-[53px] w-[275px]">
             <p>Course Duration:</p>
             <p className="mt-1 font-bold text-right">
-              {bookingState.courseDuration === "half-day"
-                ? "Half-Day"
-                : "Full-Day"}
+              {bookingState.courseDuration === "half-day" ? "Half-Day" : "Full-Day"}
             </p>
           </div>
           <hr className="mt-2 max-w-full bg-white border border-solid border-zinc-200 min-h-px w-[275px]" />
@@ -36,17 +32,13 @@ export const BookingSummary: React.FC<BookingSummaryProps> = ({
 
           <div className="flex flex-col justify-center mt-4 max-w-full min-h-[53px] w-[275px]">
             <p>Selected Date:</p>
-            <p className="mt-1 font-bold text-right">
-              {bookingState.selectedDate}
-            </p>
+            <p className="mt-1 font-bold text-right">{bookingState.selectedDate.toLocaleDateString()}</p>
           </div>
           <hr className="mt-4 max-w-full bg-white border border-solid border-zinc-200 min-h-px w-[275px]" />
 
           <div className="flex flex-col justify-center mt-1 max-w-full min-h-[53px] w-[275px]">
             <p>Selected Slot(s):</p>
-            <p className="mt-1 font-bold text-left">
-              {bookingState.selectedSlot}
-            </p>
+            <p className="mt-1 font-bold text-left">{bookingState.selectedSlot}</p>
           </div>
         </div>
 
