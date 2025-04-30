@@ -185,13 +185,13 @@ const CourseDetailPageClient = ({
     <>
       {showInPersonPopup && (
         <div
-          className={`fixed inset-0 bg-black/50 z-50 flex items-center justify-center transition-opacity duration-300 ease-in-out ${
+          className={`fixed inset-0 bg-black/50 z-50 flex items-center p-4 justify-center transition-opacity duration-300 ease-in-out ${
             isPopupVisible ? "opacity-100" : "opacity-0"
           }`}
           onClick={handleClosePopup}
         >
           <div
-            className={`transform transition-all duration-300 ease-in-out ${
+            className={`transform transition-all duration-300 ease-in-out w-full md:w-auto ${
               isPopupVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
             }`}
             onClick={(e) => e.stopPropagation()}
@@ -282,24 +282,23 @@ const CourseDetailPageClient = ({
                     </div>
                   </div>
 
-
                   <div className="flex mt-5 flex-wrap gap-3 items-center">
-        <div className="flex gap-1.5 items-center">
-         
-          <span className="text-base max-md:text-sm text-white">Last updated 2/15/2025</span>
-        </div>
-        <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
-        <div className="flex gap-1.5 items-center">
-        <MapPin className="w-5 h-5 text-white" />
-          <span className="text-base max-md:text-sm text-white">234 Elm Street, Springfield, USA 90210</span>
-        </div>
-        <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
-        <div className="flex gap-1.5 items-center">
-        <Globe className="w-5 h-5 text-white"/>
-          <span className="text-base max-md:text-sm text-white">English</span>
-        </div>
-      </div>
-
+                    <div className="flex gap-1.5 items-center">
+                      <span className="text-base max-md:text-sm text-white">Last updated 2/15/2025</span>
+                    </div>
+                    <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
+                    <div className="flex gap-1.5 items-center">
+                      <MapPin className="w-5 h-5 text-white" />
+                      <span className="text-base max-md:text-sm text-white">
+                        234 Elm Street, Springfield, USA 90210
+                      </span>
+                    </div>
+                    <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
+                    <div className="flex gap-1.5 items-center">
+                      <Globe className="w-5 h-5 text-white" />
+                      <span className="text-base max-md:text-sm text-white">English</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
