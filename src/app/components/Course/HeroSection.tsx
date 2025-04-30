@@ -4,19 +4,19 @@ import React from "react";
 
 export const HeroSection = () => {
   return (
-    <section className="flex flex-col items-center px-16 pt-5 w-full bg-sky-50 max-md:px-5 max-md:max-w-full pl-15">
+    <section className="flex flex-col items-center px-4 pt-5 w-full bg-sky-50 max-md:px-4 max-md:max-w-full ">
       <div className="w-full max-w-[1326px] max-md:max-w-full">
         <div className="flex gap-5 max-md:flex-col">
           <div className="w-6/12 max-md:w-full">
             <div className="flex flex-col w-full max-md:mt-10 max-md:max-w-full">
               <nav className="flex gap-1 items-end self-start text-base text-teal-950">
-                <a href="#">Home</a>
+                <a href="/">Home</a>
                 <img
                   src="/img/Hero/arrow.svg"
                   className="object-contain shrink-0 aspect-square w-[18px]"
                   alt="Breadcrumb separator"
                 />
-                <a href="#">Courses</a>
+                <a href="/course">Courses</a>
                 <img
                   src="/img/Hero/arrow.svg"
                   className="object-contain shrink-0 aspect-square w-[18px]"

@@ -139,7 +139,7 @@ const SubscriptionCards: React.FC = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col lg:p-0 p-3 lg:flex-row gap-6 h-auto lg:h-[494px]">
+      <div className="w-full flex flex-col p-1  max-xl:p-4  lg:flex-row gap-6 h-auto lg:h-[494px] px-4">
         {/* Left Column - Individual Plans */}
         <div className="w-full lg:w-1/2 flex flex-col lg:gap-0 gap-3 justify-between ">
           {data.individualPlans.map((plan, index) => (

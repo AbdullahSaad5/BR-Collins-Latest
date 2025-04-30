@@ -265,16 +265,16 @@ const CourseDetailPageClient = ({
       {/* Hero Section */}
       <div className="relative">
         <div className="bg-neutral-900">
-          <section className="flex flex-col items-start mx-auto max-w-[1326px] pt-5 pb-32 lg:px-2 max-md:pb-24 max-md:px-4 max-md:w-full">
+          <section className="flex flex-col items-start mx-auto max-w-[1326px] max-[1230px]:mx-4 pt-5 pb-32 lg:px-2 max-md:pb-24 max-md:px-4 max-md:w-full">
             {/* Breadcrumbs */}
             <nav className="flex gap-1 items-end self-start text-base text-white max-md:items-center">
-              <a href="#">Home</a>
+              <a href="/">Home</a>
               <img
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/5f8a4ef21cebf71bbe62d3a6b83740a760828aca?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
                 alt="Breadcrumb separator"
                 className="object-contain shrink-0 aspect-square w-[18px]"
               />
-              <a href="#">Courses</a>
+              <a href="/course">Courses</a>
               <img
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/5f8a4ef21cebf71bbe62d3a6b83740a760828aca?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
                 alt="Breadcrumb separator"
@@ -352,7 +352,7 @@ const CourseDetailPageClient = ({
 
       <div className="flex gap-8 lg:mt-20 max-[1230px]:flex-col w-full max-w-[1326px] mx-auto max-lg:px-3 px-2">
         {/* Left Content */}
-        <div className="flex-1 max-lg:w-full max-[1230px]:order-2 [1230px]:max-w-[720px] max-[1230px]:w-full">
+        <div className="flex-1 max-lg:w-full max-[1230px]:order-2 [1230px]:max-w-[720px] max-[1230px]:w-full max-[1230px]:mx-4">
           <div className="w-full ">
             {/* Course content */}
             <section className="mt-12 max-md:mt-10 ml-auto">
@@ -552,11 +552,9 @@ const CourseDetailPageClient = ({
         </div>
       </div>
 
-      <div className="px-1 lg:px-3 mb-5">
-        {" "}
-        {/* Outer div with responsive padding */}
-        <div className="mx-auto max-w-[1326px]">
-          <hr className="my-10" />
+      <div className="px-1 lg:px-3 mb-5 ">
+        <div className="mx-auto max-w-[1326px] max-[1230px]:mx-4">
+          <hr className="shrink-0 mt-10 h-px   bg-zinc-200 opacity-10 max-md:max-w-full" />
           <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">More Courses By Claudia Pruitt</h2>
 
           <CourseSwiper />
