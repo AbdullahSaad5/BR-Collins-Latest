@@ -357,7 +357,11 @@ const CourseDetailPageClient = ({
               </div>
 
               <div ref={instructorRef} data-section="Instructor">
-                <InstructorSection />
+                <InstructorSection
+                  instructor={{
+                    name: displayCourse.instructor,
+                  }}
+                />
               </div>
 
               <div ref={reviewRef} data-section="Review">
@@ -493,7 +497,7 @@ const CourseDetailPageClient = ({
       <div className="px-1 lg:px-3 mb-5 ">
         <div className="mx-auto max-w-[1326px] max-[1230px]:mx-4">
           <hr className="shrink-0 mt-10 h-px   bg-zinc-200 opacity-10 max-md:max-w-full" />
-          <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">More Courses By Claudia Pruitt</h2>
+          <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">See More Courses</h2>
 
           <CourseSwiper />
         </div>
