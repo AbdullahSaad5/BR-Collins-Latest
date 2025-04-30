@@ -61,6 +61,7 @@ const fetchCategories = async (): Promise<{
 
 export const Homepage = () => {
   const [activeTab, setActiveTab] = useState<string>("e-learning");
+  const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
   // const [currentSlide, setCurrentSlide] = useState(0);
   // const [isClient, setIsClient] = useState(false);
@@ -244,9 +245,8 @@ export const Homepage = () => {
     hasShadow?: boolean;
   }) => (
     <article
-      className={`px-4 md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
-        hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
-      } w-full`}
+      className={`px-4 md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
+        } w-full`}
     >
       <img
         src={
@@ -464,7 +464,21 @@ export const Homepage = () => {
           }}
           modules={[Autoplay]}
           loop={true}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          onSwiper={(swiper) => setActiveIndex(swiper.realIndex)}
+          className="relative"
         >
+          <div className="absolute bottom-[5%] right-[10%] flex justify-center items-center gap-2 z-50 h-[10vh]">
+            {Array.from({ length: 2 }).map((_, i) => {
+              console.log("Logging index", i);
+              return (
+                <div
+                  key={i}
+                  className={`w-3 h-3 rounded-b-sm rounded-tl-sm transition-all duration-300 ${i === activeIndex ? 'bg-[#F86537]': 'bg-[#FFFFFF99]'}`}
+                />
+              );
+            })}
+          </div>
           <SwiperSlide>
             {/* Your first slide content */}
             <section className="relative w-full">
@@ -677,21 +691,19 @@ export const Homepage = () => {
               <div className="flex flex-wrap gap-4 sm:gap-6 my-3">
                 <button
                   onClick={() => setActiveTab("e-learning")}
-                  className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "e-learning"
-                      ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
-                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
-                  }`}
+                  className={`pb-2 px-1 transition-all duration-300 ${activeTab === "e-learning"
+                    ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
+                    : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                    }`}
                 >
                   E-Learning
                 </button>
                 <button
                   onClick={() => setActiveTab("blogs")}
-                  className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "blogs"
-                      ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
-                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
-                  }`}
+                  className={`pb-2 px-1 transition-all duration-300 ${activeTab === "blogs"
+                    ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
+                    : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                    }`}
                 >
                   In-Person
                 </button>
