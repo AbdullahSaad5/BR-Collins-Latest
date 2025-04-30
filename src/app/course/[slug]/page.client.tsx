@@ -171,77 +171,14 @@ const CourseDetailPageClient = ({
     sections: Object.entries(course.content).map(([key, value]) => ({
       title: key,
       stats: `${value.totalContents} lectures • ${value.totalDuration} minutes`,
+      totalContents: value.totalContents,
+      totalDuration: value.totalDuration,
       lectures: value.contents.map((item: ICourseContent) => ({
         title: item.title,
         duration: `${parseInt(item.duration)} minutes`,
         type: item.contentType,
       })),
     })),
-    // [
-    //   {
-    //     title: "Introduction to Course",
-    //     stats: `${Object.values(course.content)[0].totalContents} lectures • ${
-    //       Object.values(course.content)[0].totalDuration
-    //     } minutes`,
-    //     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/62b824286fd0acfa901dd05cd9fdd8f82eedcc53?placeholderIfAbsent=true",
-    //     lectures: Object.values(course.content)[0].contents.map((item: ICourseContent) => ({
-    //       title: item.title,
-    //       duration: `${parseInt(item.duration)} minutes`,
-    //       type: item.contentType,
-    //     })),
-    //   },
-    //   {
-    //     title: "Course Fundamentals",
-    //     stats: "6 lectures • 2hr 30 min",
-    //     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4a9582ecadffb53b1570073486c3f4e6e7eb3ff4?placeholderIfAbsent=true",
-    //     lectures: [
-    //       {
-    //         title: "Module 1: Core Administrative Skills",
-    //         duration: "45:00",
-    //         type: "video",
-    //       },
-    //       {
-    //         title: "Module 2: Effective Communication Techniques",
-    //         duration: "45:00",
-    //         type: "video",
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     title: "You can develop skill and setup",
-    //     stats: "6 lectures • 2hr 30 min",
-    //     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4a9582ecadffb53b1570073486c3f4e6e7eb3ff4?placeholderIfAbsent=true",
-    //     lectures: [
-    //       {
-    //         title: "Module 1: Core Administrative Skills",
-    //         duration: "45:00",
-    //         type: "video",
-    //       },
-    //       {
-    //         title: "Module 2: Effective Communication Techniques",
-    //         duration: "45:00",
-    //         type: "video",
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     title: "You can develop skill and setup",
-    //     stats: "6 lectures • 2hr 30 min",
-    //     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/4a9582ecadffb53b1570073486c3f4e6e7eb3ff4?placeholderIfAbsent=true",
-    //     lectures: [
-    //       {
-    //         title: "Module 1: Core Administrative Skills",
-    //         duration: "45:00",
-    //         type: "video",
-    //       },
-    //       {
-    //         title: "Module 2: Effective Communication Techniques",
-    //         duration: "45:00",
-    //         type: "video",
-    //       },
-    //     ],
-    //   },
-    // ],
   };
 
   return (
