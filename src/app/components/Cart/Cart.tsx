@@ -5,7 +5,7 @@ import CrossIcon from "../../../../public/img/cart/cross.svg";
 import Link from "next/link";
 import Image from "next/image";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
-import { toggleCart, removeFromCart } from "@/app/store/features/cart/cartSlice";
+import { toggleCart, removeFromCart, toggleCartVisiblity } from "@/app/store/features/cart/cartSlice";
 import { ICourse } from "@/app/types/course.contract";
 import { BookOpen, ArrowRight, Search } from "lucide-react";
 // import { useUser } from '../context/CartContext';
@@ -13,14 +13,17 @@ import { BookOpen, ArrowRight, Search } from "lucide-react";
 const Cart = () => {
   // const { items, handleRemoveItem, setCart, bill } = useUser();
   const dispatch = useAppDispatch();
-  const { items, discountTotal, isCartOpen, total } = useAppSelector((state) => state.cart);
+  const { items, discountTotal, isCartOpen, total, isCartVisible } = useAppSelector((state) => state.cart);
 
   const handleRemoveItem = (courseId: string) => {
     dispatch(removeFromCart(courseId));
   };
 
   const handleCloseCart = () => {
-    dispatch(toggleCart());
+    dispatch(toggleCartVisiblity());
+    setTimeout(() => {
+      dispatch(toggleCart());
+    }, 300);
   };
 
   return (
