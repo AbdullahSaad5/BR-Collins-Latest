@@ -17,6 +17,17 @@ const fetchCourseContents = async (): Promise<{ data: ICourseContent[] }> => {
   return response.data;
 };
 
+const toTitleCase = (str?: string) => {
+  if (!str) return "";
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const toOrdinal = (num: number) => {
+  const suffix = ["th", "st", "nd", "rd"];
+  const value = num % 100;
+  return num + (suffix[(value - 20) % 10] || suffix[value] || suffix[0]);
+};
+
 const ViewCourseContent = () => {
   const [selectedContent, setSelectedContent] = useState<ICourseContent | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -92,21 +103,35 @@ const ViewCourseContent = () => {
       selector: (row: ICourseContent) => row.contentType,
       sortable: true,
       grow: 1.5,
-      cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{row.contentType}</div>,
+      cell: (row: ICourseContent) => (
+        <div className="text-base text-left text-neutral-900">{toTitleCase(row.contentType)}</div>
+      ),
     },
     {
       name: "Duration",
       selector: (row: ICourseContent) => row.duration,
       sortable: true,
       grow: 1,
-      cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{row.duration}</div>,
+      cell: (row: ICourseContent) => {
+        const duration = Number(row.duration);
+        if (isNaN(duration)) return <div className="text-base text-left text-neutral-900">{row.duration}</div>;
+
+        const minutes = duration;
+        const hours = Math.floor(minutes / 60);
+        const remainingMinutes = minutes % 60;
+
+        if (hours > 0) {
+          return <div className="text-base text-left text-neutral-900">{`${hours}h ${remainingMinutes}m`}</div>;
+        }
+        return <div className="text-base text-left text-neutral-900">{`${minutes}m`}</div>;
+      },
     },
     {
       name: "Order",
       selector: (row: ICourseContent) => row.order,
       sortable: true,
       grow: 1,
-      cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{row.order}</div>,
+      cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{toOrdinal(row.order)}</div>,
     },
     {
       name: "Status",
