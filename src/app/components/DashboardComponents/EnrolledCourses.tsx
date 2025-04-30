@@ -181,6 +181,9 @@ const EnrolledCourses = () => {
               order: 1,
               isBlocked: false,
               id: "1",
+              allowDownload: true,
+              allowPreview: true,
+              sectionName: "Section 1",
             },
           ]
         }
