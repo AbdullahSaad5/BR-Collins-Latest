@@ -68,7 +68,7 @@ const Cart = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
                   <Link
-                    href="/courses"
+                    href="/course"
                     onClick={handleCloseCart}
                     className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[#FF6B00] px-6 py-3 text-white hover:bg-[#FF8533] transition-colors"
                   >
