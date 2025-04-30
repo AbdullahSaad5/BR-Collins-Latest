@@ -1,14 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import { FaTelegramPlane } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa6";
-import { FaInstagram } from "react-icons/fa";
+import { FaInstagram ,FaTelegramPlane,FaFacebookF} from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
-import { FaFacebookF } from "react-icons/fa";
-
-import { Send, MapPin } from "lucide-react";
-import Image from "next/image";
-
+import {  MapPin } from "lucide-react";
 const QuickLinks = () => {
   return (
     <div className="grow  max-md:mt-10 font-sans">
