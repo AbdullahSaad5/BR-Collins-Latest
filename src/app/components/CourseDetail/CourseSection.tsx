@@ -22,7 +22,6 @@ const Lecture: React.FC<LectureProps> = ({ title, duration, type }) => (
 interface CourseSectionProps {
   title: string;
   stats: string;
-  icon: string;
   lectures?: LectureProps[];
   expanded?: boolean;
   onToggle: () => void;
@@ -31,7 +30,6 @@ interface CourseSectionProps {
 export const CourseSection: React.FC<CourseSectionProps> = ({
   title,
   stats,
-  icon,
   lectures = [],
   expanded = false,
   onToggle,

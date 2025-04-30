@@ -12,7 +12,6 @@ interface Lecture {
 interface Section {
   title: string;
   stats: string;
-  icon: string;
   lectures: Lecture[];
 }
 
@@ -73,7 +72,6 @@ export const CourseContent: React.FC<CourseContentProps> = ({ sections: propSect
               key={section.title}
               title={section.title}
               stats={section.stats}
-              icon={section.icon}
               lectures={section.lectures}
               expanded={expandedSections[section.title]}
               onToggle={() => toggleSection(section.title)}
