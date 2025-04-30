@@ -32,6 +32,7 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
       ...prev,
       courseDuration: duration,
       price: duration === "half-day" ? 1495 : 1995,
+      selectedSlot: duration === "full-day" ? "Full Day, 8:00 AM - 5:00 PM" : prev.selectedSlot,
     }));
   };
 
@@ -87,7 +88,11 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
 
             <hr className="shrink-0 mt-5 h-px bg-white border border-solid border-zinc-200 max-md:max-w-full" />
 
-            <TimeSlots onSelect={handleTimeSlotSelection} selectedSlot={bookingState.selectedSlot} />
+            <TimeSlots
+              onSelect={handleTimeSlotSelection}
+              selectedSlot={bookingState.selectedSlot}
+              courseDuration={bookingState.courseDuration}
+            />
           </div>
         </div>
 
@@ -96,27 +101,27 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
             <div className="flex flex-col px-6 mt-4 w-full max-md:px-5">
               <h2 className="self-start text-2xl font-bold">Details Overview</h2>
               <div className="mt-16 max-md:mt-10 max-md:mr-2">
-                <div className="flex flex-col justify-center max-w-full min-h-[53px] w-[275px]">
+                <div className="flex flex-col justify-center max-w-full min-h-[53px]">
                   <p>Course Duration:</p>
                   <p className="mt-1 font-bold text-left">
                     {bookingState.courseDuration === "half-day" ? "Half-Day" : "Full-Day"}
                   </p>
                 </div>
-                <hr className="mt-2 max-w-full bg-white border border-solid border-zinc-200 min-h-px w-[275px]" />
+                <hr className="mt-2 max-w-full bg-white border border-solid border-zinc-200 min-h-px" />
 
-                <div className="flex flex-col justify-center mt-4 max-w-full min-h-[53px] w-[275px]">
+                <div className="flex flex-col justify-center mt-4 max-w-full min-h-[53px]">
                   <p>Course Price:</p>
                   <p className="mt-1 font-bold text-left">${bookingState.price}</p>
                 </div>
-                <hr className="mt-2 max-w-full bg-white border border-solid border-zinc-200 min-h-px w-[275px]" />
+                <hr className="mt-2 max-w-full bg-white border border-solid border-zinc-200 min-h-px" />
 
-                <div className="flex flex-col justify-center mt-4 max-w-full min-h-[53px] w-[275px]">
+                <div className="flex flex-col justify-center mt-4 max-w-full min-h-[53px]">
                   <p>Selected Date:</p>
                   <p className="mt-1 font-bold text-left">{bookingState.selectedDate}</p>
                 </div>
-                <hr className="mt-4 max-w-full bg-white border border-solid border-zinc-200 min-h-px w-[275px]" />
+                <hr className="mt-4 max-w-full bg-white border border-solid border-zinc-200 min-h-px" />
 
-                <div className="flex flex-col justify-center mt-1 max-w-full min-h-[53px] w-[275px]">
+                <div className="flex flex-col justify-center mt-1 max-w-full min-h-[53px]">
                   <p>Selected Slot(s):</p>
                   <p className="mt-1 font-bold text-left">{bookingState.selectedSlot}</p>
                 </div>
