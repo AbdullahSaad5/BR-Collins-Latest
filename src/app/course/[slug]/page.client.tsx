@@ -13,8 +13,9 @@ import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
 import CourseSwiper from "@/app/components/Course/CourseSwiper";
 import Image from "next/image";
 import { ICourseContent } from "@/app/types/course-content.contract";
+import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../../public/icons/footer_icons";
 
-const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
+const socialIcons = [{ Icon: FacebookIcon }, { Icon: XIcon }, { Icon: LinkedInIcon }, { Icon: InstagramIcon }];
 
 const toTitleCase = (str: string) => {
   return str.replace(/\B([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
@@ -536,12 +537,12 @@ const CourseDetailPageClient = ({
                 {socialIcons.map(({ Icon }, idx) => (
                   <Icon
                     key={idx}
-                    className="text-[#85AABA] text-xl"
+                    className="text-[#5e6f76] text-xl"
                     style={{
-                      backgroundColor: "#0F2B39",
+                      backgroundColor: "#fff",
                       borderRadius: "9999px",
                       padding: "12px",
-                      width: "45px",
+                      width: "40px",
                       height: "45px",
                     }}
                   />

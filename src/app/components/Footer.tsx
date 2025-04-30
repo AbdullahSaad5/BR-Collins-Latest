@@ -4,6 +4,7 @@ import { FaLinkedinIn } from "react-icons/fa6";
 import { FaInstagram ,FaTelegramPlane,FaFacebookF} from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import {  MapPin } from "lucide-react";
+import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../public/icons/footer_icons";
 const QuickLinks = () => {
   return (
     <div className="grow  max-md:mt-10 font-sans">
@@ -146,7 +147,7 @@ const Footer = () => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <g clip-path="url(#clip0_3036_2684)">
+              <g clipPath="url(#clip0_3036_2684)">
                 <path
                   d="M40.5655 29.6535L38.1441 28.2293L39.2876 27.5722C47.7863 22.6882 49.3653 10.9612 42.1635 4.33986C39.3636 1.7655 35.2371 -0.0174669 29.1788 0.00403083C33.8927 4.03486 37.7697 13.4119 34.9386 19.1518C34.8925 19.2445 34.8315 19.352 34.7582 19.4716C33.593 21.3607 31.4876 22.4786 29.2534 22.4786H12.1585V10.8376H28.7434C31.082 10.8376 33.2484 12.0576 34.4449 14.0488C34.3295 13.3864 34.1749 12.7334 33.9809 12.0912C31.7996 4.84506 24.9017 0 17.2685 0H0V57H16.4804C19.4634 57 22.4247 56.4478 25.1879 55.3312C25.4457 55.2264 25.6586 55.1351 25.8024 55.0598C30.8718 52.4667 32.756 48.2921 34.4516 43.1541L33.8778 43.7439C32.3734 45.2891 30.2993 46.1611 28.1316 46.1611H12.1585V33.3162H28.2808C29.8991 33.3162 31.5039 33.7784 32.7953 34.7444C32.7967 34.7444 32.798 34.7471 32.8007 34.7485C37.8524 38.6382 37.3424 46.5346 36.679 50.5843C36.3426 52.6386 36.1541 54.7145 36.1541 56.7944V57H47.8215V42.2754C47.8215 37.0944 45.0637 32.2977 40.5668 29.6548L40.5655 29.6535Z"
                   fill="white"
@@ -258,17 +259,17 @@ const Footer = () => {
 
           {/* Right Block - Fills Remaining Space */}
           <div className="flex flex-1 justify-end w-fit  gap-4 items-center  min-h-[52px]">
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <FaFacebookF className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full ">
+              <FacebookIcon className="w-8 h-7"/>
             </div>
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <BsTwitterX className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
+              <XIcon className="w-6 h-6"/>
             </div>
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <FaLinkedinIn className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
+              <LinkedInIcon className="w-6 h-6"/>
             </div>
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <FaInstagram className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-3  text-gray-400 bg-[#16313f] rounded-full ">
+              <InstagramIcon className="w-6 h-6"/>
             </div>
           </div>
         </div>
