@@ -6,6 +6,8 @@ import { getAccessToken } from "@/app/store/features/users/userSlice";
 import { ICourse } from "@/app/types/course.contract";
 import { IUser } from "@/app/types/user.contract";
 import CourseDetailsModal from "./CourseDetailsModal";
+import CoursePlayer from "./CoursePlayer";
+import { ICourseContent } from "@/app/types/course-content.contract";
 
 interface EnrolledCourse {
   userId: IUser;
@@ -23,6 +25,7 @@ interface EnrolledCourse {
 const EnrolledCourses = () => {
   const accessToken = useAppSelector(getAccessToken);
   const [selectedCourse, setSelectedCourse] = useState<EnrolledCourse | null>(null);
+  const [selectedCourseForLearning, setSelectedCourseForLearning] = useState<EnrolledCourse | null>(null);
 
   const {
     data: enrolledCourses,
@@ -41,12 +44,58 @@ const EnrolledCourses = () => {
     enabled: !!accessToken,
   });
 
+  const { data: contentData } = useQuery<ICourseContent[]>({
+    queryKey: ["course-content", selectedCourseForLearning?.courseId._id],
+    queryFn: async () => {
+      if (!selectedCourseForLearning) return [];
+      const response = await api.get(`/course-content/${selectedCourseForLearning.courseId._id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data.data;
+    },
+    enabled: !!selectedCourseForLearning && !!accessToken,
+  });
+
   const handleViewDetails = (course: EnrolledCourse) => {
     setSelectedCourse(course);
   };
 
   const handleCloseModal = () => {
     setSelectedCourse(null);
+  };
+
+  const handleStartLearning = async (course: EnrolledCourse) => {
+    setSelectedCourseForLearning(course);
+  };
+
+  const handleBackToCourses = () => {
+    setSelectedCourseForLearning(null);
+  };
+
+  const handleCompleteLesson = async (contentId: string) => {
+    try {
+      await api.post(
+        `/user-courses/${selectedCourseForLearning?._id}/complete-lesson`,
+        { contentId },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      // Update the local state to reflect the completed lesson
+      if (selectedCourseForLearning) {
+        const updatedCourse = {
+          ...selectedCourseForLearning,
+          lessonsCompleted: selectedCourseForLearning.lessonsCompleted + 1,
+        };
+        setSelectedCourseForLearning(updatedCourse);
+      }
+    } catch (error) {
+      console.error("Failed to mark lesson as complete:", error);
+    }
   };
 
   if (isLoading) {
@@ -111,6 +160,33 @@ const EnrolledCourses = () => {
           </div>
         </div>
       </div>
+    );
+  }
+
+  if (selectedCourseForLearning) {
+    return (
+      <CoursePlayer
+        course={selectedCourseForLearning.courseId}
+        content={
+          contentData || [
+            {
+              _id: "1",
+              title: "Lesson 1",
+              description: "Lesson 1 description",
+              // videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+              contentType: "video",
+              contentUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+              duration: "10 minutes",
+              courseId: selectedCourseForLearning.courseId._id,
+              order: 1,
+              isBlocked: false,
+              id: "1",
+            },
+          ]
+        }
+        onBack={handleBackToCourses}
+        onCompleteLesson={handleCompleteLesson}
+      />
     );
   }
 
@@ -200,7 +276,10 @@ const EnrolledCourses = () => {
                 </div>
 
                 <div className="flex gap-3">
-                  <button className="flex-1 rounded-xl bg-[#FF6B00] px-4 py-3 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2">
+                  <button
+                    onClick={() => handleStartLearning(course)}
+                    className="flex-1 rounded-xl bg-[#FF6B00] px-4 py-3 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2"
+                  >
                     {course.status === "not-started"
                       ? "Start Learning"
                       : course.status === "completed"
