@@ -125,7 +125,6 @@ const SubscriptionCards: React.FC = () => {
 
   const handleConfirmPurchase = () => {
     // TODO: Implement purchase logic
-    console.log("Purchase confirmed for plan:", selectedPlan);
     setShowConfirmationModal(false);
     if (selectedPlan?.type === "individual") {
       router.push("/course");

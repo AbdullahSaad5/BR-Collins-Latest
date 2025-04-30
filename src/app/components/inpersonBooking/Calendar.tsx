@@ -71,7 +71,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }
         date.getFullYear() === today.getFullYear();
 
       // Check if the date is in the past
-      const isPastDate = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const isPastDate = date <= new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
       days.push(
         <button

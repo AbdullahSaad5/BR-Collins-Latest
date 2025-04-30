@@ -88,8 +88,6 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
 
   if (!isOpen) return null;
 
-  console.log(plan);
-
   if (showCheckout && clientSecret) {
     return (
       <CheckoutPage

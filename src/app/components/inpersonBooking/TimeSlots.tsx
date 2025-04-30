@@ -5,21 +5,18 @@ interface TimeSlotsProps {
   selectedSlot: string;
 }
 
-export const TimeSlots: React.FC<TimeSlotsProps> = ({
-  onSelect,
-  selectedSlot,
-}) => {
+export const TimeSlots: React.FC<TimeSlotsProps> = ({ onSelect, selectedSlot }) => {
   const timeSlots = [
     {
       label: "Morning Slot",
-      value: "Morning, 8:00 AM – 12:00 PM",
-      time: "8:00 AM – 12:00 PM"
+      value: "Morning, 8:00 AM - 12:00 PM",
+      time: "8:00 AM - 12:00 PM",
     },
     {
       label: "Afternoon Slot",
-      value: "Afternoon, 1:00 PM – 5:00 PM",
-      time: "1:00 PM – 5:00 PM"
-    }
+      value: "Afternoon, 1:00 PM - 5:00 PM",
+      time: "1:00 PM - 5:00 PM",
+    },
   ];
 
   return (
@@ -28,10 +25,7 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
         <h2 className="text-2xl font-bold w-[280px] shrink-0">Choose Time Slot(s):</h2>
         <div className="flex flex-col justify-start text-lg flex-grow">
           {timeSlots.map((slot) => (
-            <label 
-              key={slot.value}
-              className="flex items-center gap-3 cursor-pointer"
-            >
+            <label key={slot.value} className="flex items-center gap-3 cursor-pointer">
               <input
                 type="radio"
                 name="timeSlot"
