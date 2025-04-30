@@ -7,7 +7,7 @@ import Cart from "./Cart/Cart";
 import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { logout } from "@/app/store/features/users/userSlice";
-import { toggleCart } from "@/app/store/features/cart/cartSlice";
+import { toggleCart, toggleCartVisiblity } from "@/app/store/features/cart/cartSlice";
 import { IUser } from "../types/user.contract";
 import Image from "next/image";
 
@@ -31,6 +31,7 @@ export const Navigation = () => {
   const isLoggedIn = useAppSelector((state) => state.user.accessToken !== null);
   const user = useAppSelector((state) => state.user.user);
   const { items, isCartOpen } = useAppSelector((state) => state.cart);
+  const cart = useAppSelector((state) => state.cart);
   const profilePicture = (user as IUser).profilePicture;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Courses");
@@ -74,6 +75,13 @@ export const Navigation = () => {
     router.push("/");
   };
 
+  const handleOpenCart = () => {
+    dispatch(toggleCart())
+    setTimeout(() => {
+      dispatch(toggleCartVisiblity())
+    }, 300)
+  }
+
   return (
     <nav className="relative text-gray-900 flex items-center justify-between my-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 ">
       {/* Mobile Header */}
@@ -92,7 +100,9 @@ export const Navigation = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button onClick={() => dispatch(toggleCart())} className="relative p-2">
+          <button
+            onClick={() => {handleOpenCart()}}
+            className="relative p-2">
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
               <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
@@ -190,7 +200,9 @@ export const Navigation = () => {
           </div>
 
           <div className="flex gap-4 items-center text-base">
-            <button onClick={() => dispatch(toggleCart())} className="relative">
+            <button
+              onClick={() => {handleOpenCart()}}
+              className="relative">
               <ShoppingCart className="w-7 h-7 text-base" />
               {items.length > 0 && (
                 <div className="absolute -top-3 -right-3 text-xs py-1 px-2 rounded-full bg-blue-200">
@@ -215,18 +227,16 @@ export const Navigation = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
-                      (user as IUser).lastName
-                    }`}</span>
+                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${(user as IUser).lastName
+                      }`}</span>
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
                 {isProfileDropdownOpen && (
                   <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56 z-[99999]">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
-                        (user as IUser).lastName
-                      }`}</p>
+                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${(user as IUser).lastName
+                        }`}</p>
                       <p className="text-xs text-gray-500">{`${toTitleCase((user as IUser).role)}`}</p>
                     </div>
                     <button
@@ -265,9 +275,8 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-4 space-y-6 mt-4">
           {/* Mobile Menu Header */}
@@ -330,6 +339,7 @@ export const Navigation = () => {
               </button>
             </Link>
           )}
+
           {isLoggedIn && (
             <div className="flex items-center gap-3 p-2">
               {isValidProfilePicture(profilePicture) ? (
@@ -349,9 +359,9 @@ export const Navigation = () => {
 
       {/* Cart Overlay */}
       <div
-        className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out ${
-          isCartOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
-        }`}
+        className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out 
+          ${isCartOpen ? "translate-x-0" : "translate-x-full"}
+          `}
       >
         <Cart />
       </div>

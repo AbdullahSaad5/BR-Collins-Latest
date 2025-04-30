@@ -6,6 +6,7 @@ interface CartState {
   total: number;
   discountTotal: number;
   isCartOpen: boolean;
+  isCartVisible: boolean;
 }
 
 const initialState: CartState = {
@@ -13,6 +14,7 @@ const initialState: CartState = {
   total: 0,
   discountTotal: 0,
   isCartOpen: false,
+  isCartVisible: false
 };
 
 const cartSlice = createSlice({
@@ -43,14 +45,18 @@ const cartSlice = createSlice({
     toggleCart: (state) => {
       state.isCartOpen = !state.isCartOpen;
     },
+    toggleCartVisiblity: (state) => {
+      state.isCartVisible = !state.isCartVisible
+    }
   },
 });
 
-export const { addToCart, removeFromCart, clearCart, toggleCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, toggleCart, toggleCartVisiblity } = cartSlice.actions;
 
 export const selectCartItems = (state: { cart: CartState }) => state.cart.items;
 export const selectCartTotal = (state: { cart: CartState }) => state.cart.total;
 export const selectCartDiscountTotal = (state: { cart: CartState }) => state.cart.discountTotal;
 export const selectIsCartOpen = (state: { cart: CartState }) => state.cart.isCartOpen;
+export const selectIsCartVisible = (state: { cart: CartState }) => state.cart.isCartVisible;
 
 export default cartSlice.reducer;
