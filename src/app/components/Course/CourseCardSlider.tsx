@@ -15,7 +15,7 @@ interface CourseCardSliderProps {
 
 const CourseCardSlider: React.FC<CourseCardSliderProps> = ({ courses }) => {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full ">
       <Swiper
         modules={[Pagination, Mousewheel]}
         spaceBetween={24}
@@ -47,7 +47,7 @@ const CourseCardSlider: React.FC<CourseCardSliderProps> = ({ courses }) => {
         className="pb-8"
       >
         {courses.map((course) => (
-          <SwiperSlide key={course._id} className="!h-auto max-w-[220px]">
+          <SwiperSlide key={course._id} className="!h-auto  max-w-[220px]">
             <div className="h-full">
               <CourseCard course={course} />
             </div>
