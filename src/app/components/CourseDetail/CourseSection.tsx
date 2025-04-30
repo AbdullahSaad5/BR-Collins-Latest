@@ -22,7 +22,17 @@ const Lecture: React.FC<LectureProps> = ({ title, duration, type }) => (
       <CourseContentBookIcon width={24} height={24} className="mr-2.5" color="#7B878D" strokeWidth={1.8} />
     )}
     <span className="grow text-base text-neutral-900 max-md:text-sm max-sm:text-xs">{title}</span>
-    <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs">{duration}</span>
+    <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs">
+      {(() => {
+        const minutes = parseInt(duration);
+        if (minutes >= 60) {
+          const hours = Math.floor(minutes / 60);
+          const remainingMins = minutes % 60;
+          return `${hours}hr ${remainingMins}min`;
+        }
+        return `${minutes}min`;
+      })()}
+    </span>
   </div>
 );
 
