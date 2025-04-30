@@ -79,7 +79,7 @@ const CourseSwiper: React.FC = () => {
               className="!w-[calc(100%/1.1)] sm:!w-[calc(100%/3.2)] lg:!w-[calc(100%/5.4)] xl:!w-[calc(100%/6.4)]"
             >
               <div className="h-full p-2">
-                <CourseCard {...transformedCourse} />
+                <CourseCard course={course} />
               </div>
             </SwiperSlide>
           );
