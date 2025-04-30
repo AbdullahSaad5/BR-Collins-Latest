@@ -7,7 +7,7 @@ import { z } from "zod";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { Lock, Shield, CheckCircle2, AlertCircle } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
@@ -47,6 +47,7 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
   const [success, setSuccess] = React.useState(false);
   const [clientSecret, setClientSecret] = React.useState<string | null>(null);
   const accessToken = useAppSelector(getRefreshToken);
+  const queryClient = useQueryClient();
 
   const stripe = useStripe();
   const elements = useElements();
@@ -167,6 +168,8 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
       }
 
       setSuccess(true);
+      // Invalidate the availableSlots query for the current month
+      queryClient.invalidateQueries({ queryKey: ["availableSlots", bookingState.currentMonth] });
       setTimeout(() => {
         setIsVisible(false);
         setTimeout(() => {
