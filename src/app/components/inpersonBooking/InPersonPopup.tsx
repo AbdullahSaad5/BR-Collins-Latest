@@ -5,6 +5,7 @@ import { Calendar } from "./Calendar";
 import { CourseSelection } from "./CourseSelection";
 import { TimeSlots } from "./TimeSlots";
 import { api } from "@/app/utils/axios";
+import { useQuery } from "@tanstack/react-query";
 
 export interface BookingState {
   courseDuration: "half-day" | "full-day";
@@ -31,13 +32,6 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
     currentMonth: new Date(),
   });
 
-  const [availableSlots, setAvailableSlots] = React.useState<
-    {
-      date: string;
-      slots: ("full-day" | "half-day-morning" | "half-day-afternoon")[];
-    }[]
-  >([]);
-
   const fetchAvailableSlots = async (date: Date) => {
     // Check if the month is previous to current month
     const currentDate = new Date();
@@ -46,7 +40,7 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
 
     if (selectedMonth < currentMonth) {
       console.log("Skipping API call for previous month");
-      return;
+      return [];
     }
 
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -55,19 +49,15 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
     const startDate = firstDayOfMonth.toISOString().split("T")[0];
     const endDate = lastDayOfMonth.toISOString().split("T")[0];
 
-    try {
-      const response = await api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`);
-      console.log("Available slots:", response.data);
-      setAvailableSlots(response.data);
-    } catch (error) {
-      console.error("Error fetching available slots:", error);
-    }
+    const response = await api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`);
+    return response.data;
   };
 
-  React.useEffect(() => {
-    console.log("bookingState.currentMonth", bookingState.currentMonth);
-    fetchAvailableSlots(bookingState.currentMonth);
-  }, [bookingState.currentMonth]);
+  const { data: availableSlots = [], isLoading } = useQuery({
+    queryKey: ["availableSlots", bookingState.currentMonth],
+    queryFn: () => fetchAvailableSlots(bookingState.currentMonth),
+    enabled: bookingState.currentMonth >= new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  });
 
   const handleCourseSelection = (duration: "half-day" | "full-day") => {
     setBookingState((prev) => ({
@@ -101,6 +91,14 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
 
   return (
     <div className="rounded max-w-[1102px] relative max-h-[90vh] overflow-y-auto">
+      {isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-lg font-medium text-neutral-900">Loading available slots...</p>
+          </div>
+        </div>
+      )}
       <button className="absolute top-4 right-4 z-10" onClick={onClose}>
         <img
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/179dd092ac1215fe4beb3a0ff1267359fcb77bcb?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
