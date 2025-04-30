@@ -1,5 +1,3 @@
-import { ICourse } from "./course.contract";
-
 export interface ICourseContent {
   id: string;
   _id: string;
@@ -11,6 +9,9 @@ export interface ICourseContent {
   duration: string;
   order: number;
   isBlocked: boolean;
+  allowDownload: boolean;
+  allowPreview: boolean;
+  sectionName: string;
 }
 
 export type CourseContentCreatePayload = Omit<ICourseContent, "id" | "_id">;

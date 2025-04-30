@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -10,9 +10,22 @@ import FormField from "./FormField";
 import { ICourse } from "@/app/types/course.contract";
 import { CourseContentCreatePayload } from "@/app/types/course-content.contract";
 import { useSearchParams, useRouter } from "next/navigation";
+import ToggleOption from "./ToggleOption";
+import CreatableSelect from "react-select/creatable";
+import { ActionMeta, SingleValue } from "react-select";
+
+interface SectionOption {
+  value: string;
+  label: string;
+}
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
+  return response.data;
+};
+
+const fetchSections = async (courseId: string): Promise<{ data: string[] }> => {
+  const response = await api.get(`/course-contents/sections/${courseId}`);
   return response.data;
 };
 
@@ -25,6 +38,9 @@ const courseContentSchema = z.object({
   duration: z.string().min(1, "Duration is required"),
   order: z.number().min(0, "Order must be a non-negative number"),
   isBlocked: z.boolean(),
+  allowDownload: z.boolean(),
+  allowPreview: z.boolean(),
+  sectionName: z.string().min(1, "Section name is required"),
 });
 
 export default function AddCourseContent() {
@@ -44,21 +60,14 @@ export default function AddCourseContent() {
     select: (data) => data.data,
   });
 
-  const { data: content } = useQuery({
-    queryKey: ["course-content", contentId],
-    queryFn: async () => {
-      const response = await api.get(`/course-contents/${contentId}`);
-      return response.data.data;
-    },
-    enabled: isEditMode && !!contentId,
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     setValue,
+    control,
+    watch,
   } = useForm<CourseContentCreatePayload>({
     resolver: zodResolver(courseContentSchema),
     defaultValues: {
@@ -70,7 +79,32 @@ export default function AddCourseContent() {
       duration: "",
       order: 0,
       isBlocked: false,
+      allowDownload: false,
+      allowPreview: false,
+      sectionName: "",
     },
+  });
+
+  const selectedCourseId = watch("courseId");
+
+  const {
+    data: sections,
+    isLoading: isLoadingSections,
+    error: sectionsError,
+  } = useQuery({
+    queryKey: ["sections", selectedCourseId],
+    queryFn: () => fetchSections(selectedCourseId),
+    select: (data: { data: string[] }) => data.data,
+    enabled: !!selectedCourseId,
+  });
+
+  const { data: content } = useQuery({
+    queryKey: ["course-content", contentId],
+    queryFn: async () => {
+      const response = await api.get(`/course-contents/${contentId}`);
+      return response.data.data;
+    },
+    enabled: isEditMode && !!contentId,
   });
 
   useEffect(() => {
@@ -82,6 +116,9 @@ export default function AddCourseContent() {
       setValue("contentUrl", content.contentUrl);
       setValue("duration", content.duration);
       setValue("order", content.order);
+      setValue("allowDownload", content.allowDownload);
+      setValue("allowPreview", content.allowPreview);
+      setValue("sectionName", content.sectionName);
     }
   }, [content, isEditMode, setValue]);
 
@@ -105,6 +142,15 @@ export default function AddCourseContent() {
 
   const onSubmit = async (data: CourseContentCreatePayload) => {
     createCourseContentMutation.mutate(data);
+  };
+
+  const handleSectionChange = (newValue: SingleValue<SectionOption>, actionMeta: ActionMeta<SectionOption>) => {
+    if (actionMeta.action === "create-option") {
+      // Handle new section creation
+      setValue("sectionName", newValue?.value || "");
+    } else {
+      setValue("sectionName", newValue?.value || "");
+    }
   };
 
   return (
@@ -201,6 +247,132 @@ export default function AddCourseContent() {
           type="number"
           required
         />
+
+        <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
+          <div className="grow shrink-0 basis-0 w-fit">
+            <label className="text-base text-neutral-900">Section Name *</label>
+            <p className="mt-1 text-sm text-gray-500">Select or create a section name</p>
+          </div>
+          <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
+            {!selectedCourseId ? (
+              <div className="text-sm text-gray-500">Please select a course first</div>
+            ) : isLoadingSections ? (
+              <div className="text-sm text-gray-500">Loading sections...</div>
+            ) : sectionsError ? (
+              <div className="text-sm text-red-500">Error loading sections. Please try again later.</div>
+            ) : (
+              <Controller
+                name="sectionName"
+                control={control}
+                render={({ field }) => (
+                  <CreatableSelect<SectionOption>
+                    {...field}
+                    value={field.value ? { value: field.value, label: field.value } : null}
+                    isClearable
+                    isSearchable
+                    options={sections?.map((section) => ({ value: section, label: section })) || []}
+                    placeholder="Select or create a section"
+                    className="w-full"
+                    classNamePrefix="select"
+                    onChange={handleSectionChange}
+                    styles={{
+                      control: (base) => ({
+                        ...base,
+                        minHeight: "44px",
+                        borderRadius: "0.5rem",
+                        borderColor: "#e5e7eb",
+                        backgroundColor: "#f1f5f9",
+                        "&:hover": {
+                          borderColor: "#d1d5db",
+                        },
+                      }),
+                      input: (base) => ({
+                        ...base,
+                        color: "#111827",
+                      }),
+                      singleValue: (base) => ({
+                        ...base,
+                        color: "#111827",
+                      }),
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "#9ca3af",
+                      }),
+                      option: (base, state) => ({
+                        ...base,
+                        color: "#111827",
+                        backgroundColor: state.isSelected ? "#f1f5f9" : "white",
+                        "&:hover": {
+                          backgroundColor: "#f1f5f9",
+                        },
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        borderRadius: "0.5rem",
+                        border: "1px solid #e5e7eb",
+                        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                      }),
+                      menuList: (base) => ({
+                        ...base,
+                        padding: "0.5rem",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "#6b7280",
+                        "&:hover": {
+                          color: "#4b5563",
+                        },
+                      }),
+                      clearIndicator: (base) => ({
+                        ...base,
+                        color: "#6b7280",
+                        "&:hover": {
+                          color: "#4b5563",
+                        },
+                      }),
+                    }}
+                  />
+                )}
+              />
+            )}
+            {errors.sectionName && <p className="mt-1 text-sm text-red-500">{errors.sectionName.message}</p>}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
+          <div className="grow shrink-0 basis-0 w-fit">
+            <label className="text-base text-neutral-900">Content Settings</label>
+            <p className="mt-1 text-sm text-gray-500">Configure content access settings</p>
+          </div>
+          <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
+            <div className="space-y-4">
+              <Controller
+                name="allowDownload"
+                control={control}
+                render={({ field }) => (
+                  <ToggleOption
+                    label="Allow Download"
+                    description="Allow users to download this content"
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                  />
+                )}
+              />
+              <Controller
+                name="allowPreview"
+                control={control}
+                render={({ field }) => (
+                  <ToggleOption
+                    label="Allow Preview"
+                    description="Allow users to preview this content"
+                    checked={field.value}
+                    onChange={(e) => field.onChange(e.target.checked)}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        </div>
 
         <div className="flex justify-end mt-8">
           <button

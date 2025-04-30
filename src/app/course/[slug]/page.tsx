@@ -4,9 +4,9 @@ import { api } from "@/app/utils/axios";
 const CourseDetailPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${slug}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/courses/${slug}?content=true`, {
     next: {
-      revalidate: 300,
+      revalidate: 0,
     },
   });
   const res = await response.json();

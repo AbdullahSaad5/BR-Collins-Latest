@@ -12,7 +12,7 @@ import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
 
 import CourseSwiper from "@/app/components/Course/CourseSwiper";
 import Image from "next/image";
-
+import { ICourseContent } from "@/app/types/course-content.contract";
 
 const socialIcons = [{ Icon: Facebook }, { Icon: Twitter }, { Icon: Linkedin }, { Icon: Instagram }];
 
@@ -20,7 +20,13 @@ const toTitleCase = (str: string) => {
   return str.replace(/\B([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
 };
 
-const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
+const CourseDetailPageClient = ({
+  course,
+}: {
+  course: ICourse & {
+    content: ICourseContent[];
+  };
+}) => {
   const [showInPersonPopup, setShowInPersonPopup] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("Overview");
@@ -158,30 +164,43 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
     sections: [
       {
         title: "Introduction to Course",
-        stats: "3 lectures • 1hr 30 min",
+        stats: `${course.content.length} lectures • ${course.content
+          .reduce((acc, item) => acc + parseInt(item.duration), 0)
+          .toLocaleString("en-US", {
+            style: "unit",
+            unit: "minute",
+          })}`,
         icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/62b824286fd0acfa901dd05cd9fdd8f82eedcc53?placeholderIfAbsent=true",
-        lectures: [
-          {
-            title: "Module 1: Introduction to Office Administration",
-            duration: "30:00",
-            type: "video",
-          },
-          {
-            title: "Module 2: Communication in the Workplace",
-            duration: "30:00",
-            type: "video",
-          },
-          {
-            title: "Module 3: Time Management & Organization",
-            duration: "30:00",
-            type: "video",
-          },
-          {
-            title: "Module 4: Time Management & Organization",
-            duration: "30:00",
-            type: "book",
-          },
-        ],
+        // lectures: [
+        //   {
+        //     title: "Module 1: Introduction to Office Administration",
+        //     duration: "30:00",
+        //     type: "video",
+        //   },
+        //   {
+        //     title: "Module 2: Communication in the Workplace",
+        //     duration: "30:00",
+        //     type: "video",
+        //   },
+        //   {
+        //     title: "Module 3: Time Management & Organization",
+        //     duration: "30:00",
+        //     type: "video",
+        //   },
+        //   {
+        //     title: "Module 4: Time Management & Organization",
+        //     duration: "30:00",
+        //     type: "book",
+        //   },
+        // ],
+        lectures: course.content.map((item) => ({
+          title: item.title,
+          duration: parseInt(item.duration).toLocaleString("en-US", {
+            style: "unit",
+            unit: "minute",
+          }),
+          type: item.contentType,
+        })),
       },
       {
         title: "Course Fundamentals",
@@ -544,23 +563,18 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
             </div>
           </div>
         </div>
-       
       </div>
-     
 
-        <div className="px-1 lg:px-3 mb-5"> {/* Outer div with responsive padding */}
-  <div className="mx-auto max-w-[1326px]">
-  <hr className="my-10"/>
-    <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">
-      More Courses By Claudia Pruitt
-    </h2>
-    
-    <CourseSwiper />
-  </div>
-</div>           
-      
+      <div className="px-1 lg:px-3 mb-5">
+        {" "}
+        {/* Outer div with responsive padding */}
+        <div className="mx-auto max-w-[1326px]">
+          <hr className="my-10" />
+          <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">More Courses By Claudia Pruitt</h2>
 
-     
+          <CourseSwiper />
+        </div>
+      </div>
     </>
   );
 };
