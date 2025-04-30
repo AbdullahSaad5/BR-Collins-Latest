@@ -4,7 +4,7 @@ import { InstructorSection } from "../../components/CourseDetail/InstructorSecti
 import { ReviewSection } from "../../components/CourseDetail/ReviewSection";
 import CourseDetail from "../../components/CourseDetail/CourseDetail";
 import { StarRating } from "@/app/components/CourseDetail/StarRating";
-import { Send, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Send, Facebook, Instagram, Linkedin, Twitter, MapPin, Globe } from "lucide-react";
 import { ICourse } from "@/app/types/course.contract";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { addToCart } from "@/app/store/features/cart/cartSlice";
@@ -281,6 +281,25 @@ const CourseDetailPageClient = ({
                       </span>
                     </div>
                   </div>
+
+
+                  <div className="flex mt-5 flex-wrap gap-3 items-center">
+        <div className="flex gap-1.5 items-center">
+         
+          <span className="text-base max-md:text-sm text-white">Last updated 2/15/2025</span>
+        </div>
+        <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
+        <div className="flex gap-1.5 items-center">
+        <MapPin className="w-5 h-5 text-white" />
+          <span className="text-base max-md:text-sm text-white">234 Elm Street, Springfield, USA 90210</span>
+        </div>
+        <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
+        <div className="flex gap-1.5 items-center">
+        <Globe className="w-5 h-5 text-white"/>
+          <span className="text-base max-md:text-sm text-white">English</span>
+        </div>
+      </div>
+
                 </div>
               </div>
             </div>
