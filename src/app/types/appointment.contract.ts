@@ -1,3 +1,9 @@
+export enum AppointmentType {
+  HALF_DAY_MORNING = "half-day-morning", // 8AM to 12PM
+  HALF_DAY_AFTERNOON = "half-day-afternoon", // 1PM to 5PM
+  FULL_DAY = "full-day", // 8AM to 5PM
+}
+
 export interface IAppointment {
   id: string;
   _id: string;
@@ -15,10 +21,9 @@ export interface IAppointment {
     };
   };
   date: Date;
-  startTime: Date;
-  endTime: Date;
+  appointmentType: AppointmentType;
   maxParticipants: number;
-  price: number;
+  price?: number;
   status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled";
   notes: string;
   createdAt: Date;

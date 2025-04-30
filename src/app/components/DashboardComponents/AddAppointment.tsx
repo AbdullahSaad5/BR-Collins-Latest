@@ -7,7 +7,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import FormField from "./FormField";
-import { AppointmentCreatePayload, IAppointment } from "@/app/types/appointment.contract";
+import { AppointmentCreatePayload, IAppointment, AppointmentType } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -38,8 +38,9 @@ const appointmentSchema = z.object({
       .optional(),
   }),
   date: z.string().min(1, "Date is required"),
-  startTime: z.string().min(1, "Start time is required"),
-  endTime: z.string().min(1, "End time is required"),
+  appointmentType: z.nativeEnum(AppointmentType, {
+    required_error: "Appointment type is required",
+  }),
   maxParticipants: z
     .number({
       required_error: "Maximum participants is required",
@@ -128,16 +129,13 @@ export default function AddAppointment() {
 
   useEffect(() => {
     if (appointment) {
-      const formattedDate = new Date(appointment.startTime).toISOString().split("T")[0];
-      const startTime = new Date(appointment.startTime).toTimeString().split(" ")[0].slice(0, 5);
-      const endTime = new Date(appointment.endTime).toTimeString().split(" ")[0].slice(0, 5);
+      const formattedDate = new Date(appointment.date).toISOString().split("T")[0];
 
       reset({
         courseId: appointment.courseId,
         location: appointment.location,
         date: formattedDate,
-        startTime,
-        endTime,
+        appointmentType: appointment.appointmentType,
         maxParticipants: appointment.maxParticipants,
         price: appointment.price,
         notes: appointment.notes,
@@ -150,8 +148,6 @@ export default function AddAppointment() {
     const appointmentData: AppointmentCreatePayload = {
       ...data,
       date: new Date(data.date),
-      startTime: new Date(`${data.date}T${data.startTime}`),
-      endTime: new Date(`${data.date}T${data.endTime}`),
     };
 
     if (isEditMode) {
@@ -278,21 +274,18 @@ export default function AddAppointment() {
         />
 
         <FormField
-          label="Start Time *"
-          description="Select the start time"
-          {...register("startTime")}
-          error={errors.startTime?.message}
-          type="time"
+          label="Appointment Type *"
+          description="Select the type of appointment"
+          {...register("appointmentType")}
+          error={errors.appointmentType?.message}
+          select
           required
-        />
-
-        <FormField
-          label="End Time *"
-          description="Select the end time"
-          {...register("endTime")}
-          error={errors.endTime?.message}
-          type="time"
-          required
+          options={[
+            { value: "", label: "Select appointment type" },
+            { value: AppointmentType.HALF_DAY_MORNING, label: "Half Day Morning (8AM - 12PM)" },
+            { value: AppointmentType.HALF_DAY_AFTERNOON, label: "Half Day Afternoon (1PM - 5PM)" },
+            { value: AppointmentType.FULL_DAY, label: "Full Day (8AM - 5PM)" },
+          ]}
         />
 
         <FormField

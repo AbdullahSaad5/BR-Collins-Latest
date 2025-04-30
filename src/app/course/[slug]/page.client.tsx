@@ -196,7 +196,7 @@ const CourseDetailPageClient = ({
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <InPersonPopup onClose={handleClosePopup} />
+            <InPersonPopup onClose={handleClosePopup} courseId={course._id} />
           </div>
         </div>
       )}

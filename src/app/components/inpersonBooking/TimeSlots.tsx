@@ -1,5 +1,6 @@
 import * as React from "react";
 
+// type SlotType = "full-day" | "half-day-morning" | "half-day-afternoon";
 type SlotType = "full-day" | "half-day-morning" | "half-day-afternoon";
 
 interface TimeSlotsProps {
@@ -8,9 +9,9 @@ interface TimeSlotsProps {
   courseDuration: "half-day" | "full-day";
   availableSlots: {
     date: string;
-    slots: SlotType[];
+    availableSlots: SlotType[];
   }[];
-  selectedDate: string;
+  selectedDate: Date;
 }
 
 export const TimeSlots: React.FC<TimeSlotsProps> = ({
@@ -39,13 +40,16 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
 
   // Check if a slot is available for the selected date
   const isSlotAvailable = (slotType: SlotType) => {
-    if (!selectedDate || !availableSlots.length) return false;
+    if (!selectedDate || !availableSlots.length) {
+      return false;
+    }
 
     const selectedDateObj = new Date(selectedDate);
     const formattedDate = selectedDateObj.toISOString().split("T")[0];
-
-    const dateSlots = availableSlots.find((slot) => slot.date === formattedDate);
-    return dateSlots?.slots.includes(slotType) || false;
+    const dateSlots = availableSlots.find((slot) => {
+      return slot.date === formattedDate;
+    });
+    return dateSlots?.availableSlots?.includes(slotType) || false;
   };
 
   return (
@@ -55,7 +59,7 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
         <div className="flex flex-col justify-start text-lg flex-grow">
           {courseDuration === "full-day" ? (
             <div className="flex items-center gap-3">
-              <div className="flex gap-2.5 items-center">
+              <div className={`flex gap-2.5 items-center ${!isSlotAvailable("full-day") ? "opacity-50" : ""}`}>
                 <span>Full Day:</span>
                 <span className="font-bold">8:00 AM - 5:00 PM</span>
                 {!isSlotAvailable("full-day") && <span className="text-red-500 text-sm">(Unavailable)</span>}
