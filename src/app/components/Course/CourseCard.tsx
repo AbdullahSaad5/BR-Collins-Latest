@@ -4,6 +4,7 @@ import React from "react";
 import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Link from "next/link";
 import { ICourse } from "@/app/types/course.contract";
+import { BookIcon } from "../../../../public/icons/home_page_icons";
 
 interface CourseCardProps {
   course: ICourse;
@@ -42,7 +43,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
 
         {/* Lessons Count */}
         <div className="flex items-center text-gray-600 mb-3">
-          <FaBook className="mr-2 text-gray-400 text-sm" />
+          <BookIcon className="mr-2 text-gray-400 text-sm" />
           <span className="text-base text-gray-500">{course.noOfLessons} Lessons</span>
         </div>
 

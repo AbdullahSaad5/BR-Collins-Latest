@@ -249,3 +249,23 @@ export const DropUpIcon = (props: React.SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+export const CourseContentBookIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M8.04631 3.72949V20.2707M15.7262 10.8186H11.5909M15.7262 7.27404H11.5909M5.09252 7.27404H2.72949M5.09252 10.8186H2.72949M5.09252 14.3631H2.72949M6.27404 20.2707H16.9077C18.2127 20.2707 19.2707 19.2127 19.2707 17.9077V6.09252C19.2707 4.78746 18.2127 3.72949 16.9077 3.72949H6.27404C4.96897 3.72949 3.91101 4.78746 3.91101 6.09252V17.9077C3.91101 19.2127 4.96897 20.2707 6.27404 20.2707Z"
+        stroke="#7B878D"
+        stroke-width="1.8"
+        stroke-linecap="round"
+      />
+    </svg>
+  );
+};

@@ -59,28 +59,28 @@ export const HomeHeaderBookIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-export const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => {
+export const ArrowLeftIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
+      width="16"
+      height="14"
+      viewBox="0 0 16 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       <path
-        d="M9 18L15 12L9 6"
-        stroke="#fff"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M6.88888 1.1665L1.33332 6.99984M1.33332 6.99984L6.88888 12.8332M1.33332 6.99984L14.6667 6.99984"
+        stroke="#0A1419"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </svg>
   );
 };
 
-export const ArrowLeftIcon = (props: React.SVGProps<SVGSVGElement>) => {
+export const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="16"
@@ -141,4 +141,3 @@ export const CardQouteIcon = (props: React.SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
-

@@ -17,6 +17,7 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import { ICourseCategory } from "../types/course-category.contract";
 import CourseSwiper from "../components/Course/CourseSwiper";
+import { ArrowLeftIcon ,ArrowRightIcon} from "../../../public/icons/home_page_icons";
 
 interface SliderItem {
   title: string;
@@ -710,15 +711,7 @@ export const Homepage = () => {
               onClick={scrollLeft}
               className="hidden md:flex absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
+              <ArrowLeftIcon className="w-4 h-4"/>
             </button>
 
             <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
@@ -738,15 +731,7 @@ export const Homepage = () => {
               onClick={scrollRight}
               className="hidden md:flex absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-gray-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+             <ArrowRightIcon className="w-4 h-4"/>
             </button>
           </div>
         </section>

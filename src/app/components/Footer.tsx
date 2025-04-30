@@ -4,7 +4,7 @@ import { FaLinkedinIn } from "react-icons/fa6";
 import { FaInstagram ,FaTelegramPlane,FaFacebookF} from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import {  MapPin } from "lucide-react";
-import { FacebookIcon } from "../../../public/icons/footer_icons";
+import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../public/icons/footer_icons";
 const QuickLinks = () => {
   return (
     <div className="grow  max-md:mt-10 font-sans">
@@ -259,17 +259,17 @@ const Footer = () => {
 
           {/* Right Block - Fills Remaining Space */}
           <div className="flex flex-1 justify-end w-fit  gap-4 items-center  min-h-[52px]">
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <FacebookIcon className="w-12 h-12 p-3"/>
+            <div className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full ">
+              <FacebookIcon className="w-8 h-7"/>
             </div>
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <BsTwitterX className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
+              <XIcon className="w-6 h-6"/>
             </div>
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <FaLinkedinIn className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
+              <LinkedInIcon className="w-6 h-6"/>
             </div>
-            <div className="w-12 h-12  text-gray-400 bg-[#16313f] rounded-full ">
-              <FaInstagram className="w-12 h-12 p-3 " />
+            <div className="w-12 h-12 p-3  text-gray-400 bg-[#16313f] rounded-full ">
+              <InstagramIcon className="w-6 h-6"/>
             </div>
           </div>
         </div>

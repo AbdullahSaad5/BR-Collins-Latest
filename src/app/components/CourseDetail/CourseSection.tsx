@@ -1,5 +1,6 @@
 import React from "react";
 import { Video, BookOpenText, ChevronDown, ChevronUp } from "lucide-react";
+import { CourseContentBookIcon, DropDownIcon, DropUpIcon, HeaderBookIcon, VideoCameraIcon } from "../../../../public/icons/course_details_page_icons";
 
 interface LectureProps {
   title: string;
@@ -10,9 +11,9 @@ interface LectureProps {
 const Lecture: React.FC<LectureProps> = ({ title, duration, type }) => (
   <div className="flex items-center px-5 py-2.5">
     {type === "video" ? (
-      <Video size={24} className="mr-2.5" color="#7B878D" strokeWidth={1.8} />
+      <VideoCameraIcon width={24} height={24} className="mr-2.5" color="#7B878D" strokeWidth={1.8} />
     ) : (
-      <BookOpenText size={24} className="mr-2.5" color="#7B878D" strokeWidth={1.8} />
+      <CourseContentBookIcon width={24} height={24} className="mr-2.5" color="#7B878D" strokeWidth={1.8} />
     )}
     <span className="grow text-base text-neutral-900 max-md:text-sm max-sm:text-xs">{title}</span>
     <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs">{duration}</span>
@@ -41,11 +42,11 @@ export const CourseSection: React.FC<CourseSectionProps> = ({
       <header className="flex justify-between items-center px-5 py-2.5 cursor-pointer" onClick={onToggle}>
         <div className="flex items-center">
           {expanded ? (
-            <ChevronUp size={20} className="text-neutral-500" />
+            <DropUpIcon width={21} height={15} className="text-neutral-500 p-1" />
           ) : (
-            <ChevronDown size={20} className="text-neutral-500" />
+            <DropDownIcon width={21} height={15} className="text-neutral-500 p-1" />
           )}
-          <h3 className="text-lg font-semibold text-neutral-900 max-md:text-sm max-sm:text-xs">{title}</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 max-md:text-sm max-sm:text-xs ml-3">{title}</h3>
         </div>
         <div className="flex items-center">
           <span className="text-base text-neutral-900 max-md:text-sm max-sm:text-xs mr-4">{stats}</span>

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { CourseSection } from "./CourseSection";
 import { Check } from "lucide-react";
+import { CheckIcon } from "../../../../public/icons/course_details_page_icons";
 
 interface Lecture {
   title: string;
@@ -86,7 +87,7 @@ export const CourseContent: React.FC<CourseContentProps> = ({ sections: propSect
           <ul>
             {requirements.map((requirement, index) => (
               <li key={index} className="flex items-center mb-2.5">
-                <Check size={20} className="mr-2 text-sky-600" strokeWidth={2} />
+                <CheckIcon width={23} height={23} className="mr-2 text-sky-600" strokeWidth={2} />
                 <span>{requirement}</span>
               </li>
             ))}
