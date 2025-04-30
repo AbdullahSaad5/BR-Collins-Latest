@@ -59,12 +59,12 @@ export const FeatureCourseSlider: React.FC = () => {
         </Swiper>
 
         {/* Navigation Arrows */}
-        {/* <button className="featured-swiper-prev absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100">
+        <button className="featured-swiper-prev absolute left-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100">
           <ChevronLeft className="w-5 h-5 text-black" strokeWidth={2.5} />
         </button>
-        <button className="featured-swiper-next absolute right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100">
+        <button className="featured-swiper-next absolute right-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100">
           <ChevronRight className="w-5 h-5 text-black" strokeWidth={2.5} />
-        </button> */}
+        </button>
       </div>
 
       <style jsx global>{`
