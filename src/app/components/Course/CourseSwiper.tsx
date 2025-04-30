@@ -40,7 +40,7 @@ const CourseSwiper: React.FC = () => {
         scrollbar={{
           draggable: true,
           hide: false,
-          dragSize: 54,
+          dragSize: 64,
           snapOnRelease: true,
         }}
         breakpoints={{
@@ -87,7 +87,7 @@ const CourseSwiper: React.FC = () => {
       </Swiper>
       <style jsx global>{`
         .custom-swiper {
-          padding-bottom: 30px;
+          padding-bottom: 55px;
           width: 100%;
           overflow: hidden;
         }
@@ -98,12 +98,13 @@ const CourseSwiper: React.FC = () => {
           background: rgba(0, 0, 0, 0.1);
           left: 50%;
           transform: translateX(-50%);
+          
           bottom: 8px;
         }
 
         .custom-swiper .swiper-scrollbar-drag {
           background: #2490e0;
-          height: 2px;
+          height: 3px;
           cursor: pointer;
         }
 

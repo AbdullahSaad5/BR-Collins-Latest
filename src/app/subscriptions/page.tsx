@@ -37,8 +37,8 @@ const Subcription = () => {
   return (
     <>
       <section className="bg-[#E3F4FC] text-gray-900">
-        <div className="w-full px-[10px] xl:px-[1px] lg:px-[10px] md:px-[20px] mx-auto max-w-[1326px] py-10 md:py-14">
-          <div className="flex flex-col justify-center items-center text-center mb-6">
+        <div className="w-full px-[10px] xl:px-[1px] lg:px-[10px] md:px-[20px] mx-auto max-w-[1326px] py-10 md:py-14 ">
+          <div className="flex flex-col justify-center items-center text-center mb-6 ">
             <h1 className="text-gray-900 font-hanken md:text-5xl text-3xl font-bold lg:mt-8">
               Flexible Pricing for Individuals and Teams
             </h1>

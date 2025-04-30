@@ -10,6 +10,8 @@ import { FeatureCourse } from "./FetureCourse";
 import { useCourseContext } from "../context/CourseContext";
 import { CategoryProvider } from "../context/CategoryContext";
 import CourseCardSlider from "./CourseCardSlider";
+import CourseCard from "./CourseCard";
+import { FeatureCourseSlider } from "./FeatureCourseSlider";
 
 export default function Courses() {
   const { courses: allCourses, isLoading, error } = useCourseContext();
@@ -128,33 +130,7 @@ export default function Courses() {
 
         <section className="flex flex-col self-center  w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
           <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
-            <div className="text-neutral-900 max-md:max-w-full">
-              <h2 className="text-3xl font-bold max-md:max-w-full">Featured courses</h2>
-              <p className="mt-3 text-lg max-md:max-w-full">
-                Many learners enjoyed this highly rated course for its engaging content.
-              </p>
-            </div>
-
-            <div className="mt-10 w-full max-w-[1326px] max-md:max-w-full">
-              <div className="flex gap-5 max-md:flex-col items-stretch">
-                {filteredCourses.slice(0, 2).map((course, index) => {
-                  const transformedCourse = {
-                    ...course,
-                    duration: `${course.noOfHours} Hrs`,
-                    lessons: course.noOfLessons,
-                    price: `$${course.discountPrice || course.price}`,
-                    originalPrice: course.price ? `$${course.price}` : undefined,
-                    isNew: course.bestSeller,
-                    imageUrl: "/img/Course/Course.png",
-                  };
-                  return (
-                    <div key={index} className="w-6/12 max-md:w-full">
-                      <FeatureCourse {...transformedCourse} />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+            <FeatureCourseSlider/>
 
             <section className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
               <h2 className="text-3xl font-bold max-md:max-w-full">Most Popular Courses</h2>
@@ -226,8 +202,23 @@ export default function Courses() {
                     </button>
                   </div>
                 ) : (
-                  <div className="w-full">
-                    <CourseCardSlider courses={filteredCourses} />
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                    {filteredCourses.map((course, index) => {
+                      const transformedCourse = {
+                        ...course,
+                        duration: `${course.noOfHours} Hrs`,
+                        lessons: course.noOfLessons,
+                        price: course.discountPrice || course.price,
+                        originalPrice: course.price ? `$${course.price}` : undefined,
+                        isNew: course.bestSeller,
+                        imageUrl: course.coverImageUrl || "/img/Course/Course.png",
+                      };
+                      return (
+                        <div key={index} className="h-full">
+                          <CourseCard course={transformedCourse} />
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </main>

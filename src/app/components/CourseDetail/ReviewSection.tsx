@@ -2,7 +2,7 @@ import { StarRating } from "./StarRating";
 
 export const ReviewSection = () => {
   return (
-    <section className="my-12 max-md:mt-10 ml-auto">
+    <section className="my-12 max-md:mt-10 ml-auto max-[1230px]:mx-4">
       <div className="flex gap-2 items-center text-3xl font-bold text-neutral-900">
         <img
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/753eba6e3988ee6a19d3061d4b4af2a32cfedd01?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
