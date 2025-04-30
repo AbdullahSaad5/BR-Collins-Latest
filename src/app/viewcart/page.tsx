@@ -78,7 +78,7 @@ const ViewCart = () => {
 
   return (
     <div className="w-full min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Breadcrumb */}
         <nav className="text-sm mb-8">
           <ol className="list-none p-0 inline-flex text-gray-600">
@@ -114,13 +114,13 @@ const ViewCart = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-5 lg:gap-8">
           {/* Cart Items */}
           <div className="flex-1">
             {items.map((item: ICourse, index: number) => (
               <div key={index} className="bg-white rounded-lg shadow-sm mb-4 p-4">
-                <div className="flex gap-4">
-                  <div className="w-48 h-32 flex-shrink-0">
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div className="flex-shrink-0 w-48 h-32">
                     <Image
                       src={"/img/Course/Course.png"}
                       alt={item.title}
@@ -130,13 +130,13 @@ const ViewCart = () => {
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start ">
                       <div>
                         <span className="inline-block bg-blue-600 text-white text-xs px-2 py-1 rounded-md mb-2">
                           {item.noOfHours}HRS
                         </span>
-                        <h2 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h2>
-                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <h2 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2">{item.title}</h2>
+                        <div className="flex items-center md:gap-3 text-sm text-gray-600">
                           <div className="flex items-center gap-1">
                             <Image
                               src="/default-instructor-image.jpg"
@@ -176,10 +176,10 @@ const ViewCart = () => {
                         {item.discountPrice && <p className="text-sm text-gray-400 line-through">${item.price}.00</p>}
                         <button
                           onClick={() => handleRemoveItem(item._id)}
-                          className="mt-4 text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 ml-auto"
+                          className="mt-5 text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 ml-auto"
                         >
-                          <Image src={TrashIcon} alt="Remove" width={16} height={16} />
-                          <span className="text-sm">Remove</span>
+                          <Image src={TrashIcon} alt="Remove" width={21} height={21} />
+                          <span className="hidden md:flex">Remove</span>
                         </button>
                       </div>
                     </div>
