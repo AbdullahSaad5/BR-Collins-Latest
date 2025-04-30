@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 interface CalendarProps {
   selectedDate: string;
   onDateSelect: (date: string) => void;
+  onMonthChange?: (date: Date) => void;
 }
 
-export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }) => {
+export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect, onMonthChange }) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [today] = useState<Date>(new Date());
 
@@ -26,6 +27,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }
     const newMonth = new Date(currentMonth);
     newMonth.setMonth(newMonth.getMonth() + direction);
     setCurrentMonth(newMonth);
+    onMonthChange?.(newMonth);
   };
 
   const getDaysInMonth = (date: Date) => {

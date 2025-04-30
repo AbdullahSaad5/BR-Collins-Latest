@@ -4,13 +4,16 @@ import * as React from "react";
 import { Calendar } from "./Calendar";
 import { CourseSelection } from "./CourseSelection";
 import { TimeSlots } from "./TimeSlots";
+import { api } from "@/app/utils/axios";
 
 export interface BookingState {
   courseDuration: "half-day" | "full-day";
   price: number;
   selectedDate: string;
   selectedSlot: string;
+  currentMonth: Date;
 }
+
 interface InPersonPopupProps {
   onClose: () => void;
 }
@@ -25,7 +28,46 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
       year: "numeric",
     }),
     selectedSlot: "Morning, 8:00 AM - 12:00 PM",
+    currentMonth: new Date(),
   });
+
+  const [availableSlots, setAvailableSlots] = React.useState<
+    {
+      date: string;
+      slots: ("full-day" | "half-day-morning" | "half-day-afternoon")[];
+    }[]
+  >([]);
+
+  const fetchAvailableSlots = async (date: Date) => {
+    // Check if the month is previous to current month
+    const currentDate = new Date();
+    const currentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    const selectedMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+    if (selectedMonth < currentMonth) {
+      console.log("Skipping API call for previous month");
+      return;
+    }
+
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+    const startDate = firstDayOfMonth.toISOString().split("T")[0];
+    const endDate = lastDayOfMonth.toISOString().split("T")[0];
+
+    try {
+      const response = await api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`);
+      console.log("Available slots:", response.data);
+      setAvailableSlots(response.data);
+    } catch (error) {
+      console.error("Error fetching available slots:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    console.log("bookingState.currentMonth", bookingState.currentMonth);
+    fetchAvailableSlots(bookingState.currentMonth);
+  }, [bookingState.currentMonth]);
 
   const handleCourseSelection = (duration: "half-day" | "full-day") => {
     setBookingState((prev) => ({
@@ -47,6 +89,13 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
     setBookingState((prev) => ({
       ...prev,
       selectedSlot: slot,
+    }));
+  };
+
+  const handleMonthChange = (date: Date) => {
+    setBookingState((prev) => ({
+      ...prev,
+      currentMonth: date,
     }));
   };
 
@@ -81,7 +130,11 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
                   </div>
                 </div>
                 <div className="ml-5 w-7/12 max-md:ml-0 max-md:w-full">
-                  <Calendar selectedDate={bookingState.selectedDate} onDateSelect={handleDateSelection} />
+                  <Calendar
+                    selectedDate={bookingState.selectedDate}
+                    onDateSelect={handleDateSelection}
+                    onMonthChange={handleMonthChange}
+                  />
                 </div>
               </div>
             </div>
@@ -92,6 +145,8 @@ function InPersonPopup({ onClose }: InPersonPopupProps) {
               onSelect={handleTimeSlotSelection}
               selectedSlot={bookingState.selectedSlot}
               courseDuration={bookingState.courseDuration}
+              availableSlots={availableSlots}
+              selectedDate={bookingState.selectedDate}
             />
           </div>
         </div>
