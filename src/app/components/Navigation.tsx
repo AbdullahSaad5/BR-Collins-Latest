@@ -76,11 +76,16 @@ export const Navigation = () => {
   };
 
   const handleOpenCart = () => {
-    dispatch(toggleCart())
+    dispatch(toggleCart());
     setTimeout(() => {
-      dispatch(toggleCartVisiblity())
-    }, 300)
-  }
+      dispatch(toggleCartVisiblity());
+    }, 300);
+  };
+
+  const handleCloseCart = () => {
+    dispatch(toggleCart());
+    dispatch(toggleCartVisiblity());
+  };
 
   return (
     <nav className="relative text-gray-900 flex items-center justify-between my-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 ">
@@ -101,8 +106,11 @@ export const Navigation = () => {
 
         <div className="flex items-center gap-4">
           <button
-            onClick={() => {handleOpenCart()}}
-            className="relative p-2">
+            onClick={() => {
+              handleOpenCart();
+            }}
+            className="relative p-2"
+          >
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
               <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
@@ -201,8 +209,11 @@ export const Navigation = () => {
 
           <div className="flex gap-4 items-center text-base">
             <button
-              onClick={() => {handleOpenCart()}}
-              className="relative">
+              onClick={() => {
+                handleOpenCart();
+              }}
+              className="relative"
+            >
               <ShoppingCart className="w-7 h-7 text-base" />
               {items.length > 0 && (
                 <div className="absolute -top-3 -right-3 text-xs py-1 px-2 rounded-full bg-blue-200">
@@ -227,16 +238,18 @@ export const Navigation = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${(user as IUser).lastName
-                      }`}</span>
+                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
+                      (user as IUser).lastName
+                    }`}</span>
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
                 {isProfileDropdownOpen && (
                   <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56 z-[99999]">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${(user as IUser).lastName
-                        }`}</p>
+                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
+                        (user as IUser).lastName
+                      }`}</p>
                       <p className="text-xs text-gray-500">{`${toTitleCase((user as IUser).role)}`}</p>
                     </div>
                     <button
@@ -275,8 +288,9 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
+          isMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="p-4 space-y-6 mt-4">
           {/* Mobile Menu Header */}
@@ -359,11 +373,24 @@ export const Navigation = () => {
 
       {/* Cart Overlay */}
       <div
-        className={`fixed z-50 overflow-x-hidden overflow-y-scroll no-scrollbar top-0 right-0 w-full h-screen overflow-hidden transform transition-transform duration-300 ease-in-out 
-          ${isCartOpen ? "translate-x-0" : "translate-x-full"}
-          `}
+        className={`fixed inset-0 z-50 transition-all duration-300 ease-in-out ${
+          isCartOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
       >
-        <Cart />
+        {/* Backdrop */}
+        <div
+          className="fixed inset-0 bg-[#0A141980]/50 backdrop-brightness-50 backdrop-blur-[2px]"
+          onClick={handleCloseCart}
+        />
+
+        {/* Cart Panel */}
+        <div
+          className={`fixed right-0 top-0 h-screen w-full md:w-[90%] lg:w-[40%] transform transition-transform duration-300 ease-in-out ${
+            isCartOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <Cart />
+        </div>
       </div>
     </nav>
   );

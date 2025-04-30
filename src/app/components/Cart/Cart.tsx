@@ -27,15 +27,9 @@ const Cart = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-[#0A141980]/50 backdrop-brightness-50 backdrop-blur-[2px]"
-        onClick={handleCloseCart}
-      />
-
+    <div className="flex justify-end h-full">
       {/* Cart Panel */}
-      <div className="relative w-full md:w-[90%] lg:w-[40%] flex flex-col bg-white h-screen">
+      <div className="relative w-full flex flex-col bg-white h-screen">
         {/* Header - Fixed */}
         <div className="flex-none p-6 border-b border-gray-200">
           <div className="flex justify-between items-center">
