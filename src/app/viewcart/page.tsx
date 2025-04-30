@@ -142,7 +142,7 @@ const ViewCart = () => {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <a
-                      href="/courses"
+                      href="/course"
                       className="inline-flex items-center justify-center bg-[#F86537] hover:bg-[#E55A2E] text-white font-semibold py-3 px-8 rounded-full transition-colors"
                     >
                       Browse Courses
