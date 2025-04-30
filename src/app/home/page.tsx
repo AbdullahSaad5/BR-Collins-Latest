@@ -502,7 +502,7 @@ export const Homepage = () => {
                       IT Support Specialist Professional Certificate
                     </h2>
 
-                    <div className="flex md:flex-col sm:flex-row flex-row items-start sm:items-center gap-2">
+                    <div className="flex md:flex-col sm:flex-row flex-row items-start sm:items-start gap-2">
                       <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
                       <h1 className="font-light text-sm sm:text-base text-gray-800">
                         Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
@@ -764,7 +764,7 @@ export const Homepage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="bg-[#081B25]  px-4 h-[1179px] md:h-[768px] md:px-0">
+      <section className="bg-[#081B25]  px-4 py-20 md:px-0">
         <div className="w-full p-4 md:p-4 xl:p-0 flex flex-col justify-center gap-5 h-full py-10 items-center mx-auto max-w-[1326px]">
           <div className="flex flex-col justify-center items-center text-center mb-6">
             <h2 className="text-white font-hanken text-2xl md:text-[34px] font-bold">
@@ -825,76 +825,83 @@ export const Homepage = () => {
         </section>
 
         {/* On Site Learning Section */}
-        <section className="self-center mx-auto p-4 md:p-4 xl:p-0 flex flex-col items-center text-gray-900 w-full  ">
-          <div className="flex flex-col  lg:p-0 p-3 justify-center lg:flex-row gap-10 items-center w-full">
-            <div className="grow shrink self-stretch my-auto w-full md:w-[529px]">
-              <div className="w-full">
-                <div className="flex flex-col justify-center w-full font-bold">
-                  <span className="self-start text-lg text-center text-orange-500 uppercase">about us</span>
-                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900">On Site Learning</h2>
-                </div>
-                <p className="mt-3 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900">
-                  At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
-                  experiences. Blending creativity with expertise.
-                </p>
-              </div>
-              <div className="mt-6 md:mt-10 w-full">
-                <FeatureCard
-                  title="Flexible Classes"
-                  description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
-                  iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/0142af754e70f9fb9b82869b1b20e4421b6f04e5?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                />
-                <FeatureCard
-                  title="Expert-Led Training"
-                  description="Learn from industry experts in a real-world setting. Gain practical knowledge, hands-on experience."
-                  iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                  className="mt-4 md:mt-5"
-                />
-              </div>
-            </div>
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-              className="object-contain grow shrink self-stretch my-auto rounded-2xl aspect-[0.93] w-full md:w-[452px]"
-              alt="On-site learning"
-            />
-          </div>
-        </section>
+        <section className="mx-auto p-2 md:p-4 xl:p-0 flex flex-col items-center text-gray-900 w-full">
+  <div className="flex flex-col lg:flex-row justify-between items-center gap-10 w-full max-w-[1326px] px-1 md:px-4">
+    {/* Content Column - Centered on medium, left on large */}
+    <div className="w-full flex flex-col items-center lg:items-start lg:max-w-[529px] xl:max-w-[600px]">
+      <div className="w-full flex flex-col items-center lg:items-start">
+        <div className="flex flex-col items-center lg:items-start w-full font-bold">
+          <span className="text-lg text-orange-500 uppercase">about us</span>
+          <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900 text-center lg:text-left">
+            On Site Learning
+          </h2>
+        </div>
+        <p className="mt-4 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900 text-center lg:text-left">
+          At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
+          experiences. Blending creativity with expertise.
+        </p>
+      </div>
+      
+      <div className="mt-6 md:mt-10 w-full flex flex-col items-center lg:items-start">
+        <FeatureCard
+          title="Flexible Classes"
+          description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
+          iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/0142af754e70f9fb9b82869b1b20e4421b6f04e5?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+          className="w-full"
+        />
+        <FeatureCard
+          title="Expert-Led Training"
+          description="Learn from industry experts in a real-world setting and Gain practical knowledge and get hands-on experience."
+          iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+          className="mt-4 md:mt-5 w-full"
+        />
+      </div>
+    </div>
 
+    {/* Image - Centered on medium, right on large */}
+    <div> <img
+      src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+      className="object-contain rounded-2xl aspect-[0.93] w-full max-w-[452px] lg:max-w-[600px] xl:max-w-[700px] mt-8 lg:mt-0 lg:flex-1"
+      alt="On-site learning"
+    /></div>
+    
+  </div>
+</section>
         {/* Community Section */}
-        <section className="mx-auto flex flex-col items-center text-gray-900 w-full  lg:h-[410px]">
-          <div className="flex flex-col lg:flex-row justify-between items-stretch h-full w-full gap-8">
-            {/* Left Content Section */}
-            <div className="flex flex-col justify-between h-full md:w-[50%] w-full">
-              <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
-                <span className="text-lg text-orange-500 uppercase font-bold">WHY CHOOSE US</span>
-                <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
-                  Creating A Community Of Life Long Learners
-                </h2>
-                <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
-                  At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
-                  experiences.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                  <Link
-                    href="/course"
-                    className="px-6 py-3 md:px-8 md:py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors text-center"
-                  >
-                    Explore Courses
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="px-6 py-3 md:px-8 md:py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors text-center"
-                  >
-                    Learn More
-                  </Link>
-                </div>
-              </div>
-            </div>
+        <section className="mx-auto flex flex-col items-center text-gray-900 w-full max-w-[1326px] lg:h-[410px] px-1  md:px-2">
+  <div className="flex flex-col lg:flex-row justify-between items-center lg:items-stretch h-full w-full gap-4 px-5  ">
+    {/* Left Content Section */}
+    <div className="flex flex-col justify-between h-full w-full lg:w-[50%] text-center md:text-left">
+      <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
+        <span className="text-lg text-orange-500 uppercase font-bold">WHY CHOOSE US</span>
+        <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
+          Creating A Community Of Life Long Learners
+        </h2>
+        <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
+          At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
+          experiences.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center md:justify-start">
+          <Link
+            href="/course"
+            className="px-6 py-3 md:px-8 md:py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors text-center"
+          >
+            Explore Courses
+          </Link>
+          <Link
+            href="/about"
+            className="px-6 py-3 md:px-8 md:py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors text-center"
+          >
+            Learn More
+          </Link>
+        </div>
+      </div>
+    </div>
 
-            {/* Stats Section */}
-            <StatsSection />
-          </div>
-        </section>
+    {/* Stats Section */}
+    <StatsSection />
+  </div>
+</section>
       </div>
     </>
   );
