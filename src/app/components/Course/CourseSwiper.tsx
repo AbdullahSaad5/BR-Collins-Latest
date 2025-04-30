@@ -2,11 +2,12 @@
 
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar } from 'swiper/modules';
+import { Scrollbar } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/scrollbar";
-import { CourseCard } from "./CourseCard";
+
 import { useCourseContext } from "../context/CourseContext";
+import CourseCard from "./CourseCard";
 
 interface Course {
   id: string;
@@ -30,7 +31,9 @@ const CourseSwiper: React.FC = () => {
   }
 
   return (
-    <div className="mt-10 mx-auto max-w-[1326px] px-1"> {/* Added container constraints */}
+    <div className="mt-10 mx-auto max-w-[1326px] px-1">
+      {" "}
+      {/* Added container constraints */}
       <Swiper
         spaceBetween={32}
         modules={[Scrollbar]}
@@ -38,24 +41,24 @@ const CourseSwiper: React.FC = () => {
           draggable: true,
           hide: false,
           dragSize: 54,
-          snapOnRelease: true
+          snapOnRelease: true,
         }}
         breakpoints={{
           0: {
             slidesPerView: 1,
-            spaceBetween: 14
+            spaceBetween: 14,
           },
           640: {
             slidesPerView: 3,
-            spaceBetween: 14
+            spaceBetween: 14,
           },
           1224: {
             slidesPerView: 5,
-            spaceBetween: 14
+            spaceBetween: 14,
           },
           1274: {
             slidesPerView: 6,
-            spaceBetween: 14
+            spaceBetween: 14,
           },
         }}
         className="custom-swiper"
@@ -71,7 +74,7 @@ const CourseSwiper: React.FC = () => {
             imageUrl: course.coverImageUrl || "/img/Course/Course.png",
           };
           return (
-            <SwiperSlide 
+            <SwiperSlide
               key={index}
               className="!w-[calc(100%/1.1)] sm:!w-[calc(100%/3.2)] lg:!w-[calc(100%/5.4)] xl:!w-[calc(100%/6.4)]"
             >
@@ -82,14 +85,13 @@ const CourseSwiper: React.FC = () => {
           );
         })}
       </Swiper>
-
       <style jsx global>{`
         .custom-swiper {
           padding-bottom: 30px;
           width: 100%;
           overflow: hidden;
         }
-        
+
         .custom-swiper .swiper-scrollbar {
           max-width: 315px;
           height: 1px;
@@ -100,7 +102,7 @@ const CourseSwiper: React.FC = () => {
         }
 
         .custom-swiper .swiper-scrollbar-drag {
-          background: #2490E0;
+          background: #2490e0;
           height: 2px;
           cursor: pointer;
         }

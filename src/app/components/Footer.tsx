@@ -123,7 +123,7 @@ const SocialIcon = ({
 
 const Footer = () => {
   return (
-    <footer className="flex flex-col items-center px-20 pt-20 pb-8 w-full text-[#A9BBC3] h-auto lg:h-[575px] bg-[#081B25] max-md:px-5 max-md:max-w-full">
+    <footer className="flex flex-col items-center px-6 pt-20 pb-8 w-full text-[#A9BBC3] h-auto lg:h-[575px] bg-[#081B25] max-md:px-5 max-md:max-w-full">
       <div className="w-full max-w-[1326px] max-md:max-w-full">
         <div className="flex flex-wrap justify-between max-w-full w-full">
           <div className="flex-auto max-md:max-w-full">

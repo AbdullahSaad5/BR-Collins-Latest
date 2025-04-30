@@ -13,6 +13,7 @@ import { Provider } from "react-redux";
 import { store, persistor } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 import UserProfileInitializer from "./components/UserProfileInitializer";
+import "./styles/scrollbar-hide.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

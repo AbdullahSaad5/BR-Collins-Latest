@@ -22,6 +22,7 @@ const toTitleCase = (str: string) => {
 
 const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
   const [showInPersonPopup, setShowInPersonPopup] = useState(false);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("Overview");
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart);
@@ -75,6 +76,17 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (showInPersonPopup) {
+      // Trigger the animation after the component is mounted
+      requestAnimationFrame(() => {
+        setIsPopupVisible(true);
+      });
+    } else {
+      setIsPopupVisible(false);
+    }
+  }, [showInPersonPopup]);
+
   const handleSectionClick = (section: string) => {
     setActiveSection(section);
     const refs = {
@@ -96,6 +108,14 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
     if (!isCourseInCart) {
       dispatch(addToCart(course));
     }
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+    // Wait for the animation to complete before hiding the popup
+    setTimeout(() => {
+      setShowInPersonPopup(false);
+    }, 300);
   };
 
   if (!course) {
@@ -220,8 +240,20 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
   return (
     <>
       {showInPersonPopup && (
-        <div className="fixed inset-0 bg-opacity-50 z-50 flex items-center justify-center  p-4">
-          <InPersonPopup onClose={() => setShowInPersonPopup(false)} />
+        <div
+          className={`fixed inset-0 bg-black/50 z-50 flex items-center justify-center transition-opacity duration-300 ease-in-out ${
+            isPopupVisible ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={handleClosePopup}
+        >
+          <div
+            className={`transform transition-all duration-300 ease-in-out ${
+              isPopupVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <InPersonPopup onClose={handleClosePopup} />
+          </div>
         </div>
       )}
       {/* Hero Section */}
@@ -443,8 +475,14 @@ const CourseDetailPageClient = ({ course }: { course: ICourse }) => {
               {/* Course Modes */}
               <div className="mt-8 w-full text-center max-md:max-w-full">
                 <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
-                  <button onClick={handleAddToCart} className="w-full min-h-[58px] bg-orange-500 rounded-[58px]">
-                    E-Learning
+                  <button
+                    onClick={handleAddToCart}
+                    className={`w-full min-h-[58px] rounded-[58px] ${
+                      items.some((item) => item._id === course._id) ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500"
+                    }`}
+                    disabled={items.some((item) => item._id === course._id)}
+                  >
+                    {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
                   </button>
                   <button
                     onClick={() => setShowInPersonPopup(true)}

@@ -10,6 +10,8 @@ import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
+import CourseCard from "../components/Course/CourseCard";
+import CourseCardSlider from "../components/Course/CourseCardSlider";
 
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -127,8 +129,7 @@ export const Homepage = () => {
     {
       id: 1,
       title: "The Future of Artificial Intelligence in Business",
-      description:
-        "Explore how AI is transforming business operations and what it means for the future of work.",
+      description: "Explore how AI is transforming business operations and what it means for the future of work.",
       category: "Technology",
       date: "May 15, 2024",
       image: "/assets/abouthome.png",
@@ -136,8 +137,7 @@ export const Homepage = () => {
     {
       id: 2,
       title: "Effective Time Management Strategies for Professionals",
-      description:
-        "Learn proven techniques to boost your productivity and achieve more in less time.",
+      description: "Learn proven techniques to boost your productivity and achieve more in less time.",
       category: "Business",
       date: "April 28, 2024",
       image: "/assets/congrateicon.png",
@@ -145,8 +145,7 @@ export const Homepage = () => {
     {
       id: 3,
       title: "The Psychology of Consumer Behavior",
-      description:
-        "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
+      description: "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
       category: "Marketing",
       date: "April 15, 2024",
       image: "/assets/lowerlogo.png",
@@ -154,8 +153,7 @@ export const Homepage = () => {
     {
       id: 4,
       title: "Minimalist Design Principles for Modern Websites",
-      description:
-        "Discover how minimalist design can improve user experience and conversion rates.",
+      description: "Discover how minimalist design can improve user experience and conversion rates.",
       category: "Design",
       date: "March 30, 2024",
       image: "/assets/sendericon.png",
@@ -172,8 +170,7 @@ export const Homepage = () => {
     {
       id: 6,
       title: "The Rise of Remote Work: Trends and Best Practices",
-      description:
-        "How companies are adapting to the remote work revolution and what it means for the future.",
+      description: "How companies are adapting to the remote work revolution and what it means for the future.",
       category: "Business",
       date: "March 10, 2024",
       image: "/assets/person.png",
@@ -211,8 +208,7 @@ export const Homepage = () => {
 
   const testimonials = [
     {
-      quote:
-        "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+      quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
       author: "Valerie J.",
       role: "Creasman CEO",
       avatarSrc:
@@ -222,8 +218,7 @@ export const Homepage = () => {
       hasShadow: false,
     },
     {
-      quote:
-        "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+      quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
       author: "Hannah R.",
       role: "Sutton CEO",
       avatarSrc:
@@ -268,25 +263,13 @@ export const Homepage = () => {
       </blockquote>
       <div className="flex flex-col md:flex-row justify-between mt-8 md:mt-16 gap-4">
         <div className="flex gap-3 items-center">
-          <img
-            src={avatarSrc}
-            className="object-contain rounded-full aspect-square w-10 md:w-[50px]"
-            alt={author}
-          />
+          <img src={avatarSrc} className="object-contain rounded-full aspect-square w-10 md:w-[50px]" alt={author} />
           <div>
-            <p className="text-base md:text-xl font-bold text-neutral-900">
-              {author}
-            </p>
-            <p className="text-sm md:text-base leading-none text-zinc-500">
-              {role}
-            </p>
+            <p className="text-base md:text-xl font-bold text-neutral-900">{author}</p>
+            <p className="text-sm md:text-base leading-none text-zinc-500">{role}</p>
           </div>
         </div>
-        <img
-          src={ratingSrc}
-          className="object-contain aspect-[2.51] w-20 md:w-[88px]"
-          alt="Rating"
-        />
+        <img src={ratingSrc} className="object-contain aspect-[2.51] w-20 md:w-[88px]" alt="Rating" />
       </div>
     </article>
   );
@@ -314,9 +297,7 @@ export const Homepage = () => {
           </div>
           <div className="ml-0 md:ml-5 w-full md:w-[83%]">
             <div className="grow text-neutral-900">
-              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">
-                {title}
-              </h3>
+              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">{title}</h3>
               <p className="mt-2 md:mt-3 text-base md:text-lg leading-6 md:leading-7 max-md:max-w-full">
                 {description}
               </p>
@@ -327,24 +308,10 @@ export const Homepage = () => {
     </div>
   );
 
-  const StatCard = ({
-    number,
-    label,
-    bgColor,
-  }: {
-    number: string;
-    label: string;
-    bgColor: string;
-  }) => (
-    <div
-      className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}
-    >
-      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">
-        {number}
-      </h3>
-      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">
-        {label}
-      </p>
+  const StatCard = ({ number, label, bgColor }: { number: string; label: string; bgColor: string }) => (
+    <div className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
+      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">{number}</h3>
+      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">{label}</p>
     </div>
   );
 
@@ -353,36 +320,20 @@ export const Homepage = () => {
       {/* Top Row */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
         <div className="w-full md:w-[48%] h-[180px]">
-          <StatCard
-            number="500+"
-            label="Learners & counting"
-            bgColor="bg-rose-50"
-          />
+          <StatCard number="500+" label="Learners & counting" bgColor="bg-rose-50" />
         </div>
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard
-            number="800+"
-            label="Courses & Video"
-            bgColor="bg-sky-100"
-          />
+          <StatCard number="800+" label="Courses & Video" bgColor="bg-sky-100" />
         </div>
       </div>
 
       {/* Bottom Row */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard
-            number="100+"
-            label="Registered Enrolls"
-            bgColor="bg-sky-100"
-          />
+          <StatCard number="100+" label="Registered Enrolls" bgColor="bg-sky-100" />
         </div>
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard
-            number="1000+"
-            label="Certified Students"
-            bgColor="bg-rose-50"
-          />
+          <StatCard number="1000+" label="Certified Students" bgColor="bg-rose-50" />
         </div>
       </div>
     </div>
@@ -531,24 +482,15 @@ export const Homepage = () => {
 
               <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
                 <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-                  <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
+                  <div className="flex flex-col p-4 md:p-4 xl:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
                     <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
                       IT Support Specialist Professional Certificate
                     </h2>
 
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                      <Image
-                        src="/assets/person.png"
-                        width={40}
-                        height={40}
-                        alt="person"
-                        className="w-10 h-10"
-                      />
+                    <div className="flex md:flex-col sm:flex-row flex-row items-start sm:items-center gap-2">
+                      <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
                       <h1 className="font-light text-sm sm:text-base text-gray-800">
-                        Instructor:{" "}
-                        <span className="text-blue-500 underline mx-2">
-                          Claudia Pruitt
-                        </span>
+                        Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
                       </h1>
                     </div>
 
@@ -603,14 +545,12 @@ export const Homepage = () => {
 
               <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
                 <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-                  <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-                    <h2 className="font-hanken lg:w-2/3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
+                  <div className="flex flex-col p-4 md:p-4 xl:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
+                    <h2 className="font-hanken  text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
                       Your Learning Journey Starts Here
                     </h2>
 
-                    <p className="text-xl">
-                      Get the skills to achieve goals and stay competitive.
-                    </p>
+                    <p className="text-xl">Get the skills to achieve goals and stay competitive.</p>
 
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                       <Link
@@ -727,7 +667,7 @@ export const Homepage = () => {
       </section> */}
 
       {/* Courses Section */}
-      <section className="w-full px-4 lg:px-0 max-w-[1326px] mx-auto py-8 md:py-12">
+      <section className="w-full p-4 md:p-4 xl:py-10 max-w-[1326px] mx-auto py-8 md:py-12">
         <section className="relative text-gray-900 w-full">
           <div className="w-full">
             <div className="flex flex-col w-full">
@@ -777,19 +717,11 @@ export const Homepage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
-            <div
-              ref={sliderRef}
-              className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar"
-            >
+            <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
               <div className="flex flex-nowrap gap-4">
                 {sliderItems.map((item, index) => (
                   <div key={index} className="flex-shrink-0 w-[200px] sm:w-fit py-2">
@@ -813,12 +745,7 @@ export const Homepage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>
@@ -827,76 +754,21 @@ export const Homepage = () => {
         {/* Courses Grid */}
         {/* <section className="relative text-gray-900">
           <div className="w-full mx-auto max-w-[1326px] h-auto relative">
-            <div className="flex flex-nowrap items-start overflow-auto gap-3 mb-16 py-6 custom-scroll scrollbar-hide">
-              {isCoursesLoading ? (
-                <div className="w-full text-center">Loading courses...</div>
-              ) : coursesError ? (
-                <div className="w-full text-center text-red-500">Error loading courses</div>
-              ) : (
-                courses?.map((course) => (
-                  <div
-                    className="flex flex-row md:w-[196px] gap-10 md:h-[400px]"
-                    key={course._id}
-                  >
-                    <div className="flex flex-col justify-between w-[178px] sm:w-[300px] border border-gray-100 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300">
-                      <div className="py-2 px-4 flex h-full flex-col justify-around text-sm font-medium">
-                        <h1 className="bg-blu p-1 w-fit bg-blue-400 rounded-xl text-white">
-                          {course.noOfHours}Hrs
-                        </h1>
-                        <h3 className="font-bold text-xl mb-3 ">
-                          {course.title}
-                        </h3>
-                        <div className="flex items-center text-gray-600 mb-4">
-                          <FaBook className="mr-2 text-blue-500" />
-                          <span className="text-sm">
-                            {course.noOfLessons} Lessons
-                          </span>
-                        </div>
-                        <hr className="border-t border-gray-200 my-2" />
-
-                        <div className="flex flex-col items-start gap-12 mb-3">
-                          <div className="flex items-center">
-                            <div className="flex mr-2">
-                              {renderStars(course.rating || 5)}
-                            </div>
-                            <span className="text-sm font-medium">
-                              {course.rating || 10}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="p-4 flex flex-col h-1/3 items-start">
-                        <span className="text-lg font-bold">
-                          ${course.price}
-                          {course.isDiscounted && (
-                            <span className="ml-2 text-sm text-gray-500 line-through">
-                              ${course.discountPrice}
-                            </span>
-                          )}
-                        </span>
-
-                        <Link
-                          // href={`/course/${course.slug}`}
-                          href={`/course/${course._id}`}
-                          className="text-center text-org underline font-medium py-2 transition-colors"
-                        >
-                          View Details
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+            {isCoursesLoading ? (
+              <div className="w-full text-center">Loading courses...</div>
+            ) : coursesError ? (
+              <div className="w-full text-center text-red-500">Error loading courses</div>
+            ) : (
+              <CourseCardSlider courses={courses || []} />
+            )}
           </div>
         </section> */}
          <CourseSwiper />
       </section>
 
       {/* Pricing Section */}
-      <section className="bg-[#081B25]  px-4 h-auto md:h-[768px] md:px-0">
-        <div className="w-full  flex flex-col justify-center gap-5 h-full lg:h-[768px] items-center mx-auto max-w-[1326px]">
+      <section className="bg-[#081B25]  px-4 h-[1179px] md:h-[768px] md:px-0">
+        <div className="w-full p-4 md:p-4 xl:p-0 flex flex-col justify-center gap-5 h-full py-10 items-center mx-auto max-w-[1326px]">
           <div className="flex flex-col justify-center items-center text-center mb-6">
             <h2 className="text-white font-hanken text-2xl md:text-[34px] font-bold">
               Flexible Pricing for Individuals and Teams
@@ -907,7 +779,7 @@ export const Homepage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <div className="w-full px-4 h-auto items-center justify-around lg:px-0 mx-auto flex flex-col max-w-[1326px] md:h-[1902px] py-12">
+      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[1902px] py-12">
         <section className="text-gray-900 w-full mx-auto">
           <div className="flex flex-col lg:flex-row justify-between gap-6">
             {/* Info Card */}
@@ -956,22 +828,17 @@ export const Homepage = () => {
         </section>
 
         {/* On Site Learning Section */}
-        <section className="self-center mx-auto flex flex-col items-center text-gray-900 w-full ">
-          <div className="flex flex-col lg:p-0 p-3 justify-center lg:flex-row gap-10 items-center w-full">
+        <section className="self-center mx-auto p-4 md:p-4 xl:p-0 flex flex-col items-center text-gray-900 w-full  ">
+          <div className="flex flex-col  lg:p-0 p-3 justify-center lg:flex-row gap-10 items-center w-full">
             <div className="grow shrink self-stretch my-auto w-full md:w-[529px]">
               <div className="w-full">
                 <div className="flex flex-col justify-center w-full font-bold">
-                  <span className="self-start text-lg text-center text-orange-500 uppercase">
-                    about us
-                  </span>
-                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900">
-                    On Site Learning
-                  </h2>
+                  <span className="self-start text-lg text-center text-orange-500 uppercase">about us</span>
+                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900">On Site Learning</h2>
                 </div>
                 <p className="mt-3 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900">
-                  At B.R Collins, our on-site training transforms everyday
-                  lessons into engaging and interactive experiences. Blending
-                  creativity with expertise.
+                  At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
+                  experiences. Blending creativity with expertise.
                 </p>
               </div>
               <div className="mt-6 md:mt-10 w-full">
@@ -1002,15 +869,13 @@ export const Homepage = () => {
             {/* Left Content Section */}
             <div className="flex flex-col justify-between h-full md:w-[50%] w-full">
               <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
-                <span className="text-lg text-orange-500 uppercase font-bold">
-                  WHY CHOOSE US
-                </span>
+                <span className="text-lg text-orange-500 uppercase font-bold">WHY CHOOSE US</span>
                 <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
                   Creating A Community Of Life Long Learners
                 </h2>
                 <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
-                  At B.R Collins, our on-site training transforms everyday
-                  lessons into engaging and interactive experiences.
+                  At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
+                  experiences.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-4">
                   <Link

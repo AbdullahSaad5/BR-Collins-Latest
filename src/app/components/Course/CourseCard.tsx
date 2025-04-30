@@ -1,84 +1,80 @@
 "use client";
 
 import React from "react";
+import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
+import Link from "next/link";
+import { ICourse } from "@/app/types/course.contract";
 
 interface CourseCardProps {
-  duration: string;
-  title: string;
-  slug: string;
-  instructor?: string;
-  lessons: number;
-  rating: number;
-  price: string;
-  originalPrice?: string;
-  isNew?: boolean;
-  imageUrl?: string;
-  _id: string;
+  course: ICourse;
 }
 
-export const CourseCard: React.FC<CourseCardProps> = ({
-  duration,
-  title,
-  lessons,
-  rating,
-  price,
-  slug,
-  originalPrice,
-  imageUrl,
-  _id,
-}) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<FaStar key={i} className="text-yellow-500 text-base" />);
+      } else if (i === fullStars + 1 && hasHalfStar) {
+        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500 text-base" />);
+      } else {
+        stars.push(<FaRegStar key={i} className="text-yellow-500 text-base" />);
+      }
+    }
+    return stars;
+  };
+
   return (
-    <a href={`/course/${_id}`} className="h-full">
-      <div className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full h-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
-        <div className="flex flex-col flex-1">
-          {/* Duration badge */}
-          {/* {isNew && ( */}
-          <span className="mb-2 px-2 py-0.5 text-sm font-bold text-white uppercase bg-sky-500 rounded-md border border-sky-500 border-solid w-fit">
-            {duration}
+    <div className="h-full min-w-[200px] w-full bg-white rounded-2xl shadow-md transition-all duration-300 border border-gray-200">
+      <div className="p-4 flex flex-col h-full">
+        {/* Hours Badge */}
+        <div className="mb-4">
+          <span className="bg-blue-400 text-white text-xs font-bold px-2.5 py-1 rounded-md">
+            {course.noOfHours} HRS
           </span>
-          {/* )} */}
+        </div>
 
-          {/* Title & Lessons */}
-          <div className="w-full">
-            <h3 className="text-lg sm:text-xl md:text-1xl font-bold leading-snug text-neutral-900">{title}</h3>
-            <div className="flex gap-1.5 items-center mt-3.5 text-lg text-gray-500">
-              <img src="/img/Course/lession.svg" className="w-4 h-4" alt="Lessons icon" />
-              <span>{lessons} Lessons</span>
-            </div>
-            <hr className="mt-4 w-full border-zinc-200" />
-          </div>
+        {/* Course Title */}
+        <h3 className="font-bold text-xl text-gray-900 mb-2 leading-tight">{course.title}</h3>
 
+        {/* Lessons Count */}
+        <div className="flex items-center text-gray-600 mb-3">
+          <FaBook className="mr-2 text-gray-400 text-sm" />
+          <span className="text-base text-gray-500">{course.noOfLessons} Lessons</span>
+        </div>
+
+        {/* Divider */}
+        <div className="w-full h-[1px] bg-gray-200 my-3"></div>
+        <div>
           {/* Rating */}
-          <div className="flex gap-1.5 items-center mt-4">
-            <span className="text-lg text-neutral-900">{rating}</span>
-            <div className="flex gap-px items-center">
-              {[...Array(5)].map((_, i) => (
-                <img
-                  key={i}
-                  src={`https://cdn.builder.io/api/v1/image/assets/TEMP/${
-                    i < Math.floor(rating)
-                      ? "cbe5a472d765e221c9aabf502e5a61f589060766"
-                      : "c8fa37fbcebebcd120b4ccf029f77f04da351558"
-                  }?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5`}
-                  className="w-4 h-4"
-                  alt={i < Math.floor(rating) ? "Filled star" : "Empty star"}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Price & CTA */}
-          <div className="mt-6">
-            <div className="flex gap-2 items-center">
-              <span className="text-xl font-bold text-neutral-900">{price}</span>
-              {originalPrice && <span className="text-base line-through text-neutral-400">{originalPrice}</span>}
-            </div>
-            <a href={`/course/${_id}`} className="mt-4 inline-block text-base font-semibold text-orange-500 underline">
-              View Details
-            </a>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-base font-medium text-gray-700 ml-1">{course.rating || 4.5}</span>
+            <div className="flex">{renderStars(course.rating || 4.5)}</div>
           </div>
         </div>
+        <div className="mt-auto pt-12">
+          {/* Price */}
+          <div className="font-bold text-xl text-gray-900 mb-2">
+            {parseInt(course.price.toString()).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          </div>
+
+          {/* View Details Link */}
+          <Link
+            href={`/course/${course._id}`}
+            className="text-[#FF6B00] text-sm font-medium hover:text-[#FF8533] transition-colors"
+          >
+            View Details
+          </Link>
+        </div>
       </div>
-    </a>
+    </div>
   );
 };
+
+export default CourseCard;

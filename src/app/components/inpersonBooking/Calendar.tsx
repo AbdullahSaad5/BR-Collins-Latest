@@ -8,10 +8,7 @@ interface CalendarProps {
   onDateSelect: (date: string) => void;
 }
 
-export const Calendar: React.FC<CalendarProps> = ({
-  selectedDate,
-  onDateSelect,
-}) => {
+export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [today] = useState<Date>(new Date());
 
@@ -73,16 +70,22 @@ export const Calendar: React.FC<CalendarProps> = ({
         date.getMonth() === today.getMonth() &&
         date.getFullYear() === today.getFullYear();
 
+      // Check if the date is in the past
+      const isPastDate = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
       days.push(
         <button
           key={`day-${day}`}
-          onClick={() => onDateSelect(dateString)}
+          onClick={() => !isPastDate && onDateSelect(dateString)}
+          disabled={isPastDate}
           className={`flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold ${
             isSelected
               ? "bg-orange-500"
               : isToday
-                ? "bg-sky-300 bg-opacity-30"
-                : "hover:bg-orange-500 hover:bg-opacity-20"
+              ? "bg-sky-300 bg-opacity-30"
+              : isPastDate
+              ? "text-gray-400 cursor-not-allowed"
+              : "hover:bg-orange-500 hover:bg-opacity-20"
           }`}
         >
           {day}
@@ -150,9 +153,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-1 auto-rows-fr">
-          {renderDays()}
-        </div>
+        <div className="grid grid-cols-7 gap-1 auto-rows-fr">{renderDays()}</div>
       </div>
     </div>
   );
