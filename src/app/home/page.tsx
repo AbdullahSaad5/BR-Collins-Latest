@@ -950,11 +950,11 @@ export const Homepage = () => {
           </div>
         </section>
         {/* Community Section */}
-        <section className="mx-auto flex flex-col items-center text-gray-900 w-full max-w-[1326px] lg:h-[410px] px-1  md:px-2">
+        <section className="mx-auto flex flex-col items-center text-gray-900 w-full max-w-[1326px] lg:h-[410px] px-1  md:px-2 ">
           <div className="flex flex-col lg:flex-row justify-between items-center lg:items-stretch h-full w-full gap-4 px-5  ">
             {/* Left Content Section */}
             <div className="flex flex-col justify-between h-full w-full lg:w-[50%] text-center md:text-left">
-              <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
+              <div className="flex flex-col justify-between h-full gap-4 max-lg:pt-10 md:gap-6">
                 <span className="text-lg text-orange-500 uppercase font-bold">
                   WHY CHOOSE US
                 </span>

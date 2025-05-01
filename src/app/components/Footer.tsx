@@ -258,7 +258,7 @@ const Footer = () => {
           </div>
 
           {/* Right Block - Fills Remaining Space */}
-          <div className="flex flex-1 justify-end w-fit  gap-4 items-center  min-h-[52px]">
+          <div className="flex flex-1 justify-end max-sm:justify-start max-[521px]:mt-4 w-fit  gap-4 items-center  min-h-[52px]">
             <div className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full ">
               <FacebookIcon className="w-8 h-7"/>
             </div>
