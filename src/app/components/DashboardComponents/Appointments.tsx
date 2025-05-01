@@ -19,6 +19,9 @@ import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken, selectUser } from "@/app/store/features/users/userSlice";
 import { IUser } from "@/app/types/user.contract";
 import { IAdminOffDay } from "@/app/types/admin.contract";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light-border.css";
 
 const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId");
@@ -59,10 +62,15 @@ const getAppointmentTimes = (appointment: IAppointment) => {
 
 const Appointments = () => {
   const [view, setView] = useState<"table" | "calendar">("table");
+  const [calendarView, setCalendarView] = useState(() => {
+    const savedView = localStorage.getItem("preferredCalendarView");
+    return savedView || "dayGridMonth";
+  });
   const [isScrollable, setIsScrollable] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const calendarRef = useRef<FullCalendar>(null);
   const router = useRouter();
   const user = useAppSelector(selectUser) as IUser;
   const refreshToken = useAppSelector(getRefreshToken);
@@ -135,6 +143,23 @@ const Appointments = () => {
     return matchingOffDay.disabledSlots.some((slot) => slot === "half-day-morning" || slot === "half-day-afternoon");
   };
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "scheduled":
+        return "#3B82F6"; // blue
+      case "in-progress":
+        return "#10B981"; // green
+      case "completed":
+        return "#059669"; // darker green
+      case "cancelled":
+        return "#EF4444"; // red
+      case "rescheduled":
+        return "#F59E0B"; // amber
+      default:
+        return "#6B7280"; // gray
+    }
+  };
+
   const calendarEvents = [
     ...(appointments?.map((appointment) => {
       const { startTime, endTime } = getAppointmentTimes(appointment);
@@ -143,10 +168,14 @@ const Appointments = () => {
         title: `${(appointment.courseId as unknown as ICourse).title}`,
         start: startTime,
         end: endTime,
+        backgroundColor: getStatusColor(appointment.status),
+        borderColor: getStatusColor(appointment.status),
+        textColor: "#ffffff",
         extendedProps: {
           location: appointment.location,
           maxParticipants: appointment.maxParticipants,
           price: appointment.price,
+          status: appointment.status,
         },
       };
     }) || []),
@@ -354,35 +383,144 @@ const Appointments = () => {
           </div>
         </div>
       ) : (
-        <div className="h-[600px]">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            headerToolbar={{
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay",
-            }}
-            events={calendarEvents}
-            eventClick={handleEventClick}
-            height="100%"
-            eventTimeFormat={{
-              hour: "numeric",
-              minute: "2-digit",
-              meridiem: "short",
-            }}
-            selectConstraint={{
-              start: "00:00",
-              end: "24:00",
-              daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-            }}
-            selectMirror={true}
-            selectable={true}
-            selectOverlap={false}
-            selectAllow={(selectInfo) => {
-              return !isDateDisabled(selectInfo.start);
-            }}
-          />
+        <div className="space-y-4">
+          {isLoading ? (
+            <div className="h-[600px] flex items-center justify-center">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="text-gray-600">Loading appointments...</p>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="h-[600px] flex items-center justify-center">
+              <div className="text-center">
+                <p className="text-red-500 mb-2">Failed to load appointments</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-sm text-orange-500 hover:text-orange-600"
+                >
+                  Try again
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="h-[600px] bg-white rounded-lg shadow-sm">
+              <FullCalendar
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                initialView={calendarView}
+                headerToolbar={{
+                  left: "prev,next today",
+                  center: "title",
+                  right: "dayGridMonth,timeGridWeek,timeGridDay",
+                }}
+                events={calendarEvents}
+                eventClick={handleEventClick}
+                height="100%"
+                eventTimeFormat={{
+                  hour: "numeric",
+                  minute: "2-digit",
+                  meridiem: "short",
+                }}
+                selectConstraint={{
+                  start: "00:00",
+                  end: "24:00",
+                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+                }}
+                selectMirror={true}
+                selectable={true}
+                selectOverlap={false}
+                selectAllow={(selectInfo) => {
+                  return !isDateDisabled(selectInfo.start);
+                }}
+                eventContent={(eventInfo) => {
+                  const isOffDay = eventInfo.event.id.startsWith("off-day-");
+                  if (isOffDay) {
+                    return (
+                      <div className="w-full h-full flex items-center justify-center text-gray-700 font-medium">
+                        {eventInfo.event.title}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="w-full p-1">
+                      <div className="font-semibold text-sm truncate">{eventInfo.event.title}</div>
+                      <div className="text-xs opacity-90 truncate">
+                        {eventInfo.timeText} • {eventInfo.event.extendedProps.location.venueName}
+                      </div>
+                      <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
+                        {eventInfo.event.extendedProps.status}
+                      </div>
+                    </div>
+                  );
+                }}
+                eventDidMount={(info) => {
+                  if (!info.event.id.startsWith("off-day-")) {
+                    tippy(info.el, {
+                      content: `
+                        <div class="p-3 min-w-[280px]">
+                          <div class="font-semibold text-base mb-2">${info.event.title}</div>
+                          <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                              <span class="text-gray-500">Time:</span>
+                              <span>${info.timeText}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                              <span class="text-gray-500">Location:</span>
+                              <span>${info.event.extendedProps.location.venueName}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                              <span class="text-gray-500">Participants:</span>
+                              <span>${info.event.extendedProps.maxParticipants}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                              <span class="text-gray-500">Price:</span>
+                              <span>$${info.event.extendedProps.price}</span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
+                              <span class="text-gray-500">Status:</span>
+                              <span class="px-2 py-0.5 rounded-full text-xs font-medium" style="background-color: ${getStatusColor(
+                                info.event.extendedProps.status
+                              )}20; color: ${getStatusColor(info.event.extendedProps.status)}">
+                                ${info.event.extendedProps.status}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      `,
+                      allowHTML: true,
+                      placement: "top",
+                      arrow: true,
+                      theme: "light-border",
+                      delay: [200, 0],
+                      interactive: true,
+                      maxWidth: 320,
+                      animation: "shift-away",
+                    });
+                  }
+                }}
+                dayMaxEvents={3}
+                moreLinkContent={(args) => `+${args.num} more`}
+                nowIndicator={true}
+                slotMinTime="08:00:00"
+                slotMaxTime="18:00:00"
+                businessHours={{
+                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+                  startTime: "08:00",
+                  endTime: "18:00",
+                }}
+                slotDuration="00:30:00"
+                snapDuration="00:15:00"
+                allDaySlot={false}
+                weekends={true}
+                firstDay={1}
+                scrollTime="08:00:00"
+                datesSet={({ view }) => {
+                  setCalendarView(view.type);
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
 
