@@ -4,11 +4,13 @@ import type { RootState } from "../../index";
 import { IUser } from "@/app/types/user.contract";
 import { ISubscription } from "@/app/types/subscription.contract";
 import { api } from "@/app/utils/axios";
+import { IOrganization } from "@/app/types/organization.contract";
 
 // Define a type for the slice state
 interface UserState {
   user: IUser | {};
   subscription: ISubscription | {};
+  organization: IOrganization | {};
   accessToken: string | null;
   refreshToken: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -19,6 +21,7 @@ interface UserState {
 const initialState: UserState = {
   user: {},
   subscription: {},
+  organization: {},
   accessToken: null,
   refreshToken: null,
   status: "idle",

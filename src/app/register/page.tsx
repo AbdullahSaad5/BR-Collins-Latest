@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 
 const registerSchema = z
   .object({
-    userType: z.enum(["student", "org"], {
+    userType: z.enum(["student", "manager"], {
       required_error: "Please select a user type",
       invalid_type_error: "Please select a user type",
     }),
@@ -53,7 +53,11 @@ const Register: React.FC = () => {
 
   const registerMutation = useMutation({
     mutationFn: async (data: RegisterFormData) => {
-      const response = await api.post("/auth/register", data);
+      data.email = data.email.toLowerCase();
+      const response = await api.post("/auth/register", {
+        ...data,
+        role: data.userType,
+      });
       return response.data;
     },
     onSuccess: () => {
@@ -79,9 +83,9 @@ const Register: React.FC = () => {
             <Image src={B} alt="Decorative background element" className="w-full" />
           </div>
           <div className="w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start lg:h-full relative z-10">
-            <div className="w-12 h-12 rounded-full bg-[#3584BD] flex items-center justify-center">
+            <Link href="/login" className="w-12 h-12 rounded-full bg-[#3584BD] flex items-center justify-center">
               <IoArrowBackOutline className="w-7 h-7 text-white" />
-            </div>
+            </Link>
             <div>
               <Image src={logo} alt="Company logo" className="h-10 w-auto" />
             </div>
@@ -98,8 +102,14 @@ const Register: React.FC = () => {
               <h2 className="text-white mb-4">
                 Select User Type <span className="text-org">*</span>
               </h2>
+              {watch("userType") === "manager" && (
+                <p className="text-white text-sm mb-4 bg-[#3584BD] p-3 rounded-lg">
+                  <span className="font-bold">Note:</span> It is recommended to use your organization's official email
+                  address for registration. The registered email will be treated as the manager for the organization.
+                </p>
+              )}
               <div className="flex flex-wrap gap-6">
-                {(["student", "org"] as const).map((type) => (
+                {(["student", "manager"] as const).map((type) => (
                   <label key={type} className="inline-flex items-center cursor-pointer">
                     <input type="radio" value={type} {...register("userType")} className="peer hidden" />
                     <div className="h-6 w-6 rounded-full border-2 border-gray-300 flex items-center justify-center peer-checked:bg-org peer-checked:border-org transition-colors">
@@ -130,7 +140,7 @@ const Register: React.FC = () => {
                     type="text"
                     {...register("firstName")}
                     className="flex-1 px-4 py-3 rounded-lg bg-white border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:border-org w-full"
-                    placeholder="Enter your first name"
+                    placeholder={watch("userType") === "manager" ? "Manager's first name" : "Enter your first name"}
                   />
                   {errors.firstName && <p className="text-white text-xs mt-1">{errors.firstName.message}</p>}
                 </div>
@@ -139,7 +149,7 @@ const Register: React.FC = () => {
                     type="text"
                     {...register("lastName")}
                     className="flex-1 px-4 py-3 rounded-lg bg-white border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:border-org w-full"
-                    placeholder="Enter your last name"
+                    placeholder={watch("userType") === "manager" ? "Manager's last name" : "Enter your last name"}
                   />
                   {errors.lastName && <p className="text-white text-xs mt-1">{errors.lastName.message}</p>}
                 </div>
@@ -149,7 +159,7 @@ const Register: React.FC = () => {
                   type="email"
                   {...register("email")}
                   className="w-full px-4 py-3 rounded-lg bg-white border border-gray-400 text-black placeholder-gray-500 focus:outline-none focus:border-org"
-                  placeholder="Enter your email"
+                  placeholder={watch("userType") === "manager" ? "Manager's email" : "Enter your email"}
                 />
                 {errors.email && <p className="text-white text-xs mt-1">{errors.email.message}</p>}
               </div>

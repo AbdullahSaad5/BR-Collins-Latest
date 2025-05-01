@@ -9,6 +9,9 @@ import { ICourse } from "@/app/types/course.contract";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { addToCart } from "@/app/store/features/cart/cartSlice";
 import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
+import { selectUser } from "@/app/store/features/users/userSlice";
+import { useRouter } from "next/navigation";
+import { IUser } from "@/app/types/user.contract";
 
 import CourseSwiper from "@/app/components/Course/CourseSwiper";
 import Image from "next/image";
@@ -39,6 +42,8 @@ const CourseDetailPageClient = ({
   const [activeSection, setActiveSection] = useState("Overview");
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart);
+  const user = useAppSelector(selectUser) as IUser;
+  const router = useRouter();
 
   const overviewRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -121,6 +126,12 @@ const CourseDetailPageClient = ({
     if (!isCourseInCart) {
       dispatch(addToCart(course));
     }
+  };
+
+  const isManager = user && typeof user === "object" && "role" in user && user.role === "manager";
+
+  const handleSubscriptionRedirect = () => {
+    router.push("/subscriptions");
   };
 
   const handleClosePopup = () => {
@@ -441,15 +452,26 @@ const CourseDetailPageClient = ({
               {/* Course Modes */}
               <div className="mt-8 w-full text-center max-md:max-w-full">
                 <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
-                  <button
-                    onClick={handleAddToCart}
-                    className={`w-full min-h-[58px] rounded-[58px] ${
-                      items.some((item) => item._id === course._id) ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500"
-                    }`}
-                    disabled={items.some((item) => item._id === course._id)}
-                  >
-                    {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
-                  </button>
+                  {isManager ? (
+                    <button
+                      onClick={handleSubscriptionRedirect}
+                      className="w-full min-h-[58px] bg-orange-500 rounded-[58px] hover:bg-orange-600 transition-colors"
+                    >
+                      Buy Subscription
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleAddToCart}
+                      className={`w-full min-h-[58px] rounded-[58px] ${
+                        items.some((item) => item._id === course._id)
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-orange-500"
+                      }`}
+                      disabled={items.some((item) => item._id === course._id)}
+                    >
+                      {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
+                    </button>
+                  )}
                   <button
                     onClick={() => setShowInPersonPopup(true)}
                     className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
