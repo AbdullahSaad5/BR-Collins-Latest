@@ -179,14 +179,36 @@ const Appointments = () => {
         },
       };
     }) || []),
-    ...adminOffDays.map((offDay) => ({
-      id: `off-day-${offDay._id}`,
-      title: offDay.reason || "Off Day",
-      start: new Date(offDay.date),
-      allDay: true,
-      display: "background",
-      backgroundColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
-    })),
+    ...adminOffDays.map((offDay) => {
+      console.log(offDay);
+      let title;
+      let isMorning = offDay.disabledSlots?.includes("half-day-morning");
+      let isAfternoon = offDay.disabledSlots?.includes("half-day-afternoon");
+      let fullDay = isMorning && isAfternoon;
+      if (offDay.isRecurring) {
+        title = `Recurring Off: ${fullDay ? "Full Day" : isMorning ? "Morning" : "Afternoon"}`;
+      } else {
+        title = offDay.reason || `Off Day: ${fullDay ? "Full Day" : isMorning ? "Morning" : "Afternoon"}`;
+      }
+      return {
+        id: `off-day-${offDay._id}`,
+        title: title,
+        start: fullDay
+          ? new Date(offDay.date)
+          : isMorning
+          ? new Date(offDay.date).setHours(8, 0, 0, 0)
+          : new Date(offDay.date).setHours(13, 0, 0, 0),
+        end: fullDay
+          ? new Date(offDay.date).setHours(17, 0, 0, 0)
+          : isMorning
+          ? new Date(offDay.date).setHours(12, 0, 0, 0)
+          : new Date(offDay.date).setHours(17, 0, 0, 0),
+        allDay: fullDay ? false : true,
+        // display: "background",
+        display: fullDay ? "background" : "auto",
+        backgroundColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
+      };
+    }),
   ];
 
   const handleEventClick = (info: any) => {
