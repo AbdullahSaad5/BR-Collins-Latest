@@ -190,7 +190,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       onClick: () => handleItemClick("appointments"),
       isExpanded: appointmentsExpanded,
       handleToggle: () => handleToggle("appointments"),
-      access: ["admin", "manager"],
+      access: ["admin"],
       children: [
         {
           icon: Plus,
@@ -205,6 +205,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           onClick: () => handleItemClick("appointments"),
         },
       ],
+    },
+    {
+      icon: Calendar,
+      label: "Appointments",
+      isActive: activeItem === "appointments",
+      onClick: () => handleItemClick("appointments"),
+      access: ["manager"],
     },
     {
       icon: BookOpen,
