@@ -159,33 +159,7 @@ export const Homepage = () => {
       date: "April 15, 2024",
       image: "/assets/lowerlogo.png",
     },
-    {
-      id: 4,
-      title: "Minimalist Design Principles for Modern Websites",
-      description:
-        "Discover how minimalist design can improve user experience and conversion rates.",
-      category: "Design",
-      date: "March 30, 2024",
-      image: "/assets/sendericon.png",
-    },
-    {
-      id: 5,
-      title: "Building Resilience in Challenging Times",
-      description:
-        "Practical strategies to develop mental toughness and adaptability in your personal and professional life.",
-      category: "Personal Development",
-      date: "March 22, 2024",
-      image: "/assets/person.png",
-    },
-    {
-      id: 6,
-      title: "The Rise of Remote Work: Trends and Best Practices",
-      description:
-        "How companies are adapting to the remote work revolution and what it means for the future.",
-      category: "Business",
-      date: "March 10, 2024",
-      image: "/assets/person.png",
-    },
+
   ];
 
   const renderStars = (rating: number) => {

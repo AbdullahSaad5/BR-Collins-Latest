@@ -11,7 +11,7 @@ const testimonials = [
     role: "Creasman CEO",
     avatarSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/908baf5bca0653700b717ff9a12bfa4fcbf17d44?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
     ratingSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-    hasShadow: false,
+
   },
   {
     quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
@@ -19,7 +19,7 @@ const testimonials = [
     role: "Sutton CEO",
     avatarSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/f24e7dc3c08e89a2508b97c949c626c39032de5f?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
     ratingSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-    hasShadow: true,
+ 
   },
   {
     quote: "The marketing strategies I learned helped double our company's revenue in just six months.",
@@ -27,7 +27,7 @@ const testimonials = [
     role: "Marketing Director",
     avatarSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/f24e7dc3c08e89a2508b97c949c626c39032de5f?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
     ratingSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-    hasShadow: true,
+
   },
   {
     quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
@@ -35,7 +35,7 @@ const testimonials = [
     role: "Creasman CEO",
     avatarSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/908baf5bca0653700b717ff9a12bfa4fcbf17d44?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
     ratingSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-    hasShadow: false,
+   
   },
   {
     quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
@@ -43,7 +43,7 @@ const testimonials = [
     role: "Sutton CEO",
     avatarSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/f24e7dc3c08e89a2508b97c949c626c39032de5f?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
     ratingSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-    hasShadow: true,
+    
   },
 ];
 
@@ -63,9 +63,7 @@ const TestimonialCard = ({
   hasShadow?: boolean;
 }) => (
   <article
-    className={`px-4  md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
-      hasShadow ? "shadow-[20px_4px_34px_rgba(0,0,0,0.06)]" : ""
-    } w-full`}
+    className={`px-4  md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100  shadow-[2px_4px_4px_rgba(0,0,0,0.06)] w-full`}
   >
     <img
       src={
