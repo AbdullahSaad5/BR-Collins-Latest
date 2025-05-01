@@ -517,7 +517,7 @@ const CourseDetailPageClient = ({
           <hr className="shrink-0 mt-10 h-px   bg-zinc-200 opacity-10 max-md:max-w-full" />
           <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 lg:px-0">See More Courses</h2>
 
-          <CourseSwiper />
+          <CourseSwiper excludeCourseId={course._id} />
         </div>
       </div>
     </>
