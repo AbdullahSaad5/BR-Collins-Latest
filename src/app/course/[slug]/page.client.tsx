@@ -4,44 +4,25 @@ import { InstructorSection } from "../../components/CourseDetail/InstructorSecti
 import { ReviewSection } from "../../components/CourseDetail/ReviewSection";
 import CourseDetail from "../../components/CourseDetail/CourseDetail";
 import { StarRating } from "@/app/components/CourseDetail/StarRating";
-import {
-  Send,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Twitter,
-  MapPin,
-  Globe,
-} from "lucide-react";
+import { Send, Facebook, Instagram, Linkedin, Twitter, MapPin, Globe } from "lucide-react";
 import { ICourse } from "@/app/types/course.contract";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { addToCart } from "@/app/store/features/cart/cartSlice";
 import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
-import { selectUser } from "@/app/store/features/users/userSlice";
+import { selectUser, getSubscription } from "@/app/store/features/users/userSlice";
 import { useRouter } from "next/navigation";
 import { IUser } from "@/app/types/user.contract";
+import { ISubscription } from "@/app/types/subscription.contract";
 
 import CourseSwiper from "@/app/components/Course/CourseSwiper";
 import Image from "next/image";
 import { ICourseContent } from "@/app/types/course-content.contract";
-import {
-  FacebookIcon,
-  InstagramIcon,
-  LinkedInIcon,
-  XIcon,
-} from "../../../../public/icons/footer_icons";
+import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../../public/icons/footer_icons";
 
-const socialIcons = [
-  { Icon: FacebookIcon },
-  { Icon: XIcon },
-  { Icon: LinkedInIcon },
-  { Icon: InstagramIcon },
-];
+const socialIcons = [{ Icon: FacebookIcon }, { Icon: XIcon }, { Icon: LinkedInIcon }, { Icon: InstagramIcon }];
 
 const toTitleCase = (str: string) => {
-  return str
-    .replace(/\B([A-Z])/g, " $1")
-    .replace(/^./, (char) => char.toUpperCase());
+  return str.replace(/\B([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
 };
 
 const CourseDetailPageClient = ({
@@ -63,6 +44,7 @@ const CourseDetailPageClient = ({
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart);
   const user = useAppSelector(selectUser) as IUser;
+  const subscription = useAppSelector(getSubscription) as ISubscription;
   const router = useRouter();
 
   const overviewRef = useRef<HTMLDivElement>(null);
@@ -148,11 +130,7 @@ const CourseDetailPageClient = ({
     }
   };
 
-  const isManager =
-    user &&
-    typeof user === "object" &&
-    "role" in user &&
-    user.role === "manager";
+  const isManager = user && typeof user === "object" && "role" in user && user.role === "manager";
 
   const handleSubscriptionRedirect = () => {
     router.push("/subscriptions");
@@ -202,11 +180,7 @@ const CourseDetailPageClient = ({
     requirements:
       course.requirements.length > 0
         ? course.requirements
-        : [
-            "This course is for beginners",
-            "No prior knowledge required",
-            "All levels welcome",
-          ],
+        : ["This course is for beginners", "No prior knowledge required", "All levels welcome"],
     sections: Object.entries(course.content).map(([key, value]) => ({
       title: key,
       stats: `${value.totalContents} lectures • ${value.totalDuration} minutes`,
@@ -268,9 +242,7 @@ const CourseDetailPageClient = ({
                 <h1 className="text-5xl font-bold leading-[58px] max-md:text-4xl max-md:leading-[49px]">
                   {displayCourse.title}
                 </h1>
-                <p className="mt-5 text-xl leading-8 max-md:text-lg max-md:leading-7">
-                  {displayCourse.subtitle}
-                </p>
+                <p className="mt-5 text-xl leading-8 max-md:text-lg max-md:leading-7">{displayCourse.subtitle}</p>
               </div>
 
               {/* Stats Section */}
@@ -293,10 +265,7 @@ const CourseDetailPageClient = ({
                       {displayCourse.rating || 10}
                     </span>
                     <StarRating rating={displayCourse.rating || 4} />
-                    <a
-                      href="#"
-                      className="text-base text-white underline max-md:text-sm"
-                    >
+                    <a href="#" className="text-base text-white underline max-md:text-sm">
                       {displayCourse.lessons}+ rating
                     </a>
                   </div>
@@ -312,9 +281,7 @@ const CourseDetailPageClient = ({
                         alt="Lessons icon"
                         className="object-contain shrink-0 w-5 aspect-square max-md:w-4"
                       />
-                      <span className="text-base max-md:text-sm text-white">
-                        {displayCourse.lessons} Lessons
-                      </span>
+                      <span className="text-base max-md:text-sm text-white">{displayCourse.lessons} Lessons</span>
                     </div>
                     <div className="flex gap-1.5 items-center">
                       <img
@@ -330,9 +297,7 @@ const CourseDetailPageClient = ({
 
                   <div className="flex mt-5 flex-wrap gap-3 items-center">
                     <div className="flex gap-1.5 items-center">
-                      <span className="text-base max-md:text-sm text-white">
-                        Last updated 2/15/2025
-                      </span>
+                      <span className="text-base max-md:text-sm text-white">Last updated 2/15/2025</span>
                     </div>
                     <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
                     <div className="flex gap-1.5 items-center">
@@ -344,9 +309,7 @@ const CourseDetailPageClient = ({
                     <div className="shrink h-5 border border-solid border-white border-opacity-50 max-md:hidden" />
                     <div className="flex gap-1.5 items-center">
                       <Globe className="w-5 h-5 text-white" />
-                      <span className="text-base max-md:text-sm text-white">
-                        English
-                      </span>
+                      <span className="text-base max-md:text-sm text-white">English</span>
                     </div>
                   </div>
                 </div>
@@ -381,9 +344,7 @@ const CourseDetailPageClient = ({
                       key={index}
                       onClick={() => handleSectionClick(item.label)}
                       className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${
-                        item.active
-                          ? "bg-sky-500 text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        item.active ? "bg-sky-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                       } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
                     >
                       {item.label}
@@ -398,27 +359,23 @@ const CourseDetailPageClient = ({
                 className="mt-12 text-neutral-900 max-md:mt-10 max-md:mr-2.5 max-md:max-w-full"
               >
                 <article className="w-full max-md:max-w-full">
-                  <h2 className="text-3xl font-bold max-md:max-w-full">
-                    What you'll learn
-                  </h2>
+                  <h2 className="text-3xl font-bold max-md:max-w-full">What you'll learn</h2>
                   <div className="mt-8 w-full text-base leading-6 max-md:max-w-full">
                     {/* Add Overview here */}
                     <p className="mt-5 text-base leading-8 max-md:text-lg max-md:leading-7 mb-6">
                       {displayCourse.overview}
                     </p>
                     <div className="grid grid-cols-2 gap-8 max-md:grid-cols-1">
-                      {displayCourse.learningObjectives.map(
-                        (objective, index) => (
-                          <div key={index} className="flex gap-2 items-start">
-                            <img
-                              src="https://cdn.builder.io/api/v1/image/assets/TEMP/e250ce5e477b6a62341118a96947307c91c70fef?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
-                              alt="Checkmark"
-                              className="object-contain shrink-0 w-6 aspect-square"
-                            />
-                            <p className="w-[291px]">{objective}</p>
-                          </div>
-                        )
-                      )}
+                      {displayCourse.learningObjectives.map((objective, index) => (
+                        <div key={index} className="flex gap-2 items-start">
+                          <img
+                            src="https://cdn.builder.io/api/v1/image/assets/TEMP/e250ce5e477b6a62341118a96947307c91c70fef?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
+                            alt="Checkmark"
+                            className="object-contain shrink-0 w-6 aspect-square"
+                          />
+                          <p className="w-[291px]">{objective}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </article>
@@ -468,11 +425,7 @@ const CourseDetailPageClient = ({
                   <div className="relative">
                     <div className="absolute inset-0 rounded-full backdrop-blur-sm bg-white/10 -m-2"></div>
                     <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-black/70 transition-all relative">
-                      <svg
-                        className="w-10 h-10"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
+                      <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     </div>
@@ -486,19 +439,14 @@ const CourseDetailPageClient = ({
               {/* Price */}
               <div className="flex items-center gap-3 mt-8 font-extrabold text-center text-neutral-900">
                 <span className="text-3xl leading-none">
-                  {parseInt(displayCourse.price.toString()).toLocaleString(
-                    "en-US",
-                    {
-                      style: "currency",
-                      currency: "USD",
-                    }
-                  )}
+                  {parseInt(displayCourse.price.toString()).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
                 </span>
                 {displayCourse.originalPrice && (
                   <span className="text-xl leading-tight line-through text-neutral-400">
-                    {parseInt(
-                      displayCourse.originalPrice.toString()
-                    ).toLocaleString("en-US", {
+                    {parseInt(displayCourse.originalPrice.toString()).toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
@@ -512,38 +460,53 @@ const CourseDetailPageClient = ({
               {/* Course Modes */}
               <div className="mt-8 w-full text-center max-md:max-w-full">
                 <div className="text-white font-semibold text-xl space-y-3 max-md:max-w-full">
-                  {isManager ? (
-                    <button
-                      onClick={handleSubscriptionRedirect}
-                      className="w-full min-h-[58px] bg-orange-500 rounded-[58px] hover:bg-orange-600 transition-colors"
-                    >
-                      Buy Subscription
+                  {user.role === "admin" && (
+                    <p className="text-sm text-gray-500 mb-4">As an admin, you cannot purchase or own courses</p>
+                  )}
+                  {user.role === "admin" ? (
+                    <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
+                      E-Learning
                     </button>
+                  ) : user.role === "manager" ? (
+                    subscription?.isActive ? (
+                      <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
+                        Already Owned
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleSubscriptionRedirect}
+                        className="w-full min-h-[58px] bg-orange-500 rounded-[58px] hover:bg-orange-600 transition-colors"
+                      >
+                        Buy Subscription
+                      </button>
+                    )
                   ) : (
                     <button
                       onClick={handleAddToCart}
                       className={`w-full min-h-[58px] rounded-[58px] ${
                         items.some((item) => item._id === course._id)
                           ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-orange-500"
+                          : "bg-orange-500 hover:bg-orange-600"
                       }`}
                       disabled={items.some((item) => item._id === course._id)}
                     >
-                      {items.some((item) => item._id === course._id)
-                        ? "Already in Cart"
-                        : "E-Learning"}
+                      {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
                     </button>
                   )}
-                  <button
-                    onClick={() => setShowInPersonPopup(true)}
-                    className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
-                  >
-                    In-Person
-                  </button>
+                  {user.role === "admin" ? (
+                    <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
+                      In-Person
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setShowInPersonPopup(true)}
+                      className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
+                    >
+                      In-Person
+                    </button>
+                  )}
                 </div>
-                <p className="mt-5 text-base font-medium text-neutral-400">
-                  30-Day Money-Back Guarantee
-                </p>
+                <p className="mt-5 text-base font-medium text-neutral-400">30-Day Money-Back Guarantee</p>
               </div>
 
               {/* Details Table */}
@@ -556,13 +519,9 @@ const CourseDetailPageClient = ({
                         <div key={label}>
                           <div className="flex justify-between items-center w-full">
                             <span>{toTitleCase(label)}</span>
-                            <span className="font-semibold text-right">
-                              {value}
-                            </span>
+                            <span className="font-semibold text-right">{value}</span>
                           </div>
-                          {index <
-                            Object.keys(displayCourse.courseDetails).length -
-                              1 && (
+                          {index < Object.keys(displayCourse.courseDetails).length - 1 && (
                             <div className="my-3 w-full border-t border-gray-200" />
                           )}
                         </div>
@@ -605,9 +564,7 @@ const CourseDetailPageClient = ({
       <div className="px-1 lg:px-3 mb-5 ">
         <div className="mx-auto max-w-[1326px] ">
           <hr className="shrink-0 mt-10 h-px   bg-zinc-200 opacity-10 max-md:max-w-full" />
-          <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 max-[1340px]:mx-4 lg:px-0">
-            See More Courses
-          </h2>
+          <h2 className="text-3xl my-5 font-bold max-md:max-w-full px-4 max-[1340px]:mx-4 lg:px-0">See More Courses</h2>
 
           <CourseSwiper excludeCourseId={course._id} />
         </div>

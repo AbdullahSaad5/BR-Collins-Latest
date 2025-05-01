@@ -262,12 +262,12 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
   return (
     <nav
       className={`relative flex flex-col p-4 h-full bg-white rounded-xl shadow-sm transition-all duration-300 ${
-        collapsed ? "w-20" : "w-68"
+        collapsed ? "w-20" : "w-full md:w-68"
       }`}
     >
       <button
         onClick={toggleSidebar}
-        className={`absolute -right-3 top-6 z-10 flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md hover:bg-gray-100 transition-colors ${
+        className={` absolute -right-3 top-6 z-10 hidden md:flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md hover:bg-gray-100 transition-colors ${
           collapsed ? "rotate-180" : ""
         }`}
       >

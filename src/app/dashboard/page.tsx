@@ -198,7 +198,7 @@ export default function Dashboard() {
           <ProfileSummary onItemClick={handleItemClick} />
 
           <div className="flex flex-col md:flex-row gap-6 my-6">
-            <div className={`shrink-0 transition-all duration-300 ${sidebarCollapsed ? "w-20" : "w-64"}`}>
+            <div className={`shrink-0 transition-all duration-300 ${sidebarCollapsed ? "w-20" : "w-full md:w-68"}`}>
               <Sidebar activeItem={activeItem} onItemClick={handleItemClick} onToggle={handleSidebarToggle} />
             </div>
 
