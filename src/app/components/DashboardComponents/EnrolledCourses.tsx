@@ -7,6 +7,7 @@ import { ICourse } from "@/app/types/course.contract";
 import { IUser } from "@/app/types/user.contract";
 import CourseDetailsModal from "./CourseDetailsModal";
 import { useRouter } from "next/navigation";
+import Pagination from "../common/Pagination";
 
 interface EnrolledCourse {
   userId: IUser;
@@ -25,6 +26,8 @@ const EnrolledCourses = () => {
   const router = useRouter();
   const accessToken = useAppSelector(getAccessToken);
   const [selectedCourse, setSelectedCourse] = useState<EnrolledCourse | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 6;
 
   const {
     data: enrolledCourses,
@@ -54,6 +57,12 @@ const EnrolledCourses = () => {
   const handleStartLearning = (course: EnrolledCourse) => {
     router.push(`/courses/learn/${course.courseId._id}`);
   };
+
+  // Pagination calculations
+  const totalPages = enrolledCourses ? Math.ceil(enrolledCourses.length / coursesPerPage) : 0;
+  const startIndex = (currentPage - 1) * coursesPerPage;
+  const endIndex = startIndex + coursesPerPage;
+  const currentCourses = enrolledCourses?.slice(startIndex, endIndex) || [];
 
   if (isLoading) {
     return (
@@ -143,7 +152,7 @@ const EnrolledCourses = () => {
       </div>
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {enrolledCourses.map((course) => (
+        {currentCourses.map((course) => (
           <div
             key={course._id}
             className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
@@ -228,6 +237,13 @@ const EnrolledCourses = () => {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-8">
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+        </div>
+      )}
 
       {selectedCourse && (
         <CourseDetailsModal
