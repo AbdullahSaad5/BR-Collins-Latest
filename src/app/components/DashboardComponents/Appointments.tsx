@@ -16,7 +16,7 @@ import ViewAppointmentModal from "./ViewAppointmentModal";
 import { useRouter } from "next/navigation";
 import AppointmentStatusMenu from "./AppointmentStatusMenu";
 import { useAppSelector } from "@/app/store/hooks";
-import { selectUser } from "@/app/store/features/users/userSlice";
+import { getRefreshToken, selectUser } from "@/app/store/features/users/userSlice";
 import { IUser } from "@/app/types/user.contract";
 import { IAdminOffDay } from "@/app/types/admin.contract";
 
@@ -25,8 +25,12 @@ const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   return response.data;
 };
 
-const fetchOffDays = async (): Promise<{ data: IAdminOffDay[] }> => {
-  const response = await api.get("/admin-off-days");
+const fetchOffDays = async (refreshToken: string): Promise<{ data: IAdminOffDay[] }> => {
+  const response = await api.get("/admin-off-days", {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
   return response.data;
 };
 
@@ -61,6 +65,7 @@ const Appointments = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
   const user = useAppSelector(selectUser) as IUser;
+  const refreshToken = useAppSelector(getRefreshToken);
 
   const {
     data: appointments,
@@ -74,7 +79,7 @@ const Appointments = () => {
 
   const { data: adminOffDays = [] } = useQuery({
     queryKey: ["adminOffDays"],
-    queryFn: fetchOffDays,
+    queryFn: () => fetchOffDays(refreshToken!),
     select: (data) => data.data,
   });
 

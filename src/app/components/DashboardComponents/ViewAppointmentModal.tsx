@@ -66,18 +66,6 @@ const ViewAppointmentModal: React.FC<ViewAppointmentModalProps> = ({ appointment
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3 mb-2">
-                  <MapPin className="w-5 h-5 text-gray-500" />
-                  <label className="text-sm font-medium text-gray-500">Location</label>
-                </div>
-                <p className="text-base text-neutral-900">{appointment.location.venueName}</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  {appointment.location.streetAddress}, {appointment.location.city}, {appointment.location.state}{" "}
-                  {appointment.location.zipCode}
-                </p>
-              </div>
-
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-3 mb-2">
                   <Clock className="w-5 h-5 text-gray-500" />
                   <label className="text-sm font-medium text-gray-500">Time</label>
                 </div>
@@ -116,6 +104,63 @@ const ViewAppointmentModal: React.FC<ViewAppointmentModalProps> = ({ appointment
                   <label className="text-sm font-medium text-gray-500">Course</label>
                 </div>
                 <p className="text-base text-neutral-900">{(appointment.courseId as unknown as ICourse).title}</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-gray-50 rounded-lg mt-4">
+              <div className="flex items-center gap-3 mb-3">
+                <MapPin className="w-5 h-5 text-gray-500" />
+                <h3 className="text-lg font-medium text-neutral-900">Location Details</h3>
+              </div>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <label className="text-sm font-medium text-gray-500 w-32">Venue:</label>
+                  <p className="text-base text-neutral-900 flex-1">{appointment.location.venueName}</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <label className="text-sm font-medium text-gray-500 w-32">Full Address:</label>
+                  <p className="text-sm text-gray-600 flex-1">
+                    {appointment.location.venueName}, {appointment.location.streetAddress}, {appointment.location.city},
+                    {appointment.location.state}, {appointment.location.zipCode}
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <label className="text-sm font-medium text-gray-500 w-32">Address:</label>
+                  <p className="text-sm text-gray-600 flex-1">{appointment.location.streetAddress}</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <label className="text-sm font-medium text-gray-500 w-32">City:</label>
+                  <p className="text-sm text-gray-600 flex-1">{appointment.location.city}</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <label className="text-sm font-medium text-gray-500 w-32">State:</label>
+                  <p className="text-sm text-gray-600 flex-1">{appointment.location.state}</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <label className="text-sm font-medium text-gray-500 w-32">ZIP Code:</label>
+                  <p className="text-sm text-gray-600 flex-1">{appointment.location.zipCode}</p>
+                </div>
+
+                {appointment.location.additionalInfo && (
+                  <div className="flex items-start gap-3">
+                    <label className="text-sm font-medium text-gray-500 w-32">Additional Info:</label>
+                    <p className="text-sm text-gray-600 flex-1">{appointment.location.additionalInfo}</p>
+                  </div>
+                )}
+                {appointment.location.coordinates && (
+                  <div className="flex items-start gap-3">
+                    <label className="text-sm font-medium text-gray-500 w-32">Directions:</label>
+                    <a
+                      href={`https://www.google.com/maps?q=${appointment.location.coordinates.latitude},${appointment.location.coordinates.longitude}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-sm text-orange-500 hover:text-orange-600"
+                    >
+                      <MapPin className="w-4 h-4 mr-1" />
+                      View on Map
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>

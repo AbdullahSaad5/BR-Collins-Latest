@@ -103,13 +103,33 @@ const AdminOffDaysManager = () => {
     deleteOffDayMutation.mutate(offDayId);
   };
 
-  const calendarEvents = offDays.map((offDay) => ({
-    id: `off-day-${offDay._id}`,
-    title: offDay.reason || "Off Day",
-    start: new Date(offDay.date),
-    backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
-    classNames: ["cursor-pointer"],
-  }));
+  console;
+
+  const calendarEvents = offDays
+    .map((offDay) => {
+      return {
+        ...offDay,
+        date: new Date(offDay.date),
+      };
+    })
+    .map((offDay) => ({
+      id: `off-day-${offDay._id}`,
+      title: offDay.reason || "Off Day",
+      start: offDay.disabledSlots.includes("half-day-morning")
+        ? new Date(offDay.date?.setHours(8, 0, 0, 0))
+        : offDay.disabledSlots.includes("half-day-afternoon")
+        ? new Date(offDay.date?.setHours(13, 0, 0, 0))
+        : new Date(offDay.date),
+      end: offDay.disabledSlots.includes("half-day-morning")
+        ? new Date(offDay.date?.setHours(12, 0, 0, 0))
+        : offDay.disabledSlots.includes("half-day-afternoon")
+        ? new Date(offDay.date?.setHours(17, 0, 0, 0))
+        : new Date(offDay.date),
+      backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+      classNames: ["cursor-pointer"],
+    }));
+
+  console.log(calendarEvents);
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-6">
