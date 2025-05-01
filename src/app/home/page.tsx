@@ -21,6 +21,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
 } from "../../../public/icons/home_page_icons";
+import TestimonialsSection from "../components/home/TestimonialsSection";
 
 interface SliderItem {
   title: string;
@@ -216,87 +217,6 @@ export const Homepage = () => {
     }
   };
 
-  const testimonials = [
-    {
-      quote:
-        "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
-      author: "Valerie J.",
-      role: "Creasman CEO",
-      avatarSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/908baf5bca0653700b717ff9a12bfa4fcbf17d44?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-      ratingSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-      hasShadow: false,
-    },
-    {
-      quote:
-        "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      author: "Hannah R.",
-      role: "Sutton CEO",
-      avatarSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/f24e7dc3c08e89a2508b97c949c626c39032de5f?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-      ratingSrc:
-        "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
-      hasShadow: true,
-    },
-  ];
-
-  const TestimonialCard = ({
-    quote,
-    author,
-    role,
-    avatarSrc,
-    ratingSrc,
-    hasShadow = false,
-  }: {
-    quote: string;
-    author: string;
-    role: string;
-    avatarSrc: string;
-    ratingSrc: string;
-    hasShadow?: boolean;
-  }) => (
-    <article
-      className={`px-4 md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
-        hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
-      } w-full`}
-    >
-      <img
-        src={
-          hasShadow
-            ? "https://cdn.builder.io/api/v1/image/assets/TEMP/4f53b01f4a2055025ae001d32242dd2156eb1d6f?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-            : "https://cdn.builder.io/api/v1/image/assets/TEMP/e3b511254abaa10feac72b54d94eff2df35b0d69?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-        }
-        className="object-contain w-8 aspect-[1.68]"
-        alt="Quote"
-      />
-      <blockquote className="mt-4 md:mt-7 text-lg md:text-2xl font-medium leading-6 md:leading-8 text-neutral-900">
-        {quote}
-      </blockquote>
-      <div className="flex flex-col md:flex-row justify-between mt-8 md:mt-16 gap-4">
-        <div className="flex gap-3 items-center">
-          <img
-            src={avatarSrc}
-            className="object-contain rounded-full aspect-square w-10 md:w-[50px]"
-            alt={author}
-          />
-          <div>
-            <p className="text-base md:text-xl font-bold text-neutral-900">
-              {author}
-            </p>
-            <p className="text-sm md:text-base leading-none text-zinc-500">
-              {role}
-            </p>
-          </div>
-        </div>
-        <img
-          src={ratingSrc}
-          className="object-contain aspect-[2.51] w-20 md:w-[88px]"
-          alt="Rating"
-        />
-      </div>
-    </article>
-  );
 
   const FeatureCard = ({
     title,
@@ -398,119 +318,7 @@ export const Homepage = () => {
   return (
     <>
       {/* Hero Section */}
-      {/* <div className="relative overflow-hidden w-full h-[300px] lg:h-[500px]">
-        <div
-          className="flex transition-transform duration-1000 ease-in-out w-[200%]"
-          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-        >
-          <section className="relative w-full">
-            <div className="w-full">
-              <Image
-                src="/assets/homepagewall.png"
-                width={1920}
-                height={1080}
-                alt="wallpaper"
-                className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-                priority
-              />
-            </div>
-
-            <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-              <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-                <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-                  <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-                    IT Support Specialist Professional Certificate
-                  </h2>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                    <Image
-                      src="/assets/person.png"
-                      width={40}
-                      height={40}
-                      alt="person"
-                      className="w-10 h-10"
-                    />
-                    <h1 className="font-light text-sm sm:text-base text-gray-800">
-                      Instructor:{" "}
-                      <span className="text-blue-500 underline mx-2">
-                        Claudia Pruitt
-                      </span>
-                    </h1>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                    <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
-                      <Image
-                        src="/assets/congrateicon.png"
-                        width={16}
-                        height={16}
-                        className="mr-2 w-4 h-4"
-                        alt="congrats"
-                      />
-                      <h3>Bestseller</h3>
-                    </div>
-                    <h1 className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
-                      4.8
-                      <span className="text-yellow-500 flex items-center text-sm">
-                        {[...Array(4)].map((_, i) => (
-                          <FaStar key={i} />
-                        ))}
-                        <FaStarHalfAlt />
-                      </span>
-                    </h1>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                    <div className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                      Enroll Now
-                    </div>
-                    <div className="text-sm text-gray-700">
-                      Start <span className="font-bold">14 April</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="relative w-full">
-            <div className="w-full">
-              <Image
-                src="/assets/homepagewall2.png"
-                width={1920}
-                height={1080}
-                alt="wallpaper"
-                className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-                priority
-              />
-            </div>
-
-            <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-              <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-                <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-                  <h2 className="font-hanken lg:w-2/3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-                    Your Learning Journey Starts Here
-                  </h2>
-
-                  <p className="text-xl">
-                    Get the skills to achieve goals and stay competitive.
-                  </p>
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                    <button className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                      Plans for Individual{" "}
-                    </button>
-                    <button className="bg-transparent text-black border-1 border-gray-600 rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                      Plans for Corporate{" "}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div> */}
-
+      
       <div className="h-[300px] lg:h-[500px] w-full">
         <Swiper
           spaceBetween={0}
@@ -656,99 +464,7 @@ export const Homepage = () => {
           </SwiperSlide>
         </Swiper>
       </div>
-      {/* <section className="relative w-full">
-        <div className="w-full">
-          <Image
-            src="/assets/homepagewall.png"
-            width={1920}
-            height={1080}
-            alt="wallpaper"
-            className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-            priority
-          />
-        </div>
-
-        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-            <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-              <h2 className="font-hanken text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-                IT Support Specialist Professional Certificate
-              </h2>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
-                <h1 className="font-light text-sm sm:text-base text-gray-800">
-                  Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
-                </h1>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
-                  <Image
-                    src="/assets/congrateicon.png"
-                    width={16}
-                    height={16}
-                    className="mr-2 w-4 h-4"
-                    alt="congrats"
-                  />
-                  <h3>Bestseller</h3>
-                </div>
-                <h1 className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
-                  4.8
-                  <span className="text-yellow-500 flex items-center text-sm">
-                    {[...Array(4)].map((_, i) => (
-                      <FaStar key={i} />
-                    ))}
-                    <FaStarHalfAlt />
-                  </span>
-                </h1>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <div className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                  Enroll Now
-                </div>
-                <div className="text-sm text-gray-700">
-                  Start <span className="font-bold">14 April</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="relative w-full">
-        <div className="w-full">
-          <Image
-            src="/assets/homepagewall2.png"
-            width={1920}
-            height={1080}
-            alt="wallpaper"
-            className="w-full h-[300px] lg:h-[500px] object-cover  object-right-top"
-            priority
-          />
-        </div>
-
-        <div className="absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-[linear-gradient(to_right,_white,transparent)] md:bg-[linear-gradient(to_right,_white,_white,_transparent,_transparent)] pointer-events-none flex items-center">
-          <div className="w-full p-4 md:p-8 lg:p-0 md:max-w-[1326px] mx-auto">
-            <div className="flex flex-col p-4 md:p-0 justify-start gap-3 md:gap-4 w-full max-w-2xl pointer-events-auto">
-              <h2 className="font-hanken lg:w-2/3 text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-start text-gray-900">
-              Your Learning Journey Starts Here
-              </h2>
-
-
-             <p className="text-xl">Get the skills to achieve goals and stay competitive.</p>
-
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <button className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                Plans for Individual                 </button>
-                <button className="bg-transparent text-black border-1 border-gray-600 rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer">
-                Plans for Corporate                 </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
+     
       {/* Courses Section */}
       <section className="w-full p-4 md:p-4 xl:py-10 max-w-[1326px] mx-auto py-8 md:py-12">
         <section className="relative text-gray-900 w-full">
@@ -825,18 +541,7 @@ export const Homepage = () => {
           </div>
         </section>
 
-        {/* Courses Grid */}
-        {/* <section className="relative text-gray-900">
-          <div className="w-full mx-auto max-w-[1326px] h-auto relative">
-            {isCoursesLoading ? (
-              <div className="w-full text-center">Loading courses...</div>
-            ) : coursesError ? (
-              <div className="w-full text-center text-red-500">Error loading courses</div>
-            ) : (
-              <CourseCardSlider courses={courses || []} />
-            )}
-          </div>
-        </section> */}
+      
         <CourseSwiper />
       </section>
 
@@ -853,53 +558,10 @@ export const Homepage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[1902px] py-12">
-        <section className="text-gray-900 w-full mx-auto">
-          <div className="flex flex-col lg:flex-row justify-between gap-6">
-            {/* Info Card */}
-            <div className="flex flex-col items-start text-start justify-between p-6 h-[420px] w-full lg:w-[422px] bg-sky-500 rounded-xl">
-              <h2 className="text-2xl md:text-[34px] font-bold text-white">
-                What subscribers are achieving through learning
-              </h2>
-              <p className="text-xl md:text-2xl text-white">
-                <span className="font-semibold text-[#FF9270]">37,076</span>
-                <span> responses collected</span>
-              </p>
-              <div className="flex justify-between bottom-0 w-full">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/130d72ee6184a472ad3edb3bbba812115cae9da8?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                  className="object-contain w-[150px] md:w-[200px] rounded-none"
-                  alt="Learning statistics"
-                />
-                <div className="flex gap-2 items-center">
-                  <button aria-label="Previous testimonial">
-                    <img
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/86abcbed0348e0114509cab56011a93a7df8f1bf?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                      className="object-contain aspect-square w-10 md:w-[50px]"
-                      alt="Previous"
-                    />
-                  </button>
-                  <button aria-label="Next testimonial">
-                    <img
-                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/eb2ea5548b6387d8aca0a2880a216cc986f8e138?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                      className="object-contain aspect-square w-10 md:w-[50px]"
-                      alt="Next"
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
 
-            {/* Testimonials */}
-            <div className="flex flex-col lg:flex-row w-full lg:w-2/3 gap-4">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="w-full h-[422px]">
-                  <TestimonialCard {...testimonial} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+      <TestimonialsSection/>
+      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[1902px] py-12">
+       
 
         {/* On Site Learning Section */}
         <section className="mx-auto p-2 md:p-4 xl:p-0 flex flex-col items-center text-gray-900 w-full">
