@@ -5,6 +5,7 @@ interface CourseDetailsModalProps {
   course: ICourse;
   isOpen: boolean;
   onClose: () => void;
+  onStartLearning: () => void;
   progress?: number;
   status?: "active" | "completed" | "not-started";
   lessonsCompleted?: number;
@@ -14,6 +15,7 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
   course,
   isOpen,
   onClose,
+  onStartLearning,
   progress = 0,
   status = "not-started",
   lessonsCompleted,
@@ -141,22 +143,22 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                     <p className="text-sm text-gray-500">Quizzes</p>
                     <p className="mt-1 font-medium text-gray-900">{course.noOfQuizzes}</p>
                   </div> */}
-                  <div className="rounded-lg bg-[#FFF5E6] p-4">
+                  {/* <div className="rounded-lg bg-[#FFF5E6] p-4">
                     <p className="text-sm text-gray-500">Certificate</p>
                     <p className="mt-1 font-medium text-gray-900">
                       {course.hasCertificate ? "Available" : "Not Available"}
                     </p>
-                  </div>
+                  </div> */}
                   <div className="rounded-lg bg-[#FFF5E6] p-4">
                     <p className="text-sm text-gray-500">Last Updated</p>
                     <p className="mt-1 font-medium text-gray-900">
                       {new Date(course.lastUpdated).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className="rounded-lg bg-[#FFF5E6] p-4">
+                  {/* <div className="rounded-lg bg-[#FFF5E6] p-4">
                     <p className="text-sm text-gray-500">Students</p>
                     <p className="mt-1 font-medium text-gray-900">{course.noOfStudents}</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -168,7 +170,10 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                 >
                   Close
                 </button>
-                <button className="rounded-md bg-[#FF6B00] px-4 py-2 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2 transition-colors duration-200">
+                <button
+                  onClick={onStartLearning}
+                  className="rounded-md bg-[#FF6B00] px-4 py-2 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2 transition-colors duration-200"
+                >
                   {status === "not-started"
                     ? "Start Learning"
                     : status === "completed"

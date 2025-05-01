@@ -234,6 +234,10 @@ const EnrolledCourses = () => {
           course={selectedCourse.courseId}
           isOpen={!!selectedCourse}
           onClose={handleCloseModal}
+          onStartLearning={() => {
+            handleStartLearning(selectedCourse);
+            handleCloseModal();
+          }}
           progress={selectedCourse.progress}
           status={selectedCourse.status}
           lessonsCompleted={selectedCourse.lessonsCompleted}
