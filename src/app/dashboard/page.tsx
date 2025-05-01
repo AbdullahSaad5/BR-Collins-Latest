@@ -42,6 +42,12 @@ export default function Dashboard() {
       setActiveItem(item);
     }
 
+    // Check if user is not logged in
+    if (!user || Object.keys(user).length === 0) {
+      router.push("/login");
+      return;
+    }
+
     // Check if user is a manager and doesn't have an organization
     if (user && typeof user === "object" && "role" in user && user.role === "manager" && !user.organization) {
       router.push("/register-organization");
