@@ -4,16 +4,20 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 interface CalendarProps {
-  selectedDate: string;
-  onDateSelect: (date: string) => void;
+  selectedDate: Date;
+  onDateSelect: (date: Date) => void;
+  onMonthChange?: (date: Date) => void;
+  availableSlots?: { date: string; availableSlots: string[] }[];
 }
 
-export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }) => {
+export const Calendar: React.FC<CalendarProps> = ({
+  selectedDate,
+  onDateSelect,
+  onMonthChange,
+  availableSlots = [],
+}) => {
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [today] = useState<Date>(new Date());
-
-  // Parse the selectedDate string into a Date object
-  const parsedSelectedDate = new Date(selectedDate);
 
   // Initialize currentMonth with the selected date's month
   useEffect(() => {
@@ -26,6 +30,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }
     const newMonth = new Date(currentMonth);
     newMonth.setMonth(newMonth.getMonth() + direction);
     setCurrentMonth(newMonth);
+    onMonthChange?.(newMonth);
   };
 
   const getDaysInMonth = (date: Date) => {
@@ -63,8 +68,10 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(currentMonth);
       date.setDate(day);
-      const dateString = formatDateString(date);
-      const isSelected = selectedDate === dateString;
+      const isSelected =
+        date.getDate() === selectedDate.getDate() &&
+        date.getMonth() === selectedDate.getMonth() &&
+        date.getFullYear() === selectedDate.getFullYear();
       const isToday =
         date.getDate() === today.getDate() &&
         date.getMonth() === today.getMonth() &&
@@ -73,18 +80,28 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }
       // Check if the date is in the past
       const isPastDate = date <= new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
+      // Check if the date has some slots booked
+      const dateStr = date.toISOString().split("T")[0];
+      console.log("dateStr", dateStr);
+      console.log("availableSlots", availableSlots);
+      const dateSlots = availableSlots.find((slot) => slot.date === dateStr);
+      console.log("dateSlots", dateSlots);
+      const hasBookedSlots = dateSlots && dateSlots.availableSlots.length < 3;
+
       days.push(
         <button
           key={`day-${day}`}
-          onClick={() => !isPastDate && onDateSelect(dateString)}
+          onClick={() => !isPastDate && onDateSelect(date)}
           disabled={isPastDate}
           className={`flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold ${
             isSelected
               ? "bg-orange-500"
-              : isToday
-              ? "bg-sky-300 bg-opacity-30"
-              : isPastDate
+              : // : isToday
+              // ? "bg-sky-300 bg-opacity-30"
+              isPastDate
               ? "text-gray-400 cursor-not-allowed"
+              : hasBookedSlots
+              ? "bg-sky-300 bg-opacity-20 hover:bg-orange-500 hover:bg-opacity-20"
               : "hover:bg-orange-500 hover:bg-opacity-20"
           }`}
         >
@@ -102,7 +119,7 @@ export const Calendar: React.FC<CalendarProps> = ({ selectedDate, onDateSelect }
   });
 
   return (
-    <div className="flex flex-col w-full max-w-[325px] max-h-[287px] text-center text-white bg-sky-500 rounded-xl overflow-hidden">
+    <div className="flex flex-col w-full max-w-[325px] max-h-[287px] text-center text-white bg-[#2490E0] rounded-xl overflow-hidden">
       <div className="flex justify-between items-center px-6 py-3.5 w-full text-base font-bold min-h-11 max-md:px-5">
         <button
           onClick={() => navigateMonth(-1)}

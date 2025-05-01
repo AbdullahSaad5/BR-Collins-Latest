@@ -5,8 +5,9 @@ import SubscriptionConfirmationModal from "./SubscriptionConfirmationModal";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/app/store/hooks";
-import { isUserLoggedIn, getSubscription } from "@/app/store/features/users/userSlice";
+import { isUserLoggedIn, getSubscription, selectUser } from "@/app/store/features/users/userSlice";
 import { ISubscription } from "@/app/types/subscription.contract";
+import { IUser } from "@/app/types/user.contract";
 
 // Define TypeScript interfaces for the data structure
 interface IndividualPlan {
@@ -49,9 +50,19 @@ const SubscriptionCards: React.FC = () => {
   const router = useRouter();
   const isLoggedIn = useAppSelector(isUserLoggedIn);
   const subscription = useAppSelector(getSubscription) as ISubscription;
+  const user = useAppSelector(selectUser) as IUser;
 
-  const isSubscribed = () => {
-    return subscription && Object.keys(subscription).length > 0 && "isActive" in subscription && subscription.isActive;
+  const isManagerWithOrg = (): boolean => {
+    if (!user || typeof user !== "object" || !("role" in user)) {
+      return false;
+    }
+    return user.role === "manager" && Boolean(user.organization);
+  };
+
+  const isSubscribed = (): boolean => {
+    return Boolean(
+      subscription && Object.keys(subscription).length > 0 && "isActive" in subscription && subscription.isActive
+    );
   };
 
   const isCurrentPlan = (plan: IndividualPlan | CorporatePlan) => {
@@ -149,17 +160,26 @@ const SubscriptionCards: React.FC = () => {
                   <div>
                     <h1 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.title}</h1>
                     <p className="text-gray-700 text-sm sm:text-base">{plan.description}</p>
+                    {isManagerWithOrg() && (
+                      <p className="mt-2 text-red-600 text-xs font-medium">Available for individual users only</p>
+                    )}
                   </div>
                   <button
                     onClick={() => handlePlanClick(plan)}
-                    disabled={isSubscribed()}
+                    disabled={isSubscribed() || isManagerWithOrg()}
                     className={`bg-[#F86537] text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${
-                      isSubscribed()
+                      isSubscribed() || isManagerWithOrg()
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer hover:bg-[#E55A2E] transition-all duration-300"
                     }`}
                   >
-                    {isCurrentPlan(plan) ? "Current Plan" : isSubscribed() ? "Already Subscribed" : plan.buttonText}
+                    {isCurrentPlan(plan)
+                      ? "Current Plan"
+                      : isSubscribed()
+                      ? "Already Subscribed"
+                      : isManagerWithOrg()
+                      ? "Not Available"
+                      : plan.buttonText}
                   </button>
                 </div>
                 <div className="flex flex-col justify-between w-1/2">
@@ -179,16 +199,25 @@ const SubscriptionCards: React.FC = () => {
         </div>
 
         {/* Right Column - Corporate Plans */}
-        <div className="w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full">
+        <div
+          className={`w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full ${
+            !isManagerWithOrg() ? "opacity-50 pointer-events-none" : ""
+          }`}
+        >
           <div>
-            <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data.corporatePlans.title}</h1>
-            <p className="text-gray-700 text-sm sm:text-base mb-4">{data.corporatePlans.description}</p>
+            <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data?.corporatePlans.title}</h1>
+            <p className="text-gray-700 text-sm sm:text-base mb-4">{data?.corporatePlans.description}</p>
+            {!isManagerWithOrg() && (
+              <p className="text-gray-400 text-xs font-medium mb-4">Exclusive to organization managers</p>
+            )}
             <ul className="space-y-2">
-              {data.corporatePlans.plans.map((plan, index) => (
+              {data?.corporatePlans.plans.map((plan, index) => (
                 <React.Fragment key={index}>
                   <li
-                    className="flex py-2 items-center cursor-pointer"
-                    onClick={() => !isSubscribed() && setSelectedCorporatePlan(index)}
+                    className={`flex py-2 items-center ${
+                      !isManagerWithOrg() ? "cursor-not-allowed" : "cursor-pointer"
+                    }`}
+                    onClick={() => isManagerWithOrg() && !isSubscribed() && setSelectedCorporatePlan(index)}
                   >
                     <div className="flex flex-row w-full justify-between">
                       <div>
@@ -202,12 +231,12 @@ const SubscriptionCards: React.FC = () => {
                             name="checkbox"
                             className="peer hidden"
                             checked={selectedCorporatePlan === index}
-                            onChange={() => !isSubscribed() && setSelectedCorporatePlan(index)}
-                            disabled={isSubscribed()}
+                            onChange={() => isManagerWithOrg() && !isSubscribed() && setSelectedCorporatePlan(index)}
+                            disabled={isSubscribed() || !isManagerWithOrg()}
                           />
                           <div
                             className={`h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition ${
-                              isSubscribed() ? "opacity-50 cursor-not-allowed" : ""
+                              isSubscribed() || !isManagerWithOrg() ? "opacity-50 cursor-not-allowed" : ""
                             }`}
                           >
                             <svg
@@ -233,20 +262,22 @@ const SubscriptionCards: React.FC = () => {
           </div>
           <button
             onClick={handleCorporatePlanClick}
-            disabled={selectedCorporatePlan === null || isSubscribed()}
+            disabled={selectedCorporatePlan === null || isSubscribed() || !isManagerWithOrg()}
             className={`bg-[#F86537] duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
-              selectedCorporatePlan === null || isSubscribed()
+              selectedCorporatePlan === null || isSubscribed() || !isManagerWithOrg()
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer hover:bg-[#E55A2E]"
             }`}
           >
             {isSubscribed() &&
             selectedCorporatePlan !== null &&
-            isCurrentPlan(data.corporatePlans.plans[selectedCorporatePlan])
+            isCurrentPlan(data?.corporatePlans.plans[selectedCorporatePlan])
               ? "Current Plan"
               : isSubscribed()
               ? "Already Subscribed"
-              : data.corporatePlans.buttonText}
+              : !isManagerWithOrg()
+              ? "Not Available"
+              : data?.corporatePlans.buttonText}
           </button>
         </div>
       </div>

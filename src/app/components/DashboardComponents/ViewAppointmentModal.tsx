@@ -1,6 +1,6 @@
 import React from "react";
 import { X, Calendar, Clock, MapPin, Users, DollarSign, BookOpen } from "lucide-react";
-import { IAppointment } from "@/app/types/appointment.contract";
+import { IAppointment, AppointmentType } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
 
 interface ViewAppointmentModalProps {
@@ -8,6 +8,29 @@ interface ViewAppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const getAppointmentTimes = (appointment: IAppointment) => {
+  const date = new Date(appointment.date);
+  let startTime = new Date(date);
+  let endTime = new Date(date);
+
+  switch (appointment.appointmentType) {
+    case AppointmentType.HALF_DAY_MORNING:
+      startTime.setHours(8, 0, 0, 0);
+      endTime.setHours(12, 0, 0, 0);
+      break;
+    case AppointmentType.HALF_DAY_AFTERNOON:
+      startTime.setHours(13, 0, 0, 0);
+      endTime.setHours(17, 0, 0, 0);
+      break;
+    case AppointmentType.FULL_DAY:
+      startTime.setHours(8, 0, 0, 0);
+      endTime.setHours(17, 0, 0, 0);
+      break;
+  }
+
+  return { startTime, endTime };
+};
 
 const ViewAppointmentModal: React.FC<ViewAppointmentModalProps> = ({ appointment, isOpen, onClose }) => {
   if (!isOpen || !appointment) return null;
@@ -58,11 +81,17 @@ const ViewAppointmentModal: React.FC<ViewAppointmentModalProps> = ({ appointment
                   <Clock className="w-5 h-5 text-gray-500" />
                   <label className="text-sm font-medium text-gray-500">Time</label>
                 </div>
-                <p className="text-base text-neutral-900">
-                  {new Date(appointment.startTime).toLocaleTimeString()} -{" "}
-                  {new Date(appointment.endTime).toLocaleTimeString()}
-                </p>
-                <p className="text-sm text-gray-500 mt-1">{new Date(appointment.startTime).toLocaleDateString()}</p>
+                {(() => {
+                  const { startTime, endTime } = getAppointmentTimes(appointment);
+                  return (
+                    <>
+                      <p className="text-base text-neutral-900">
+                        {startTime.toLocaleTimeString()} - {endTime.toLocaleTimeString()}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">{new Date(appointment.date).toLocaleDateString()}</p>
+                    </>
+                  );
+                })()}
               </div>
 
               <div className="p-4 bg-gray-50 rounded-lg">

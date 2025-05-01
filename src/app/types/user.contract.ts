@@ -24,6 +24,7 @@ export interface IUser {
   allowResetPassword: boolean;
   createdAt: Date;
   updatedAt: Date;
+  organization?: string;
 }
 
 export interface IUserMethods {

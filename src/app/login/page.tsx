@@ -53,7 +53,13 @@ const Login: React.FC = () => {
       dispatch(setRefreshToken(data.refreshToken));
 
       showToast("Login successful", "success");
-      router.push("/dashboard");
+
+      // Check if user is a manager and doesn't have an organization
+      if (data.user.role === "manager" && !data.user.organization) {
+        router.push("/register-organization");
+      } else {
+        router.push("/dashboard");
+      }
     },
     onError: (error) => {
       showToast("Login failed. Please check your credentials.", "error");
@@ -75,9 +81,9 @@ const Login: React.FC = () => {
           </div>
 
           <div className="relative z-10 w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start min-h-[600px] lg:min-h-[700px]">
-            <div className="w-12 h-12 rounded-full bg-[#3584BD] flex items-center justify-center">
+            <Link href="/register" className="w-12 h-12 rounded-full bg-[#3584BD] flex items-center justify-center">
               <IoArrowBackOutline className="w-7 h-7 text-white" />
-            </div>
+            </Link>
             <div>
               <Image src={logo} alt="Logo" className="h-10 w-auto" />
             </div>

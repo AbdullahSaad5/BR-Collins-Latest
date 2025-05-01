@@ -10,7 +10,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
-import { IAppointment } from "@/app/types/appointment.contract";
+import { IAppointment, AppointmentType } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
 import ViewAppointmentModal from "./ViewAppointmentModal";
 import { useRouter } from "next/navigation";
@@ -19,6 +19,29 @@ import AppointmentStatusMenu from "./AppointmentStatusMenu";
 const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId");
   return response.data;
+};
+
+const getAppointmentTimes = (appointment: IAppointment) => {
+  const date = new Date(appointment.date);
+  let startTime = new Date(date);
+  let endTime = new Date(date);
+
+  switch (appointment.appointmentType) {
+    case AppointmentType.HALF_DAY_MORNING:
+      startTime.setHours(8, 0, 0, 0);
+      endTime.setHours(12, 0, 0, 0);
+      break;
+    case AppointmentType.HALF_DAY_AFTERNOON:
+      startTime.setHours(13, 0, 0, 0);
+      endTime.setHours(17, 0, 0, 0);
+      break;
+    case AppointmentType.FULL_DAY:
+      startTime.setHours(8, 0, 0, 0);
+      endTime.setHours(17, 0, 0, 0);
+      break;
+  }
+
+  return { startTime, endTime };
 };
 
 const Appointments = () => {
@@ -53,17 +76,20 @@ const Appointments = () => {
   }, [appointments]);
 
   const calendarEvents =
-    appointments?.map((appointment) => ({
-      id: appointment._id,
-      title: `${(appointment.courseId as unknown as ICourse).title}`,
-      start: appointment.startTime,
-      end: appointment.endTime,
-      extendedProps: {
-        location: appointment.location,
-        maxParticipants: appointment.maxParticipants,
-        price: appointment.price,
-      },
-    })) || [];
+    appointments?.map((appointment) => {
+      const { startTime, endTime } = getAppointmentTimes(appointment);
+      return {
+        id: appointment._id,
+        title: `${(appointment.courseId as unknown as ICourse).title}`,
+        start: startTime,
+        end: endTime,
+        extendedProps: {
+          location: appointment.location,
+          maxParticipants: appointment.maxParticipants,
+          price: appointment.price,
+        },
+      };
+    }) || [];
 
   const handleEventClick = (info: any) => {
     const appointment = appointments?.find((a) => a._id === info.event.id);
@@ -144,24 +170,30 @@ const Appointments = () => {
     },
     {
       name: "Date",
-      selector: (row: IAppointment) => new Date(row.startTime).toLocaleDateString(),
+      selector: (row: IAppointment) => new Date(row.date).toLocaleDateString(),
       sortable: true,
       grow: 1,
       cell: (row: IAppointment) => (
-        <div className="text-sm text-left text-neutral-900">{new Date(row.startTime).toLocaleDateString()}</div>
+        <div className="text-sm text-left text-neutral-900">{new Date(row.date).toLocaleDateString()}</div>
       ),
     },
     {
       name: "Time",
-      selector: (row: IAppointment) => new Date(row.startTime).toLocaleTimeString(),
+      selector: (row: IAppointment) => {
+        const { startTime, endTime } = getAppointmentTimes(row);
+        return startTime.toLocaleTimeString();
+      },
       sortable: true,
       grow: 1,
       minWidth: "200px",
-      cell: (row: IAppointment) => (
-        <div className="text-sm text-left text-neutral-900">
-          {new Date(row.startTime).toLocaleTimeString()} - {new Date(row.endTime).toLocaleTimeString()}
-        </div>
-      ),
+      cell: (row: IAppointment) => {
+        const { startTime, endTime } = getAppointmentTimes(row);
+        return (
+          <div className="text-sm text-left text-neutral-900">
+            {startTime.toLocaleTimeString()} - {endTime.toLocaleTimeString()}
+          </div>
+        );
+      },
     },
     {
       name: "Max Participants",

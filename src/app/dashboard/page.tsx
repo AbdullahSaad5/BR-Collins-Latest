@@ -21,14 +21,18 @@ import ViewCourseContent from "../components/DashboardComponents/ViewCourseConte
 import ViewCourses from "../components/DashboardComponents/ViewCourses";
 import ViewUser from "../components/DashboardComponents/ViewUser";
 import SubscriptionDetails from "../components/DashboardComponents/SubscriptionDetails";
+import { useAppSelector } from "../store/hooks";
+import { selectUser } from "../store/features/users/userSlice";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
   const searchParams = useSearchParams();
   const router = useRouter();
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     setIsClient(true);
@@ -37,9 +41,30 @@ export default function Dashboard() {
     if (item) {
       setActiveItem(item);
     }
+
+    // Check if user is a manager and doesn't have an organization
+    if (user && typeof user === "object" && "role" in user && user.role === "manager" && !user.organization) {
+      router.push("/register-organization");
+      return;
+    }
+
+    // Set checking user to false after processing
+    setIsCheckingUser(false);
     // Set loading to false after processing
     setIsLoading(false);
-  }, [searchParams]);
+  }, [searchParams, user, router]);
+
+  // Show loading page while checking user role and organization
+  if (isCheckingUser) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-neutral-100">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-600">Checking user permissions...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleItemClick = (item: string) => {
     setIsLoading(true);
