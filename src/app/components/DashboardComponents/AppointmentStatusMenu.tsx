@@ -6,13 +6,14 @@ import { createPortal } from "react-dom";
 
 interface AppointmentStatusMenuProps {
   status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled";
+  role?: "student" | "admin" | "manager";
   onStatusChange: (
     status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled",
     data?: { newDate?: string; startTime?: string; endTime?: string; reason?: string }
   ) => Promise<void>;
 }
 
-const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, onStatusChange }) => {
+const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, role = "staff", onStatusChange }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<
@@ -215,7 +216,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
           >
             <div className="bg-white rounded-lg shadow-lg border border-gray-200">
               <div className="py-0.5">
-                {status !== "scheduled" && (
+                {role === "admin" && status !== "scheduled" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -226,18 +227,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                     Scheduled
                   </button>
                 )}
-                {/* {status !== "in-progress" && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleStatusClick("in-progress");
-                    }}
-                    className="flex items-center w-full px-2 py-1 text-xs text-orange-600 hover:bg-orange-50"
-                  >
-                    In Progress
-                  </button>
-                )} */}
-                {status !== "completed" && (
+                {role === "admin" && status !== "completed" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -245,7 +235,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                     }}
                     className="flex items-center w-full px-2 py-1 text-xs text-green-600 hover:bg-green-50"
                   >
-                    Completed
+                    Complete
                   </button>
                 )}
                 {status !== "cancelled" && (
@@ -256,7 +246,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                     }}
                     className="flex items-center w-full px-2 py-1 text-xs text-red-600 hover:bg-red-50"
                   >
-                    Cancelled
+                    Cancel
                   </button>
                 )}
                 {status !== "rescheduled" && (
@@ -267,7 +257,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, o
                     }}
                     className="flex items-center w-full px-2 py-1 text-xs text-purple-600 hover:bg-purple-50"
                   >
-                    Rescheduled
+                    Reschedule
                   </button>
                 )}
               </div>

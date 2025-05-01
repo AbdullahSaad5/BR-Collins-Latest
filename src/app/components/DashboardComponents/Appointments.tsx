@@ -15,6 +15,9 @@ import { ICourse } from "@/app/types/course.contract";
 import ViewAppointmentModal from "./ViewAppointmentModal";
 import { useRouter } from "next/navigation";
 import AppointmentStatusMenu from "./AppointmentStatusMenu";
+import { useAppSelector } from "@/app/store/hooks";
+import { selectUser } from "@/app/store/features/users/userSlice";
+import { IUser } from "@/app/types/user.contract";
 
 const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId");
@@ -51,6 +54,7 @@ const Appointments = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<IAppointment | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
+  const user = useAppSelector(selectUser) as IUser;
 
   const {
     data: appointments,
@@ -215,7 +219,11 @@ const Appointments = () => {
       header: "Status",
       minWidth: "200px",
       cell: (row: IAppointment) => (
-        <AppointmentStatusMenu status={row.status} onStatusChange={(status) => handleStatusChange(row._id, status)} />
+        <AppointmentStatusMenu
+          status={row.status}
+          onStatusChange={(status) => handleStatusChange(row._id, status)}
+          role={user.role}
+        />
       ),
     },
     {
