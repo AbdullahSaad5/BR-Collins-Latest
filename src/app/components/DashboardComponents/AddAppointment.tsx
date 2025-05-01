@@ -11,6 +11,8 @@ import { AppointmentCreatePayload, IAppointment, AppointmentType } from "@/app/t
 import { ICourse } from "@/app/types/course.contract";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAppSelector } from "@/app/store/hooks";
+import { IAdminOffDay } from "@/app/types/admin.contract";
+import { getRefreshToken } from "@/app/store/features/users/userSlice";
 
 interface AvailableSlot {
   date: string;
@@ -27,7 +29,7 @@ const fetchAppointment = async (id: string): Promise<{ data: IAppointment }> => 
   return response.data;
 };
 
-const fetchAvailableSlots = async (date: Date): Promise<AvailableSlot[]> => {
+const fetchAvailableSlots = async (date: Date, refreshToken: string): Promise<AvailableSlot[]> => {
   // Check if the month is previous to current month
   const currentDate = new Date();
   const currentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -45,8 +47,84 @@ const fetchAvailableSlots = async (date: Date): Promise<AvailableSlot[]> => {
   const startDate = firstDayOfMonth.toISOString().split("T")[0];
   const endDate = lastDayOfMonth.toISOString().split("T")[0];
 
-  const response = await api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`);
-  return response.data.data;
+  // Fetch both regular and recurring off days
+  const [slotsResponse, offDaysResponse] = await Promise.all([
+    api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`),
+    api.get("/admin-off-days", {
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    }),
+  ]);
+
+  const regularSlots = slotsResponse.data.data;
+  const adminOffDays = offDaysResponse.data.data;
+
+  // Process regular slots and add recurring off days
+  const allSlots: AvailableSlot[] = [...regularSlots];
+
+  // Process each day in the month
+  let currentDay = new Date(firstDayOfMonth);
+  while (currentDay <= lastDayOfMonth) {
+    const dateStr = currentDay.toISOString().split("T")[0];
+    let slotIndex = allSlots.findIndex((slot) => slot.date === dateStr);
+
+    // Check for recurring off days
+    const recurringOffDays = adminOffDays.filter((offDay: IAdminOffDay) => {
+      if (!offDay.isRecurring) return false;
+      const offDayDate = new Date(offDay.date);
+      return currentDay.getDay() === offDayDate.getDay();
+    });
+
+    // Check for regular off days
+    const regularOffDays = adminOffDays.filter((offDay: IAdminOffDay) => {
+      if (offDay.isRecurring) return false;
+      const offDayDate = new Date(offDay.date);
+      return (
+        offDayDate.getDate() === currentDay.getDate() &&
+        offDayDate.getMonth() === currentDay.getMonth() &&
+        offDayDate.getFullYear() === currentDay.getFullYear()
+      );
+    });
+
+    const offDays = [...recurringOffDays, ...regularOffDays];
+
+    if (offDays.length > 0) {
+      const unavailableSlots = new Set<string>();
+
+      offDays.forEach((offDay: IAdminOffDay) => {
+        offDay.disabledSlots.forEach((slot: "half-day-morning" | "half-day-afternoon") => {
+          if (slot === "half-day-morning") {
+            unavailableSlots.add("half-day-morning");
+            unavailableSlots.add("full-day");
+          }
+          if (slot === "half-day-afternoon") {
+            unavailableSlots.add("half-day-afternoon");
+            unavailableSlots.add("full-day");
+          }
+        });
+      });
+
+      if (slotIndex === -1) {
+        // Create new slot if it doesn't exist
+        allSlots.push({
+          date: dateStr,
+          availableSlots: ["half-day-morning", "half-day-afternoon", "full-day"].filter(
+            (slot) => !unavailableSlots.has(slot)
+          ) as ("half-day-morning" | "half-day-afternoon" | "full-day")[],
+        });
+      } else {
+        // Update existing slot
+        allSlots[slotIndex].availableSlots = allSlots[slotIndex].availableSlots.filter(
+          (slot) => !unavailableSlots.has(slot)
+        );
+      }
+    }
+
+    currentDay.setDate(currentDay.getDate() + 1);
+  }
+
+  return allSlots;
 };
 
 const appointmentSchema = z.object({
@@ -93,12 +171,26 @@ export default function AddAppointment() {
   const editId = searchParams.get("edit");
   const isEditMode = Boolean(editId);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const refreshToken = useAppSelector(getRefreshToken);
 
   // Add query for available slots
   const { data: availableSlots = [], isLoading: isLoadingSlots } = useQuery({
     queryKey: ["availableSlots", currentMonth],
-    queryFn: () => fetchAvailableSlots(currentMonth),
+    queryFn: () => fetchAvailableSlots(currentMonth, refreshToken!),
     enabled: currentMonth >= new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  });
+
+  // Add query for admin off days
+  const { data: adminOffDays = [] } = useQuery({
+    queryKey: ["adminOffDays"],
+    queryFn: async () => {
+      const response = await api.get("/admin-off-days", {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      return response.data.data;
+    },
   });
 
   const {
@@ -124,7 +216,11 @@ export default function AddAppointment() {
 
   const createAppointmentMutation = useMutation({
     mutationFn: async (data: AppointmentCreatePayload) => {
-      const response = await api.post("/appointments", data);
+      const response = await api.post("/appointments", data, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
       return response.data;
     },
     onSuccess: () => {
@@ -186,21 +282,59 @@ export default function AddAppointment() {
   // Function to check if a slot is available
   const isSlotAvailable = (date: Date, appointmentType: AppointmentType) => {
     const dateStr = date.toISOString().split("T")[0];
-    console.log(dateStr);
-    const slot = availableSlots.find((slot: AvailableSlot) => slot.date === dateStr);
-    console.log(slot);
-    if (!slot) return true; // If no slot found, assume it's available
 
+    // First check regular slots
+    const slot = availableSlots.find((slot: AvailableSlot) => slot.date === dateStr);
+
+    // Convert AppointmentType to slot type
+    let slotType: "half-day-morning" | "half-day-afternoon" | "full-day";
     switch (appointmentType) {
       case AppointmentType.HALF_DAY_MORNING:
-        return slot.availableSlots.includes("half-day-morning");
+        slotType = "half-day-morning";
+        break;
       case AppointmentType.HALF_DAY_AFTERNOON:
-        return slot.availableSlots.includes("half-day-afternoon");
+        slotType = "half-day-afternoon";
+        break;
       case AppointmentType.FULL_DAY:
-        return slot.availableSlots.includes("full-day");
+        slotType = "full-day";
+        break;
       default:
         return false;
     }
+
+    // If slot exists in availableSlots, check its availability
+    if (slot) {
+      return slot.availableSlots.includes(slotType);
+    }
+
+    // If no slot found, check if the date is blocked by recurring off days
+    const isBlockedByRecurringOffDay = adminOffDays?.some((offDay: IAdminOffDay) => {
+      if (!offDay.isRecurring) return false;
+
+      const offDayDate = new Date(offDay.date);
+      const isSameDay = date.getDay() === offDayDate.getDay();
+
+      if (!isSameDay) return false;
+
+      // Check if the specific slot type is blocked
+      return offDay.disabledSlots.some((slot: "half-day-morning" | "half-day-afternoon") => {
+        if (slot === "half-day-morning" && (slotType === "half-day-morning" || slotType === "full-day")) {
+          return true;
+        }
+        if (slot === "half-day-afternoon" && (slotType === "half-day-afternoon" || slotType === "full-day")) {
+          return true;
+        }
+        return false;
+      });
+    });
+
+    // If blocked by recurring off day, return false
+    if (isBlockedByRecurringOffDay) {
+      return false;
+    }
+
+    // If not found in slots and not blocked by recurring off days, assume it's available
+    return true;
   };
 
   const onSubmit = async (data: AppointmentFormData) => {

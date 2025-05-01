@@ -176,38 +176,89 @@ const Appointments = () => {
           maxParticipants: appointment.maxParticipants,
           price: appointment.price,
           status: appointment.status,
+          isAppointment: true,
         },
       };
     }) || []),
-    ...adminOffDays.map((offDay) => {
-      console.log(offDay);
-      let title;
-      let isMorning = offDay.disabledSlots?.includes("half-day-morning");
-      let isAfternoon = offDay.disabledSlots?.includes("half-day-afternoon");
-      let fullDay = isMorning && isAfternoon;
+    ...adminOffDays.flatMap((offDay) => {
+      const events = [];
+      const startDate = new Date(offDay.date);
+
       if (offDay.isRecurring) {
-        title = `Recurring Off: ${fullDay ? "Full Day" : isMorning ? "Morning" : "Afternoon"}`;
+        const endDate = new Date();
+        endDate.setMonth(endDate.getMonth() + 6);
+
+        let currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+          const isMorning = offDay.disabledSlots?.includes("half-day-morning");
+          const isAfternoon = offDay.disabledSlots?.includes("half-day-afternoon");
+          const fullDay = isMorning && isAfternoon;
+
+          events.push({
+            id: `off-day-${offDay._id}-${currentDate.toISOString()}`,
+            title: `🔄 ${offDay.reason || "Recurring Off Day"}: ${
+              fullDay ? "Full Day" : isMorning ? "Morning" : "Afternoon"
+            }`,
+            start: fullDay
+              ? new Date(new Date(currentDate).setHours(8, 0, 0, 0))
+              : isMorning
+              ? new Date(new Date(currentDate).setHours(8, 0, 0, 0))
+              : new Date(new Date(currentDate).setHours(13, 0, 0, 0)),
+            end: fullDay
+              ? new Date(new Date(currentDate).setHours(17, 0, 0, 0))
+              : isMorning
+              ? new Date(new Date(currentDate).setHours(12, 0, 0, 0))
+              : new Date(new Date(currentDate).setHours(17, 0, 0, 0)),
+            allDay: false,
+            display: fullDay ? "background" : "auto",
+            backgroundColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
+            borderColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
+            textColor: "#6B7280",
+            extendedProps: {
+              originalId: offDay._id,
+              slots: offDay.disabledSlots,
+              isRecurring: offDay.isRecurring,
+              recurringDay: currentDate.toLocaleDateString("en-US", { weekday: "long" }),
+              originalDate: startDate.toISOString(),
+              isOffDay: true,
+            },
+          });
+
+          currentDate.setDate(currentDate.getDate() + 7);
+        }
       } else {
-        title = offDay.reason || `Off Day: ${fullDay ? "Full Day" : isMorning ? "Morning" : "Afternoon"}`;
+        const isMorning = offDay.disabledSlots?.includes("half-day-morning");
+        const isAfternoon = offDay.disabledSlots?.includes("half-day-afternoon");
+        const fullDay = isMorning && isAfternoon;
+
+        events.push({
+          id: `off-day-${offDay._id}`,
+          title: `${offDay.reason || "Off Day"}: ${fullDay ? "Full Day" : isMorning ? "Morning" : "Afternoon"}`,
+          start: fullDay
+            ? new Date(new Date(startDate).setHours(8, 0, 0, 0))
+            : isMorning
+            ? new Date(new Date(startDate).setHours(8, 0, 0, 0))
+            : new Date(new Date(startDate).setHours(13, 0, 0, 0)),
+          end: fullDay
+            ? new Date(new Date(startDate).setHours(17, 0, 0, 0))
+            : isMorning
+            ? new Date(new Date(startDate).setHours(12, 0, 0, 0))
+            : new Date(new Date(startDate).setHours(17, 0, 0, 0)),
+          allDay: false,
+          display: fullDay ? "background" : "auto",
+          backgroundColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
+          borderColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
+          textColor: "#6B7280",
+          extendedProps: {
+            originalId: offDay._id,
+            slots: offDay.disabledSlots,
+            isRecurring: offDay.isRecurring,
+            isOffDay: true,
+          },
+        });
       }
-      return {
-        id: `off-day-${offDay._id}`,
-        title: title,
-        start: fullDay
-          ? new Date(offDay.date)
-          : isMorning
-          ? new Date(offDay.date).setHours(8, 0, 0, 0)
-          : new Date(offDay.date).setHours(13, 0, 0, 0),
-        end: fullDay
-          ? new Date(offDay.date).setHours(17, 0, 0, 0)
-          : isMorning
-          ? new Date(offDay.date).setHours(12, 0, 0, 0)
-          : new Date(offDay.date).setHours(17, 0, 0, 0),
-        allDay: fullDay ? false : true,
-        // display: "background",
-        display: fullDay ? "background" : "auto",
-        backgroundColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
-      };
+
+      return events;
     }),
   ];
 
@@ -455,11 +506,21 @@ const Appointments = () => {
                   return !isDateDisabled(selectInfo.start);
                 }}
                 eventContent={(eventInfo) => {
-                  const isOffDay = eventInfo.event.id.startsWith("off-day-");
-                  if (isOffDay) {
+                  if (eventInfo.event.extendedProps.isOffDay) {
+                    const title = eventInfo.event.title;
+                    const isRecurring = title.includes("🔄");
+
+                    // Split the title into parts for better formatting
+                    const [recurringIcon, ...restTitle] = isRecurring
+                      ? [title.slice(0, 2), title.slice(2)]
+                      : ["", title];
+
                     return (
-                      <div className="w-full h-full flex items-center justify-center text-gray-700 font-medium">
-                        {eventInfo.event.title}
+                      <div className="w-full h-full flex flex-col items-center justify-center text-gray-700 font-medium p-1">
+                        <div className="w-full flex items-center gap-1 overflow-hidden">
+                          {isRecurring && <span className="flex-shrink-0">{recurringIcon}</span>}
+                          <span className="truncate text-sm">{isRecurring ? restTitle : title}</span>
+                        </div>
                       </div>
                     );
                   }
@@ -477,36 +538,41 @@ const Appointments = () => {
                   );
                 }}
                 eventDidMount={(info) => {
-                  if (!info.event.id.startsWith("off-day-")) {
+                  if (info.event.extendedProps.isOffDay) {
                     tippy(info.el, {
                       content: `
                         <div class="p-3 min-w-[280px]">
                           <div class="font-semibold text-base mb-2">${info.event.title}</div>
                           <div class="space-y-2">
                             <div class="flex items-center gap-2">
+                              <span class="text-gray-500">Date:</span>
+                              <span>${new Date(info.event.start!).toLocaleDateString()}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
                               <span class="text-gray-500">Time:</span>
-                              <span>${info.timeText}</span>
+                              <span>${
+                                info.event.extendedProps.slots?.includes("half-day-morning") &&
+                                info.event.extendedProps.slots?.includes("half-day-afternoon")
+                                  ? "Full Day (8 AM - 5 PM)"
+                                  : info.event.extendedProps.slots?.includes("half-day-morning")
+                                  ? "Morning (8 AM - 12 PM)"
+                                  : "Afternoon (1 PM - 5 PM)"
+                              }</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                              <span class="text-gray-500">Location:</span>
-                              <span>${info.event.extendedProps.location.venueName}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                              <span class="text-gray-500">Participants:</span>
-                              <span>${info.event.extendedProps.maxParticipants}</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                              <span class="text-gray-500">Price:</span>
-                              <span>$${info.event.extendedProps.price}</span>
-                            </div>
-                            <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
-                              <span class="text-gray-500">Status:</span>
-                              <span class="px-2 py-0.5 rounded-full text-xs font-medium" style="background-color: ${getStatusColor(
-                                info.event.extendedProps.status
-                              )}20; color: ${getStatusColor(info.event.extendedProps.status)}">
-                                ${info.event.extendedProps.status}
-                              </span>
-                            </div>
+                            ${
+                              info.event.extendedProps.isRecurring
+                                ? `
+                                <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
+                                  <span class="text-gray-500">Recurring:</span>
+                                  <span>Every ${info.event.extendedProps.recurringDay}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                  <span class="text-gray-500">First Set:</span>
+                                  <span>${new Date(info.event.extendedProps.originalDate).toLocaleDateString()}</span>
+                                </div>
+                              `
+                                : ""
+                            }
                           </div>
                         </div>
                       `,
@@ -519,7 +585,50 @@ const Appointments = () => {
                       maxWidth: 320,
                       animation: "shift-away",
                     });
+                    return;
                   }
+
+                  tippy(info.el, {
+                    content: `
+                      <div class="p-3 min-w-[280px]">
+                        <div class="font-semibold text-base mb-2">${info.event.title}</div>
+                        <div class="space-y-2">
+                          <div class="flex items-center gap-2">
+                            <span class="text-gray-500">Time:</span>
+                            <span>${info.timeText}</span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-gray-500">Location:</span>
+                            <span>${info.event.extendedProps.location.venueName}</span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-gray-500">Participants:</span>
+                            <span>${info.event.extendedProps.maxParticipants}</span>
+                          </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-gray-500">Price:</span>
+                            <span>$${info.event.extendedProps.price}</span>
+                          </div>
+                          <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
+                            <span class="text-gray-500">Status:</span>
+                            <span class="px-2 py-0.5 rounded-full text-xs font-medium" style="background-color: ${getStatusColor(
+                              info.event.extendedProps.status
+                            )}20; color: ${getStatusColor(info.event.extendedProps.status)}">
+                              ${info.event.extendedProps.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    `,
+                    allowHTML: true,
+                    placement: "top",
+                    arrow: true,
+                    theme: "light-border",
+                    delay: [200, 0],
+                    interactive: true,
+                    maxWidth: 320,
+                    animation: "shift-away",
+                  });
                 }}
                 dayMaxEvents={3}
                 moreLinkContent={(args) => `+${args.num} more`}
