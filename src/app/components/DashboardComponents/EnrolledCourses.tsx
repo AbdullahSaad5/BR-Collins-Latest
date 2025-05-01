@@ -48,7 +48,7 @@ const EnrolledCourses = () => {
     queryKey: ["course-content", selectedCourseForLearning?.courseId._id],
     queryFn: async () => {
       if (!selectedCourseForLearning) return [];
-      const response = await api.get(`/course-content/${selectedCourseForLearning.courseId._id}`, {
+      const response = await api.get(`/course-contents/course/${selectedCourseForLearning.courseId._id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

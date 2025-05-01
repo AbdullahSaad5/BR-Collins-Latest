@@ -4,8 +4,15 @@ import axios from "axios";
 import SubscriptionConfirmationModal from "./SubscriptionConfirmationModal";
 import LoginRequiredModal from "./LoginRequiredModal";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/app/store/hooks";
-import { isUserLoggedIn, getSubscription, selectUser } from "@/app/store/features/users/userSlice";
+import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
+import {
+  isUserLoggedIn,
+  getSubscription,
+  selectUser,
+  getRefreshToken,
+  fetchUserProfile,
+  fetchSubscription,
+} from "@/app/store/features/users/userSlice";
 import { ISubscription } from "@/app/types/subscription.contract";
 import { IUser } from "@/app/types/user.contract";
 
@@ -47,10 +54,13 @@ const SubscriptionCards: React.FC = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<IndividualPlan | CorporatePlan | null>(null);
   const [isCorporatePlan, setIsCorporatePlan] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(isUserLoggedIn);
   const subscription = useAppSelector(getSubscription) as ISubscription;
   const user = useAppSelector(selectUser) as IUser;
+  const refreshToken = useAppSelector(getRefreshToken);
 
   const isManagerWithOrg = (): boolean => {
     if (!user || typeof user !== "object" || !("role" in user)) {
@@ -135,13 +145,21 @@ const SubscriptionCards: React.FC = () => {
   };
 
   const handleConfirmPurchase = () => {
-    // TODO: Implement purchase logic
     setShowConfirmationModal(false);
     if (selectedPlan?.type === "individual") {
       router.push("/course");
     } else {
       router.push("/buy-now?type=subscription");
     }
+
+    // Start refetching after 5 seconds
+    setIsRefetching(true);
+    setTimeout(async () => {
+      if (refreshToken) {
+        await Promise.all([dispatch(fetchUserProfile(refreshToken)), dispatch(fetchSubscription(refreshToken))]);
+      }
+      setIsRefetching(false);
+    }, 5000);
   };
 
   if (loading) return <div>Loading subscription plans...</div>;
@@ -150,6 +168,15 @@ const SubscriptionCards: React.FC = () => {
 
   return (
     <>
+      {isRefetching && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#F86537] mb-4"></div>
+            <p className="text-gray-700">Updating subscription details...</p>
+          </div>
+        </div>
+      )}
+
       <div className="w-full flex flex-col p-1 xl:p-4  lg:flex-row gap-6 h-auto lg:h-[494px] px-4 max-md:px-1">
         {/* Left Column - Individual Plans */}
         <div className="w-full lg:w-1/2 flex flex-col  gap-3 justify-between ">

@@ -7,9 +7,10 @@ import { createPortal } from "react-dom";
 interface StatusMenuProps {
   isBlocked: boolean;
   onStatusChange: (isBlocked: boolean) => Promise<void>;
+  disabled?: boolean;
 }
 
-const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange }) => {
+const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disabled = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<boolean | null>(null);
@@ -80,16 +81,18 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange }) =>
     <div className="relative">
       <button
         ref={buttonRef}
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        onClick={() => !disabled && setIsMenuOpen(!isMenuOpen)}
         className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full transition-colors ${
           isBlocked ? "text-red-600 bg-red-50 hover:bg-red-100" : "text-green-600 bg-emerald-50 hover:bg-emerald-100"
-        }`}
+        } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        disabled={disabled}
       >
         {isBlocked ? "Blocked" : "Active"}
         <MoreVertical className="ml-1 w-3 h-3" />
       </button>
 
       {isMenuOpen &&
+        !disabled &&
         createPortal(
           <div
             ref={menuRef}

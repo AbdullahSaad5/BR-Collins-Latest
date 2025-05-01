@@ -143,7 +143,7 @@ export const Navigation = () => {
               </div>
             </div>
 
-            <div className="relative w-full flex flex-row items-center justify-center max-w-[120px] m-auto">
+            <div className="relative w-full flex flex-row items-center justify-center max-w-[120px] m-auto mr-2">
               <div
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="w-full appearance-none flex flex-row items-center px-3 py-2 text-sm text-orange-500 bg-white border border-orange-500 border-solid min-h-[42px] rounded-[58px] cursor-pointer"

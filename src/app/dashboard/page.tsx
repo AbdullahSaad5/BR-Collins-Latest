@@ -22,7 +22,10 @@ import ViewCourses from "../components/DashboardComponents/ViewCourses";
 import ViewUser from "../components/DashboardComponents/ViewUser";
 import SubscriptionDetails from "../components/DashboardComponents/SubscriptionDetails";
 import { useAppSelector } from "../store/hooks";
-import { selectUser } from "../store/features/users/userSlice";
+import { selectUser, getSubscription } from "../store/features/users/userSlice";
+import Link from "next/link";
+import { Crown } from "lucide-react";
+import { ISubscription } from "../types/subscription.contract";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -33,6 +36,7 @@ export default function Dashboard() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const user = useAppSelector(selectUser);
+  const subscription = useAppSelector(getSubscription) as ISubscription | null;
 
   useEffect(() => {
     setIsClient(true);
@@ -54,11 +58,25 @@ export default function Dashboard() {
       return;
     }
 
+    // Check if user is a manager and has no active subscription
+    if (
+      user &&
+      typeof user === "object" &&
+      "role" in user &&
+      user.role === "manager" &&
+      (!subscription || !subscription.isActive)
+    ) {
+      // Set checking user to false after processing
+      setIsCheckingUser(false);
+      setIsLoading(false);
+      return;
+    }
+
     // Set checking user to false after processing
     setIsCheckingUser(false);
     // Set loading to false after processing
     setIsLoading(false);
-  }, [searchParams, user, router]);
+  }, [searchParams, user, router, subscription]);
 
   // Show loading page while checking user role and organization
   if (isCheckingUser) {
@@ -93,6 +111,34 @@ export default function Dashboard() {
             <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-gray-600">Loading...</p>
           </div>
+        </div>
+      );
+    }
+
+    // Show subscription notice for managers without active subscription
+    if (
+      user &&
+      typeof user === "object" &&
+      "role" in user &&
+      user.role === "manager" &&
+      (!subscription || !subscription.isActive)
+    ) {
+      return (
+        <div className="flex flex-col items-center justify-center p-8 text-center">
+          <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+            <Crown className="w-8 h-8 text-orange-500" />
+          </div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-3">Subscription Required</h2>
+          <p className="text-gray-600 mb-6 max-w-md">
+            As an organization manager, you need an active subscription to access the dashboard. Please subscribe to
+            continue.
+          </p>
+          <Link
+            href="/subscriptions"
+            className="px-6 py-3 bg-[#F86537] text-white rounded-lg hover:bg-[#E55A2E] transition-colors font-medium"
+          >
+            View Subscription Plans
+          </Link>
         </div>
       );
     }
@@ -138,7 +184,7 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="flex flex-col bg-neutral-100 min-h-screen">
+    <main className="flex flex-col bg-neutral-100 min-h-screen px-4">
       {/* <TopBanner /> */}
       {/* <Header /> */}
 

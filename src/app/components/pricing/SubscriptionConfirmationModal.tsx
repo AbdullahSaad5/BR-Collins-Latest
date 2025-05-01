@@ -220,14 +220,25 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
           <div className="mt-8 flex flex-col gap-3">
             <button
               onClick={handleConfirm}
-              className="cursor-pointer w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
+              disabled={createSubscriptionMutation.isPending}
+              className={`cursor-pointer w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
             >
-              {plan.type === "subscription" ? "Confirm Purchase" : "Explore Courses"}
-              <ArrowRight className="w-4 h-4" />
+              {createSubscriptionMutation.isPending ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  {plan.type === "subscription" ? "Confirm Purchase" : "Explore Courses"}
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
             </button>
             <button
               onClick={onClose}
-              className="cursor-pointer w-full px-6 py-3 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              disabled={createSubscriptionMutation.isPending}
+              className="cursor-pointer w-full px-6 py-3 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>

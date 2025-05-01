@@ -7,13 +7,15 @@ import { api } from "@/app/utils/axios";
 import { IUser } from "@/app/types/user.contract";
 import { transformUserType } from "@/app/utils/string-manipulation/transform-user-type";
 import { useAppSelector } from "@/app/store/hooks";
-import { getRefreshToken } from "@/app/store/features/users/userSlice";
+import { getRefreshToken, getSubscription, selectUser } from "@/app/store/features/users/userSlice";
 import ActionIcons from "@/components/ActionIcons";
 import ViewUserModal from "./ViewUserModal";
 import { useRouter } from "next/navigation";
 import StatusMenu from "./StatusMenu";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { ISubscription } from "@/app/types/subscription.contract";
+import { Users, AlertCircle } from "lucide-react";
 
 const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
   const response = await api.get("/users", {
@@ -36,8 +38,24 @@ const updateUserStatus = async (userId: string, isBlocked: boolean, refreshToken
   );
 };
 
+// Function to get user limit based on subscription plan
+const getUserLimit = (plan: string | undefined): number => {
+  switch (plan) {
+    case "organization_10":
+      return 10;
+    case "organization_20":
+      return 20;
+    case "organization_50":
+      return 50;
+    default:
+      return 0;
+  }
+};
+
 const UserTable: React.FC = () => {
   const refreshToken = useAppSelector(getRefreshToken);
+  const subscription = useAppSelector(getSubscription) as ISubscription;
+  const currentUser = useAppSelector(selectUser) as IUser;
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
@@ -69,6 +87,17 @@ const UserTable: React.FC = () => {
     router.push(`/dashboard?item=addUser&edit=true&userId=${user.id}`);
   };
 
+  const handleAddUser = () => {
+    if (users && subscription?.isActive) {
+      const userLimit = getUserLimit(subscription.plan);
+      if (users.length >= userLimit) {
+        toast.error(`User limit of ${userLimit} reached. Please upgrade your plan to add more users.`);
+        return;
+      }
+    }
+    router.push(`/dashboard?item=addUser`);
+  };
+
   const handleDeleteUser = (user: IUser) => {
     // TODO: Implement delete user functionality
     console.log("Delete user:", user);
@@ -93,6 +122,9 @@ const UserTable: React.FC = () => {
       cell: (row: IUser) => (
         <div className="text-base text-left text-neutral-900 truncate" title={`${row.firstName} ${row.lastName}`}>
           {row.firstName} {row.lastName}
+          {row.id === currentUser.id && (
+            <span className="ml-2 text-xs text-orange-500 bg-orange-50 px-2 py-0.5 rounded-full">You</span>
+          )}
         </div>
       ),
     },
@@ -120,7 +152,11 @@ const UserTable: React.FC = () => {
       sortable: true,
       grow: 1,
       cell: (row: IUser) => (
-        <StatusMenu isBlocked={row.isBlocked} onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)} />
+        <StatusMenu
+          isBlocked={row.isBlocked}
+          onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)}
+          disabled={row.id === currentUser.id} // Disable status toggle for current user
+        />
       ),
     },
     {
@@ -130,12 +166,10 @@ const UserTable: React.FC = () => {
           onView={() => handleViewUser(row)}
           onEdit={() => handleEditUser(row)}
           viewTooltip="View User Details"
-          editTooltip="Edit User"
-          deleteTooltip="Delete User"
+          editTooltip={row.id === currentUser.id ? "Cannot edit your own profile" : "Edit User"}
           disabled={{
             view: false,
-            edit: row.role === "admin", // Prevent editing admin users
-            delete: row.role === "admin", // Prevent deleting admin users
+            edit: row.role === "admin" || row.id === currentUser.id, // Prevent editing admin users and current user
           }}
         />
       ),
@@ -146,11 +180,35 @@ const UserTable: React.FC = () => {
   return (
     <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-neutral-900">View Users</h1>
-        {/* <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">
+        <div>
+          <h1 className="text-2xl font-semibold text-neutral-900">View Users</h1>
+          {subscription?.isActive && (
+            <div className="flex items-center gap-2 mt-2">
+              <Users className="w-4 h-4 text-gray-500" />
+              <span className="text-sm text-gray-600">
+                {users?.length || 0} / {getUserLimit(subscription.plan)} users
+              </span>
+              {users && users.length >= getUserLimit(subscription.plan) && (
+                <div className="flex items-center gap-1 text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+                  <AlertCircle className="w-4 h-4" />
+                  <span className="text-xs font-medium">User limit reached</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        <button
+          onClick={handleAddUser}
+          className={`flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors ${
+            users && subscription?.isActive && users.length >= getUserLimit(subscription.plan)
+              ? "opacity-50 cursor-not-allowed"
+              : ""
+          }`}
+          disabled={users && subscription?.isActive && users.length >= getUserLimit(subscription.plan)}
+        >
           <AddUserIcon className="w-5 h-5" />
           <span>Add New User</span>
-        </button> */}
+        </button>
       </div>
 
       <CustomDataTable
