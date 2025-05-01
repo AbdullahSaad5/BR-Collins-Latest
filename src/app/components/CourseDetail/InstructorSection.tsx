@@ -7,7 +7,7 @@ interface InstructorSectionProps {
 }
 export const InstructorSection = ({ instructor }: InstructorSectionProps) => {
   return (
-    <section className="mt-10 ml-auto max-[1230px]:mx-4">
+    <section className="mt-10 ml-auto max-[1340px]:mx-4">
       <h2 className="text-3xl font-bold text-neutral-900">Instructors</h2>
 
       <div className="flex gap-10 mt-8">

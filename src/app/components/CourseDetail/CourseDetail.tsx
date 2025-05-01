@@ -52,7 +52,7 @@ export const CourseContent: React.FC<CourseContentProps> = ({ sections: propSect
 
   return (
     <>
-      <main className="box-border p-5 my-0 w-full max-md:p-4 max-sm:p-2.5 max-sm:max-w-screen-sm ml-auto mt-6">
+      <main className="box-border p-4 my-0 w-full  max-sm:p-2.5 max-sm:max-w-screen-sm ml-auto mt-6">
         <section className="mb-10">
           <header className="flex flex-col justify-between mb-5">
             <h1 className="text-3xl font-bold text-neutral-900 max-md:text-3xl max-sm:text-2xl mb-3">Course Content</h1>
