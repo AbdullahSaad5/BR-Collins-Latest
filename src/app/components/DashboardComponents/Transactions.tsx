@@ -6,7 +6,7 @@ import CustomDataTable from "./CustomDataTable";
 import { useAppSelector } from "@/app/store/hooks";
 import { getAccessToken } from "@/app/store/features/users/userSlice";
 import ActionIcons from "@/components/ActionIcons";
-import { Download, ExternalLink } from "lucide-react";
+import { Download, ExternalLink, Loader2 } from "lucide-react";
 import { showToast } from "@/app/utils/toast";
 
 interface Customer {
@@ -184,10 +184,15 @@ const Transactions = () => {
         <h2 className="text-2xl font-semibold text-neutral-900">Transactions</h2>
         <button
           onClick={() => portalSessionMutation.mutate()}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
+          disabled={portalSessionMutation.isPending}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          <ExternalLink className="w-4 h-4" />
-          Manage Billing
+          {portalSessionMutation.isPending ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <ExternalLink className="w-4 h-4" />
+          )}
+          {portalSessionMutation.isPending ? "Loading..." : "Manage Billing"}
         </button>
       </div>
 
