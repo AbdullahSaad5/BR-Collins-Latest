@@ -11,6 +11,9 @@ import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
 import AdminOffDayModal from "./AdminOffDayModal";
 import ViewOffDayModal from "./ViewOffDayModal";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/themes/light-border.css";
 
 interface OffDayFormData {
   date: Date;
@@ -87,8 +90,8 @@ const AdminOffDaysManager = () => {
   };
 
   const handleEventClick = (info: any) => {
-    const offDayId = info.event.id.replace("off-day-", "");
-    const offDay = offDays.find((day) => day._id === offDayId);
+    const originalId = info.event.extendedProps.originalId;
+    const offDay = offDays.find((day) => day._id === originalId);
     if (offDay) {
       setSelectedOffDay(offDay);
       setIsViewModalOpen(true);
@@ -103,31 +106,72 @@ const AdminOffDaysManager = () => {
     deleteOffDayMutation.mutate(offDayId);
   };
 
-  console;
+  const calendarEvents = offDays.flatMap((offDay) => {
+    const events = [];
+    const startDate = new Date(offDay.date);
 
-  const calendarEvents = offDays
-    .map((offDay) => {
-      return {
-        ...offDay,
-        date: new Date(offDay.date),
-      };
-    })
-    .map((offDay) => ({
-      id: `off-day-${offDay._id}`,
-      title: offDay.reason || "Off Day",
-      start: offDay.disabledSlots.includes("half-day-morning")
-        ? new Date(offDay.date?.setHours(8, 0, 0, 0))
-        : offDay.disabledSlots.includes("half-day-afternoon")
-        ? new Date(offDay.date?.setHours(13, 0, 0, 0))
-        : new Date(offDay.date),
-      end: offDay.disabledSlots.includes("half-day-morning")
-        ? new Date(offDay.date?.setHours(12, 0, 0, 0))
-        : offDay.disabledSlots.includes("half-day-afternoon")
-        ? new Date(offDay.date?.setHours(17, 0, 0, 0))
-        : new Date(offDay.date),
-      backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
-      classNames: ["cursor-pointer"],
-    }));
+    if (offDay.isRecurring) {
+      const endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 6);
+
+      let currentDate = new Date(startDate);
+      while (currentDate <= endDate) {
+        events.push({
+          id: `off-day-${offDay._id}-${currentDate.toISOString()}`,
+          title: offDay.reason || "Recurring Off Day",
+          start: offDay.disabledSlots.includes("half-day-morning")
+            ? new Date(new Date(currentDate).setHours(8, 0, 0, 0))
+            : offDay.disabledSlots.includes("half-day-afternoon")
+            ? new Date(new Date(currentDate).setHours(13, 0, 0, 0))
+            : new Date(currentDate),
+          end: offDay.disabledSlots.includes("half-day-morning")
+            ? new Date(new Date(currentDate).setHours(12, 0, 0, 0))
+            : offDay.disabledSlots.includes("half-day-afternoon")
+            ? new Date(new Date(currentDate).setHours(17, 0, 0, 0))
+            : new Date(currentDate),
+          backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+          borderColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+          textColor: "#ffffff",
+          classNames: ["cursor-pointer"],
+          extendedProps: {
+            originalId: offDay._id,
+            slots: offDay.disabledSlots,
+            isRecurring: offDay.isRecurring,
+            recurringDay: currentDate.toLocaleDateString("en-US", { weekday: "long" }),
+            originalDate: startDate.toISOString(),
+          },
+        });
+
+        currentDate.setDate(currentDate.getDate() + 7);
+      }
+    } else {
+      events.push({
+        id: `off-day-${offDay._id}`,
+        title: offDay.reason || "Off Day",
+        start: offDay.disabledSlots.includes("half-day-morning")
+          ? new Date(startDate.setHours(8, 0, 0, 0))
+          : offDay.disabledSlots.includes("half-day-afternoon")
+          ? new Date(startDate.setHours(13, 0, 0, 0))
+          : startDate,
+        end: offDay.disabledSlots.includes("half-day-morning")
+          ? new Date(startDate.setHours(12, 0, 0, 0))
+          : offDay.disabledSlots.includes("half-day-afternoon")
+          ? new Date(startDate.setHours(17, 0, 0, 0))
+          : startDate,
+        backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+        borderColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+        textColor: "#ffffff",
+        classNames: ["cursor-pointer"],
+        extendedProps: {
+          originalId: offDay._id,
+          slots: offDay.disabledSlots,
+          isRecurring: offDay.isRecurring,
+        },
+      });
+    }
+
+    return events;
+  });
 
   console.log(calendarEvents);
 
@@ -135,21 +179,108 @@ const AdminOffDaysManager = () => {
     <div className="bg-white rounded-xl shadow-sm p-6">
       <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Manage Off Days</h2>
 
-      <div className="h-[600px]">
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth",
-          }}
-          events={calendarEvents}
-          dateClick={handleDateClick}
-          eventClick={handleEventClick}
-          height="100%"
-        />
-      </div>
+      {isLoading ? (
+        <div className="h-[600px] flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-gray-600">Loading off days...</p>
+          </div>
+        </div>
+      ) : (
+        <div className="h-[600px]">
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth",
+            }}
+            events={calendarEvents}
+            dateClick={handleDateClick}
+            eventClick={handleEventClick}
+            height="100%"
+            eventContent={(eventInfo) => {
+              const isRecurring = eventInfo.event.extendedProps.isRecurring;
+              return (
+                <div className="w-full p-1">
+                  <div className="font-semibold text-sm truncate">
+                    {eventInfo.event.title}
+                    {isRecurring && " 🔄"}
+                  </div>
+                  <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
+                    {eventInfo.event.extendedProps.slots?.length === 1 ? "Half Day" : "Full Day"}
+                  </div>
+                </div>
+              );
+            }}
+            eventDidMount={(info) => {
+              const isRecurring = info.event.extendedProps.isRecurring;
+              tippy(info.el, {
+                content: `
+                  <div class="p-3 min-w-[280px]">
+                    <div class="font-semibold text-base mb-2">${info.event.title}</div>
+                    <div class="space-y-2">
+                      <div class="flex items-center gap-2">
+                        <span class="text-gray-500">Date:</span>
+                        <span>${new Date(info.event.start!).toLocaleDateString()}</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-gray-500">Type:</span>
+                        <span>${info.event.extendedProps.slots?.length === 1 ? "Half Day" : "Full Day"}</span>
+                      </div>
+                      ${
+                        info.event.extendedProps.slots?.length === 1
+                          ? `
+                        <div class="flex items-center gap-2">
+                          <span class="text-gray-500">Time:</span>
+                          <span>${
+                            info.event.extendedProps.slots.includes("half-day-morning")
+                              ? "Morning (8 AM - 12 PM)"
+                              : "Afternoon (1 PM - 5 PM)"
+                          }</span>
+                        </div>
+                      `
+                          : ""
+                      }
+                      ${
+                        isRecurring
+                          ? `
+                        <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
+                          <span class="text-gray-500">Recurring:</span>
+                          <span>Every ${info.event.extendedProps.recurringDay}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span class="text-gray-500">First Set:</span>
+                          <span>${new Date(info.event.extendedProps.originalDate).toLocaleDateString()}</span>
+                        </div>
+                      `
+                          : ""
+                      }
+                    </div>
+                  </div>
+                `,
+                allowHTML: true,
+                placement: "top",
+                arrow: true,
+                theme: "light-border",
+                delay: [200, 0],
+                interactive: true,
+                maxWidth: 320,
+                animation: "shift-away",
+              });
+            }}
+            dayMaxEvents={3}
+            moreLinkContent={(args) => `+${args.num} more`}
+            nowIndicator={true}
+            businessHours={{
+              daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+              startTime: "08:00",
+              endTime: "18:00",
+            }}
+          />
+        </div>
+      )}
 
       <AdminOffDayModal
         isOpen={isModalOpen}
