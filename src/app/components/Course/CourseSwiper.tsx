@@ -98,7 +98,7 @@
 //           background: rgba(0, 0, 0, 0.1);
 //           left: 50%;
 //           transform: translateX(-50%);
-          
+
 //           bottom: 8px;
 //         }
 
@@ -148,12 +148,18 @@ interface CourseSwiperProps {
   title?: string; // Optional custom title
 }
 
-const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "See More Courses" }) => {
+const CourseSwiper: React.FC<CourseSwiperProps> = ({
+  excludeCourseId,
+  title = "See More Courses",
+}) => {
   const { courses: allCourses } = useCourseContext();
 
   // Filter courses if excludeCourseId is provided
-  const displayedCourses = excludeCourseId 
-    ? allCourses?.filter(course => course._id !== excludeCourseId && course.id !== excludeCourseId)
+  const displayedCourses = excludeCourseId
+    ? allCourses?.filter(
+        (course) =>
+          course._id !== excludeCourseId && course.id !== excludeCourseId
+      )
     : allCourses;
 
   if (!displayedCourses || displayedCourses.length === 0) {
@@ -228,7 +234,7 @@ const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "S
           background: rgba(0, 0, 0, 0.1);
           left: 50%;
           transform: translateX(-50%);
-          
+
           bottom: 8px;
         }
 

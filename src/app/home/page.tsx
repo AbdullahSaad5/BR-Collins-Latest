@@ -841,7 +841,7 @@ export const Homepage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="bg-[#081B25]  px-4 py-20 md:px-0">
+      <section className="bg-[#081B25]  px-1 py-20 md:px-0">
         <div className="w-full p-4 md:p-4 xl:p-0 flex flex-col justify-center gap-5 h-full py-10 items-center mx-auto max-w-[1326px]">
           <div className="flex flex-col justify-center items-center text-center mb-6">
             <h2 className="text-white font-hanken text-2xl md:text-[34px] font-bold">
