@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { UserCreatePayload } from "@/app/types/user.contract";
+import { UserCreatePayload, IUser } from "@/app/types/user.contract";
 import { ENUMS } from "@/app/constants/enum";
 import FormField from "./FormField";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -11,12 +11,14 @@ import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
 import { useAppSelector } from "@/app/store/hooks";
+import { selectUser } from "@/app/store/features/users/userSlice";
 import { useSearchParams, useRouter } from "next/navigation";
 
 export default function AddUser() {
   const [previewImage, setPreviewImage] = React.useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const refreshToken = useAppSelector(getRefreshToken);
+  const user = useAppSelector(selectUser) as IUser;
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get("edit") === "true";
   const userId = searchParams.get("userId");
@@ -93,6 +95,13 @@ export default function AddUser() {
     }
   }, [userData, setValue]);
 
+  // Set role to student if user is a manager
+  useEffect(() => {
+    if (user.role === "manager") {
+      setValue("role", "student");
+    }
+  }, [user.role, setValue]);
+
   const createUserMutation = useMutation({
     mutationFn: async (data: UserFormData) => {
       const endpoint = isEditMode ? `/users/${userId}` : "/users";
@@ -146,18 +155,20 @@ export default function AddUser() {
       <h2 className="text-2xl font-semibold text-neutral-900 mb-8">{isEditMode ? "Edit User" : "Add New User"}</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-        <FormField
-          label="Role *"
-          description="Select the user's role"
-          {...register("role")}
-          error={errors.role?.message}
-          select
-          required
-          options={ENUMS.USER_TYPES.map((role) => ({
-            value: role,
-            label: role.charAt(0).toUpperCase() + role.slice(1),
-          }))}
-        />
+        {user.role !== "manager" && (
+          <FormField
+            label="Role *"
+            description="Select the user's role"
+            {...register("role")}
+            error={errors.role?.message}
+            select
+            required
+            options={ENUMS.USER_TYPES.map((role) => ({
+              value: role,
+              label: role.charAt(0).toUpperCase() + role.slice(1),
+            }))}
+          />
+        )}
 
         <FormField
           label="First Name *"

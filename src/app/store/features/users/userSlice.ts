@@ -39,7 +39,7 @@ export const fetchUserProfile = createAsyncThunk(
         },
       });
 
-      return response.data.data.user;
+      return response.data.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch user profile");
     }
@@ -97,7 +97,8 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.organization = action.payload.organization;
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.status = "failed";
