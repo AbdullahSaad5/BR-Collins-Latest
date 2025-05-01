@@ -6,8 +6,7 @@ import { getAccessToken } from "@/app/store/features/users/userSlice";
 import { ICourse } from "@/app/types/course.contract";
 import { IUser } from "@/app/types/user.contract";
 import CourseDetailsModal from "./CourseDetailsModal";
-import CoursePlayer from "./CoursePlayer";
-import { ICourseContent } from "@/app/types/course-content.contract";
+import { useRouter } from "next/navigation";
 
 interface EnrolledCourse {
   userId: IUser;
@@ -23,9 +22,9 @@ interface EnrolledCourse {
 }
 
 const EnrolledCourses = () => {
+  const router = useRouter();
   const accessToken = useAppSelector(getAccessToken);
   const [selectedCourse, setSelectedCourse] = useState<EnrolledCourse | null>(null);
-  const [selectedCourseForLearning, setSelectedCourseForLearning] = useState<EnrolledCourse | null>(null);
 
   const {
     data: enrolledCourses,
@@ -44,20 +43,6 @@ const EnrolledCourses = () => {
     enabled: !!accessToken,
   });
 
-  const { data: contentData } = useQuery<ICourseContent[]>({
-    queryKey: ["course-content", selectedCourseForLearning?.courseId._id],
-    queryFn: async () => {
-      if (!selectedCourseForLearning) return [];
-      const response = await api.get(`/course-contents/course/${selectedCourseForLearning.courseId._id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      return response.data.data;
-    },
-    enabled: !!selectedCourseForLearning && !!accessToken,
-  });
-
   const handleViewDetails = (course: EnrolledCourse) => {
     setSelectedCourse(course);
   };
@@ -66,36 +51,8 @@ const EnrolledCourses = () => {
     setSelectedCourse(null);
   };
 
-  const handleStartLearning = async (course: EnrolledCourse) => {
-    setSelectedCourseForLearning(course);
-  };
-
-  const handleBackToCourses = () => {
-    setSelectedCourseForLearning(null);
-  };
-
-  const handleCompleteLesson = async (contentId: string) => {
-    try {
-      await api.post(
-        `/user-courses/${selectedCourseForLearning?._id}/complete-lesson`,
-        { contentId },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      // Update the local state to reflect the completed lesson
-      if (selectedCourseForLearning) {
-        const updatedCourse = {
-          ...selectedCourseForLearning,
-          lessonsCompleted: selectedCourseForLearning.lessonsCompleted + 1,
-        };
-        setSelectedCourseForLearning(updatedCourse);
-      }
-    } catch (error) {
-      console.error("Failed to mark lesson as complete:", error);
-    }
+  const handleStartLearning = (course: EnrolledCourse) => {
+    router.push(`/courses/learn/${course.courseId._id}`);
   };
 
   if (isLoading) {
@@ -160,36 +117,6 @@ const EnrolledCourses = () => {
           </div>
         </div>
       </div>
-    );
-  }
-
-  if (selectedCourseForLearning) {
-    return (
-      <CoursePlayer
-        course={selectedCourseForLearning.courseId}
-        content={
-          contentData || [
-            {
-              _id: "1",
-              title: "Lesson 1",
-              description: "Lesson 1 description",
-              // videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-              contentType: "video",
-              contentUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-              duration: "10 minutes",
-              courseId: selectedCourseForLearning.courseId._id,
-              order: 1,
-              isBlocked: false,
-              id: "1",
-              allowDownload: true,
-              allowPreview: true,
-              sectionName: "Section 1",
-            },
-          ]
-        }
-        onBack={handleBackToCourses}
-        onCompleteLesson={handleCompleteLesson}
-      />
     );
   }
 

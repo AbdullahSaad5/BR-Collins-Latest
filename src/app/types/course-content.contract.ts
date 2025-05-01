@@ -4,7 +4,7 @@ export interface ICourseContent {
   courseId: string;
   title: string;
   description: string;
-  contentType: string;
+  contentType: "video" | "document";
   contentUrl: string;
   duration: string;
   order: number;
