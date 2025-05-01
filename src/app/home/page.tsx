@@ -17,7 +17,10 @@ import "swiper/css";
 import "swiper/css/autoplay";
 import { ICourseCategory } from "../types/course-category.contract";
 import CourseSwiper from "../components/Course/CourseSwiper";
-import { ArrowLeftIcon ,ArrowRightIcon} from "../../../public/icons/home_page_icons";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+} from "../../../public/icons/home_page_icons";
 
 interface SliderItem {
   title: string;
@@ -131,7 +134,8 @@ export const Homepage = () => {
     {
       id: 1,
       title: "The Future of Artificial Intelligence in Business",
-      description: "Explore how AI is transforming business operations and what it means for the future of work.",
+      description:
+        "Explore how AI is transforming business operations and what it means for the future of work.",
       category: "Technology",
       date: "May 15, 2024",
       image: "/assets/abouthome.png",
@@ -139,7 +143,8 @@ export const Homepage = () => {
     {
       id: 2,
       title: "Effective Time Management Strategies for Professionals",
-      description: "Learn proven techniques to boost your productivity and achieve more in less time.",
+      description:
+        "Learn proven techniques to boost your productivity and achieve more in less time.",
       category: "Business",
       date: "April 28, 2024",
       image: "/assets/congrateicon.png",
@@ -147,7 +152,8 @@ export const Homepage = () => {
     {
       id: 3,
       title: "The Psychology of Consumer Behavior",
-      description: "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
+      description:
+        "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
       category: "Marketing",
       date: "April 15, 2024",
       image: "/assets/lowerlogo.png",
@@ -155,7 +161,8 @@ export const Homepage = () => {
     {
       id: 4,
       title: "Minimalist Design Principles for Modern Websites",
-      description: "Discover how minimalist design can improve user experience and conversion rates.",
+      description:
+        "Discover how minimalist design can improve user experience and conversion rates.",
       category: "Design",
       date: "March 30, 2024",
       image: "/assets/sendericon.png",
@@ -172,7 +179,8 @@ export const Homepage = () => {
     {
       id: 6,
       title: "The Rise of Remote Work: Trends and Best Practices",
-      description: "How companies are adapting to the remote work revolution and what it means for the future.",
+      description:
+        "How companies are adapting to the remote work revolution and what it means for the future.",
       category: "Business",
       date: "March 10, 2024",
       image: "/assets/person.png",
@@ -210,7 +218,8 @@ export const Homepage = () => {
 
   const testimonials = [
     {
-      quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+      quote:
+        "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
       author: "Valerie J.",
       role: "Creasman CEO",
       avatarSrc:
@@ -220,7 +229,8 @@ export const Homepage = () => {
       hasShadow: false,
     },
     {
-      quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+      quote:
+        "B.R. Collins' business management course gave me the confidence to lead my team to success.",
       author: "Hannah R.",
       role: "Sutton CEO",
       avatarSrc:
@@ -247,8 +257,9 @@ export const Homepage = () => {
     hasShadow?: boolean;
   }) => (
     <article
-      className={`px-4 md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
-        } w-full`}
+      className={`px-4 md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100 ${
+        hasShadow ? "shadow-[0px_4px_34px_rgba(0,0,0,0.06)]" : ""
+      } w-full`}
     >
       <img
         src={
@@ -264,13 +275,25 @@ export const Homepage = () => {
       </blockquote>
       <div className="flex flex-col md:flex-row justify-between mt-8 md:mt-16 gap-4">
         <div className="flex gap-3 items-center">
-          <img src={avatarSrc} className="object-contain rounded-full aspect-square w-10 md:w-[50px]" alt={author} />
+          <img
+            src={avatarSrc}
+            className="object-contain rounded-full aspect-square w-10 md:w-[50px]"
+            alt={author}
+          />
           <div>
-            <p className="text-base md:text-xl font-bold text-neutral-900">{author}</p>
-            <p className="text-sm md:text-base leading-none text-zinc-500">{role}</p>
+            <p className="text-base md:text-xl font-bold text-neutral-900">
+              {author}
+            </p>
+            <p className="text-sm md:text-base leading-none text-zinc-500">
+              {role}
+            </p>
           </div>
         </div>
-        <img src={ratingSrc} className="object-contain aspect-[2.51] w-20 md:w-[88px]" alt="Rating" />
+        <img
+          src={ratingSrc}
+          className="object-contain aspect-[2.51] w-20 md:w-[88px]"
+          alt="Rating"
+        />
       </div>
     </article>
   );
@@ -298,7 +321,9 @@ export const Homepage = () => {
           </div>
           <div className="ml-0 md:ml-5 w-full md:w-[83%]">
             <div className="grow text-neutral-900">
-              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">{title}</h3>
+              <h3 className="text-xl md:text-2xl font-bold leading-none max-md:max-w-full">
+                {title}
+              </h3>
               <p className="mt-2 md:mt-3 text-base md:text-lg leading-6 md:leading-7 max-md:max-w-full">
                 {description}
               </p>
@@ -309,10 +334,24 @@ export const Homepage = () => {
     </div>
   );
 
-  const StatCard = ({ number, label, bgColor }: { number: string; label: string; bgColor: string }) => (
-    <div className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}>
-      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">{number}</h3>
-      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">{label}</p>
+  const StatCard = ({
+    number,
+    label,
+    bgColor,
+  }: {
+    number: string;
+    label: string;
+    bgColor: string;
+  }) => (
+    <div
+      className={`rounded-2xl p-4 md:p-6 ${bgColor} h-full flex flex-col items-center justify-center`}
+    >
+      <h3 className="text-3xl md:text-[50px] font-medium text-neutral-900">
+        {number}
+      </h3>
+      <p className="text-sm md:text-lg text-neutral-700 mt-1 md:mt-2">
+        {label}
+      </p>
     </div>
   );
 
@@ -321,20 +360,36 @@ export const Homepage = () => {
       {/* Top Row */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
         <div className="w-full md:w-[48%] h-[180px]">
-          <StatCard number="500+" label="Learners & counting" bgColor="bg-rose-50" />
+          <StatCard
+            number="500+"
+            label="Learners & counting"
+            bgColor="bg-rose-50"
+          />
         </div>
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard number="800+" label="Courses & Video" bgColor="bg-sky-100" />
+          <StatCard
+            number="800+"
+            label="Courses & Video"
+            bgColor="bg-sky-100"
+          />
         </div>
       </div>
 
       {/* Bottom Row */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 h-[48%]">
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard number="100+" label="Registered Enrolls" bgColor="bg-sky-100" />
+          <StatCard
+            number="100+"
+            label="Registered Enrolls"
+            bgColor="bg-sky-100"
+          />
         </div>
         <div className="w-full sm:w-[48%] h-[180px]">
-          <StatCard number="1000+" label="Certified Students" bgColor="bg-rose-50" />
+          <StatCard
+            number="1000+"
+            label="Certified Students"
+            bgColor="bg-rose-50"
+          />
         </div>
       </div>
     </div>
@@ -476,7 +531,9 @@ export const Homepage = () => {
               return (
                 <div
                   key={i}
-                  className={`w-3 h-3 rounded-b-sm rounded-tl-sm transition-all duration-300 ${i === activeIndex ? 'bg-[#F86537]': 'bg-[#FFFFFF99]'}`}
+                  className={`w-3 h-3 rounded-b-sm rounded-tl-sm transition-all duration-300 ${
+                    i === activeIndex ? "bg-[#F86537]" : "bg-[#FFFFFF99]"
+                  }`}
                 />
               );
             })}
@@ -503,9 +560,18 @@ export const Homepage = () => {
                     </h2>
 
                     <div className="flex md:flex-col sm:flex-row flex-row items-start sm:items-start gap-2">
-                      <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
+                      <Image
+                        src="/assets/person.png"
+                        width={40}
+                        height={40}
+                        alt="person"
+                        className="w-10 h-10"
+                      />
                       <h1 className="font-light text-sm sm:text-base text-gray-800">
-                        Instructor: <span className="text-blue-500 underline mx-2">Claudia Pruitt</span>
+                        Instructor:{" "}
+                        <span className="text-blue-500 underline mx-2">
+                          Claudia Pruitt
+                        </span>
                       </h1>
                     </div>
 
@@ -565,7 +631,9 @@ export const Homepage = () => {
                       Your Learning Journey Starts Here
                     </h2>
 
-                    <p className="text-xl">Get the skills to achieve goals and stay competitive.</p>
+                    <p className="text-xl">
+                      Get the skills to achieve goals and stay competitive.
+                    </p>
 
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                       <Link
@@ -693,19 +761,21 @@ export const Homepage = () => {
               <div className="flex flex-wrap gap-4 sm:gap-6 my-3">
                 <button
                   onClick={() => setActiveTab("e-learning")}
-                  className={`pb-2 px-1 transition-all duration-300 ${activeTab === "e-learning"
-                    ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
-                    : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
-                    }`}
+                  className={`pb-2 px-1 transition-all duration-300 ${
+                    activeTab === "e-learning"
+                      ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
+                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                  }`}
                 >
                   E-Learning
                 </button>
                 <button
                   onClick={() => setActiveTab("blogs")}
-                  className={`pb-2 px-1 transition-all duration-300 ${activeTab === "blogs"
-                    ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
-                    : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
-                    }`}
+                  className={`pb-2 px-1 transition-all duration-300 ${
+                    activeTab === "blogs"
+                      ? "text-gray-800 font-bold border-b-4 border-[#F86537]"
+                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                  }`}
                 >
                   In-Person
                 </button>
@@ -721,18 +791,25 @@ export const Homepage = () => {
           <div className="w-full max-w-[1326px] relative">
             <button
               onClick={scrollLeft}
-              className="hidden md:flex absolute left-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+              className="hidden md:flex absolute left-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
             >
-              <ArrowLeftIcon className="w-4 h-4"/>
+              <ArrowLeftIcon className="w-4 h-4" />
             </button>
 
-            <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
-              <div className="flex flex-nowrap gap-4">
+            <div
+              ref={sliderRef}
+              className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar"
+            >
+              <div className="flex flex-nowrap gap-4 items-stretch">
                 {sliderItems.map((item, index) => (
-                  <div key={index} className="flex-shrink-0 w-[200px] sm:w-fit py-2">
-                    <div className="flex flex-col  rounded-4xl bg-gray-100 px-4 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1">
-                      <h2 className="font-bold font-dm text-lg sm:text-xl text-gray-800 mb-2">{item.title}</h2>
-                      <p className="text-xs sm:text-sm text-gray-600">{item.courses} courses available</p>
+                  <div key={index} className="flex-shrink-0 py-1 h-full ">
+                    <div className="flex flex-col rounded-full mt-2 bg-gray-100 px-4 py-2 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]">
+                      <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center  pt-1">
+                        {item.title}
+                      </h2>
+                      <p className="text-xs text-gray-600 mt-1 text-center">
+                        {item.courses} courses
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -741,9 +818,9 @@ export const Homepage = () => {
 
             <button
               onClick={scrollRight}
-              className="hidden md:flex absolute right-[-46px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+              className="hidden md:flex absolute right-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
             >
-             <ArrowRightIcon className="w-4 h-4"/>
+              <ArrowRightIcon className="w-4 h-4" />
             </button>
           </div>
         </section>
@@ -760,7 +837,7 @@ export const Homepage = () => {
             )}
           </div>
         </section> */}
-         <CourseSwiper />
+        <CourseSwiper />
       </section>
 
       {/* Pricing Section */}
@@ -826,82 +903,89 @@ export const Homepage = () => {
 
         {/* On Site Learning Section */}
         <section className="mx-auto p-2 md:p-4 xl:p-0 flex flex-col items-center text-gray-900 w-full">
-  <div className="flex flex-col lg:flex-row justify-between items-center gap-10 w-full max-w-[1326px] px-1 md:px-4">
-    {/* Content Column - Centered on medium, left on large */}
-    <div className="w-full flex flex-col items-center lg:items-start lg:max-w-[529px] xl:max-w-[600px]">
-      <div className="w-full flex flex-col items-center lg:items-start">
-        <div className="flex flex-col items-center lg:items-start w-full font-bold">
-          <span className="text-lg text-orange-500 uppercase">about us</span>
-          <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900 text-center lg:text-left">
-            On Site Learning
-          </h2>
-        </div>
-        <p className="mt-4 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900 text-center lg:text-left">
-          At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
-          experiences. Blending creativity with expertise.
-        </p>
-      </div>
-      
-      <div className="mt-6 md:mt-10 w-full flex flex-col items-center lg:items-start">
-        <FeatureCard
-          title="Flexible Classes"
-          description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
-          iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/0142af754e70f9fb9b82869b1b20e4421b6f04e5?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-          className="w-full"
-        />
-        <FeatureCard
-          title="Expert-Led Training"
-          description="Learn from industry experts in a real-world setting and Gain practical knowledge and get hands-on experience."
-          iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-          className="mt-4 md:mt-5 w-full"
-        />
-      </div>
-    </div>
+          <div className="flex flex-col lg:flex-row justify-between items-center gap-10 w-full max-w-[1326px] px-1 md:px-4">
+            {/* Content Column - Centered on medium, left on large */}
+            <div className="w-full flex flex-col items-center lg:items-start lg:max-w-[529px] xl:max-w-[600px]">
+              <div className="w-full flex flex-col items-center lg:items-start">
+                <div className="flex flex-col items-center lg:items-start w-full font-bold">
+                  <span className="text-lg text-orange-500 uppercase">
+                    about us
+                  </span>
+                  <h2 className="mt-3 md:mt-5 text-3xl md:text-5xl leading-tight text-neutral-900 text-center lg:text-left">
+                    On Site Learning
+                  </h2>
+                </div>
+                <p className="mt-4 md:mt-5 text-lg md:text-2xl leading-6 md:leading-8 text-neutral-900 text-center lg:text-left">
+                  At B.R Collins, our on-site training transforms everyday
+                  lessons into engaging and interactive experiences. Blending
+                  creativity with expertise.
+                </p>
+              </div>
 
-    {/* Image - Centered on medium, right on large */}
-    <div> <img
-      src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-      className="object-contain rounded-2xl aspect-[0.93] w-full max-w-[452px] lg:max-w-[600px] xl:max-w-[700px] mt-8 lg:mt-0 lg:flex-1"
-      alt="On-site learning"
-    /></div>
-    
-  </div>
-</section>
+              <div className="mt-6 md:mt-10 w-full flex flex-col items-center lg:items-start">
+                <FeatureCard
+                  title="Flexible Classes"
+                  description="It is a long established fact that a reader will be distracted by this on readable content of when looking at its layout."
+                  iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/0142af754e70f9fb9b82869b1b20e4421b6f04e5?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                  className="w-full"
+                />
+                <FeatureCard
+                  title="Expert-Led Training"
+                  description="Learn from industry experts in a real-world setting and Gain practical knowledge and get hands-on experience."
+                  iconSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/fdae32a59490e8eef0a907659d5abbdfaaf27880?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                  className="mt-4 md:mt-5 w-full"
+                />
+              </div>
+            </div>
+
+            {/* Image - Centered on medium, right on large */}
+            <div>
+              {" "}
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+                className="object-contain rounded-2xl aspect-[0.93] w-full max-w-[452px] lg:max-w-[600px] xl:max-w-[700px] mt-8 lg:mt-0 lg:flex-1"
+                alt="On-site learning"
+              />
+            </div>
+          </div>
+        </section>
         {/* Community Section */}
         <section className="mx-auto flex flex-col items-center text-gray-900 w-full max-w-[1326px] lg:h-[410px] px-1  md:px-2">
-  <div className="flex flex-col lg:flex-row justify-between items-center lg:items-stretch h-full w-full gap-4 px-5  ">
-    {/* Left Content Section */}
-    <div className="flex flex-col justify-between h-full w-full lg:w-[50%] text-center md:text-left">
-      <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
-        <span className="text-lg text-orange-500 uppercase font-bold">WHY CHOOSE US</span>
-        <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
-          Creating A Community Of Life Long Learners
-        </h2>
-        <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
-          At B.R Collins, our on-site training transforms everyday lessons into engaging and interactive
-          experiences.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center md:justify-start">
-          <Link
-            href="/course"
-            className="px-6 py-3 md:px-8 md:py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors text-center"
-          >
-            Explore Courses
-          </Link>
-          <Link
-            href="/about"
-            className="px-6 py-3 md:px-8 md:py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors text-center"
-          >
-            Learn More
-          </Link>
-        </div>
-      </div>
-    </div>
+          <div className="flex flex-col lg:flex-row justify-between items-center lg:items-stretch h-full w-full gap-4 px-5  ">
+            {/* Left Content Section */}
+            <div className="flex flex-col justify-between h-full w-full lg:w-[50%] text-center md:text-left">
+              <div className="flex flex-col justify-between h-full gap-4 md:gap-6">
+                <span className="text-lg text-orange-500 uppercase font-bold">
+                  WHY CHOOSE US
+                </span>
+                <h2 className="text-3xl md:text-[50px] leading-[40px] md:leading-[60px] text-neutral-900 font-bold">
+                  Creating A Community Of Life Long Learners
+                </h2>
+                <p className="text-lg md:text-2xl leading-7 md:leading-8 text-neutral-900">
+                  At B.R Collins, our on-site training transforms everyday
+                  lessons into engaging and interactive experiences.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center md:justify-start">
+                  <Link
+                    href="/course"
+                    className="px-6 py-3 md:px-8 md:py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors text-center"
+                  >
+                    Explore Courses
+                  </Link>
+                  <Link
+                    href="/about"
+                    className="px-6 py-3 md:px-8 md:py-4 border border-neutral-900 rounded-full hover:bg-gray-100 transition-colors text-center"
+                  >
+                    Learn More
+                  </Link>
+                </div>
+              </div>
+            </div>
 
-    {/* Stats Section */}
-    <StatsSection />
-  </div>
-</section>
+            {/* Stats Section */}
+            <StatsSection />
+          </div>
+        </section>
       </div>
     </>
   );
