@@ -87,7 +87,7 @@ const Transactions = () => {
     if (!paymentMethod) return "N/A";
     if (typeof paymentMethod === "string") return paymentMethod;
     if (paymentMethod.card) {
-      return `${paymentMethod.card.brand} •••• ${paymentMethod.card.last4}`;
+      return `${paymentMethod.card.brand.toUpperCase()} •••• ${paymentMethod.card.last4}`;
     }
     return paymentMethod.type;
   };
