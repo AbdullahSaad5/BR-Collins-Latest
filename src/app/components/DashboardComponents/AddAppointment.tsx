@@ -10,6 +10,12 @@ import FormField from "./FormField";
 import { AppointmentCreatePayload, IAppointment, AppointmentType } from "@/app/types/appointment.contract";
 import { ICourse } from "@/app/types/course.contract";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useAppSelector } from "@/app/store/hooks";
+
+interface AvailableSlot {
+  date: string;
+  availableSlots: ("half-day-morning" | "half-day-afternoon" | "full-day")[];
+}
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
   const response = await api.get("/courses");
@@ -19,6 +25,28 @@ const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
 const fetchAppointment = async (id: string): Promise<{ data: IAppointment }> => {
   const response = await api.get(`/appointments/${id}`);
   return response.data;
+};
+
+const fetchAvailableSlots = async (date: Date): Promise<AvailableSlot[]> => {
+  // Check if the month is previous to current month
+  const currentDate = new Date();
+  const currentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  const selectedMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+  if (selectedMonth < currentMonth) {
+    console.log("Skipping API call for previous month");
+    return [];
+  }
+
+  // Only fetch slots for the current month being displayed
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+  const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+  const startDate = firstDayOfMonth.toISOString().split("T")[0];
+  const endDate = lastDayOfMonth.toISOString().split("T")[0];
+
+  const response = await api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`);
+  return response.data.data;
 };
 
 const appointmentSchema = z.object({
@@ -64,6 +92,14 @@ export default function AddAppointment() {
   const [success, setSuccess] = useState(false);
   const editId = searchParams.get("edit");
   const isEditMode = Boolean(editId);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Add query for available slots
+  const { data: availableSlots = [], isLoading: isLoadingSlots } = useQuery({
+    queryKey: ["availableSlots", currentMonth],
+    queryFn: () => fetchAvailableSlots(currentMonth),
+    enabled: currentMonth >= new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  });
 
   const {
     data: courses,
@@ -123,6 +159,8 @@ export default function AddAppointment() {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    watch,
   } = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentSchema),
   });
@@ -130,7 +168,6 @@ export default function AddAppointment() {
   useEffect(() => {
     if (appointment) {
       const formattedDate = new Date(appointment.date).toISOString().split("T")[0];
-
       reset({
         courseId: appointment.courseId,
         location: appointment.location,
@@ -143,7 +180,37 @@ export default function AddAppointment() {
     }
   }, [appointment, reset]);
 
+  // Watch the date field
+  const selectedDate = watch("date");
+
+  // Function to check if a slot is available
+  const isSlotAvailable = (date: Date, appointmentType: AppointmentType) => {
+    const dateStr = date.toISOString().split("T")[0];
+    console.log(dateStr);
+    const slot = availableSlots.find((slot: AvailableSlot) => slot.date === dateStr);
+    console.log(slot);
+    if (!slot) return true; // If no slot found, assume it's available
+
+    switch (appointmentType) {
+      case AppointmentType.HALF_DAY_MORNING:
+        return slot.availableSlots.includes("half-day-morning");
+      case AppointmentType.HALF_DAY_AFTERNOON:
+        return slot.availableSlots.includes("half-day-afternoon");
+      case AppointmentType.FULL_DAY:
+        return slot.availableSlots.includes("full-day");
+      default:
+        return false;
+    }
+  };
+
   const onSubmit = async (data: AppointmentFormData) => {
+    const selectedDate = new Date(data.date);
+
+    if (!isSlotAvailable(selectedDate, data.appointmentType)) {
+      showToast("Selected time slot is not available", "error");
+      return;
+    }
+
     // Convert form data to AppointmentCreatePayload
     const appointmentData: AppointmentCreatePayload = {
       ...data,
@@ -261,7 +328,6 @@ export default function AddAppointment() {
         />
 
         {isLoadingCourses && <div className="text-sm text-gray-500">Loading courses...</div>}
-
         {coursesError && <div className="text-sm text-red-500">Error loading courses. Please try again later.</div>}
 
         <FormField
@@ -271,6 +337,15 @@ export default function AddAppointment() {
           error={errors.date?.message}
           type="date"
           required
+          onChange={(e) => {
+            register("date").onChange(e);
+            // Reset appointment type when date changes
+            setValue("appointmentType", "" as AppointmentType);
+            // Update current month for fetching available slots
+            const selectedDate = new Date(e.target.value);
+            setCurrentMonth(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
+          }}
+          min={new Date().toISOString().split("T")[0]} // Prevent selecting past dates
         />
 
         <FormField
@@ -282,11 +357,75 @@ export default function AddAppointment() {
           required
           options={[
             { value: "", label: "Select appointment type" },
-            { value: AppointmentType.HALF_DAY_MORNING, label: "Half Day Morning (8AM - 12PM)" },
-            { value: AppointmentType.HALF_DAY_AFTERNOON, label: "Half Day Afternoon (1PM - 5PM)" },
-            { value: AppointmentType.FULL_DAY, label: "Full Day (8AM - 5PM)" },
+            {
+              value: AppointmentType.HALF_DAY_MORNING,
+              label: "Half Day Morning (8AM - 12PM)",
+              disabled: selectedDate
+                ? !isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_MORNING)
+                : false,
+            },
+            {
+              value: AppointmentType.HALF_DAY_AFTERNOON,
+              label: "Half Day Afternoon (1PM - 5PM)",
+              disabled: selectedDate
+                ? !isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_AFTERNOON)
+                : false,
+            },
+            {
+              value: AppointmentType.FULL_DAY,
+              label: "Full Day (8AM - 5PM)",
+              disabled: selectedDate ? !isSlotAvailable(new Date(selectedDate), AppointmentType.FULL_DAY) : false,
+            },
           ]}
         />
+
+        {selectedDate && (
+          <div className="mt-2 p-4 bg-gray-50 rounded-lg">
+            <h4 className="text-sm font-medium text-gray-900 mb-2">Availability Status:</h4>
+            <ul className="space-y-1 text-sm text-gray-600">
+              {!isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_MORNING) && (
+                <>
+                  <li className="flex items-center">
+                    <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                    Half Day Morning is already booked
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                    Full Day is unavailable (morning is booked)
+                  </li>
+                </>
+              )}
+              {!isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_AFTERNOON) && (
+                <>
+                  <li className="flex items-center">
+                    <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                    Half Day Afternoon is already booked
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                    Full Day is unavailable (afternoon is booked)
+                  </li>
+                </>
+              )}
+              {!isSlotAvailable(new Date(selectedDate), AppointmentType.FULL_DAY) &&
+                isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_MORNING) &&
+                isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_AFTERNOON) && (
+                  <li className="flex items-center">
+                    <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                    Full Day is already booked
+                  </li>
+                )}
+              {isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_MORNING) &&
+                isSlotAvailable(new Date(selectedDate), AppointmentType.HALF_DAY_AFTERNOON) &&
+                isSlotAvailable(new Date(selectedDate), AppointmentType.FULL_DAY) && (
+                  <li className="flex items-center">
+                    <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                    All time slots are available
+                  </li>
+                )}
+            </ul>
+          </div>
+        )}
 
         <FormField
           label="Maximum Participants *"

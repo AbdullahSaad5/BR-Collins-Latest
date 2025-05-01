@@ -1,6 +1,6 @@
 import React from "react";
 
-interface FormFieldProps {
+interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
   label: string;
   description: string;
   placeholder?: string;
@@ -10,8 +10,9 @@ interface FormFieldProps {
   textarea?: boolean;
   select?: boolean;
   type?: string;
-  options?: { value: string; label: string }[];
+  options?: { value: string; label: string; disabled?: boolean }[];
   disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 }
 
 export default function FormField({
@@ -25,6 +26,7 @@ export default function FormField({
   type = "text",
   options = [],
   disabled = false,
+  onChange,
   ...props
 }: FormFieldProps) {
   return (
@@ -40,6 +42,7 @@ export default function FormField({
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[100px] text-black placeholder:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             required={required}
             disabled={disabled}
+            onChange={onChange}
             {...props}
           />
         ) : select ? (
@@ -47,10 +50,11 @@ export default function FormField({
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black disabled:opacity-50 disabled:cursor-not-allowed"
             required={required}
             disabled={disabled}
+            onChange={onChange}
             {...props}
           >
             {options.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option key={option.value} value={option.value} disabled={option.disabled}>
                 {option.label}
               </option>
             ))}
@@ -62,6 +66,7 @@ export default function FormField({
             className="overflow-hidden gap-1.5 self-stretch px-4 py-3 w-full rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black placeholder:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             required={required}
             disabled={disabled}
+            onChange={onChange}
             {...props}
           />
         )}

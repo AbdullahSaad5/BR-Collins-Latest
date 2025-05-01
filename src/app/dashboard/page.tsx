@@ -26,6 +26,7 @@ import { selectUser, getSubscription } from "../store/features/users/userSlice";
 import Link from "next/link";
 import { Crown } from "lucide-react";
 import { ISubscription } from "../types/subscription.contract";
+import AdminOffDaysManager from "../components/DashboardComponents/AdminOffDaysManager";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
@@ -178,6 +179,8 @@ export default function Dashboard() {
         return <Appointments />;
       case "addAppointment":
         return <AddAppointment />;
+      case "adminOffDays":
+        return <AdminOffDaysManager />;
       default:
         return <DashboardStats />;
     }

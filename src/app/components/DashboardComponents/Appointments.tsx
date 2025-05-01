@@ -18,9 +18,15 @@ import AppointmentStatusMenu from "./AppointmentStatusMenu";
 import { useAppSelector } from "@/app/store/hooks";
 import { selectUser } from "@/app/store/features/users/userSlice";
 import { IUser } from "@/app/types/user.contract";
+import { IAdminOffDay } from "@/app/types/admin.contract";
 
 const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId");
+  return response.data;
+};
+
+const fetchOffDays = async (): Promise<{ data: IAdminOffDay[] }> => {
+  const response = await api.get("/admin-off-days");
   return response.data;
 };
 
@@ -66,6 +72,12 @@ const Appointments = () => {
     select: (data) => data.data,
   });
 
+  const { data: adminOffDays = [] } = useQuery({
+    queryKey: ["adminOffDays"],
+    queryFn: fetchOffDays,
+    select: (data) => data.data,
+  });
+
   useEffect(() => {
     const checkScrollable = () => {
       if (tableContainerRef.current) {
@@ -79,8 +91,47 @@ const Appointments = () => {
     return () => window.removeEventListener("resize", checkScrollable);
   }, [appointments]);
 
-  const calendarEvents =
-    appointments?.map((appointment) => {
+  const isDateDisabled = (date: Date) => {
+    return adminOffDays.some((offDay) => {
+      const offDayDate = new Date(offDay.date);
+      const isSameDay =
+        date.getDate() === offDayDate.getDate() &&
+        date.getMonth() === offDayDate.getMonth() &&
+        date.getFullYear() === offDayDate.getFullYear();
+
+      if (offDay.isRecurring) {
+        return date.getDay() === new Date(offDay.date).getDay();
+      }
+
+      return isSameDay;
+    });
+  };
+
+  const isSlotDisabled = (date: Date, startTime: string, endTime: string) => {
+    const matchingOffDay = adminOffDays.find((offDay) => {
+      const offDayDate = new Date(offDay.date);
+      const isSameDay =
+        date.getDate() === offDayDate.getDate() &&
+        date.getMonth() === offDayDate.getMonth() &&
+        date.getFullYear() === offDayDate.getFullYear();
+
+      if (offDay.isRecurring) {
+        return date.getDay() === new Date(offDay.date).getDay();
+      }
+
+      return isSameDay;
+    });
+
+    if (!matchingOffDay) return false;
+
+    // If no specific slots are disabled, the entire day is off
+    if (!matchingOffDay.disabledSlots?.length) return true;
+
+    return matchingOffDay.disabledSlots.some((slot) => slot === "half-day-morning" || slot === "half-day-afternoon");
+  };
+
+  const calendarEvents = [
+    ...(appointments?.map((appointment) => {
       const { startTime, endTime } = getAppointmentTimes(appointment);
       return {
         id: appointment._id,
@@ -93,7 +144,16 @@ const Appointments = () => {
           price: appointment.price,
         },
       };
-    }) || [];
+    }) || []),
+    ...adminOffDays.map((offDay) => ({
+      id: `off-day-${offDay._id}`,
+      title: offDay.reason || "Off Day",
+      start: new Date(offDay.date),
+      allDay: true,
+      display: "background",
+      backgroundColor: offDay.disabledSlots?.length ? "rgba(251, 146, 60, 0.3)" : "rgba(239, 68, 68, 0.3)",
+    })),
+  ];
 
   const handleEventClick = (info: any) => {
     const appointment = appointments?.find((a) => a._id === info.event.id);
@@ -305,6 +365,17 @@ const Appointments = () => {
               hour: "numeric",
               minute: "2-digit",
               meridiem: "short",
+            }}
+            selectConstraint={{
+              start: "00:00",
+              end: "24:00",
+              daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+            }}
+            selectMirror={true}
+            selectable={true}
+            selectOverlap={false}
+            selectAllow={(selectInfo) => {
+              return !isDateDisabled(selectInfo.start);
             }}
           />
         </div>
