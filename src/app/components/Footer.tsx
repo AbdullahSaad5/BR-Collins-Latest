@@ -1,25 +1,20 @@
 "use client";
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import { FaLinkedinIn } from "react-icons/fa6";
-import { FaInstagram ,FaTelegramPlane,FaFacebookF} from "react-icons/fa";
+import { FaInstagram, FaTelegramPlane, FaFacebookF } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
-import {  MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../public/icons/footer_icons";
 const QuickLinks = () => {
   return (
     <div className="grow  max-md:mt-10 font-sans">
       <h3 className="text-lg gap-3 font-medium text-white">Quick Links</h3>
       <nav className="flex gap-2 flex-col justify-center mt-8 w-full text-lg ">
-        <a
-          href="/course"
-          className=" self-start whitespace-nowrap hover:text-white transition-colors"
-        >
+        <a href="/course" className=" self-start whitespace-nowrap hover:text-white transition-colors">
           Courses
         </a>
-        <a
-          href="/subscriptions"
-          className=" self-start  whitespace-nowrap hover:text-white transition-colors"
-        >
+        <a href="/subscriptions" className=" self-start  whitespace-nowrap hover:text-white transition-colors">
           Subscriptions
         </a>
         <a href="/about" className=" hover:text-white transition-colors">
@@ -78,13 +73,8 @@ const Newsletter = () => {
   return (
     <div className="flex flex-col w-fit items-start self-start mt-2 font-sans text-lg max-md:max-w-full">
       <h3 className="text-xl font-medium text-white">Join the Community</h3>
-      <p className="mt-4 text-[A9BBC3]">
-        2,000+ Students Globally – Connect & Say Hello!
-      </p>
-      <form
-        onSubmit={handleSubmit}
-        className="md:w-full my-4 flex flex-row justify-center md:justify-between gap-2"
-      >
+      <p className="mt-4 text-[A9BBC3]">2,000+ Students Globally – Connect & Say Hello!</p>
+      <form onSubmit={handleSubmit} className="md:w-full my-4 flex flex-row justify-center md:justify-between gap-2">
         <div className="border-1 bg-[#16313F] border-gray-600 w-fit flex flex-row  rounded-4xl p-1">
           <input
             type="text"
@@ -101,13 +91,7 @@ const Newsletter = () => {
   );
 };
 
-const SocialIcon = ({
-  icon: Icon,
-  label,
-}: {
-  icon: React.ElementType;
-  label: string;
-}) => (
+const SocialIcon = ({ icon: Icon, label }: { icon: React.ElementType; label: string }) => (
   <a
     href="#"
     aria-label={label}
@@ -118,6 +102,13 @@ const SocialIcon = ({
 );
 
 const Footer = () => {
+  const pathname = usePathname();
+
+  // Hide footer on course learning pages
+  if (pathname?.startsWith("/courses/learn/")) {
+    return null;
+  }
+
   return (
     <footer className="flex flex-col items-center px-6 pt-20 pb-8 w-full text-[#A9BBC3] h-auto lg:h-[575px] bg-[#081B25] max-md:px-5 max-md:max-w-full">
       <div className="w-full max-w-[1326px] max-md:max-w-full">
@@ -140,13 +131,7 @@ const Footer = () => {
         <div className="flex justify-between flex-wrap mt-8 w-full max-md:max-w-full">
           <div>
             {/* Left Block - Fixed Width */}
-            <svg
-              width="241"
-              height="57"
-              viewBox="0 0 241 57"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="241" height="57" viewBox="0 0 241 57" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_3036_2684)">
                 <path
                   d="M40.5655 29.6535L38.1441 28.2293L39.2876 27.5722C47.7863 22.6882 49.3653 10.9612 42.1635 4.33986C39.3636 1.7655 35.2371 -0.0174669 29.1788 0.00403083C33.8927 4.03486 37.7697 13.4119 34.9386 19.1518C34.8925 19.2445 34.8315 19.352 34.7582 19.4716C33.593 21.3607 31.4876 22.4786 29.2534 22.4786H12.1585V10.8376H28.7434C31.082 10.8376 33.2484 12.0576 34.4449 14.0488C34.3295 13.3864 34.1749 12.7334 33.9809 12.0912C31.7996 4.84506 24.9017 0 17.2685 0H0V57H16.4804C19.4634 57 22.4247 56.4478 25.1879 55.3312C25.4457 55.2264 25.6586 55.1351 25.8024 55.0598C30.8718 52.4667 32.756 48.2921 34.4516 43.1541L33.8778 43.7439C32.3734 45.2891 30.2993 46.1611 28.1316 46.1611H12.1585V33.3162H28.2808C29.8991 33.3162 31.5039 33.7784 32.7953 34.7444C32.7967 34.7444 32.798 34.7471 32.8007 34.7485C37.8524 38.6382 37.3424 46.5346 36.679 50.5843C36.3426 52.6386 36.1541 54.7145 36.1541 56.7944V57H47.8215V42.2754C47.8215 37.0944 45.0637 32.2977 40.5668 29.6548L40.5655 29.6535Z"
@@ -164,18 +149,12 @@ const Footer = () => {
                   d="M91.7487 36.0771C91.3566 37.2461 88.7494 45.6638 88.3994 46.6944H90.2673L91.122 43.9292H94.7968L95.7002 46.6944H97.6957L94.1836 36.0771H91.7487ZM91.4977 42.3626C92.1204 40.3834 92.6304 38.7348 92.9031 37.5296H92.9234C93.154 38.4715 93.6559 40.0112 94.4047 42.3626H91.4977Z"
                   fill="white"
                 />
-                <path
-                  d="M105.356 36.0771H103.465V46.6944H105.356V36.0771Z"
-                  fill="white"
-                />
+                <path d="M105.356 36.0771H103.465V46.6944H105.356V36.0771Z" fill="white" />
                 <path
                   d="M118.862 39.67C118.862 41.4005 118.877 43.1271 118.982 44.4398H118.955C118.78 43.948 118.244 42.9108 114.688 36.0771H112.25V46.6944H113.988V43.0895C113.988 41.1896 113.986 39.3744 113.908 38.0227H113.924C114.106 38.4365 114.473 39.2212 118.285 46.6957H120.605V36.0785H118.862V39.6713V39.67Z"
                   fill="white"
                 />
-                <path
-                  d="M129.384 36.0771H127.493V46.6944H129.384V36.0771Z"
-                  fill="white"
-                />
+                <path d="M129.384 36.0771H127.493V46.6944H129.384V36.0771Z" fill="white" />
                 <path
                   d="M142.89 39.67C142.89 41.4005 142.905 43.1271 143.011 44.4398H142.984C142.809 43.948 142.273 42.9108 138.716 36.0771H136.278V46.6944H138.016V43.0895C138.016 41.1896 138.015 39.3744 137.936 38.0227H137.952C138.134 38.4365 138.502 39.2212 142.313 46.6957H144.633V36.0785H142.89V39.6713V39.67Z"
                   fill="white"
@@ -208,18 +187,12 @@ const Footer = () => {
                   d="M75.1202 19.7949C76.5527 19.2346 77.9119 17.981 77.9119 15.4953C77.9119 12.7167 76.0019 10.0752 70.8715 10.0752H61.3867V31.2384H70.725C75.7265 31.2384 78.6064 28.6936 78.6064 24.82C78.6064 21.9312 76.7656 20.4304 75.1202 19.7949ZM67.099 13.977H69.6629C71.2066 13.977 72.1955 14.6368 72.1955 16.1308C72.1955 17.6249 71.3938 18.2645 69.5313 18.2645H67.0977V13.977H67.099ZM69.7239 27.3567H67.099V22.0589H69.4797C71.5837 22.0589 72.5645 22.9591 72.5645 24.7219C72.5645 26.6527 71.2934 27.3554 69.7239 27.3554V27.3567Z"
                   fill="white"
                 />
-                <path
-                  d="M85.1935 25.5928H80.0645V31.2279H85.1935V25.5928Z"
-                  fill="white"
-                />
+                <path d="M85.1935 25.5928H80.0645V31.2279H85.1935V25.5928Z" fill="white" />
                 <path
                   d="M104.169 15.8769C104.169 12.5179 101.608 10.0752 96.9171 10.0752H87.1719V31.2384H92.9059V23.1096H94.9407C97.2115 23.1096 97.944 23.7733 97.944 25.9849V26.5828C97.944 29.0107 98.0485 30.3637 98.3605 31.2384H104.013C103.835 30.2052 103.765 28.3564 103.765 26.5882V25.9352C103.765 23.5006 103.102 21.7095 100.88 20.8644C102.711 20.1429 104.168 18.7186 104.168 15.8756L104.169 15.8769ZM95.3829 18.9551H92.9073V14.2081H95.756C97.2508 14.2081 98.37 14.8477 98.37 16.5057C98.37 18.2981 97.1328 18.9565 95.3829 18.9565V18.9551Z"
                   fill="white"
                 />
-                <path
-                  d="M111.344 25.5928H106.215V31.2279H111.344V25.5928Z"
-                  fill="white"
-                />
+                <path d="M111.344 25.5928H106.215V31.2279H111.344V25.5928Z" fill="white" />
                 <path
                   d="M128.221 27.3499C125.468 27.3499 124.571 24.6143 124.571 20.6788C124.571 16.7434 125.458 13.9823 128.213 13.9823C130.514 13.9823 131.043 15.4105 131.349 17.0202H137.13C136.963 13.7619 134.8 9.7002 128.303 9.7002C121.805 9.7002 118.464 14.642 118.464 20.699C118.464 26.756 120.876 31.6346 128.094 31.6346C133.943 31.6346 136.649 28.3791 137.233 24.2098H131.432C131.154 25.6556 130.537 27.3512 128.22 27.3512L128.221 27.3499Z"
                   fill="white"
@@ -228,18 +201,9 @@ const Footer = () => {
                   d="M148.836 9.69922C141.614 9.69922 138.623 15.0132 138.623 20.5233C138.623 26.6972 141.554 31.6337 148.503 31.6337C155.818 31.6337 158.759 26.7281 158.759 20.5422C158.759 14.817 155.738 9.69922 148.836 9.69922ZM148.722 27.3717C145.956 27.3717 144.749 24.5609 144.749 20.5005C144.749 16.4401 145.815 13.9732 148.65 13.9732C151.751 13.9732 152.652 16.7559 152.652 20.4884C152.652 24.7853 151.72 27.3717 148.721 27.3717H148.722Z"
                   fill="white"
                 />
-                <path
-                  d="M167.011 10.0752H161.117V31.2384H175.446L176.044 26.8193H167.011V10.0752Z"
-                  fill="white"
-                />
-                <path
-                  d="M183.394 10.0752H177.5V31.2384H191.829L192.427 26.8193H183.394V10.0752Z"
-                  fill="white"
-                />
-                <path
-                  d="M199.777 10.0752H193.883V31.2384H199.777V10.0752Z"
-                  fill="white"
-                />
+                <path d="M167.011 10.0752H161.117V31.2384H175.446L176.044 26.8193H167.011V10.0752Z" fill="white" />
+                <path d="M183.394 10.0752H177.5V31.2384H191.829L192.427 26.8193H183.394V10.0752Z" fill="white" />
+                <path d="M199.777 10.0752H193.883V31.2384H199.777V10.0752Z" fill="white" />
                 <path
                   d="M215.667 14.7281C215.667 18.0159 215.742 21.641 215.96 24.1146H215.854C215.597 23.2251 214.676 20.7865 210.154 10.0752H203.024V31.2384H208.404V26.5076C208.404 22.8449 208.395 19.2212 208.206 16.5635H208.27C208.54 17.3576 209.255 19.2615 214.179 31.2384H221.058V10.0752H215.667V14.7281Z"
                   fill="white"
@@ -260,16 +224,16 @@ const Footer = () => {
           {/* Right Block - Fills Remaining Space */}
           <div className="flex flex-1 justify-end max-sm:justify-start max-[521px]:mt-4 w-fit  gap-4 items-center  min-h-[52px]">
             <div className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full ">
-              <FacebookIcon className="w-8 h-7"/>
+              <FacebookIcon className="w-8 h-7" />
             </div>
             <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
-              <XIcon className="w-6 h-6"/>
+              <XIcon className="w-6 h-6" />
             </div>
             <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
-              <LinkedInIcon className="w-6 h-6"/>
+              <LinkedInIcon className="w-6 h-6" />
             </div>
             <div className="w-12 h-12 p-3  text-gray-400 bg-[#16313f] rounded-full ">
-              <InstagramIcon className="w-6 h-6"/>
+              <InstagramIcon className="w-6 h-6" />
             </div>
           </div>
         </div>
@@ -278,30 +242,19 @@ const Footer = () => {
 
         <div className="flex flex-wrap gap-5 justify-between mt-12 w-full text-base text-[#22485c] max-md:mt-10 max-md:max-w-full">
           <div className="flex flex-wrap gap-5 items-center min-h-[21px] max-md:max-w-full">
-            <p className="self-stretch my-auto">
-              Copyright © 2025 B.R. Collins All Rights Reserved
-            </p>
+            <p className="self-stretch my-auto">Copyright © 2025 B.R. Collins All Rights Reserved</p>
             <div className="flex gap-3 items-center self-stretch my-auto font-semibold text-right underline min-w-60">
-              <a
-                href="#"
-                className="self-stretch my-auto hover:text-white transition-colors"
-              >
+              <a href="#" className="self-stretch my-auto hover:text-white transition-colors">
                 Terms of service
               </a>
-              <a
-                href="#"
-                className="self-stretch my-auto hover:text-white transition-colors"
-              >
+              <a href="#" className="self-stretch my-auto hover:text-white transition-colors">
                 Privacy policy
               </a>
             </div>
           </div>
           <p className="font-medium text-right">
             <span className="font-normal">Design and Developed by </span>
-            <a
-              href="#"
-              className="font-normal underline hover:text-white transition-colors"
-            >
+            <a href="#" className="font-normal underline hover:text-white transition-colors">
               Agency Partner Interactive
             </a>
           </p>

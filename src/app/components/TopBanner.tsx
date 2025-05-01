@@ -1,8 +1,15 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
 export const TopBanner = () => {
+  const pathname = usePathname();
+
+  // Hide navigation on course learning pages
+  if (pathname?.startsWith("/courses/learn/")) {
+    return null;
+  }
   const [visible, setVisible] = useState(true);
 
   if (!visible) return null;
