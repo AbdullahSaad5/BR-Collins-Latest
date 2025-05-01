@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { TouchEvent, useEffect, useRef, useState } from "react";
 import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
 import { useQuery } from "@tanstack/react-query";
@@ -159,7 +160,6 @@ export const Homepage = () => {
       date: "April 15, 2024",
       image: "/assets/lowerlogo.png",
     },
-
   ];
 
   const renderStars = (rating: number) => {
@@ -190,7 +190,6 @@ export const Homepage = () => {
       sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
     }
   };
-
 
   const FeatureCard = ({
     title,
@@ -292,7 +291,7 @@ export const Homepage = () => {
   return (
     <>
       {/* Hero Section */}
-      
+
       <div className="h-[300px] lg:h-[500px] w-full">
         <Swiper
           spaceBetween={0}
@@ -438,7 +437,7 @@ export const Homepage = () => {
           </SwiperSlide>
         </Swiper>
       </div>
-     
+
       {/* Courses Section */}
       <section className="w-full p-4 md:p-4 xl:py-10 max-w-[1326px] mx-auto py-8 md:py-12">
         <section className="relative text-gray-900 w-full">
@@ -477,6 +476,7 @@ export const Homepage = () => {
         </section>
 
         {/* Slider Section */}
+
         <section className="relative text-gray-900 mt-6">
           <div className="w-full max-w-[1326px] relative">
             <button
@@ -515,7 +515,6 @@ export const Homepage = () => {
           </div>
         </section>
 
-      
         <CourseSwiper />
       </section>
 
@@ -533,10 +532,8 @@ export const Homepage = () => {
 
       {/* Testimonials Section */}
 
-      <TestimonialsSection/>
-      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[1902px] py-12">
-       
-
+      <TestimonialsSection />
+      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[1502px] py-12">
         {/* On Site Learning Section */}
         <section className="mx-auto p-2 md:p-4 xl:p-0 flex flex-col items-center text-gray-900 w-full">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-10 w-full max-w-[1326px] px-1 md:px-4">
@@ -579,7 +576,7 @@ export const Homepage = () => {
               {" "}
               <img
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ad81aa71094e8f17ed8df5001172ac5e3d12e12?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
-                className="object-contain rounded-2xl aspect-[0.93] w-full max-w-[452px] lg:max-w-[600px] xl:max-w-[700px] mt-8 lg:mt-0 lg:flex-1"
+                className="object-contain rounded-2xl aspect-[0.93] w-full max-w-full lg:max-w-[600px] xl:max-w-[700px] mt-8 lg:mt-0 lg:flex-1"
                 alt="On-site learning"
               />
             </div>

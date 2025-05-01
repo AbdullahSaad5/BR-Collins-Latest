@@ -188,6 +188,10 @@ const CourseSwiper: React.FC<CourseSwiperProps> = ({
             slidesPerView: 3,
             spaceBetween: 14,
           },
+          1124: {
+            slidesPerView: 4,
+            spaceBetween: 14,
+          },
           1224: {
             slidesPerView: 5,
             spaceBetween: 14,

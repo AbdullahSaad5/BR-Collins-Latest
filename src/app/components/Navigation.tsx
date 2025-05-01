@@ -4,10 +4,20 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
 import Cart from "./Cart/Cart";
-import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
+import {
+  ShoppingCart,
+  Menu,
+  X,
+  User,
+  LayoutDashboard,
+  LogOut,
+} from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { logout } from "@/app/store/features/users/userSlice";
-import { toggleCart, toggleCartVisiblity } from "@/app/store/features/cart/cartSlice";
+import {
+  toggleCart,
+  toggleCartVisiblity,
+} from "@/app/store/features/cart/cartSlice";
 import { IUser } from "../types/user.contract";
 import Image from "next/image";
 
@@ -23,6 +33,7 @@ const toTitleCase = (str?: string) => {
 export const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [DropdownMenu, setDropDownMenu] = useState(false);
+  const [isDropdownOpenMobile, setIsDropdownOpenMobile] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -54,7 +65,10 @@ export const Navigation = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsProfileDropdownOpen(false);
       }
     };
@@ -92,7 +106,10 @@ export const Navigation = () => {
       {/* Mobile Header */}
       <div className="flex items-center justify-between w-full lg:hidden">
         <div className="flex items-center gap-5">
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="p-2 text-neutral-900">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 text-neutral-900"
+          >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
           <a href="/">
@@ -113,7 +130,9 @@ export const Navigation = () => {
           >
             <ShoppingCart className="w-6 h-6 text-[#AEB5B9]" />
             {items.length > 0 && (
-              <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">{items.length}</div>
+              <div className="absolute top-0 right-0 text-xs py-1 px-2 rounded-full bg-blue-200">
+                {items.length}
+              </div>
             )}
           </button>
         </div>
@@ -134,7 +153,11 @@ export const Navigation = () => {
           <div className="flex gap-2.5 items-center w-full max-w-[500px]">
             <div className="flex flex-col justify-center items-start px-5 py-3 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
               <div className="flex gap-2 justify-center items-center w-full">
-                <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
+                <img
+                  src="/img/search.svg"
+                  className="object-contain w-5 aspect-square"
+                  alt="Search icon"
+                />
                 <input
                   type="text"
                   placeholder="Search for anything"
@@ -196,13 +219,22 @@ export const Navigation = () => {
         {/* Right Section */}
         <div className="flex items-center gap-10">
           <div className="flex gap-8 items-center font-base">
-            <Link href="/subscriptions" className="hover:text-orange-600 whitespace-nowrap">
+            <Link
+              href="/subscriptions"
+              className="hover:text-orange-600 whitespace-nowrap"
+            >
               Subscriptions
             </Link>
-            <Link href="/about" className="hover:text-orange-600 whitespace-nowrap">
+            <Link
+              href="/about"
+              className="hover:text-orange-600 whitespace-nowrap"
+            >
               About Us
             </Link>
-            <Link href="/contact" className="hover:text-orange-600 whitespace-nowrap">
+            <Link
+              href="/contact"
+              className="hover:text-orange-600 whitespace-nowrap"
+            >
               Contact Us
             </Link>
           </div>
@@ -230,7 +262,11 @@ export const Navigation = () => {
                 <div className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center relative overflow-hidden">
                     <Image
-                      src={isValidProfilePicture(profilePicture) ? profilePicture : "/assets/default-avatar.jpg"}
+                      src={
+                        isValidProfilePicture(profilePicture)
+                          ? profilePicture
+                          : "/assets/default-avatar.jpg"
+                      }
                       alt="Profile"
                       fill
                       className="object-cover"
@@ -238,19 +274,23 @@ export const Navigation = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
-                      (user as IUser).lastName
-                    }`}</span>
-                    <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
+                    <span className="text-base font-semibold">{`${
+                      (user as IUser).firstName
+                    } ${(user as IUser).lastName}`}</span>
+                    <span className="text-xs font-light text-gray-500">{`${toTitleCase(
+                      (user as IUser).role
+                    )}`}</span>
                   </div>
                 </div>
                 {isProfileDropdownOpen && (
                   <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56 z-[99999]">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
-                        (user as IUser).lastName
-                      }`}</p>
-                      <p className="text-xs text-gray-500">{`${toTitleCase((user as IUser).role)}`}</p>
+                      <p className="text-sm font-medium text-gray-900">{`${
+                        (user as IUser).firstName
+                      } ${(user as IUser).lastName}`}</p>
+                      <p className="text-xs text-gray-500">{`${toTitleCase(
+                        (user as IUser).role
+                      )}`}</p>
                     </div>
                     <button
                       onClick={() => {
@@ -296,9 +336,16 @@ export const Navigation = () => {
           {/* Mobile Menu Header */}
           <div className="flex items-center justify-between">
             <a href="/" onClick={() => setIsMenuOpen(false)}>
-              <img src="/img/logo.svg" className="object-contain aspect-[4.22] w-[241px]" alt="Logo" />
+              <img
+                src="/img/logo.svg"
+                className="object-contain aspect-[4.22] w-[241px]"
+                alt="Logo"
+              />
             </a>
-            <button onClick={() => setIsMenuOpen(false)} className="p-2 text-neutral-900">
+            <button
+              onClick={() => setIsMenuOpen(false)}
+              className="p-2 text-neutral-900"
+            >
               <X size={24} />
             </button>
           </div>
@@ -307,7 +354,11 @@ export const Navigation = () => {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
               <div className="flex gap-2 justify-center items-center w-full">
-                <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
+                <img
+                  src="/img/search.svg"
+                  className="object-contain w-5 aspect-square"
+                  alt="Search icon"
+                />
                 <input
                   type="text"
                   placeholder="Search for anything"
@@ -316,7 +367,7 @@ export const Navigation = () => {
               </div>
             </div>
 
-            <div className="relative w-full">
+            {/* <div className="relative w-full">
               <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-1 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
                 <option value="">Courses</option>
                 <option value="course1">Course 1</option>
@@ -327,6 +378,56 @@ export const Navigation = () => {
                 className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
                 alt="Dropdown icon"
               />
+            </div> */}
+            <div className="relative w-full">
+              <div
+                onClick={() => setIsDropdownOpenMobile(!isDropdownOpenMobile)}
+                className="w-full appearance-none flex flex-row items-center px-5 py-3 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer"
+              >
+                {selectedOption}
+                <img
+                  src="/img/downarrow.svg"
+                  className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
+                  alt="Dropdown icon"
+                />
+              </div>
+              {isDropdownOpenMobile && (
+                <div className="absolute left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                  <button
+                    onClick={() => {
+                      router.push("/course");
+                      setSelectedOption("Courses");
+                      setIsDropdownOpenMobile(false);
+                      setIsMenuOpen(false); // Also close mobile menu
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 text-lg"
+                  >
+                    Courses
+                  </button>
+                  <button
+                    onClick={() => {
+                      router.push("/about");
+                      setSelectedOption("About");
+                      setIsDropdownOpenMobile(false);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 text-lg"
+                  >
+                    About
+                  </button>
+                  <button
+                    onClick={() => {
+                      router.push("/contact");
+                      setSelectedOption("Contact");
+                      setIsDropdownOpenMobile(false);
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-gray-50 text-lg"
+                  >
+                    Contact
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -358,14 +459,21 @@ export const Navigation = () => {
             <div className="flex items-center gap-3 p-2">
               {isValidProfilePicture(profilePicture) ? (
                 <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                  <Image src={profilePicture} alt="Profile" fill className="object-cover" />
+                  <Image
+                    src={profilePicture}
+                    alt="Profile"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               ) : (
                 <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
                   <User className="w-6 h-6 text-gray-500" />
                 </div>
               )}
-              <span className="text-lg font-medium">{`${(user as IUser).firstName} ${(user as IUser).lastName}`}</span>
+              <span className="text-lg font-medium">{`${
+                (user as IUser).firstName
+              } ${(user as IUser).lastName}`}</span>
             </div>
           )}
         </div>
