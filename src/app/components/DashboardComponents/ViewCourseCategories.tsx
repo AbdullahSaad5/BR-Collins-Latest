@@ -83,15 +83,15 @@ export default function ViewCourseCategories() {
       grow: 2,
       cell: (row: CourseCategory) => <div className="text-base text-left text-neutral-900">{row.description}</div>,
     },
-    {
-      name: "Status",
-      selector: (row: CourseCategory) => row.isBlocked,
-      sortable: true,
-      grow: 1,
-      cell: (row: CourseCategory) => (
-        <StatusMenu isBlocked={row.isBlocked} onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)} />
-      ),
-    },
+    // {
+    //   name: "Status",
+    //   selector: (row: CourseCategory) => row.isBlocked,
+    //   sortable: true,
+    //   grow: 1,
+    //   cell: (row: CourseCategory) => (
+    //     <StatusMenu isBlocked={row.isBlocked} onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)} />
+    //   ),
+    // },
     {
       name: "Created At",
       selector: (row: CourseCategory) => row.createdAt,

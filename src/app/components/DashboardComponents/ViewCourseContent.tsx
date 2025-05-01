@@ -133,18 +133,18 @@ const ViewCourseContent = () => {
       grow: 1,
       cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{toOrdinal(row.order)}</div>,
     },
-    {
-      name: "Status",
-      selector: (row: ICourseContent) => row.isBlocked,
-      sortable: true,
-      grow: 1,
-      cell: (row: ICourseContent) => (
-        <ContentStatusMenu
-          isBlocked={row.isBlocked}
-          onStatusChange={(isBlocked) => handleStatusChange(row._id, isBlocked)}
-        />
-      ),
-    },
+    // {
+    //   name: "Status",
+    //   selector: (row: ICourseContent) => row.isBlocked,
+    //   sortable: true,
+    //   grow: 1,
+    //   cell: (row: ICourseContent) => (
+    //     <ContentStatusMenu
+    //       isBlocked={row.isBlocked}
+    //       onStatusChange={(isBlocked) => handleStatusChange(row._id, isBlocked)}
+    //     />
+    //   ),
+    // },
     {
       name: "Actions",
       cell: (row: ICourseContent) => <ActionIcons onView={() => handleView(row)} onEdit={() => handleEdit(row)} />,

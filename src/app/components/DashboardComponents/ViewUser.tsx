@@ -146,19 +146,19 @@ const UserTable: React.FC = () => {
       grow: 1,
       cell: (row: IUser) => <div className="text-base text-left text-neutral-900">{transformUserType(row.role)}</div>,
     },
-    {
-      name: "Status",
-      selector: (row: IUser) => row.isBlocked,
-      sortable: true,
-      grow: 1,
-      cell: (row: IUser) => (
-        <StatusMenu
-          isBlocked={row.isBlocked}
-          onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)}
-          disabled={row.id === currentUser.id} // Disable status toggle for current user
-        />
-      ),
-    },
+    // {
+    //   name: "Status",
+    //   selector: (row: IUser) => row.isBlocked,
+    //   sortable: true,
+    //   grow: 1,
+    //   cell: (row: IUser) => (
+    //     <StatusMenu
+    //       isBlocked={row.isBlocked}
+    //       onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)}
+    //       disabled={row.id === currentUser.id} // Disable status toggle for current user
+    //     />
+    //   ),
+    // },
     {
       name: "Actions",
       cell: (row: IUser) => (

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import { ViewIcon, ArrowLeftIcon, ArrowRightIcon, CalendarIcon, TableIcon } from "./Icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import FullCalendar from "@fullcalendar/react";
@@ -74,6 +74,7 @@ const Appointments = () => {
   const router = useRouter();
   const user = useAppSelector(selectUser) as IUser;
   const refreshToken = useAppSelector(getRefreshToken);
+  const queryClient = useQueryClient();
 
   const {
     data: appointments,
@@ -89,6 +90,37 @@ const Appointments = () => {
     queryKey: ["adminOffDays"],
     queryFn: () => fetchOffDays(refreshToken!),
     select: (data) => data.data,
+  });
+
+  const updateAppointmentMutation = useMutation({
+    mutationFn: async ({
+      appointmentId,
+      status,
+      data,
+    }: {
+      appointmentId: string;
+      status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled";
+      data?: { newDate?: string; newTime?: string; reason?: string };
+    }) => {
+      const response = await api.patch(
+        `/appointments/${appointmentId}`,
+        { status, ...data },
+        {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      showToast("Appointment status updated successfully", "success");
+    },
+    onError: (error) => {
+      console.error("Error updating appointment status:", error);
+      showToast("Failed to update appointment status", "error");
+    },
   });
 
   useEffect(() => {
@@ -294,25 +326,7 @@ const Appointments = () => {
     status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled",
     data?: { newDate?: string; newTime?: string; reason?: string }
   ) => {
-    try {
-      const response = await fetch(`/api/appointments/${appointmentId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status, ...data }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update appointment status");
-      }
-
-      // Refresh the appointments list
-      fetchAppointments();
-    } catch (error) {
-      console.error("Error updating appointment status:", error);
-      throw error;
-    }
+    updateAppointmentMutation.mutate({ appointmentId, status, data });
   };
 
   const columns = [

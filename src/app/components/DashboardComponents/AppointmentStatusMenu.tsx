@@ -3,13 +3,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { MoreVertical, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { createPortal } from "react-dom";
+import { api } from "@/app/utils/axios";
+import { useQuery } from "@tanstack/react-query";
+
+interface AvailableSlot {
+  date: string;
+  availableSlots: ("half-day-morning" | "half-day-afternoon" | "full-day")[];
+}
 
 interface AppointmentStatusMenuProps {
   status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled";
   role?: "student" | "admin" | "manager";
   onStatusChange: (
     status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled",
-    data?: { newDate?: string; startTime?: string; endTime?: string; reason?: string }
+    data?: { date?: string; appointmentType?: "half-day-morning" | "half-day-afternoon" | "full-day"; reason?: string }
   ) => Promise<void>;
 }
 
@@ -19,12 +26,45 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
   const [pendingStatus, setPendingStatus] = useState<
     "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled" | null
   >(null);
-  const [rescheduleData, setRescheduleData] = useState({ newDate: "", startTime: "", endTime: "" });
+  const [rescheduleData, setRescheduleData] = useState<{
+    newDate: string;
+    slot: "half-day-morning" | "half-day-afternoon" | "full-day" | undefined;
+  }>({ newDate: "", slot: undefined });
   const [cancelReason, setCancelReason] = useState("");
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
   const [mounted, setMounted] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Add query for available slots
+  const { data: availableSlots = [] } = useQuery({
+    queryKey: ["availableSlots", currentMonth],
+    queryFn: async () => {
+      // Only fetch slots for the current month being displayed
+      const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+      const lastDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+
+      const startDate = firstDayOfMonth.toISOString().split("T")[0];
+      const endDate = lastDayOfMonth.toISOString().split("T")[0];
+
+      const response = await api.get(`/appointments/available-slots?startDate=${startDate}&endDate=${endDate}`);
+      return response.data.data;
+    },
+    enabled: currentMonth >= new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+  });
+
+  // Function to check if a slot is available
+  const isSlotAvailable = (slotType: "half-day-morning" | "half-day-afternoon" | "full-day") => {
+    if (!rescheduleData.newDate || !availableSlots.length) {
+      return false;
+    }
+
+    const selectedDateObj = new Date(rescheduleData.newDate);
+    const formattedDate = selectedDateObj.toISOString().split("T")[0];
+    const dateSlots = availableSlots.find((slot: AvailableSlot) => slot.date === formattedDate);
+    return dateSlots?.availableSlots?.includes(slotType) || false;
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -69,9 +109,8 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
       try {
         if (pendingStatus === "rescheduled") {
           await onStatusChange(pendingStatus, {
-            newDate: rescheduleData.newDate,
-            startTime: rescheduleData.startTime,
-            endTime: rescheduleData.endTime,
+            date: rescheduleData.newDate,
+            appointmentType: rescheduleData.slot,
           });
         } else if (pendingStatus === "cancelled") {
           await onStatusChange(pendingStatus, { reason: cancelReason });
@@ -85,14 +124,14 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
     }
     setShowConfirmation(false);
     setPendingStatus(null);
-    setRescheduleData({ newDate: "", startTime: "", endTime: "" });
+    setRescheduleData({ newDate: "", slot: undefined });
     setCancelReason("");
   };
 
   const handleCancel = () => {
     setShowConfirmation(false);
     setPendingStatus(null);
-    setRescheduleData({ newDate: "", startTime: "", endTime: "" });
+    setRescheduleData({ newDate: "", slot: undefined });
     setCancelReason("");
   };
 
@@ -132,33 +171,87 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
               <input
                 type="date"
                 value={rescheduleData.newDate}
-                onChange={(e) => setRescheduleData({ ...rescheduleData, newDate: e.target.value })}
+                onChange={(e) => {
+                  const newDate = e.target.value;
+                  setRescheduleData({ ...rescheduleData, newDate, slot: undefined });
+                  // Update current month when date changes for fetching available slots
+                  const selectedDate = new Date(newDate);
+                  setCurrentMonth(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+                min={new Date().toISOString().split("T")[0]}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
-                <input
-                  type="time"
-                  value={rescheduleData.startTime}
-                  onChange={(e) => setRescheduleData({ ...rescheduleData, startTime: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
-                <input
-                  type="time"
-                  value={rescheduleData.endTime}
-                  onChange={(e) => setRescheduleData({ ...rescheduleData, endTime: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
+              <select
+                value={rescheduleData.slot || ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setRescheduleData({
+                    ...rescheduleData,
+                    slot: value === "" ? undefined : (value as "half-day-morning" | "half-day-afternoon" | "full-day"),
+                  });
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="">Select a time slot</option>
+                <option value="half-day-morning" disabled={!isSlotAvailable("half-day-morning")}>
+                  Morning (8:00 AM - 12:00 PM)
+                </option>
+                <option value="half-day-afternoon" disabled={!isSlotAvailable("half-day-afternoon")}>
+                  Afternoon (1:00 PM - 5:00 PM)
+                </option>
+                <option value="full-day" disabled={!isSlotAvailable("full-day")}>
+                  Full Day (8:00 AM - 5:00 PM)
+                </option>
+              </select>
             </div>
+            {rescheduleData.newDate && (
+              <div className="mt-2 p-4 bg-gray-50 rounded-lg">
+                <h4 className="text-sm font-medium text-gray-900 mb-2">Availability Status:</h4>
+                <ul className="space-y-1 text-sm text-gray-600">
+                  {!isSlotAvailable("half-day-morning") && (
+                    <>
+                      <li className="flex items-center">
+                        <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                        Morning Slot is not available
+                      </li>
+                      {!isSlotAvailable("full-day") && (
+                        <li className="flex items-center">
+                          <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                          Full Day is unavailable (morning is booked)
+                        </li>
+                      )}
+                    </>
+                  )}
+                  {!isSlotAvailable("half-day-afternoon") && (
+                    <>
+                      <li className="flex items-center">
+                        <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                        Afternoon Slot is not available
+                      </li>
+                      {!isSlotAvailable("full-day") && (
+                        <li className="flex items-center">
+                          <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
+                          Full Day is unavailable (afternoon is booked)
+                        </li>
+                      )}
+                    </>
+                  )}
+                  {isSlotAvailable("half-day-morning") &&
+                    isSlotAvailable("half-day-afternoon") &&
+                    isSlotAvailable("full-day") && (
+                      <li className="flex items-center">
+                        <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                        All time slots are available
+                      </li>
+                    )}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       );
@@ -216,7 +309,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
           >
             <div className="bg-white rounded-lg shadow-lg border border-gray-200">
               <div className="py-0.5">
-                {role === "admin" && status !== "scheduled" && (
+                {/* {role === "admin" && status !== "scheduled" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -226,8 +319,8 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
                   >
                     Scheduled
                   </button>
-                )}
-                {role === "admin" && status !== "completed" && (
+                )} */}
+                {/* {role === "admin" && status !== "completed" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -236,6 +329,17 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
                     className="flex items-center w-full px-2 py-1 text-xs text-green-600 hover:bg-green-50"
                   >
                     Complete
+                  </button>
+                )} */}
+                {status !== "cancelled" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleStatusClick("rescheduled");
+                    }}
+                    className="flex items-center w-full px-2 py-1 text-xs text-purple-600 hover:bg-purple-50"
+                  >
+                    Reschedule
                   </button>
                 )}
                 {status !== "cancelled" && (
@@ -247,17 +351,6 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
                     className="flex items-center w-full px-2 py-1 text-xs text-red-600 hover:bg-red-50"
                   >
                     Cancel
-                  </button>
-                )}
-                {status !== "rescheduled" && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleStatusClick("rescheduled");
-                    }}
-                    className="flex items-center w-full px-2 py-1 text-xs text-purple-600 hover:bg-purple-50"
-                  >
-                    Reschedule
                   </button>
                 )}
               </div>
@@ -294,8 +387,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
                   <button
                     onClick={handleConfirm}
                     disabled={
-                      (pendingStatus === "rescheduled" &&
-                        (!rescheduleData.newDate || !rescheduleData.startTime || !rescheduleData.endTime)) ||
+                      (pendingStatus === "rescheduled" && !rescheduleData.newDate) ||
                       (pendingStatus === "cancelled" && !cancelReason)
                     }
                     className={`px-4 py-2 text-sm font-medium text-white ${

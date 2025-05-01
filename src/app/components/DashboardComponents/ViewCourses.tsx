@@ -121,21 +121,21 @@ const ViewCourses = () => {
         </div>
       ),
     },
-    {
-      name: "Status",
-      accessorKey: "status",
-      header: "Status",
-      cell: (row: ICourse) => {
-        console.log(row);
-        return (
-          <CourseStatusMenu
-            isPublished={row.isPublished}
-            isArchived={row.isArchived}
-            onStatusChange={(status) => handleStatusChange(row.id, status)}
-          />
-        );
-      },
-    },
+    // {
+    //   name: "Status",
+    //   accessorKey: "status",
+    //   header: "Status",
+    //   cell: (row: ICourse) => {
+    //     console.log(row);
+    //     return (
+    //       <CourseStatusMenu
+    //         isPublished={row.isPublished}
+    //         isArchived={row.isArchived}
+    //         onStatusChange={(status) => handleStatusChange(row.id, status)}
+    //       />
+    //     );
+    //   },
+    // },
     {
       name: "Actions",
       cell: (row: ICourse) => (
