@@ -88,7 +88,7 @@ const UserTable: React.FC = () => {
   };
 
   const handleAddUser = () => {
-    if (users && subscription?.isActive) {
+    if (users && subscription?.isActive && currentUser.role === "manager") {
       const userLimit = getUserLimit(subscription.plan);
       if (users.length >= userLimit) {
         toast.error(`User limit of ${userLimit} reached. Please upgrade your plan to add more users.`);
@@ -182,7 +182,7 @@ const UserTable: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-neutral-900">View Users</h1>
-          {subscription?.isActive && (
+          {subscription?.isActive && currentUser.role === "manager" && (
             <div className="flex items-center gap-2 mt-2">
               <Users className="w-4 h-4 text-gray-500" />
               <span className="text-sm text-gray-600">
@@ -197,7 +197,7 @@ const UserTable: React.FC = () => {
             </div>
           )}
         </div>
-        <button
+        {/* <button
           onClick={handleAddUser}
           className={`flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors ${
             users && subscription?.isActive && users.length >= getUserLimit(subscription.plan)
@@ -208,7 +208,7 @@ const UserTable: React.FC = () => {
         >
           <AddUserIcon className="w-5 h-5" />
           <span>Add New User</span>
-        </button>
+        </button> */}
       </div>
 
       <CustomDataTable
