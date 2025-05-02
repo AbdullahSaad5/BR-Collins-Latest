@@ -120,7 +120,7 @@ export default function ViewCourseCategories() {
   }
 
   return (
-    <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+    <section className="flex-1 p-2 sm:p-5 rounded-xl bg-white shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-neutral-900">Course Categories</h1>
         {/* <button

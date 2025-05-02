@@ -187,14 +187,14 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="flex flex-col bg-neutral-100 min-h-screen px-4">
+    <main className="flex flex-col bg-neutral-100 min-h-screen px-2 sm:px-4">
       {/* <TopBanner /> */}
       {/* <Header /> */}
 
       <section className="flex flex-col self-center mt-5 w-full max-w-[1326px] max-md:max-w-full">
         <Breadcrumb />
 
-        <article className="flex flex-col pt-6 mt-6 w-full bg-white rounded-3xl max-md:mt-4 max-md:max-w-full px-6">
+        <article className="flex flex-col pt-6 mt-6 w-full bg-white rounded-3xl max-md:mt-4 max-md:max-w-full px-2 sm:px-6">
           <ProfileSummary onItemClick={handleItemClick} />
 
           <div className="flex flex-col md:flex-row gap-6 my-6">

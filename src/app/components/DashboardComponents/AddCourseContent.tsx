@@ -248,128 +248,132 @@ export default function AddCourseContent() {
           required
         />
 
-        <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-          <div className="grow shrink-0 basis-0 w-fit">
-            <label className="text-base text-neutral-900">Section Name *</label>
-            <p className="mt-1 text-sm text-gray-500">Select or create a section name</p>
-          </div>
-          <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-            {!selectedCourseId ? (
-              <div className="text-sm text-gray-500">Please select a course first</div>
-            ) : isLoadingSections ? (
-              <div className="text-sm text-gray-500">Loading sections...</div>
-            ) : sectionsError ? (
-              <div className="text-sm text-red-500">Error loading sections. Please try again later.</div>
-            ) : (
-              <Controller
-                name="sectionName"
-                control={control}
-                render={({ field }) => (
-                  <CreatableSelect<SectionOption>
-                    {...field}
-                    value={field.value ? { value: field.value, label: field.value } : null}
-                    isClearable
-                    isSearchable
-                    options={sections?.map((section) => ({ value: section, label: section })) || []}
-                    placeholder="Select or create a section"
-                    className="w-full"
-                    classNamePrefix="select"
-                    onChange={handleSectionChange}
-                    styles={{
-                      control: (base) => ({
-                        ...base,
-                        minHeight: "44px",
-                        borderRadius: "0.5rem",
-                        borderColor: "#e5e7eb",
-                        backgroundColor: "#f1f5f9",
-                        "&:hover": {
-                          borderColor: "#d1d5db",
-                        },
-                      }),
-                      input: (base) => ({
-                        ...base,
-                        color: "#111827",
-                      }),
-                      singleValue: (base) => ({
-                        ...base,
-                        color: "#111827",
-                      }),
-                      placeholder: (base) => ({
-                        ...base,
-                        color: "#9ca3af",
-                      }),
-                      option: (base, state) => ({
-                        ...base,
-                        color: "#111827",
-                        backgroundColor: state.isSelected ? "#f1f5f9" : "white",
-                        "&:hover": {
+        <div className="@container mt-6 max-w-full w-[705px]">
+          <div className="flex flex-wrap flex-col @[480px]:flex-row gap-2 @[480px]:gap-10">
+            <div className="grow shrink-0 basis-0 w-full">
+              <label className="text-base text-neutral-900">Section Name *</label>
+              <p className="mt-1 text-sm text-gray-500">Select or create a section name</p>
+            </div>
+            <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
+              {!selectedCourseId ? (
+                <div className="text-sm text-gray-500">Please select a course first</div>
+              ) : isLoadingSections ? (
+                <div className="text-sm text-gray-500">Loading sections...</div>
+              ) : sectionsError ? (
+                <div className="text-sm text-red-500">Error loading sections. Please try again later.</div>
+              ) : (
+                <Controller
+                  name="sectionName"
+                  control={control}
+                  render={({ field }) => (
+                    <CreatableSelect<SectionOption>
+                      {...field}
+                      value={field.value ? { value: field.value, label: field.value } : null}
+                      isClearable
+                      isSearchable
+                      options={sections?.map((section) => ({ value: section, label: section })) || []}
+                      placeholder="Select or create a section"
+                      className="w-full"
+                      classNamePrefix="select"
+                      onChange={handleSectionChange}
+                      styles={{
+                        control: (base) => ({
+                          ...base,
+                          minHeight: "44px",
+                          borderRadius: "0.5rem",
+                          borderColor: "#e5e7eb",
                           backgroundColor: "#f1f5f9",
-                        },
-                      }),
-                      menu: (base) => ({
-                        ...base,
-                        borderRadius: "0.5rem",
-                        border: "1px solid #e5e7eb",
-                        boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-                      }),
-                      menuList: (base) => ({
-                        ...base,
-                        padding: "0.5rem",
-                      }),
-                      dropdownIndicator: (base) => ({
-                        ...base,
-                        color: "#6b7280",
-                        "&:hover": {
-                          color: "#4b5563",
-                        },
-                      }),
-                      clearIndicator: (base) => ({
-                        ...base,
-                        color: "#6b7280",
-                        "&:hover": {
-                          color: "#4b5563",
-                        },
-                      }),
-                    }}
-                  />
-                )}
-              />
-            )}
-            {errors.sectionName && <p className="mt-1 text-sm text-red-500">{errors.sectionName.message}</p>}
+                          "&:hover": {
+                            borderColor: "#d1d5db",
+                          },
+                        }),
+                        input: (base) => ({
+                          ...base,
+                          color: "#111827",
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          color: "#111827",
+                        }),
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#9ca3af",
+                        }),
+                        option: (base, state) => ({
+                          ...base,
+                          color: "#111827",
+                          backgroundColor: state.isSelected ? "#f1f5f9" : "white",
+                          "&:hover": {
+                            backgroundColor: "#f1f5f9",
+                          },
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          borderRadius: "0.5rem",
+                          border: "1px solid #e5e7eb",
+                          boxShadow: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+                        }),
+                        menuList: (base) => ({
+                          ...base,
+                          padding: "0.5rem",
+                        }),
+                        dropdownIndicator: (base) => ({
+                          ...base,
+                          color: "#6b7280",
+                          "&:hover": {
+                            color: "#4b5563",
+                          },
+                        }),
+                        clearIndicator: (base) => ({
+                          ...base,
+                          color: "#6b7280",
+                          "&:hover": {
+                            color: "#4b5563",
+                          },
+                        }),
+                      }}
+                    />
+                  )}
+                />
+              )}
+              {errors.sectionName && <p className="mt-1 text-sm text-red-500">{errors.sectionName.message}</p>}
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-          <div className="grow shrink-0 basis-0 w-fit">
-            <label className="text-base text-neutral-900">Content Settings</label>
-            <p className="mt-1 text-sm text-gray-500">Configure content access settings</p>
-          </div>
-          <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-            <div className="space-y-4">
-              <Controller
-                name="allowDownload"
-                control={control}
-                render={({ field }) => (
-                  <ToggleOption
-                    label="Allow Download"
-                    description="Allow users to download this content"
-                    checked={field.value}
-                    onChange={(e) => field.onChange(e.target.checked)}
-                  />
-                )}
-              />
-              <Controller
-                name="allowPreview"
-                control={control}
-                render={({ field }) => (
-                  <ToggleOption
-                    label="Allow Preview"
-                    description="Allow users to preview this content"
-                    checked={field.value}
-                    onChange={(e) => field.onChange(e.target.checked)}
-                  />
-                )}
-              />
+        <div className="@container mt-6 max-w-full w-[705px]">
+          <div className="flex flex-wrap flex-col @[480px]:flex-row gap-2 @[480px]:gap-10">
+            <div className="grow shrink-0 basis-0 w-full">
+              <label className="text-base text-neutral-900">Content Settings</label>
+              <p className="mt-1 text-sm text-gray-500">Configure content access settings</p>
+            </div>
+            <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
+              <div className="space-y-4">
+                <Controller
+                  name="allowDownload"
+                  control={control}
+                  render={({ field }) => (
+                    <ToggleOption
+                      label="Allow Download"
+                      description="Allow users to download this content"
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  )}
+                />
+                <Controller
+                  name="allowPreview"
+                  control={control}
+                  render={({ field }) => (
+                    <ToggleOption
+                      label="Allow Preview"
+                      description="Allow users to preview this content"
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -161,7 +161,7 @@ const ViewCourses = () => {
   }
 
   return (
-    <section className="flex-1 p-5 rounded-xl bg-white shadow-sm">
+    <section className="flex-1 p-2 sm:p-5 rounded-xl bg-white shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-neutral-900">View Courses</h2>
         {/* <button className="flex gap-2 items-center text-base font-medium text-orange-500 hover:text-orange-600 transition-colors">

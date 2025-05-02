@@ -337,77 +337,91 @@ export default function AddCourseStepper() {
               textarea
               required
             />
-            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-              <div className="grow shrink-0 basis-0 w-fit">
-                <label className="text-base text-neutral-900">What You'll Learn *</label>
-                <p className="mt-1 text-sm text-gray-500">Add key learning outcomes for this course</p>
-              </div>
-              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-                <div className="space-y-2">
-                  {learningPoints.map((field, index) => (
-                    <div key={`learning-point-${index}`} className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        {...register(`whatYouWillLearn.${index}.value` as const)}
-                        placeholder="Enter a learning point"
-                        className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeLearningPoint(index)}
-                        className="p-2 text-red-500 hover:text-red-600"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => appendLearningPoint({ value: "" })}
-                    className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
-                  >
-                    + Add Learning Point
-                  </button>
+            <div className="@container mt-6 max-w-full w-[705px]">
+              <div className="flex flex-wrap flex-col @[480px]:flex-row gap-2 @[480px]:gap-10">
+                <div className="grow shrink-0 basis-0 w-full">
+                  <label className="text-base text-neutral-900">What You'll Learn *</label>
+                  <p className="mt-1 text-sm text-gray-500">Add key learning outcomes for this course</p>
+                </div>
+                <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
+                  <div className="space-y-2">
+                    {learningPoints.map((field, index) => (
+                      <div key={`learning-point-${index}`} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          {...register(`whatYouWillLearn.${index}.value` as const)}
+                          placeholder="Enter a learning point"
+                          className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeLearningPoint(index)}
+                          className="p-2 text-red-500 hover:text-red-600"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => appendLearningPoint({ value: "" })}
+                      className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
+                    >
+                      + Add Learning Point
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-              <div className="grow shrink-0 basis-0 w-fit">
-                <label className="text-base text-neutral-900">Requirements *</label>
-                <p className="mt-1 text-sm text-gray-500">Add prerequisites for this course</p>
-              </div>
-              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-                <div className="space-y-2">
-                  {requirements.map((field, index) => (
-                    <div key={`requirement-${index}`} className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        {...register(`requirements.${index}.value` as const)}
-                        placeholder="Enter a requirement"
-                        className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px]"
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeRequirement(index)}
-                        className="p-2 text-red-500 hover:text-red-600"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => appendRequirement({ value: "" })}
-                    className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
-                  >
-                    + Add Requirement
-                  </button>
+            <div className="@container mt-6 max-w-full w-[705px]">
+              <div className="flex flex-wrap flex-col @[480px]:flex-row gap-2 @[480px]:gap-10">
+                <div className="grow shrink-0 basis-0 w-full">
+                  <label className="text-base text-neutral-900">Requirements *</label>
+                  <p className="mt-1 text-sm text-gray-500">Add prerequisites for this course</p>
+                </div>
+                <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
+                  <div className="space-y-2">
+                    {requirements.map((field, index) => (
+                      <div key={`requirement-${index}`} className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          {...register(`requirements.${index}.value` as const)}
+                          placeholder="Enter a requirement"
+                          className="flex-1 overflow-hidden gap-1.5 self-stretch px-4 py-3 rounded-lg border border-solid bg-slate-100 border-zinc-200 min-h-[44px] text-black"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeRequirement(index)}
+                          className="p-2 text-red-500 hover:text-red-600"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => appendRequirement({ value: "" })}
+                      className="px-4 py-2 text-sm font-medium text-orange-500 hover:text-orange-600"
+                    >
+                      + Add Requirement
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -507,49 +521,51 @@ export default function AddCourseStepper() {
               error={errors.discountPrice?.message}
               type="number"
             />
-            <div className="flex flex-wrap gap-10 mt-6 max-w-full w-[705px]">
-              <div className="grow shrink-0 basis-0 w-fit">
-                <label className="text-base text-neutral-900">Course Features</label>
-                <p className="mt-1 text-sm text-gray-500">Configure additional course settings</p>
-              </div>
-              <div className="grow shrink-0 text-base text-gray-400 basis-0 w-fit">
-                <div className="space-y-4">
-                  <Controller
-                    name="isDiscounted"
-                    control={control}
-                    render={({ field }) => (
-                      <ToggleOption
-                        label="Enable Discount"
-                        description="Offer this course at a discounted price"
-                        checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="bestSeller"
-                    control={control}
-                    render={({ field }) => (
-                      <ToggleOption
-                        label="Mark as Best Seller"
-                        description="Display a best seller badge on the course"
-                        checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
-                      />
-                    )}
-                  />
-                  <Controller
-                    name="isFeatured"
-                    control={control}
-                    render={({ field }) => (
-                      <ToggleOption
-                        label="Feature this Course"
-                        description="Show this course in featured sections"
-                        checked={field.value}
-                        onChange={(e) => field.onChange(e.target.checked)}
-                      />
-                    )}
-                  />
+            <div className="@container mt-6 max-w-full w-[705px]">
+              <div className="flex flex-wrap flex-col @[480px]:flex-row gap-2 @[480px]:gap-10">
+                <div className="grow shrink-0 basis-0 w-full">
+                  <label className="text-base text-neutral-900">Course Features</label>
+                  <p className="mt-1 text-sm text-gray-500">Configure additional course settings</p>
+                </div>
+                <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
+                  <div className="space-y-4">
+                    <Controller
+                      name="isDiscounted"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleOption
+                          label="Enable Discount"
+                          description="Offer this course at a discounted price"
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="bestSeller"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleOption
+                          label="Mark as Best Seller"
+                          description="Display a best seller badge on the course"
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="isFeatured"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleOption
+                          label="Feature this Course"
+                          description="Show this course in featured sections"
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
