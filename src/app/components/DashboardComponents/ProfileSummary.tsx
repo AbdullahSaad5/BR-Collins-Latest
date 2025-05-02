@@ -47,7 +47,7 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
             )}
           </div>
 
-          <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-5 mt-3">
+          {/* <div className="flex flex-wrap justify-center sm:justify-start gap-3 sm:gap-5 mt-3">
             <div className="flex items-center gap-1.5 text-sm">
               <BookOpen className="text-blue-500 w-4 h-4" />
               <span className="text-gray-700">
@@ -55,15 +55,15 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
               </span>
             </div>
 
-            {/* <div className="hidden sm:block w-px h-4 bg-gray-200 my-auto" /> */}
+            <div className="hidden sm:block w-px h-4 bg-gray-200 my-auto" />
 
-            {/* <div className="flex items-center gap-1.5 text-sm">
+            <div className="flex items-center gap-1.5 text-sm">
               <BadgeCheck className="text-blue-500 w-4 h-4" />
               <span className="text-gray-700">
                 <span className="font-medium text-blue-500">(4)</span> Certificates
               </span>
-            </div> */}
-          </div>
+            </div>
+          </div> */}
         </div>
       </div>
 
