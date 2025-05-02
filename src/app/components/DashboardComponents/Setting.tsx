@@ -115,10 +115,10 @@ const SettingsForm = () => {
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: "Charlotte",
-      lastName: "Anderson",
-      email: "charlotte675@gmail.com",
-      bio: "Hi, I'm Charlotte Anderson, a college student currently pursuing a degree in Business Administration. I'm passionate about leadership, communication, and developing real-world skills.",
+      firstName: "",
+      lastName: "",
+      email: "",
+      bio: "",
     },
   });
 
