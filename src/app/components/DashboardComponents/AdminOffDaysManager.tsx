@@ -39,6 +39,61 @@ const AdminOffDaysManager = () => {
   const queryClient = useQueryClient();
   const refreshToken = useAppSelector(getRefreshToken);
 
+  // Add custom styles for mobile
+  React.useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @media (max-width: 640px) {
+        .fc .fc-toolbar {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .fc .fc-toolbar-title {
+          font-size: 1.2rem;
+          text-align: center;
+        }
+        .fc .fc-button {
+          padding: 0.4em 0.65em;
+          font-size: 0.9em;
+        }
+        .fc .fc-toolbar-chunk {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+          width: 100%;
+        }
+        .fc .fc-view-harness {
+          min-height: 400px;
+        }
+        .fc .fc-daygrid-day-number {
+          font-size: 0.9em;
+          padding: 4px;
+        }
+        .fc .fc-daygrid-day-top {
+          justify-content: center;
+        }
+        .fc .fc-daygrid-day-frame {
+          min-height: 5em;
+        }
+        .fc .fc-day-header {
+          font-size: 0.9em;
+          padding: 4px 2px !important;
+        }
+        .fc-theme-standard td, .fc-theme-standard th {
+          padding: 2px;
+        }
+        .fc-daygrid-event {
+          padding: 2px 4px !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const { data: offDays = [], isLoading } = useQuery({
     queryKey: ["adminOffDays"],
     queryFn: () => fetchOffDays(refreshToken!),
