@@ -136,6 +136,45 @@ const Appointments = () => {
     return () => window.removeEventListener("resize", checkScrollable);
   }, [appointments]);
 
+  useEffect(() => {
+    // Add custom styles for FullCalendar on mobile
+    const style = document.createElement("style");
+    style.innerHTML = `
+      @media (max-width: 640px) {
+        .fc .fc-toolbar {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .fc .fc-toolbar-title {
+          font-size: 1.2rem;
+        }
+        .fc .fc-button {
+          padding: 0.4em 0.65em;
+          font-size: 0.9em;
+        }
+        .fc .fc-toolbar-chunk {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+        .fc .fc-view-harness {
+          min-height: 400px;
+        }
+        .fc .fc-timegrid-slot {
+          height: 2.5em;
+        }
+        .fc .fc-daygrid-day-number {
+          font-size: 0.9em;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   const isDateDisabled = (date: Date) => {
     return adminOffDays.some((offDay) => {
       const offDayDate = new Date(offDay.date);
@@ -491,18 +530,36 @@ const Appointments = () => {
               </div>
             </div>
           ) : (
-            <div className="h-[600px] bg-white rounded-lg shadow-sm">
+            <div className="h-[600px] bg-white rounded-lg shadow-sm overflow-x-auto">
               <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 initialView={calendarView}
                 headerToolbar={{
-                  left: "prev,next today",
+                  left: "prev,next",
                   center: "title",
                   right: "dayGridMonth,timeGridWeek,timeGridDay",
                 }}
+                views={{
+                  timeGridWeek: {
+                    titleFormat: { year: "numeric", month: "short", day: "numeric" },
+                    dayHeaderFormat: { weekday: "short", day: "numeric", omitCommas: true },
+                  },
+                  timeGridDay: {
+                    titleFormat: { year: "numeric", month: "short", day: "numeric" },
+                  },
+                  dayGridMonth: {
+                    titleFormat: { year: "numeric", month: "long" },
+                    dayHeaderFormat: { weekday: "short" },
+                  },
+                }}
+                height="auto"
+                contentHeight="auto"
+                aspectRatio={1.35}
+                handleWindowResize={true}
+                stickyHeaderDates={true}
+                expandRows={true}
                 events={calendarEvents}
                 eventClick={handleEventClick}
-                height="100%"
                 eventTimeFormat={{
                   hour: "numeric",
                   minute: "2-digit",
@@ -524,7 +581,6 @@ const Appointments = () => {
                     const title = eventInfo.event.title;
                     const isRecurring = title.includes("🔄");
 
-                    // Split the title into parts for better formatting
                     const [recurringIcon, ...restTitle] = isRecurring
                       ? [title.slice(0, 2), title.slice(2)]
                       : ["", title];
@@ -533,21 +589,26 @@ const Appointments = () => {
                       <div className="w-full h-full flex flex-col items-center justify-center text-gray-700 font-medium p-1">
                         <div className="w-full flex items-center gap-1 overflow-hidden">
                           {isRecurring && <span className="flex-shrink-0">{recurringIcon}</span>}
-                          <span className="truncate text-sm">{isRecurring ? restTitle : title}</span>
+                          <span className="truncate text-xs sm:text-sm">{isRecurring ? restTitle : title}</span>
                         </div>
                       </div>
                     );
                   }
 
+                  const isMobile = window.innerWidth < 640;
                   return (
                     <div className="w-full p-1">
-                      <div className="font-semibold text-sm truncate">{eventInfo.event.title}</div>
-                      <div className="text-xs opacity-90 truncate">
-                        {eventInfo.timeText} • {eventInfo.event.extendedProps.location.venueName}
-                      </div>
-                      <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
-                        {eventInfo.event.extendedProps.status}
-                      </div>
+                      <div className="font-semibold text-xs sm:text-sm truncate">{eventInfo.event.title}</div>
+                      {!isMobile && (
+                        <>
+                          <div className="text-xs opacity-90 truncate">
+                            {eventInfo.timeText} • {eventInfo.event.extendedProps.location.venueName}
+                          </div>
+                          <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
+                            {eventInfo.event.extendedProps.status}
+                          </div>
+                        </>
+                      )}
                     </div>
                   );
                 }}

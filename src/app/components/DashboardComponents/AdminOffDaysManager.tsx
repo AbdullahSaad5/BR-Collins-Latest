@@ -176,41 +176,55 @@ const AdminOffDaysManager = () => {
   console.log(calendarEvents);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm p-6">
-      <h2 className="text-2xl font-semibold text-neutral-900 mb-6">Manage Off Days</h2>
+    <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+      <h2 className="text-xl sm:text-2xl font-semibold text-neutral-900 mb-4 sm:mb-6">Manage Off Days</h2>
 
       {isLoading ? (
-        <div className="h-[600px] flex items-center justify-center">
+        <div className="h-[400px] sm:h-[600px] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-gray-600">Loading off days...</p>
           </div>
         </div>
       ) : (
-        <div className="h-[600px]">
+        <div className="h-[400px] sm:h-[600px] overflow-x-auto">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             headerToolbar={{
-              left: "prev,next today",
+              left: "prev,next",
               center: "title",
               right: "dayGridMonth",
             }}
+            views={{
+              dayGridMonth: {
+                titleFormat: { year: "numeric", month: "long" },
+                dayHeaderFormat: { weekday: "short" },
+              },
+            }}
+            height="auto"
+            contentHeight="auto"
+            aspectRatio={1.35}
+            handleWindowResize={true}
+            stickyHeaderDates={true}
+            expandRows={true}
             events={calendarEvents}
             dateClick={handleDateClick}
             eventClick={handleEventClick}
-            height="100%"
             eventContent={(eventInfo) => {
               const isRecurring = eventInfo.event.extendedProps.isRecurring;
+              const isMobile = window.innerWidth < 640;
               return (
                 <div className="w-full p-1">
-                  <div className="font-semibold text-sm truncate">
+                  <div className="font-semibold text-xs sm:text-sm truncate">
                     {eventInfo.event.title}
                     {isRecurring && " 🔄"}
                   </div>
-                  <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
-                    {eventInfo.event.extendedProps.slots?.length === 1 ? "Half Day" : "Full Day"}
-                  </div>
+                  {!isMobile && (
+                    <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
+                      {eventInfo.event.extendedProps.slots?.length === 1 ? "Half Day" : "Full Day"}
+                    </div>
+                  )}
                 </div>
               );
             }}
@@ -267,16 +281,7 @@ const AdminOffDaysManager = () => {
                 delay: [200, 0],
                 interactive: true,
                 maxWidth: 320,
-                animation: "shift-away",
               });
-            }}
-            dayMaxEvents={3}
-            moreLinkContent={(args) => `+${args.num} more`}
-            nowIndicator={true}
-            businessHours={{
-              daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-              startTime: "08:00",
-              endTime: "18:00",
             }}
           />
         </div>
@@ -291,10 +296,7 @@ const AdminOffDaysManager = () => {
 
       <ViewOffDayModal
         isOpen={isViewModalOpen}
-        onClose={() => {
-          setIsViewModalOpen(false);
-          setSelectedOffDay(null);
-        }}
+        onClose={() => setIsViewModalOpen(false)}
         offDay={selectedOffDay}
         onDelete={handleDelete}
       />
