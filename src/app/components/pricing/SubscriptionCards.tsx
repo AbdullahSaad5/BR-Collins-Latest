@@ -124,6 +124,9 @@ const SubscriptionCards: React.FC = () => {
     if (isSubscribed()) {
       return;
     }
+    if (isLoggedIn && isManagerWithOrg()) {
+      return;
+    }
     setSelectedPlan(plan);
     setIsCorporatePlan(false);
     setShowConfirmationModal(true);
@@ -135,6 +138,9 @@ const SubscriptionCards: React.FC = () => {
       return;
     }
     if (isSubscribed()) {
+      return;
+    }
+    if (isLoggedIn && !isManagerWithOrg()) {
       return;
     }
     if (selectedCorporatePlan !== null && data) {
@@ -187,15 +193,15 @@ const SubscriptionCards: React.FC = () => {
                   <div>
                     <h1 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.title}</h1>
                     <p className="text-gray-700 text-sm sm:text-base">{plan.description}</p>
-                    {isManagerWithOrg() && (
+                    {isLoggedIn && isManagerWithOrg() && (
                       <p className="mt-2 text-red-600 text-xs font-medium">Available for individual users only</p>
                     )}
                   </div>
                   <button
                     onClick={() => handlePlanClick(plan)}
-                    disabled={isSubscribed() || isManagerWithOrg()}
+                    disabled={isSubscribed() || (isLoggedIn && isManagerWithOrg())}
                     className={`bg-[#F86537] text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${
-                      isSubscribed() || isManagerWithOrg()
+                      isSubscribed() || (isLoggedIn && isManagerWithOrg())
                         ? "opacity-50 cursor-not-allowed"
                         : "cursor-pointer hover:bg-[#E55A2E] transition-all duration-300"
                     }`}
@@ -204,7 +210,7 @@ const SubscriptionCards: React.FC = () => {
                       ? "Current Plan"
                       : isSubscribed()
                       ? "Already Subscribed"
-                      : isManagerWithOrg()
+                      : isLoggedIn && isManagerWithOrg()
                       ? "Not Available"
                       : plan.buttonText}
                   </button>
@@ -228,13 +234,13 @@ const SubscriptionCards: React.FC = () => {
         {/* Right Column - Corporate Plans */}
         <div
           className={`w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full ${
-            !isManagerWithOrg() ? "opacity-50 pointer-events-none" : ""
+            isLoggedIn && !isManagerWithOrg() ? "opacity-50 pointer-events-none" : ""
           }`}
         >
           <div>
             <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data?.corporatePlans.title}</h1>
             <p className="text-gray-700 text-sm sm:text-base mb-4">{data?.corporatePlans.description}</p>
-            {!isManagerWithOrg() && (
+            {isLoggedIn && !isManagerWithOrg() && (
               <p className="text-gray-400 text-xs font-medium mb-4">Exclusive to organization managers</p>
             )}
             <ul className="space-y-2">
@@ -242,9 +248,11 @@ const SubscriptionCards: React.FC = () => {
                 <React.Fragment key={index}>
                   <li
                     className={`flex py-2 items-center ${
-                      !isManagerWithOrg() ? "cursor-not-allowed" : "cursor-pointer"
+                      isLoggedIn && !isManagerWithOrg() ? "cursor-not-allowed" : "cursor-pointer"
                     }`}
-                    onClick={() => isManagerWithOrg() && !isSubscribed() && setSelectedCorporatePlan(index)}
+                    onClick={() =>
+                      isLoggedIn && !isSubscribed() && isManagerWithOrg() && setSelectedCorporatePlan(index)
+                    }
                   >
                     <div className="flex flex-row w-full justify-between">
                       <div>
@@ -258,12 +266,16 @@ const SubscriptionCards: React.FC = () => {
                             name="checkbox"
                             className="peer hidden"
                             checked={selectedCorporatePlan === index}
-                            onChange={() => isManagerWithOrg() && !isSubscribed() && setSelectedCorporatePlan(index)}
-                            disabled={isSubscribed() || !isManagerWithOrg()}
+                            onChange={() =>
+                              isLoggedIn && !isSubscribed() && isManagerWithOrg() && setSelectedCorporatePlan(index)
+                            }
+                            disabled={isSubscribed() || (isLoggedIn && !isManagerWithOrg())}
                           />
                           <div
                             className={`h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition ${
-                              isSubscribed() || !isManagerWithOrg() ? "opacity-50 cursor-not-allowed" : ""
+                              isSubscribed() || (isLoggedIn && !isManagerWithOrg())
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
                             }`}
                           >
                             <svg
@@ -289,9 +301,9 @@ const SubscriptionCards: React.FC = () => {
           </div>
           <button
             onClick={handleCorporatePlanClick}
-            disabled={selectedCorporatePlan === null || isSubscribed() || !isManagerWithOrg()}
+            disabled={selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && !isManagerWithOrg())}
             className={`bg-[#F86537] duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
-              selectedCorporatePlan === null || isSubscribed() || !isManagerWithOrg()
+              selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && !isManagerWithOrg())
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer hover:bg-[#E55A2E]"
             }`}
@@ -302,7 +314,7 @@ const SubscriptionCards: React.FC = () => {
               ? "Current Plan"
               : isSubscribed()
               ? "Already Subscribed"
-              : !isManagerWithOrg()
+              : isLoggedIn && !isManagerWithOrg()
               ? "Not Available"
               : data?.corporatePlans.buttonText}
           </button>
