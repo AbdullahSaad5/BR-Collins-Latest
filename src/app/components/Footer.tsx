@@ -85,7 +85,7 @@ const Newsletter = () => {
 
   return (
     <div className="flex flex-col w-fit items-start self-start mt-2 font-sans text-lg max-md:max-w-full">
-      <h3 className="text-xl font-medium text-white">Join the Community</h3>
+      <h3 className="text-xl font-medium text-white max-md:mt-16 ">Join the Community</h3>
       <p className="mt-4 text-[A9BBC3]">2,000+ Students Globally – Connect & Say Hello!</p>
       <form onSubmit={handleSubmit} className="md:w-full my-4 flex flex-row justify-center md:justify-between gap-2">
         <div className="border-1 bg-[#16313F] border-gray-600 w-fit flex flex-row rounded-4xl p-1">
@@ -160,7 +160,7 @@ const Footer = () => {
 
         <hr className="shrink-0 mt-10 h-px border border-solid border-gray-800 border-opacity-10 max-md:max-w-full" />
 
-        <div className="flex justify-between flex-wrap mt-8 w-full max-md:max-w-full">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between flex-wrap mt-8 w-full">
           <div>
             {/* Left Block - Fixed Width */}
             <svg width="241" height="57" viewBox="0 0 241 57" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -254,7 +254,7 @@ const Footer = () => {
           </div>
 
           {/* Right Block - Fills Remaining Space */}
-          <div className="flex flex-1 justify-end max-sm:justify-start max-[521px]:mt-4 w-fit  gap-4 items-center  min-h-[52px]">
+          <div className="flex justify-end max-sm:justify-start max-[521px]:mt-4 w-fit  gap-4 items-center  min-h-[52px]">
             <div className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full ">
               <FacebookIcon className="w-8 h-7" />
             </div>
@@ -272,10 +272,10 @@ const Footer = () => {
 
         <hr className="shrink-0 mt-8 h-px border border-solid border-gray-800 border-opacity-10 max-md:max-w-full" />
 
-        <div className="flex flex-wrap gap-5 justify-between mt-12 w-full text-base text-[#22485c] max-md:mt-10 max-md:max-w-full">
-          <div className="flex flex-wrap gap-5 items-center min-h-[21px] max-md:max-w-full">
-            <p className="self-stretch my-auto">Copyright © 2025 B.R. Collins All Rights Reserved</p>
-            <div className="flex gap-3 items-center self-stretch my-auto font-semibold text-right underline min-w-60">
+        <div className="flex flex-col xl:flex-row flex-wrap gap-5 xl:justify-between mt-12 w-full text-base text-[#22485c] max-md:mt-10 max-md:max-w-full">
+          <div className="flex flex-wrap gap-5 items-center max-xl:justify-center min-h-[21px] max-md:max-w-full">
+            <p className="text-center xl:self-stretch my-auto">Copyright © 2025 B.R. Collins All Rights Reserved</p>
+            <div className="flex gap-3 items-center xl:self-stretch my-auto font-semibold text-right underline min-w-60">
               <Link href="/terms" className="self-stretch my-auto hover:text-white transition-colors">
                 Terms of service
               </Link>
@@ -284,7 +284,7 @@ const Footer = () => {
               </Link>
             </div>
           </div>
-          <p className="font-medium text-right">
+          <p className="font-medium text-center xl:text-right">
             <span className="font-normal">Design and Developed by </span>
             <a href="#" className="font-normal underline hover:text-white transition-colors">
               Agency Partner Interactive
