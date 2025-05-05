@@ -123,6 +123,28 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
     });
   };
 
+  const isSelectedSlotAvailable = React.useMemo(() => {
+    if (!bookingState.selectedDate || !availableSlots.length) {
+      return false;
+    }
+    const selectedDateObj = new Date(bookingState.selectedDate);
+    const formattedDate = selectedDateObj.toISOString().split("T")[0];
+    const dateSlots = availableSlots.find(
+      (slot: { date: string; availableSlots: string[] }) => slot.date === formattedDate
+    );
+    if (!dateSlots) return false;
+    if (bookingState.courseDuration === "full-day") {
+      return dateSlots.availableSlots.includes("full-day");
+    } else {
+      if (bookingState.selectedSlot === "Morning, 8:00 AM - 12:00 PM") {
+        return dateSlots.availableSlots.includes("half-day-morning");
+      } else if (bookingState.selectedSlot === "Afternoon, 1:00 PM - 5:00 PM") {
+        return dateSlots.availableSlots.includes("half-day-afternoon");
+      }
+    }
+    return false;
+  }, [bookingState.selectedDate, bookingState.selectedSlot, bookingState.courseDuration, availableSlots]);
+
   return (
     <div className="rounded max-w-[1102px] relative max-h-[90vh] overflow-y-auto">
       {isLoading && (
@@ -219,7 +241,10 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
 
                 <button
                   onClick={handleProceedToPayment}
-                  className="flex overflow-hidden gap-1.5 justify-center items-center px-5 py-3 mt-22 font-medium text-white bg-orange-500 min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10"
+                  disabled={!isSelectedSlotAvailable}
+                  className={`flex overflow-hidden gap-1.5 justify-center items-center px-5 py-3 mt-22 font-medium text-white bg-primary hover:bg-primary-hover transition-all duration-200 min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10 ${
+                    !isSelectedSlotAvailable ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   <span className="self-stretch my-auto">Proceed to Payment</span>
                   <img
