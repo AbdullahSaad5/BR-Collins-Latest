@@ -77,7 +77,7 @@ const CourseCategories: React.FC = () => {
       <div className="w-full max-w-[1326px] relative">
         <button
           onClick={scrollLeft}
-          className="hidden md:flex absolute left-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+          className="hidden md:flex absolute -mt-1 left-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
         >
           <ArrowLeftIcon className="w-4 h-4" />
         </button>
@@ -85,15 +85,15 @@ const CourseCategories: React.FC = () => {
         <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
           <div className="flex flex-nowrap gap-4 items-stretch">
             {sliderItems.map((item, index) => (
-              <div key={index} className="flex-shrink-0 py-1 h-full ">
+              <div key={index} className="flex-shrink-0 py-2 h-full ">
                 <Link
                   href={`/course?category=${item.categoryId}#courses-section`}
-                  className="flex flex-col rounded-full mt-2 bg-gray-100 px-4 py-2 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
+                  className="flex flex-col rounded-full bg-gray-100 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
                 >
                   <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center  pt-1">
                     {item.title}
                   </h2>
-                  <p className="text-xs text-gray-600 mt-1 text-center">{item.courses} courses</p>
+                  <p className="text-xs text-gray-600 mt-1">({item.courses}) courses</p>
                 </Link>
               </div>
             ))}
@@ -102,7 +102,7 @@ const CourseCategories: React.FC = () => {
 
         <button
           onClick={scrollRight}
-          className="hidden md:flex absolute right-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+          className="hidden md:flex absolute -mt-1 right-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
         >
           <ArrowRightIcon className="w-4 h-4" />
         </button>
