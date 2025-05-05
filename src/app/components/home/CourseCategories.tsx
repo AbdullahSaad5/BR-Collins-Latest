@@ -88,12 +88,10 @@ const CourseCategories: React.FC = () => {
               <div key={index} className="flex-shrink-0 py-2 h-full ">
                 <Link
                   href={`/course?category=${item.categoryId}#courses-section`}
-                  className="flex flex-col rounded-full bg-gray-100 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
+                  className="flex flex-col rounded-full gap-0.5 bg-gray-100 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
                 >
-                  <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center  pt-1">
-                    {item.title}
-                  </h2>
-                  <p className="text-xs text-gray-600 mt-1">({item.courses}) courses</p>
+                  <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center ">{item.title}</h2>
+                  <p className="text-xs text-gray-600">({item.courses}) courses</p>
                 </Link>
               </div>
             ))}
