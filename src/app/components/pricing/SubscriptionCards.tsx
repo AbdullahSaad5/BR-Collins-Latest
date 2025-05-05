@@ -246,17 +246,19 @@ const SubscriptionCards: React.FC = () => {
         {/* Right Column - Corporate Plans */}
         <div
           className={`w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full ${
-            isLoggedIn && (!isManagerWithOrg() || isAdmin()) ? "opacity-50 pointer-events-none" : ""
+            isLoggedIn && (!isManagerWithOrg() || isAdmin())
+              ? `${isAdmin() ? "opacity-100" : "opacity-50"} pointer-events-none`
+              : ""
           }`}
         >
           <div>
             <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data?.corporatePlans.title}</h1>
             <p className="text-gray-700 text-sm sm:text-base mb-4">{data?.corporatePlans.description}</p>
-            {isLoggedIn && !isManagerWithOrg() && (
+            {isLoggedIn && !isManagerWithOrg() && !isAdmin() && (
               <p className="text-gray-400 text-xs font-medium mb-4">Exclusive to organization managers</p>
             )}
             {isLoggedIn && isAdmin() && (
-              <p className="text-gray-400 text-xs font-medium mb-4">Admins cannot purchase subscriptions</p>
+              <p className="text-red-600 text-xs font-medium mb-4">Admins cannot purchase subscriptions</p>
             )}
             <ul className="space-y-2">
               {data?.corporatePlans.plans.map((plan, index) => (
