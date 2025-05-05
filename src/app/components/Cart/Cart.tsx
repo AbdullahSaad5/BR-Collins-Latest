@@ -53,7 +53,7 @@ const Cart = () => {
             <div className="h-full flex items-center justify-center">
               <div className="flex flex-col items-center justify-center text-center p-6">
                 <div className="w-24 h-24 rounded-full bg-[#FFF5E6] flex items-center justify-center mb-6">
-                  <BookOpen className="w-12 h-12 text-[#FF6B00]" />
+                  <BookOpen className="w-12 h-12 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
                 <p className="text-gray-600 mb-8 max-w-md">
@@ -64,7 +64,7 @@ const Cart = () => {
                   <Link
                     href="/course"
                     onClick={handleCloseCart}
-                    className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[#FF6B00] px-6 py-3 text-white hover:bg-[#FF8533] transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-white hover:bg-primary-hover transition-colors"
                   >
                     <Search className="w-5 h-5" />
                     Browse Courses
@@ -131,7 +131,7 @@ const Cart = () => {
               >
                 View Cart
               </Link>
-              <button className="flex-1 p-3 rounded-full border border-[#F86537] bg-[#F86537] text-sm md:text-md text-white hover:bg-[#f85624] transition">
+              <button className="flex-1 p-3 rounded-full border border-primary bg-primary text-sm md:text-md text-white hover:bg-primary-hover transition">
                 {`Proceed to checkout →`}
               </button>
             </div>

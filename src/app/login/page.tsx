@@ -75,13 +75,16 @@ const Login: React.FC = () => {
     <section className="">
       <div className="flex flex-col lg:flex-row w-full bg-org">
         {/* Left Section */}
-        <div className="w-full lg:w-2/3 bg-[#0365AD] text-white relative py-12 lg:py-0">
+        <div className="w-full lg:w-2/3 bg-secondary text-white relative py-12 lg:py-0">
           <div className="absolute bottom-0 w-full lg:w-[712px]">
             <Image src={B} alt="Decorative background" className="w-full h-auto" />
           </div>
 
           <div className="relative z-10 w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start min-h-[600px] lg:min-h-[700px]">
-            <Link href="/register" className="w-12 h-12 rounded-full bg-[#3584BD] flex items-center justify-center">
+            <Link
+              href="/register"
+              className="w-12 h-12 rounded-full bg-secondary-dark flex items-center justify-center"
+            >
               <IoArrowBackOutline className="w-7 h-7 text-white" />
             </Link>
             <div>

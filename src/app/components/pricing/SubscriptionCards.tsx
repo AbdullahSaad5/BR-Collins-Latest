@@ -184,7 +184,7 @@ const SubscriptionCards: React.FC = () => {
       {isRefetching && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#F86537] mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
             <p className="text-gray-700">Updating subscription details...</p>
           </div>
         </div>
@@ -210,10 +210,10 @@ const SubscriptionCards: React.FC = () => {
                   <button
                     onClick={() => handlePlanClick(plan)}
                     disabled={isSubscribed() || (isLoggedIn && (isManagerWithOrg() || isAdmin()))}
-                    className={`bg-[#F86537] text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${
+                    className={`bg-primary text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${
                       isSubscribed() || (isLoggedIn && (isManagerWithOrg() || isAdmin()))
                         ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:bg-[#E55A2E] transition-all duration-300"
+                        : "cursor-pointer hover:bg-primary-hover transition-all duration-300"
                     }`}
                   >
                     {isCurrentPlan(plan)
@@ -297,7 +297,7 @@ const SubscriptionCards: React.FC = () => {
                             disabled={isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))}
                           />
                           <div
-                            className={`h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition ${
+                            className={`h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition ${
                               isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""
@@ -329,10 +329,10 @@ const SubscriptionCards: React.FC = () => {
             disabled={
               selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
             }
-            className={`bg-[#F86537] duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
+            className={`bg-primary duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
               selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
                 ? "opacity-50 cursor-not-allowed"
-                : "cursor-pointer hover:bg-[#E55A2E]"
+                : "cursor-pointer hover:bg-primary-hover"
             }`}
           >
             {isSubscribed() &&

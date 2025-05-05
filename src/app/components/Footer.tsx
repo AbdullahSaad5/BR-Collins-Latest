@@ -39,7 +39,7 @@ const ContactInfo = () => {
         <div className="w-full ">
           <a
             href="tel:+14065550120"
-            className="text-3xl font-semibold text-[#F86537] underline hover:text-orange-400 transition-colors"
+            className="text-3xl font-semibold text-primary underline hover:text-orange-400 transition-colors"
           >
             (406) 555-0120
           </a>

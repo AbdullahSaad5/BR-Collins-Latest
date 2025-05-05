@@ -537,7 +537,7 @@ const CourseDetailPageClient = ({
               <div className="text-center text-neutral-900">
                 <p className="text-md">For details about the course</p>
                 <p className="mt-3.5 text-2xl font-extrabold leading-none">
-                  <span className="text-[#F86537]">Call Us: </span>
+                  <span className="text-primary">Call Us: </span>
                   <span className="underline">+444 555 667</span>
                 </p>
               </div>

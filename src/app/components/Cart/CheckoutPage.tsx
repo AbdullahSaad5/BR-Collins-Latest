@@ -81,14 +81,14 @@ const CheckoutForm: React.FC<{ onBack: () => void; clientSecret: string }> = ({ 
       {/* Progress Indicator */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#F86537] text-white flex items-center justify-center text-sm font-medium">
+          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
             1
           </div>
           <span className="text-sm font-medium text-neutral-900">Cart Items</span>
         </div>
         <div className="h-0.5 flex-1 bg-gray-200 mx-4"></div>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-[#F86537] text-white flex items-center justify-center text-sm font-medium">
+          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
             2
           </div>
           <span className="text-sm font-medium text-neutral-900">Payment</span>
@@ -116,7 +116,7 @@ const CheckoutForm: React.FC<{ onBack: () => void; clientSecret: string }> = ({ 
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-[#F86537]">${item.discountPrice || item.price}.00</p>
+                  <p className="text-sm font-medium text-primary">${item.discountPrice || item.price}.00</p>
                   {item.discountPrice && <p className="text-xs text-gray-500 line-through">${item.price}.00</p>}
                 </div>
               </div>
@@ -193,7 +193,7 @@ const CheckoutForm: React.FC<{ onBack: () => void; clientSecret: string }> = ({ 
         <button
           type="submit"
           disabled={!stripe || processing}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {processing ? "Processing..." : "Complete Purchase"}
         </button>

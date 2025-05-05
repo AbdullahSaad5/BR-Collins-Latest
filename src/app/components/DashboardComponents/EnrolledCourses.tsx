@@ -69,7 +69,7 @@ const EnrolledCourses = () => {
       <div className="mx-auto max-w-7xl rounded-lg bg-white p-6 shadow-sm">
         <h2 className="mb-8 text-2xl font-semibold text-gray-900">My Enrolled Courses</h2>
         <div className="flex justify-center p-10">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF6B00] border-t-transparent"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
         </div>
       </div>
     );
@@ -109,7 +109,7 @@ const EnrolledCourses = () => {
         <div className="rounded-md bg-[#FFF5E6] p-4">
           <div className="flex">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-[#FF6B00]" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-5 w-5 text-primary" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fillRule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -118,8 +118,8 @@ const EnrolledCourses = () => {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-[#FF6B00]">No Courses</h3>
-              <div className="mt-2 text-sm text-[#FF6B00]">
+              <h3 className="text-sm font-medium text-primary">No Courses</h3>
+              <div className="mt-2 text-sm text-primary">
                 <p>You haven't enrolled in any courses yet.</p>
               </div>
             </div>
@@ -139,7 +139,7 @@ const EnrolledCourses = () => {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 rounded-lg bg-white p-2 shadow-sm">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-[#FF6B00]"></div>
+              <div className="h-3 w-3 rounded-full bg-primary"></div>
               <span className="text-sm text-gray-600">In Progress</span>
             </div>
             <div className="h-4 w-px bg-gray-200"></div>
@@ -168,7 +168,7 @@ const EnrolledCourses = () => {
                 <div className="flex items-center justify-between">
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      course.status === "completed" ? "bg-[#ECFDF5] text-[#10B981]" : "bg-[#FFF5E6] text-[#FF6B00]"
+                      course.status === "completed" ? "bg-[#ECFDF5] text-[#10B981]" : "bg-[#FFF5E6] text-primary"
                     }`}
                   >
                     {course.status === "completed" ? "Completed" : "In Progress"}
@@ -203,9 +203,7 @@ const EnrolledCourses = () => {
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
                     <div
-                      className={`h-full rounded-full ${
-                        course.status === "completed" ? "bg-[#10B981]" : "bg-[#FF6B00]"
-                      }`}
+                      className={`h-full rounded-full ${course.status === "completed" ? "bg-[#10B981]" : "bg-primary"}`}
                       style={{ width: `${course.progress}%` }}
                     />
                   </div>
@@ -217,7 +215,7 @@ const EnrolledCourses = () => {
                 <div className="flex gap-3">
                   <button
                     onClick={() => handleStartLearning(course)}
-                    className="flex-1 rounded-xl bg-[#FF6B00] px-4 py-3 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2"
+                    className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     {course.status === "not-started"
                       ? "Start Learning"
@@ -227,7 +225,7 @@ const EnrolledCourses = () => {
                   </button>
                   <button
                     onClick={() => handleViewDetails(course)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-[#4B5563] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2"
+                    className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-[#4B5563] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     Details
                   </button>

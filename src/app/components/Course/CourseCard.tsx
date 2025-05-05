@@ -68,7 +68,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           {/* View Details Link */}
           <Link
             href={`/course/${course._id}`}
-            className="text-[#FF6B00] text-sm font-medium hover:text-[#FF8533] transition-colors"
+            className="text-primary text-sm font-medium hover:text-primary-hover transition-colors"
           >
             View Details
           </Link>

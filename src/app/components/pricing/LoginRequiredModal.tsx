@@ -92,7 +92,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
                   {...register("email")}
                   required
                   placeholder="Email*"
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#F86537] focus:ring-2 focus:ring-[#F86537]/20 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
               </div>
@@ -102,7 +102,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
                   {...register("password")}
                   required
                   placeholder="Password*"
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#F86537] focus:ring-2 focus:ring-[#F86537]/20 transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-white border border-gray-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                 />
                 {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
               </div>
@@ -116,7 +116,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="peer hidden"
                   />
-                  <div className="h-5 w-5 rounded-lg border-2 border-gray-200 flex items-center justify-center peer-checked:bg-[#F86537] peer-checked:border-[#F86537] transition-colors">
+                  <div className="h-5 w-5 rounded-lg border-2 border-gray-200 flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition-colors">
                     <svg
                       className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
                       viewBox="0 0 24 24"
@@ -137,7 +137,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
               <div>
                 <Link
                   href={"/forgot-password?next=/subscriptions"}
-                  className="text-[#F86537] hover:text-[#E55A2E] font-medium transition-colors"
+                  className="text-primary hover:text-primary-hover font-medium transition-colors"
                 >
                   Forgot password?
                 </Link>
@@ -146,7 +146,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting || loginMutation.isPending}
-              className="bg-[#F86537] text-white gap-2 items-center flex flex-row py-3 px-6 rounded-xl font-medium hover:bg-[#E55A2E] w-full justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+              className="bg-primary text-white gap-2 items-center flex flex-row py-3 px-6 rounded-xl font-medium hover:bg-primary-hover w-full justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
             >
               {isSubmitting || loginMutation.isPending ? "Logging in..." : "Login"}{" "}
               <span>
@@ -159,7 +159,7 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
             Don't have an account?{" "}
             <Link
               href={"/register?next=/subscriptions"}
-              className="text-[#F86537] hover:text-[#E55A2E] font-medium transition-colors"
+              className="text-primary hover:text-primary-hover font-medium transition-colors"
             >
               Register
             </Link>

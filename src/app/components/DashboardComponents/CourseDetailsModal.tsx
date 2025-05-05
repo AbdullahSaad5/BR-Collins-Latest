@@ -56,13 +56,13 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-gray-900">{course.title}</h2>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="rounded-full bg-[#FFF5E6] px-3 py-1 text-sm font-medium text-[#FF6B00]">
+                    <span className="rounded-full bg-[#FFF5E6] px-3 py-1 text-sm font-medium text-primary">
                       {course.skillLevel}
                     </span>
-                    <span className="rounded-full bg-[#FFF5E6] px-3 py-1 text-sm font-medium text-[#FF6B00]">
+                    <span className="rounded-full bg-[#FFF5E6] px-3 py-1 text-sm font-medium text-primary">
                       {course.language}
                     </span>
-                    <span className="rounded-full bg-[#FFF5E6] px-3 py-1 text-sm font-medium text-[#FF6B00]">
+                    <span className="rounded-full bg-[#FFF5E6] px-3 py-1 text-sm font-medium text-primary">
                       {course.noOfLessons} Lessons
                     </span>
                   </div>
@@ -72,7 +72,7 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                       <span>{progress}%</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-                      <div className="h-full rounded-full bg-[#FF6B00]" style={{ width: `${progress}%` }} />
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
                     </div>
                   </div>
                 </div>
@@ -87,12 +87,7 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                 <ul className="mt-4 space-y-2">
                   {course.whatYouWillLearn.map((item, index) => (
                     <li key={index} className="flex items-start">
-                      <svg
-                        className="mr-2 h-5 w-5 text-[#FF6B00]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
+                      <svg className="mr-2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                       <span className="text-gray-600">{item}</span>
@@ -107,12 +102,7 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                 <ul className="mt-4 space-y-2">
                   {course.requirements.map((item, index) => (
                     <li key={index} className="flex items-start">
-                      <svg
-                        className="mr-2 h-5 w-5 text-[#FF6B00]"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
+                      <svg className="mr-2 h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                       <span className="text-gray-600">{item}</span>
@@ -166,13 +156,13 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
               <div className="mt-8 flex justify-end gap-4">
                 <button
                   onClick={onClose}
-                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2 transition-colors duration-200"
+                  className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200"
                 >
                   Close
                 </button>
                 <button
                   onClick={onStartLearning}
-                  className="rounded-md bg-[#FF6B00] px-4 py-2 text-sm font-medium text-white hover:bg-[#FF8533] focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:ring-offset-2 transition-colors duration-200"
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200"
                 >
                   {status === "not-started"
                     ? "Start Learning"

@@ -68,7 +68,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-2 rounded-lg bg-white p-2 shadow-sm md:flex">
               <div className="flex items-center gap-2">
-                <div className="h-2.5 w-2.5 rounded-full bg-[#FF6B00]"></div>
+                <div className="h-2.5 w-2.5 rounded-full bg-primary"></div>
                 <span className="text-sm text-gray-600">{Math.round(progress)}% Complete</span>
               </div>
             </div>
@@ -123,7 +123,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
                       href={currentContent.contentUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-lg bg-[#FF6B00] px-6 py-3 text-sm font-medium text-white hover:bg-[#FF8533] transition-colors"
+                      className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white hover:bg-primary-hover transition-colors"
                     >
                       {currentContent.contentType === "document" ? "View Document" : "Open Resource"}
                       <LinkIcon className="h-4 w-4" />
@@ -152,7 +152,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
               <button
                 onClick={handleCompleteLesson}
                 disabled={completedLessons.includes(currentContent._id)}
-                className="rounded-lg bg-[#FF6B00] px-6 py-2 text-sm font-medium text-white hover:bg-[#FF8533] disabled:opacity-50"
+                className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
               >
                 {completedLessons.includes(currentContent._id) ? "Completed" : "Mark as Complete"}
               </button>
@@ -178,7 +178,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
             <h4 className="text-lg font-medium text-gray-900">Course Content</h4>
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
               <div
-                className="h-full rounded-full bg-[#FF6B00] transition-all duration-300"
+                className="h-full rounded-full bg-primary transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -194,7 +194,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
                   onClick={() => setCurrentContentIndex(index)}
                   className={`flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors duration-200 ${
                     currentContentIndex === index
-                      ? "bg-[#FF6B00] text-white"
+                      ? "bg-primary text-white"
                       : completedLessons.includes(item._id)
                       ? "bg-orange-50 text-gray-900"
                       : "hover:bg-gray-50"

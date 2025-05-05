@@ -16,7 +16,7 @@ const SubscriptionDetails = () => {
         <p className="text-gray-600 mb-6">You don't have an active subscription at the moment.</p>
         <Link
           href={"/subscriptions"}
-          className="px-4 py-2 bg-[#F86537] text-white rounded-lg hover:bg-[#E55A2E] transition-colors"
+          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors"
         >
           View Plans
         </Link>

@@ -119,7 +119,7 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
           {/* Progress Indicator */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#F86537] text-white flex items-center justify-center text-sm font-medium">
+              <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
                 1
               </div>
               <span className="text-sm font-medium text-neutral-900">Plan Details</span>
@@ -135,10 +135,10 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
 
           <div className="space-y-8">
             {/* Plan Summary Card */}
-            <div className="bg-gradient-to-br from-[#F86537]/5 to-[#F86537]/10 rounded-xl p-6 border border-[#F86537]/20">
+            <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-6 border border-primary/20">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-neutral-900">{plan.title}</h3>
-                <span className="px-3 py-1 text-sm font-medium text-[#F86537] bg-[#F86537]/10 rounded-full">
+                <span className="px-3 py-1 text-sm font-medium text-primary bg-primary/10 rounded-full">
                   {plan.paymentType}
                 </span>
               </div>
@@ -148,8 +148,8 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
               </div>
               {isCorporate && plan.users && (
                 <div className="mt-4 flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
-                    <Users className="w-4 h-4 text-[#F86537]" />
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Users className="w-4 h-4 text-primary" />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-500">Number of Users</span>
@@ -164,8 +164,8 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
               {plan.type === "subscription" ? (
                 <>
                   <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
-                      <Shield className="w-4 h-4 text-[#F86537]" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                       <h4 className="font-medium text-neutral-900">One Year Plan</h4>
@@ -173,8 +173,8 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-[#F86537]" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                       <h4 className="font-medium text-neutral-900">Complete Access</h4>
@@ -185,8 +185,8 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
               ) : (
                 <>
                   <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
-                      <Shield className="w-4 h-4 text-[#F86537]" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Shield className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                       <h4 className="font-medium text-neutral-900">Lifetime Access</h4>
@@ -194,8 +194,8 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-[#F86537]/10 flex items-center justify-center">
-                      <Zap className="w-4 h-4 text-[#F86537]" />
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                       <h4 className="font-medium text-neutral-900">Course Selection</h4>
@@ -221,7 +221,7 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
             <button
               onClick={handleConfirm}
               disabled={createSubscriptionMutation.isPending}
-              className={`cursor-pointer w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`cursor-pointer w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               {createSubscriptionMutation.isPending ? (
                 <>

@@ -121,9 +121,9 @@ const ViewCart = () => {
               <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                 <div className="max-w-md mx-auto">
                   <div className="w-40 h-40 mx-auto mb-6 relative flex items-center justify-center">
-                    <div className="absolute inset-0 bg-[#F86537]/10 rounded-full"></div>
+                    <div className="absolute inset-0 bg-primary/10 rounded-full"></div>
                     <svg
-                      className="w-3/4 h-3/4 text-[#F86537] relative z-10"
+                      className="w-3/4 h-3/4 text-primary relative z-10"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -143,7 +143,7 @@ const ViewCart = () => {
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <a
                       href="/course"
-                      className="inline-flex items-center justify-center bg-[#F86537] hover:bg-[#E55A2E] text-white font-semibold py-3 px-8 rounded-full transition-colors"
+                      className="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-8 rounded-full transition-colors"
                     >
                       Browse Courses
                       <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,7 +208,7 @@ const ViewCart = () => {
                                       <svg
                                         key={i}
                                         className={`w-4 h-4 ${
-                                          i < Math.floor(item.rating) ? "text-[#F86537]" : "text-gray-300"
+                                          i < Math.floor(item.rating) ? "text-primary" : "text-gray-300"
                                         }`}
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
@@ -255,7 +255,7 @@ const ViewCart = () => {
                     )}
                     <button
                       onClick={handleCheckout}
-                      className="w-full bg-[#F86537] hover:bg-[#E55A2E] text-white font-semibold py-3 px-6 rounded-full transition-colors flex items-center justify-center gap-2"
+                      className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-6 rounded-full transition-colors flex items-center justify-center gap-2"
                     >
                       Proceed to Checkout
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

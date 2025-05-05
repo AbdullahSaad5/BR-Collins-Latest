@@ -63,7 +63,7 @@ export default function SuccessPage() {
             <div className="flex flex-col gap-3">
               <Link
                 href="/my-courses"
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors"
               >
                 <BookOpen className="w-4 h-4" />
                 Go to My Courses

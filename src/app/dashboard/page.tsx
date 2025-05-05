@@ -136,7 +136,7 @@ export default function Dashboard() {
           </p>
           <Link
             href="/subscriptions"
-            className="px-6 py-3 bg-[#F86537] text-white rounded-lg hover:bg-[#E55A2E] transition-colors font-medium"
+            className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors font-medium"
           >
             View Subscription Plans
           </Link>

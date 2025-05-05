@@ -39,7 +39,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
             <div
               key={i}
               className={`w-3 h-3 rounded-b-sm rounded-tl-sm transition-all duration-300 ${
-                i === activeIndex ? "bg-[#F86537]" : "bg-[#FFFFFF99]"
+                i === activeIndex ? "bg-primary" : "bg-[#FFFFFF99]"
               }`}
             />
           ))}

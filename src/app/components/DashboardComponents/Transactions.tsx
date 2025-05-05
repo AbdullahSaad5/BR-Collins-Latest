@@ -185,7 +185,7 @@ const Transactions = () => {
         <button
           onClick={() => portalSessionMutation.mutate()}
           disabled={portalSessionMutation.isPending}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#F86537] rounded-lg hover:bg-[#E55A2E] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {portalSessionMutation.isPending ? (
             <Loader2 className="w-4 h-4 animate-spin" />
