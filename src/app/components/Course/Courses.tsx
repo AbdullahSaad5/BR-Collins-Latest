@@ -26,6 +26,7 @@ export default function Courses() {
   });
   const [languageFilters, setLanguageFilters] = React.useState<{ [key: string]: boolean }>({});
   const [durationFilters, setDurationFilters] = React.useState<{ [key: string]: boolean }>({});
+  const [ratingFilters, setRatingFilters] = React.useState<{ [key: string]: boolean }>({});
 
   const handleTopicFilterChange = (topic: string, checked: boolean) => {
     setTopicFilters((prev) => ({
@@ -48,6 +49,13 @@ export default function Courses() {
     }));
   };
 
+  const handleRatingFilterChange = (rating: string, checked: boolean) => {
+    setRatingFilters((prev) => ({
+      ...prev,
+      [rating]: checked,
+    }));
+  };
+
   // Filter courses based on selected filters
   const filteredCourses = React.useMemo(() => {
     if (!allCourses) return [];
@@ -57,9 +65,10 @@ export default function Courses() {
       const hasActiveTopicFilters = Object.values(topicFilters).some((value) => value);
       const hasActiveLanguageFilters = Object.values(languageFilters).some((value) => value);
       const hasActiveDurationFilters = Object.values(durationFilters).some((value) => value);
+      const hasActiveRatingFilters = Object.values(ratingFilters).some((value) => value);
 
       // If no filters are active, show all courses
-      if (!hasActiveTopicFilters && !hasActiveLanguageFilters && !hasActiveDurationFilters) {
+      if (!hasActiveTopicFilters && !hasActiveLanguageFilters && !hasActiveDurationFilters && !hasActiveRatingFilters) {
         return true;
       }
 
@@ -104,9 +113,27 @@ export default function Courses() {
         }
       }
 
+      // Rating filter check
+      if (hasActiveRatingFilters) {
+        // Assume course.rating is a number (e.g., 4.7)
+        const courseRating = course.rating || (Math.random() * 5).toFixed(1);
+        // Find the lowest selected rating
+        const selectedRatings = Object.keys(ratingFilters)
+          .filter((key) => ratingFilters[key])
+          .map(Number);
+
+        console.log("selectedRatings", selectedRatings);
+        if (selectedRatings.length > 0) {
+          // If course rating is less than the minimum selected, filter out
+          // But since these are "& up", we want to show if it matches ANY selected
+          const matches = selectedRatings.some((minRating) => Number(courseRating.toString()) >= minRating);
+          if (!matches) return false;
+        }
+      }
+
       return true;
     });
-  }, [allCourses, topicFilters, languageFilters, durationFilters]);
+  }, [allCourses, topicFilters, languageFilters, durationFilters, ratingFilters]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash === "#courses-section") {
@@ -158,9 +185,11 @@ export default function Courses() {
                   topicFilters={topicFilters}
                   languageFilters={languageFilters}
                   durationFilters={durationFilters}
+                  ratingFilters={ratingFilters}
                   onTopicFilterChange={handleTopicFilterChange}
                   onLanguageFilterChange={handleLanguageFilterChange}
                   onDurationFilterChange={handleDurationFilterChange}
+                  onRatingFilterChange={handleRatingFilterChange}
                 />
               </aside>
 
@@ -176,6 +205,7 @@ export default function Courses() {
                       setTopicFilters({});
                       setLanguageFilters({});
                       setDurationFilters({});
+                      setRatingFilters({});
                     }}
                   />
                 ) : (

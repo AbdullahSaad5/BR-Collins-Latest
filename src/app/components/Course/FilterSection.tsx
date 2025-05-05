@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useCategoryContext } from "../context/CategoryContext";
+import { FaRegStar, FaStar } from "react-icons/fa6";
+import { FaStarHalfAlt } from "react-icons/fa";
 
 interface FilterGroupProps {
   title: string;
@@ -28,8 +30,9 @@ const CheckboxItem: React.FC<CheckboxItemProps> = ({ label, children, checked, o
     <label className="flex gap-3 items-center cursor-pointer">
       <input type="checkbox" className="hidden" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <div
-        className={`w-6 h-6 rounded-md border-2 border-solid ${checked ? "bg-sky-500 border-sky-500" : "bg-white border-zinc-200"
-          }`}
+        className={`w-6 h-6 rounded-md border-2 border-solid ${
+          checked ? "bg-sky-500 border-sky-500" : "bg-white border-zinc-200"
+        }`}
       >
         {checked && (
           <svg className="w-full h-full text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,18 +76,24 @@ interface FilterSectionProps {
   durationFilters: {
     [key: string]: boolean;
   };
+  ratingFilters: {
+    [key: string]: boolean;
+  };
   onTopicFilterChange: (topic: string, checked: boolean) => void;
   onLanguageFilterChange: (language: string, checked: boolean) => void;
   onDurationFilterChange: (duration: string, checked: boolean) => void;
+  onRatingFilterChange: (rating: string, checked: boolean) => void;
 }
 
 const FilterSection: React.FC<FilterSectionProps> = ({
   topicFilters,
   languageFilters,
   durationFilters,
+  ratingFilters,
   onTopicFilterChange,
   onLanguageFilterChange,
   onDurationFilterChange,
+  onRatingFilterChange,
 }) => {
   const { categories, isLoading, error } = useCategoryContext();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -93,7 +102,8 @@ const FilterSection: React.FC<FilterSectionProps> = ({
   const INITIAL_DURATIONS_TO_SHOW = 3;
 
   const hasMoreCategories = (categories?.length || 0) > INITIAL_CATEGORIES_TO_SHOW;
-  const visibleCategories = categories?.length > 0 ? (isExpanded ? categories : categories.slice(0, INITIAL_CATEGORIES_TO_SHOW)) : [];
+  const visibleCategories =
+    categories?.length > 0 ? (isExpanded ? categories : categories.slice(0, INITIAL_CATEGORIES_TO_SHOW)) : [];
 
   const durationOptions = [
     { label: "0-1 Hours", value: "0-1 Hours" },
@@ -106,6 +116,30 @@ const FilterSection: React.FC<FilterSectionProps> = ({
 
   const hasMoreDurations = durationOptions.length > INITIAL_DURATIONS_TO_SHOW;
   const visibleDurations = isDurationExpanded ? durationOptions : durationOptions.slice(0, INITIAL_DURATIONS_TO_SHOW);
+
+  const ratingOptions = [
+    { label: "4.5 & up", value: "4.5" },
+    { label: "4.0 & up", value: "4.0" },
+    { label: "3.5 & up", value: "3.5" },
+    { label: "3.0 & up", value: "3.0" },
+  ];
+
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<FaStar key={i} className="text-[#FFB346] text-base" />);
+      } else if (i === fullStars + 1 && hasHalfStar) {
+        stars.push(<FaStarHalfAlt key={i} className="text-[#FFB346] text-base" />);
+      } else {
+        stars.push(<FaRegStar key={i} className="text-[#FFB346] text-base" />);
+      }
+    }
+    return stars;
+  };
 
   if (isLoading) {
     return (
@@ -153,6 +187,27 @@ const FilterSection: React.FC<FilterSectionProps> = ({
             onToggle={() => setIsExpanded(!isExpanded)}
             hasMore={hasMoreCategories}
           />
+        </FilterGroup>
+
+        <hr className="w-full h-px bg-zinc-200" />
+
+        <FilterGroup title="By Rating">
+          <div className="flex flex-col gap-3">
+            {ratingOptions.map((rating) => (
+              <CheckboxItem
+                key={rating.value}
+                checked={ratingFilters[rating.value] || false}
+                onChange={(checked) => onRatingFilterChange(rating.value, checked)}
+              >
+                <span className="flex items-center gap-1">
+                  {renderStars(Number(rating.value))}
+                  <span className="ml-2 text-base text-neutral-900 max-md:text-base max-sm:text-sm">
+                    {rating.label}
+                  </span>
+                </span>
+              </CheckboxItem>
+            ))}
+          </div>
         </FilterGroup>
 
         <hr className="w-full h-px bg-zinc-200" />
