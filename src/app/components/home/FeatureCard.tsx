@@ -9,7 +9,7 @@ interface FeatureCardProps {
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, iconSrc, className = "" }) => (
   <div className={`w-full rounded-none max-md:max-w-full ${className}`}>
-    <div className="px-4 md:px-9 py-4 md:py-7 rounded-2xl bg-slate-100 max-md:max-w-full">
+    <div className="px-4 md:px-9 py-4 md:py-7 rounded-2xl bg-[#F3F6F8] max-md:max-w-full">
       <div className="flex flex-col md:flex-row gap-4 md:gap-5">
         <div className="w-full md:w-[17%] max-md:ml-0">
           <img

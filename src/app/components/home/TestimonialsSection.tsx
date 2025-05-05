@@ -8,8 +8,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const testimonials = [
   {
-    quote:
-      "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+    quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
     author: "Valerie J.",
     role: "Creasman CEO",
     avatarSrc:
@@ -18,8 +17,7 @@ const testimonials = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
   },
   {
-    quote:
-      "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
     author: "Hannah R.",
     role: "Sutton CEO",
     avatarSrc:
@@ -28,8 +26,7 @@ const testimonials = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
   },
   {
-    quote:
-      "The marketing strategies I learned helped double our company's revenue in just six months.",
+    quote: "The marketing strategies I learned helped double our company's revenue in just six months.",
     author: "Michael T.",
     role: "Marketing Director",
     avatarSrc:
@@ -38,8 +35,7 @@ const testimonials = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
   },
   {
-    quote:
-      "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+    quote: "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
     author: "Valerie J.",
     role: "Creasman CEO",
     avatarSrc:
@@ -48,8 +44,7 @@ const testimonials = [
       "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca",
   },
   {
-    quote:
-      "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    quote: "B.R. Collins' business management course gave me the confidence to lead my team to success.",
     author: "Hannah R.",
     role: "Sutton CEO",
     avatarSrc:
@@ -75,7 +70,7 @@ const TestimonialCard = ({
   hasShadow?: boolean;
 }) => (
   <article
-    className={`px-4  md:px-8 py-6 md:py-9 justify-between flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100  shadow-[2px_4px_4px_rgba(0,0,0,0.06)] w-full`}
+    className={`px-4  md:px-8 py-6 md:py-9 flex flex-col h-full bg-white rounded-xl border border-solid border-zinc-100  shadow-[0px_4px_34px_rgba(0,0,0,0.06)] w-full`}
   >
     <img
       src={
@@ -86,30 +81,18 @@ const TestimonialCard = ({
       className="object-contain w-8 aspect-[1.68]"
       alt="Quote"
     />
-    <blockquote className="mt-4 md:mt-7 text-lg md:text-2xl font-medium leading-6 md:leading-8 text-neutral-900">
+    <blockquote className="mt-7 text-lg md:text-[26px] font-medium leading-6 md:leading-8 text-neutral-900">
       {quote}
     </blockquote>
-    <div className="flex flex-col md:flex-row justify-between mt-8 md:mt-16 gap-4">
+    <div className="flex flex-col md:flex-row justify-between gap-4 mt-auto">
       <div className="flex gap-3 items-center">
-        <img
-          src={avatarSrc}
-          className="object-contain rounded-full aspect-square w-10 md:w-[50px]"
-          alt={author}
-        />
+        <img src={avatarSrc} className="object-contain rounded-full aspect-square w-10 md:w-[50px]" alt={author} />
         <div>
-          <p className="text-base md:text-xl font-bold text-neutral-900">
-            {author}
-          </p>
-          <p className="text-sm md:text-base leading-none text-zinc-500">
-            {role}
-          </p>
+          <p className="text-base md:text-xl font-bold text-neutral-900">{author}</p>
+          <p className="text-sm md:text-base leading-none text-zinc-500">{role}</p>
         </div>
       </div>
-      <img
-        src={ratingSrc}
-        className="object-contain aspect-[2.51] w-20 md:w-[88px]"
-        alt="Rating"
-      />
+      <img src={ratingSrc} className="object-contain aspect-[2.51] w-20 md:w-[88px]" alt="Rating" />
     </div>
   </article>
 );
@@ -201,7 +184,7 @@ const TestimonialsSection = () => {
                 autoplay: false,
               },
             }}
-            className="h-[422px]"
+            className="h-[422px] lg:h-full"
           >
             {testimonials.map((testimonial, index) => (
               <SwiperSlide key={index} className="!bg-white">
