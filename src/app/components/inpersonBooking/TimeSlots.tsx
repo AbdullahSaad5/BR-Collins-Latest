@@ -62,7 +62,9 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
               <div className={`flex gap-2.5 items-center ${!isSlotAvailable("full-day") ? "opacity-50" : ""}`}>
                 <span>Full Day:</span>
                 <span className="font-bold">8:00 AM - 5:00 PM</span>
-                {!isSlotAvailable("full-day") && <span className="text-red-500 text-sm">(Unavailable)</span>}
+                {!isSlotAvailable("full-day") && (
+                  <span className="w-2 h-2 rounded-full bg-red-500 inline-block ml-1" title="Unavailable"></span>
+                )}
               </div>
             </div>
           ) : (
@@ -86,13 +88,20 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
                   <div className="flex gap-2.5 items-center">
                     <span>{slot.label}:</span>
                     <span className="font-bold">{slot.time}</span>
-                    {!isAvailable && <span className="text-red-500 text-sm">(Unavailable)</span>}
+                    {!isAvailable && (
+                      <span className="w-2 h-2 rounded-full bg-red-500 inline-block ml-1" title="Unavailable"></span>
+                    )}
                   </div>
                 </label>
               );
             })
           )}
         </div>
+      </div>
+      {/* Note about red dot meaning */}
+      <div className="mt-3 flex items-center gap-2 text-sm text-gray-500">
+        <span className="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
+        <span>Indicates unavailable slot</span>
       </div>
     </div>
   );
