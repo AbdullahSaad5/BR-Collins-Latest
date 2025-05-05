@@ -13,6 +13,7 @@ import CourseCardSlider from "./CourseCardSlider";
 import CourseCard from "./CourseCard";
 import { FeatureCourseSlider } from "./FeatureCourseSlider";
 import { useSearchParams } from "next/navigation";
+import CourseCardSkeleton from "./CourseCardSkeleton";
 
 export default function Courses() {
   const searchParams = useSearchParams();
@@ -123,9 +124,37 @@ export default function Courses() {
     return (
       <main className="flex overflow-hidden flex-col bg-white">
         <HeroSection />
-        <div className="flex justify-center items-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
-        </div>
+        <section className="flex flex-col self-center w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
+          <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
+            <div className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
+              <h2 className="text-3xl font-bold max-md:max-w-full">All Courses</h2>
+              <p className="mt-3 text-lg max-md:max-w-full">Explore courses from experienced, real-world experts.</p>
+            </div>
+            <div className="mt-16 max-md:mt-10 max-md:max-w-full p-5">
+              <div className="flex gap-5 max-md:flex-col">
+                <aside className="w-[31%] max-md:w-full">
+                  <FilterSection
+                    topicFilters={topicFilters}
+                    languageFilters={languageFilters}
+                    durationFilters={durationFilters}
+                    onTopicFilterChange={handleTopicFilterChange}
+                    onLanguageFilterChange={handleLanguageFilterChange}
+                    onDurationFilterChange={handleDurationFilterChange}
+                  />
+                </aside>
+                <main className="ml-5 w-[69%] max-md:ml-0 max-md:w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                    {[...Array(8)].map((_, idx) => (
+                      <div key={idx} className="h-full">
+                        <CourseCardSkeleton />
+                      </div>
+                    ))}
+                  </div>
+                </main>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
     );
   }
@@ -172,7 +201,7 @@ export default function Courses() {
           className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2"
         >
           <h2 className="self-start text-3xl font-bold text-center text-neutral-900 max-md:max-w-full p-5">
-            All Accountability in the Workplace courses
+            All Courses
           </h2>
 
           <div className="mt-16 max-md:mt-10 max-md:max-w-full p-5">

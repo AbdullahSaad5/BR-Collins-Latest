@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React from "react";
 
 export const HeroSection = () => {
@@ -10,30 +11,21 @@ export const HeroSection = () => {
           <div className="w-6/12 max-md:w-full">
             <div className="flex flex-col w-full max-md:mt-10 max-md:max-w-full">
               <nav className="flex gap-1 items-end self-start text-base text-teal-950">
-                <a href="/">Home</a>
+                <Link href="/">Home</Link>
                 <img
                   src="/img/Hero/arrow.svg"
                   className="object-contain shrink-0 aspect-square w-[18px]"
                   alt="Breadcrumb separator"
                 />
-                <a href="/course">Courses</a>
-                <img
-                  src="/img/Hero/arrow.svg"
-                  className="object-contain shrink-0 aspect-square w-[18px]"
-                  alt="Breadcrumb separator"
-                />
-                <a href="#" className="font-semibold text-sky-500">
-                  Accountability in the Workplace
-                </a>
+                <Link href="/course" className="font-semibold text-sky-500">
+                  Courses
+                </Link>
               </nav>
               <div className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
                 <h1 className="text-5xl font-bold leading-[60px] max-md:max-w-full max-md:text-4xl max-md:leading-[51px]">
-                  Accountability in <br />
-                  the Workplace
+                  Explore Our Courses
                 </h1>
-                <p className="mt-5 text-xl max-md:max-w-full">
-                  Courses that help beginner designers become true unicorns
-                </p>
+                <p className="mt-5 text-xl max-md:max-w-full">Browse a variety of courses to boost your skills.</p>
               </div>
             </div>
           </div>
