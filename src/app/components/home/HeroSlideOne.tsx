@@ -49,7 +49,7 @@ const HeroSlideOne: React.FC<HeroSlideOneProps> = ({ isLoading, firstCourse }) =
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-            <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
+            <div className="flex items-center bg-[#FFCA7E] rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
               <Image src="/assets/congrateicon.png" width={16} height={16} className="mr-2 w-4 h-4" alt="congrats" />
               <h3>Bestseller</h3>
             </div>

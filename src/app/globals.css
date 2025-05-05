@@ -5,6 +5,7 @@
   --color-primary-hover: #e55a2e;
   --color-secondary: #0365ad;
   --color-secondary-dark: #3584bd;
+  --font-main: var(--font-hanken-grotesk);
 }
 
 button {

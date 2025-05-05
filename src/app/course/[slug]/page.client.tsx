@@ -249,7 +249,7 @@ const CourseDetailPageClient = ({
               <div className="flex flex-col mt-10  max-md:w-full">
                 <div className="flex flex-wrap gap-3 items-center w-full">
                   {/* {course.isNew && ( */}
-                  <div className="flex gap-1 items-center px-3 py-1.5 text-base font-medium text-black whitespace-nowrap bg-orange-300 rounded-md max-md:text-sm">
+                  <div className="flex gap-1 items-center px-3 py-1.5 text-base font-medium text-black whitespace-nowrap bg-[#FFCA7E] rounded-md max-md:text-sm">
                     <img
                       src="https://cdn.builder.io/api/v1/image/assets/TEMP/1099e32fc8790b4b60ad2b6a14e0383d2ac123fe?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
                       alt="Bestseller badge"
@@ -381,6 +381,8 @@ const CourseDetailPageClient = ({
                 </article>
               </div>
 
+              <div className="border-b border-gray-200 mt-8"></div>
+
               <div ref={contentRef} data-section="Course Content">
                 <CourseDetail
                   sections={displayCourse.sections}
@@ -393,6 +395,8 @@ const CourseDetailPageClient = ({
                 {/* Details section content */}
               </div>
 
+              <div className="border-b border-gray-200"></div>
+
               <div ref={instructorRef} data-section="Instructor">
                 <InstructorSection
                   instructor={{
@@ -400,6 +404,8 @@ const CourseDetailPageClient = ({
                   }}
                 />
               </div>
+
+              <div className="border-b border-gray-200 mt-8"></div>
 
               <div ref={reviewRef} data-section="Review">
                 <ReviewSection />

@@ -92,6 +92,8 @@ export const CourseContent: React.FC<CourseContentProps> = ({ sections: propSect
           ))}
         </section>
 
+        <div className="border-b border-gray-200 my-12"></div>
+
         <section className="mb-10">
           <h2 className="mb-5 text-3xl font-bold text-neutral-900 max-md:text-sm max-sm:text-xs">Requirements</h2>
           <ul>
@@ -103,6 +105,8 @@ export const CourseContent: React.FC<CourseContentProps> = ({ sections: propSect
             ))}
           </ul>
         </section>
+
+        <div className="border-b border-gray-200 my-12"></div>
 
         <section className="mb-10">
           <h2 className="mb-5 text-3xl font-bold text-neutral-900 max-md:text-sm max-sm:text-xs">Description</h2>
