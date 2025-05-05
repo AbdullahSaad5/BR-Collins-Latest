@@ -101,24 +101,28 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
                       />
                       <h3>Bestseller</h3>
                     </div>
-                    <div className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
-                      {isLoading || !firstCourse ? (
-                        <span className="bg-gray-200 rounded w-8 h-4 inline-block animate-pulse" />
-                      ) : (
-                        firstCourse.rating
-                      )}
-                      <div className="text-yellow-500 flex items-center text-sm">
-                        {[...Array(4)].map((_, i) => (
-                          <FaStar key={i} />
-                        ))}
-                        <FaStarHalfAlt />
+                    <div className="font-medium text-sm sm:text-base flex flex-col sm:flex-row sm:items-center gap-2 text-gray-900">
+                      <div className="flex items-center gap-2">
+                        {isLoading || !firstCourse ? (
+                          <span className="bg-gray-200 rounded w-8 h-4 inline-block animate-pulse" />
+                        ) : (
+                          firstCourse.rating
+                        )}
+                        <div className="text-yellow-500 flex items-center text-sm">
+                          {[...Array(4)].map((_, i) => (
+                            <FaStar key={i} />
+                          ))}
+                          <FaStarHalfAlt />
+                        </div>
                       </div>
 
-                      <div className="text-black">10+ ratings</div>
-                      <div className="w-px h-4 bg-black/30"></div>
-                      <div className="text-black flex items-center gap-2">
-                        <BookIcon className="w-5 h-5" />
-                        <p>{firstCourse?.noOfLessons} lessons</p>
+                      <div className="flex items-center gap-2">
+                        <div className="text-black">10+ ratings</div>
+                        <div className="w-px h-4 bg-black/30"></div>
+                        <div className="text-black flex items-center gap-2">
+                          <BookIcon className="w-5 h-5" />
+                          <p>{firstCourse?.noOfLessons} lessons</p>
+                        </div>
                       </div>
                     </div>
                   </div>
