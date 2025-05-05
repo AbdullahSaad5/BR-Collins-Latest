@@ -1,7 +1,5 @@
 "use client";
 import { useRef, useState } from "react";
-import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-import Link from "next/link";
 
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
@@ -11,9 +9,9 @@ import { useQuery } from "@tanstack/react-query";
 
 import "swiper/css";
 import "swiper/css/autoplay";
-import { ArrowLeftIcon, ArrowRightIcon } from "../../../public/icons/home_page_icons";
 import CourseSwiper from "../components/Course/CourseSwiper";
 import CommunitySection from "../components/home/CommunitySection";
+import CourseCategories from "../components/home/CourseCategories";
 import HeroSection from "../components/home/HeroSection";
 import OnSiteLearningSection from "../components/home/OnSiteLearningSection";
 import TestimonialsSection from "../components/home/TestimonialsSection";
@@ -22,29 +20,6 @@ import { ICourseCategory } from "../types/course-category.contract";
 interface SliderItem {
   title: string;
   courses: number;
-}
-
-interface Course {
-  id: number;
-  title: string;
-  duration: string;
-  lessons: number;
-  rating: number;
-  price: number;
-}
-
-interface BlogCategory {
-  name: string;
-  count: number;
-}
-
-interface Blog {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  date: string;
-  image: string;
 }
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
@@ -65,44 +40,6 @@ export const Homepage = () => {
   const [activeTab, setActiveTab] = useState<string>("e-learning");
   const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
-
-  const {
-    data: courses,
-    isLoading: isCoursesLoading,
-    error: coursesError,
-  } = useQuery({
-    queryKey: ["courses"],
-    queryFn: fetchCourses,
-    select: (data) => data.data,
-  });
-
-  const {
-    data: categories,
-    isLoading: isCategoriesLoading,
-    error: categoriesError,
-  } = useQuery({
-    queryKey: ["course-categories"],
-    queryFn: fetchCategories,
-    select: (data) => data.data,
-  });
-
-  const sliderItems: (SliderItem & { categoryId: string })[] = (categories || []).map((cat) => ({
-    title: cat.name,
-    courses: cat.coursesCount,
-    categoryId: cat._id,
-  }));
-
-  const scrollLeft = (): void => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = (): void => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
-    }
-  };
 
   return (
     <>
@@ -148,41 +85,7 @@ export const Homepage = () => {
 
         {/* Slider Section */}
 
-        <section className="relative text-gray-900 mt-6">
-          <div className="w-full max-w-[1326px] relative">
-            <button
-              onClick={scrollLeft}
-              className="hidden md:flex absolute left-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-            >
-              <ArrowLeftIcon className="w-4 h-4" />
-            </button>
-
-            <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
-              <div className="flex flex-nowrap gap-4 items-stretch">
-                {sliderItems.map((item, index) => (
-                  <div key={index} className="flex-shrink-0 py-1 h-full ">
-                    <Link
-                      href={`/course?category=${item.categoryId}#courses-section`}
-                      className="flex flex-col rounded-full mt-2 bg-gray-100 px-4 py-2 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
-                    >
-                      <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center  pt-1">
-                        {item.title}
-                      </h2>
-                      <p className="text-xs text-gray-600 mt-1 text-center">{item.courses} courses</p>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <button
-              onClick={scrollRight}
-              className="hidden md:flex absolute right-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-            >
-              <ArrowRightIcon className="w-4 h-4" />
-            </button>
-          </div>
-        </section>
+        <CourseCategories />
 
         <CourseSwiper />
       </section>
