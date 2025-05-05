@@ -58,7 +58,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("important-information")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "important-information"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -69,7 +69,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("information-we-collect")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "information-we-collect"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -79,7 +79,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("how-we-share-information")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "how-we-share-information"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -89,7 +89,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("third-party-links")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "third-party-links"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -99,7 +99,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("children-privacy")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "children-privacy"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -109,7 +109,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("how-we-protect-information")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "how-we-protect-information"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >
@@ -119,7 +119,7 @@ export default function PrivacyPolicy() {
                   onClick={() => scrollToSection("policy-changes")}
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "policy-changes"
-                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-orange-500"
+                      ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
                       : "text-gray-700 hover:bg-gray-100"
                   }`}
                 >

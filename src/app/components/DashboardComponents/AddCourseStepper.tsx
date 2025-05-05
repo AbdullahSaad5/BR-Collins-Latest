@@ -646,7 +646,7 @@ export default function AddCourseStepper() {
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     index === activeStep
-                      ? "bg-orange-500 text-white"
+                      ? "bg-primary text-white"
                       : index < activeStep
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-600"
@@ -685,7 +685,7 @@ export default function AddCourseStepper() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
+              className="px-6 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover disabled:opacity-50"
             >
               {isSubmitting ? "Submitting..." : "Submit Course"}
             </button>
@@ -693,7 +693,7 @@ export default function AddCourseStepper() {
             <button
               type="button"
               onClick={handleNext}
-              className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600"
+              className="px-6 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover"
             >
               Next
             </button>

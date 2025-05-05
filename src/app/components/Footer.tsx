@@ -6,6 +6,7 @@ import { FaInstagram, FaTelegramPlane, FaFacebookF } from "react-icons/fa";
 import { BsTwitterX } from "react-icons/bs";
 import { MapPin } from "lucide-react";
 import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../public/icons/footer_icons";
+import Link from "next/link";
 const QuickLinks = () => {
   return (
     <div className="grow  max-md:mt-10 font-sans">
@@ -244,12 +245,12 @@ const Footer = () => {
           <div className="flex flex-wrap gap-5 items-center min-h-[21px] max-md:max-w-full">
             <p className="self-stretch my-auto">Copyright © 2025 B.R. Collins All Rights Reserved</p>
             <div className="flex gap-3 items-center self-stretch my-auto font-semibold text-right underline min-w-60">
-              <a href="#" className="self-stretch my-auto hover:text-white transition-colors">
+              <Link href="/terms" className="self-stretch my-auto hover:text-white transition-colors">
                 Terms of service
-              </a>
-              <a href="#" className="self-stretch my-auto hover:text-white transition-colors">
+              </Link>
+              <Link href="/privacy" className="self-stretch my-auto hover:text-white transition-colors">
                 Privacy policy
-              </a>
+              </Link>
             </div>
           </div>
           <p className="font-medium text-right">

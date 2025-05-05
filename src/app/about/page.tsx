@@ -89,7 +89,7 @@ const Page = () => {
             </h2>
             <Link
               href="/login"
-              className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition text-lg md:text-md font-semibold"
+              className="bg-primary text-white px-6 py-3 rounded-full hover:bg-primary-hover transition text-lg md:text-md font-semibold"
             >
               Log In to Start
             </Link>
@@ -170,7 +170,7 @@ const Page = () => {
             </p>
             <Link
               href="/login"
-              className="bg-orange-500 hover:bg-orange-600 transition px-5 py-2 rounded-full text-white font-semibold text-sm"
+              className="bg-primary hover:bg-primary-hover transition px-5 py-2 rounded-full text-white font-semibold text-sm"
             >
               Log In To Start
             </Link>

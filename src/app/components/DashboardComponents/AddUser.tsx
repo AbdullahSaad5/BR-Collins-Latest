@@ -258,7 +258,7 @@ export default function AddUser() {
           <button
             type="submit"
             disabled={createUserMutation.isPending}
-            className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
+            className="px-6 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover disabled:opacity-50"
           >
             {createUserMutation.isPending ? "Submitting..." : isEditMode ? "Update User" : "Add User"}
           </button>

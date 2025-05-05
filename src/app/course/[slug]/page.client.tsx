@@ -475,7 +475,7 @@ const CourseDetailPageClient = ({
                     ) : (
                       <button
                         onClick={handleSubscriptionRedirect}
-                        className="w-full min-h-[58px] bg-orange-500 rounded-[58px] hover:bg-orange-600 transition-colors"
+                        className="w-full min-h-[58px] bg-primary rounded-[58px] hover:bg-primary-hover transition-colors"
                       >
                         Buy Subscription
                       </button>
@@ -486,7 +486,7 @@ const CourseDetailPageClient = ({
                       className={`w-full min-h-[58px] rounded-[58px] ${
                         items.some((item) => item._id === course._id)
                           ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-orange-500 hover:bg-orange-600"
+                          : "bg-primary hover:bg-primary-hover"
                       }`}
                       disabled={items.some((item) => item._id === course._id)}
                     >

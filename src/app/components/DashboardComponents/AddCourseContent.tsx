@@ -382,7 +382,7 @@ export default function AddCourseContent() {
           <button
             type="submit"
             disabled={createCourseContentMutation.isPending}
-            className="px-6 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 disabled:opacity-50"
+            className="px-6 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover disabled:opacity-50"
           >
             {createCourseContentMutation.isPending ? "Submitting..." : isEditMode ? "Update Content" : "Add Content"}
           </button>

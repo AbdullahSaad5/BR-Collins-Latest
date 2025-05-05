@@ -95,14 +95,14 @@ export const Calendar: React.FC<CalendarProps> = ({
           disabled={isPastDate}
           className={`flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold ${
             isSelected
-              ? "bg-orange-500"
+              ? "bg-primary"
               : // : isToday
               // ? "bg-sky-300 bg-opacity-30"
               isPastDate
               ? "text-gray-400 cursor-not-allowed"
               : hasBookedSlots
-              ? "bg-sky-300 bg-opacity-20 hover:bg-orange-500 hover:bg-opacity-20"
-              : "hover:bg-orange-500 hover:bg-opacity-20"
+              ? "bg-sky-300 bg-opacity-20 hover:bg-primary hover:bg-opacity-20"
+              : "hover:bg-primary hover:bg-opacity-20"
           }`}
         >
           {day}

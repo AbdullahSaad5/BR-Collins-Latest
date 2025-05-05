@@ -42,7 +42,7 @@ export const BookingSummary: React.FC<BookingSummaryProps> = ({ bookingState }) 
           </div>
         </div>
 
-        <button className="flex overflow-hidden gap-1.5 justify-center items-center px-5 py-3 mt-22 font-medium text-white bg-orange-500 min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10">
+        <button className="flex overflow-hidden gap-1.5 justify-center items-center px-5 py-3 mt-22 font-medium text-white bg-primary min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10">
           <span className="self-stretch my-auto">Proceed to Payment</span>
           <img
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/0889cf0590565dbb9aabef07a57290e2c923c555?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"

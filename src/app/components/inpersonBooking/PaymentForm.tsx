@@ -187,17 +187,17 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
       <div className="flex items-center">
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            currentStep === 1 ? "bg-orange-500 text-white" : "bg-gray-200 text-gray-600"
+            currentStep === 1 ? "bg-primary text-white" : "bg-gray-200 text-gray-600"
           }`}
         >
           1
         </div>
         <div className="w-24 h-1 bg-gray-200 mx-2">
-          <div className={`h-full ${currentStep === 2 ? "bg-orange-500" : "bg-gray-200"}`}></div>
+          <div className={`h-full ${currentStep === 2 ? "bg-primary" : "bg-gray-200"}`}></div>
         </div>
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center ${
-            currentStep === 2 ? "bg-orange-500 text-white" : "bg-gray-200 text-gray-600"
+            currentStep === 2 ? "bg-primary text-white" : "bg-gray-200 text-gray-600"
           }`}
         >
           2
@@ -371,7 +371,7 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
       <button
         type="submit"
         disabled={createPaymentIntentMutation.isPending}
-        className="w-full py-3 px-4 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 px-4 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {createPaymentIntentMutation.isPending ? (
           <div className="flex items-center justify-center">
@@ -471,7 +471,7 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
         <button
           type="submit"
           disabled={!stripe || isProcessing}
-          className="flex-1 py-3 px-4 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 py-3 px-4 bg-primary text-white font-medium rounded-lg hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isProcessing ? (
             <div className="flex items-center justify-center">

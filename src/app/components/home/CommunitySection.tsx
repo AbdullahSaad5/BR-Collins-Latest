@@ -18,7 +18,7 @@ const CommunitySection = () => (
           <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center md:justify-start">
             <Link
               href="/course"
-              className="px-6 py-3 md:px-8 md:py-4 text-white bg-orange-500 rounded-full hover:bg-orange-600 transition-colors text-center"
+              className="px-6 py-3 md:px-8 md:py-4 text-white bg-primary rounded-full hover:bg-primary-hover transition-colors text-center"
             >
               Explore Courses
             </Link>

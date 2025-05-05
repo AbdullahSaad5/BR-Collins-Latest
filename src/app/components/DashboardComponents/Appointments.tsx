@@ -472,7 +472,7 @@ const Appointments = () => {
           <button
             onClick={() => setView("table")}
             className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors w-full sm:w-auto ${
-              view === "table" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              view === "table" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             <TableIcon className="w-5 h-5" />
@@ -481,7 +481,7 @@ const Appointments = () => {
           <button
             onClick={() => setView("calendar")}
             className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors w-full sm:w-auto ${
-              view === "calendar" ? "bg-orange-500 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              view === "calendar" ? "bg-primary text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
             <CalendarIcon className="w-5 h-5" />

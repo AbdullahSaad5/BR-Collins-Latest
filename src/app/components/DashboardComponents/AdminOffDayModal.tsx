@@ -143,7 +143,7 @@ const AdminOffDayModal: React.FC<AdminOffDayModalProps> = ({ isOpen, onClose, se
                 type="submit"
                 disabled={selectedSlots.length === 0}
                 className={`px-4 py-2 text-sm font-medium text-white rounded-lg ${
-                  selectedSlots.length === 0 ? "bg-orange-300 cursor-not-allowed" : "bg-orange-500 hover:bg-orange-600"
+                  selectedSlots.length === 0 ? "bg-orange-300 cursor-not-allowed" : "bg-primary hover:bg-primary-hover"
                 }`}
               >
                 Save
