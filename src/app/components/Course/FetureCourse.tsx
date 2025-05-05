@@ -30,59 +30,84 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
   _id,
 }) => {
   return (
-    <div className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full h-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)]">
-      {/* Left side: Image */}
-      {imageUrl && (
-        <div className="relative w-full md:w-60 h-62 rounded-xl overflow-hidden">
-          <img src={imageUrl} alt={title} className="object-cover absolute inset-0 w-full h-full" />
+    <div className="h-[280px] w-full flex items-center gap-6 p-2  bg-white rounded-2xl border border-zinc-200 ">
+      {/* Left: Image with 'New' badge */}
+      <div className="relative h-full aspect-square flex-shrink-0 rounded-xl overflow-hidden">
+        {imageUrl && <img src={imageUrl} alt={title} className="object-cover w-full h-full" />}
+        {isNew && (
+          <span className="absolute top-5 left-4 bg-[#91F6CA] text-black font-semibold px-3 py-0.5 rounded-md">
+            New
+          </span>
+        )}
+      </div>
+      {/* Right: Content */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Top row: Duration badge */}
+        <div className="flex justify-between items-start w-full">
+          <span className="bg-[#2490E0] text-white text-sm font-bold px-2.5 py-1 rounded-md mb-3 uppercase">
+            {duration}
+          </span>
         </div>
-      )}
-
-      {/* Right side: Content */}
-      <div className="flex flex-col flex-1">
-        {/* Duration badge */}
-        {/* {isNew && ( */}
-        <span className="mb-2 px-2 py-0.5 text-sm font-bold text-white uppercase bg-sky-500 rounded-md border border-sky-500 border-solid w-fit">
-          {duration}
-        </span>
-        {/* )} */}
-
-        {/* Title & Lessons */}
-        <div className="w-full">
-          <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-snug text-neutral-900">{title}</h3>
-          <div className="flex gap-1.5 items-center mt-3.5 text-lg text-gray-500">
-            <img src="/img/Course/lession.svg" className="w-4 h-4" alt="Lessons icon" />
-            <span>{lessons} Lessons</span>
+        {/* Title */}
+        <div className="flex flex-col gap-1">
+          <h3 className="text-lg sm:text-[22px] font-bold leading-snug text-neutral-900 mb-2 line-clamp-2">{title}</h3>
+          {/* Instructor, lessons */}
+          <div className="flex items-center gap-3 mb-2">
+            <img
+              src="/assets/person.png"
+              alt="Instructor avatar"
+              className="w-[30px] h-[30px] rounded-full border border-zinc-200 object-cover"
+            />
+            <span className=" text-neutral-900">
+              by:{" "}
+              <a href="#" className="text-[#2490E0] font-medium hover:underline">
+                {instructor || "Unknown"}
+              </a>
+            </span>
+            <div className="h-4 w-0.5 bg-black/30"></div>
+            <span className="flex items-center text-gray-500">
+              <img src="/img/Course/lession.svg" className="w-4 h-4 mr-1" alt="Lessons icon" />
+              {lessons} Lessons
+            </span>
           </div>
-          <hr className="mt-4 w-full border-zinc-200" />
+          {/* Rating */}
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-base text-neutral-900 font-semibold">{rating || "5.0"}</span>
+            <div className="flex gap-px items-center">
+              {[...Array(5)].map((_, i) => (
+                <img
+                  key={i}
+                  src={`https://cdn.builder.io/api/v1/image/assets/TEMP/${
+                    i < Math.floor(rating)
+                      ? "cbe5a472d765e221c9aabf502e5a61f589060766"
+                      : "c8fa37fbcebebcd120b4ccf029f77f04da351558"
+                  }?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5`}
+                  className="w-4 h-4"
+                  alt={i < Math.floor(rating) ? "Filled star" : "Empty star"}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-
-        {/* Rating */}
-        <div className="flex gap-1.5 items-center mt-4">
-          <span className="text-lg text-neutral-900">{rating}</span>
-          <div className="flex gap-px items-center">
-            {[...Array(5)].map((_, i) => (
-              <img
-                key={i}
-                src={`https://cdn.builder.io/api/v1/image/assets/TEMP/${
-                  i < Math.floor(rating)
-                    ? "cbe5a472d765e221c9aabf502e5a61f589060766"
-                    : "c8fa37fbcebebcd120b4ccf029f77f04da351558"
-                }?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5`}
-                className="w-4 h-4"
-                alt={i < Math.floor(rating) ? "Filled star" : "Empty star"}
-              />
-            ))}
+        {/* Price and CTA */}
+        <div className="flex items-center justify-between mt-7">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold text-neutral-900">
+              {parseInt(price.toString()).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </span>
+            {originalPrice && (
+              <span className="text-base line-through text-neutral-400">
+                {parseInt(originalPrice.toString()).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              </span>
+            )}
           </div>
-        </div>
-
-        {/* Price & CTA */}
-        <div className="mt-6">
-          <div className="flex gap-2 items-center">
-            <span className="text-xl font-bold text-neutral-900">{price}</span>
-            {originalPrice && <span className="text-base line-through text-neutral-400">{originalPrice}</span>}
-          </div>
-          <a href={`/course/${_id}`} className="mt-4 inline-block text-base font-semibold text-orange-500 underline">
+          <a href={`/course/${_id}`} className="text-base font-semibold text-orange-500 hover:underline ml-2">
             View Details
           </a>
         </div>

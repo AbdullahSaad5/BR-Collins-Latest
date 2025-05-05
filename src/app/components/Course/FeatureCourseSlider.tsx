@@ -30,7 +30,7 @@ export const FeatureCourseSlider: React.FC = () => {
           slidesPerView={1}
           breakpoints={{
             768: {
-              slidesPerView: 1.5,
+              slidesPerView: 1,
             },
             1024: {
               slidesPerView: 2,
@@ -51,15 +51,15 @@ export const FeatureCourseSlider: React.FC = () => {
                   ...course,
                   duration: `${course.noOfHours} Hrs`,
                   lessons: course.noOfLessons,
-                  price: `$${course.discountPrice || course.price}`,
-                  originalPrice: course.price ? `$${course.price}` : undefined,
+                  price: (course.discountPrice || course.price).toString(),
+                  originalPrice: course.price ? course.price.toString() : undefined,
                   isNew: course.bestSeller,
-                  imageUrl: "/img/Course/Course.png",
+                  imageUrl: index % 2 === 1 ? "/img/Course/new-course-2.png" : "/img/Course/new-course.png",
                 };
                 return (
                   <SwiperSlide key={index} className="!h-auto">
                     <div className="h-full p-2">
-                      <FeatureCourse {...transformedCourse} />
+                      <FeatureCourse {...transformedCourse} isNew={true} />
                     </div>
                   </SwiperSlide>
                 );
