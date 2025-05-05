@@ -7,27 +7,25 @@ const faqs = [
   {
     question: "What's included in the Corporate Subscription plans?",
     answer:
-      "Corporate subscriptions give shared access to our full course library for your team. Choose from 10, 20, or 50-user plans, with custom learning dashboards and centralized team management.",
+      "Corporate subscriptions provide shared access to our entire course library for your team. Plans are available for 10, 20, or 50 users, and include custom learning dashboards, centralized team management, and progress tracking.",
   },
   {
-    question: "Can we upgrade our Corporate Plan later?",
+    question: "Can we upgrade or downgrade our Corporate Plan later?",
     answer:
-      "Corporate subscriptions give shared access to our full course library for your team. Choose from 10, 20, or 50-user plans, with custom learning dashboards and centralized team management.",
+      "Currently, upgrading or downgrading your Corporate Plan is not possible. Please choose the plan that best fits your team's needs.",
   },
   {
     question: "Do I get a certificate after completing a course?",
-    answer:
-      "Corporate subscriptions give shared access to our full course library for your team. Choose from 10, 20, or 50-user plans, with custom learning dashboards and centralized team management.",
+    answer: "No, certificates are not provided upon course completion at this time.",
   },
   {
-    question: "Is there any trial available before I buy?",
-    answer:
-      "Corporate subscriptions give shared access to our full course library for your team. Choose from 10, 20, or 50-user plans, with custom learning dashboards and centralized team management.",
+    question: "Is there a free trial available before I buy?",
+    answer: "We do not offer a free trial for our subscriptions at this time.",
   },
   {
-    question: "Is there any trial available before I buy?",
+    question: "How do I manage users or seats in my team plan?",
     answer:
-      "Corporate subscriptions give shared access to our full course library for your team. Choose from 10, 20, or 50-user plans, with custom learning dashboards and centralized team management.",
+      "Team administrators can easily add or remove users, assign courses, and monitor progress through the centralized dashboard included with every corporate subscription.",
   },
 ];
 
@@ -61,7 +59,7 @@ const Subcription = () => {
                 A Few Frequently <br /> Asked Questions
               </h1>
               <h3 className="text-lg font-medium mb-2">
-                Didn’t find the answer you’re <br /> looking for?
+                Didn't find the answer you're <br /> looking for?
               </h3>
               <p className="text-base">
                 email us directly at{" "}
