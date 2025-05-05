@@ -64,10 +64,23 @@ const ContactInfo = () => {
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fakeSubmit = () => {
+    return new Promise((resolve) => setTimeout(resolve, 1500));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    setSuccess(false);
+    await fakeSubmit();
+    setLoading(false);
+    setSuccess(true);
     setEmail("");
+    setTimeout(() => setSuccess(false), 2500);
   };
 
   return (
@@ -75,18 +88,37 @@ const Newsletter = () => {
       <h3 className="text-xl font-medium text-white">Join the Community</h3>
       <p className="mt-4 text-[A9BBC3]">2,000+ Students Globally – Connect & Say Hello!</p>
       <form onSubmit={handleSubmit} className="md:w-full my-4 flex flex-row justify-center md:justify-between gap-2">
-        <div className="border-1 bg-[#16313F] border-gray-600 w-fit flex flex-row  rounded-4xl p-1">
+        <div className="border-1 bg-[#16313F] border-gray-600 w-fit flex flex-row rounded-4xl p-1">
           <input
-            type="text"
-            className="border-none md:w-[473px]  bg-transparent focus:outline-0 text-gray-400 p-[6px] px-5  placeholder-gray-400 rounded-4xl"
+            type="email"
+            className="border-none md:w-[473px] bg-transparent focus:outline-0 text-gray-400 p-[6px] px-5 placeholder-gray-400 rounded-4xl disabled:bg-gray-800"
             name="input"
             placeholder="Email Address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
+            required
           />
         </div>
-        <div className="rounded-full text-white bg-[#ff6900]">
-          <FaTelegramPlane className=" w-[58px] h-[58px] p-4" />
-        </div>
+        <button
+          type="submit"
+          className={`w-14 h-14 rounded-full text-white bg-[#ff6900] flex items-center justify-center transition-opacity ${
+            loading ? "opacity-60 cursor-not-allowed" : "hover:bg-orange-500"
+          }`}
+          disabled={loading || !email}
+          aria-label="Submit newsletter email"
+        >
+          {loading ? (
+            <svg className="animate-spin w-8 h-8" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="#fff" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+            </svg>
+          ) : (
+            <FaTelegramPlane className="w-8 h-8" />
+          )}
+        </button>
       </form>
+      {success && <div className="text-green-400 text-base mt-2 transition-opacity">Thank you for joining! 🎉</div>}
     </div>
   );
 };

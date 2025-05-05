@@ -103,7 +103,7 @@ const Page = () => {
       {testimonials.length > 0 && (
         <section className="bg-blue-50 py-12 text-center w-full">
           <h2 className="text-3xl md:text-[40px] font-bold text-gray-900 mb-2">What Our Learners Say</h2>
-          <p className="text-gray-600  mx-auto mb-12 text-sm md:text-[22px] mt-5">
+          <p className="text-gray-600  mx-auto mb-12 text-sm sm:text-base md:text-[22px] mt-5">
             Learning communicates to the global world and builds a bright future with our history.
           </p>
 
