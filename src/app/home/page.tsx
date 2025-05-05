@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import Link from "next/link";
 
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
@@ -64,23 +65,6 @@ export const Homepage = () => {
   const [activeTab, setActiveTab] = useState<string>("e-learning");
   const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
-  // const [currentSlide, setCurrentSlide] = useState(0);
-  // const [isClient, setIsClient] = useState(false);
-
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
-  //   }, 5000);
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  // if (!isClient) {
-  //   return <div className="h-[300px] lg:h-[500px] w-full" />;
-  // }
 
   const {
     data: courses,
@@ -102,73 +86,11 @@ export const Homepage = () => {
     select: (data) => data.data,
   });
 
-  const sliderItems: SliderItem[] = [
-    { title: "Business Writing ", courses: 100 },
-    { title: "Anger Management", courses: 80 },
-    { title: "Administrative", courses: 60 },
-    { title: "Call Center Training", courses: 40 },
-    { title: "Business Acumen", courses: 40 },
-    { title: "App Developer", courses: 40 },
-    { title: "Data Analysis", courses: 75 },
-    { title: "Project Management", courses: 90 },
-    { title: "Digital Marketing", courses: 65 },
-  ];
-
-  const blogCategories: BlogCategory[] = [
-    { name: "Technology", count: 25 },
-    { name: "Business", count: 18 },
-    { name: "Personal Development", count: 12 },
-    { name: "Marketing", count: 15 },
-    { name: "Design", count: 8 },
-    { name: "Business", count: 18 },
-    { name: "Personal Development", count: 12 },
-    { name: "Marketing", count: 15 },
-    { name: "Design", count: 8 },
-  ];
-
-  const blogs: Blog[] = [
-    {
-      id: 1,
-      title: "The Future of Artificial Intelligence in Business",
-      description: "Explore how AI is transforming business operations and what it means for the future of work.",
-      category: "Technology",
-      date: "May 15, 2024",
-      image: "/assets/abouthome.png",
-    },
-    {
-      id: 2,
-      title: "Effective Time Management Strategies for Professionals",
-      description: "Learn proven techniques to boost your productivity and achieve more in less time.",
-      category: "Business",
-      date: "April 28, 2024",
-      image: "/assets/congrateicon.png",
-    },
-    {
-      id: 3,
-      title: "The Psychology of Consumer Behavior",
-      description: "Understand what drives purchasing decisions and how to leverage this knowledge in marketing.",
-      category: "Marketing",
-      date: "April 15, 2024",
-      image: "/assets/lowerlogo.png",
-    },
-  ];
-
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-
-    for (let i = 1; i <= 5; i++) {
-      if (i <= fullStars) {
-        stars.push(<FaStar key={i} className="text-yellow-400" />);
-      } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<FaStarHalfAlt key={i} className="text-yellow-400" />);
-      } else {
-        stars.push(<FaRegStar key={i} className="text-yellow-400" />);
-      }
-    }
-    return stars;
-  };
+  const sliderItems: (SliderItem & { categoryId: string })[] = (categories || []).map((cat) => ({
+    title: cat.name,
+    courses: cat.coursesCount,
+    categoryId: cat._id,
+  }));
 
   const scrollLeft = (): void => {
     if (sliderRef.current) {
@@ -239,12 +161,15 @@ export const Homepage = () => {
               <div className="flex flex-nowrap gap-4 items-stretch">
                 {sliderItems.map((item, index) => (
                   <div key={index} className="flex-shrink-0 py-1 h-full ">
-                    <div className="flex flex-col rounded-full mt-2 bg-gray-100 px-4 py-2 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]">
+                    <Link
+                      href={`/course?category=${item.categoryId}#courses-section`}
+                      className="flex flex-col rounded-full mt-2 bg-gray-100 px-4 py-2 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
+                    >
                       <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center  pt-1">
                         {item.title}
                       </h2>
                       <p className="text-xs text-gray-600 mt-1 text-center">{item.courses} courses</p>
-                    </div>
+                    </Link>
                   </div>
                 ))}
               </div>

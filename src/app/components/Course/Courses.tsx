@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { TopBanner } from "../TopBanner";
 import { Navigation } from "../Navigation";
 import { HeroSection } from "./HeroSection";
@@ -12,11 +12,20 @@ import { CategoryProvider } from "../context/CategoryContext";
 import CourseCardSlider from "./CourseCardSlider";
 import CourseCard from "./CourseCard";
 import { FeatureCourseSlider } from "./FeatureCourseSlider";
+import { useSearchParams } from "next/navigation";
 
 export default function Courses() {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category");
+
   const { courses: allCourses, isLoading, error } = useCourseContext();
 
-  const [topicFilters, setTopicFilters] = React.useState<{ [key: string]: boolean }>({});
+  const [topicFilters, setTopicFilters] = React.useState<{ [key: string]: boolean }>(() => {
+    if (initialCategory) {
+      return { [initialCategory]: true };
+    }
+    return {};
+  });
   const [languageFilters, setLanguageFilters] = React.useState<{ [key: string]: boolean }>({});
   const [durationFilters, setDurationFilters] = React.useState<{ [key: string]: boolean }>({});
 
@@ -101,6 +110,15 @@ export default function Courses() {
     });
   }, [allCourses, topicFilters, languageFilters, durationFilters]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#courses-section") {
+      const el = document.getElementById("courses-section");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, []);
+
   if (isLoading) {
     return (
       <main className="flex overflow-hidden flex-col bg-white">
@@ -149,7 +167,10 @@ export default function Courses() {
           </div>
         </section>
 
-        <section className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
+        <section
+          id="courses-section"
+          className="flex flex-col self-center mt-20 w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2"
+        >
           <h2 className="self-start text-3xl font-bold text-center text-neutral-900 max-md:max-w-full p-5">
             All Accountability in the Workplace courses
           </h2>
