@@ -28,6 +28,21 @@ export default function Courses() {
   const [durationFilters, setDurationFilters] = React.useState<{ [key: string]: boolean }>({});
   const [ratingFilters, setRatingFilters] = React.useState<{ [key: string]: boolean }>({});
 
+  // Tab switching logic (copied from homepage)
+  const [activeTab, setActiveTab] = React.useState<string>("e-learning");
+  const sliderRef = React.useRef<HTMLDivElement>(null);
+  const eLearningRef = React.useRef<HTMLButtonElement>(null);
+  const inPersonRef = React.useRef<HTMLButtonElement>(null);
+  const [sliderStyle, setSliderStyle] = React.useState({ left: 0, width: 0 });
+
+  React.useLayoutEffect(() => {
+    const activeBtn = activeTab === "e-learning" ? eLearningRef.current : inPersonRef.current;
+    if (activeBtn) {
+      const { offsetLeft, offsetWidth } = activeBtn;
+      setSliderStyle({ left: offsetLeft, width: offsetWidth });
+    }
+  }, [activeTab]);
+
   const handleTopicFilterChange = (topic: string, checked: boolean) => {
     setTopicFilters((prev) => ({
       ...prev,
@@ -158,13 +173,33 @@ export default function Courses() {
               <p className="mt-3 text-lg max-md:max-w-full">Explore courses from experienced, real-world experts.</p>
             </section>
 
-            <div className="flex gap-8 items-center mt-14 text-xl whitespace-nowrap max-md:mt-10">
-              <button className="self-stretch my-auto font-bold text-neutral-900">E-Learning</button>
-              <button className="self-stretch my-auto font-medium text-gray-500">In-Person</button>
+            {/* Tab Switcher */}
+            <div className="relative flex flex-wrap gap-8 items-center mt-14 text-xl whitespace-nowrap max-md:mt-10">
+              {/* Sliding border */}
+              <span
+                className="absolute bottom-0 h-1 bg-orange-500 rounded transition-all duration-300"
+                style={{ left: sliderStyle.left, width: sliderStyle.width }}
+              />
+              <button
+                ref={eLearningRef}
+                onClick={() => setActiveTab("e-learning")}
+                className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                  activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                E-Learning
+              </button>
+              <button
+                ref={inPersonRef}
+                onClick={() => setActiveTab("in-person")}
+                className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                  activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                }`}
+              >
+                In-Person
+              </button>
             </div>
-
-            <div className="z-10 shrink-0 mt-4 h-1 border-4 border-orange-500 border-solid w-[110px]" />
-            <div className="shrink-0 max-w-full h-px bg-white border border-solid border-zinc-200 w-[1326px]" />
+            <hr className="border-gray-200 w-full" />
 
             <CourseSwiper />
           </div>
