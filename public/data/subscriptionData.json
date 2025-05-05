@@ -2,7 +2,7 @@
   "individualPlans": [
     {
       "title": "Individual Courses",
-      "description": "Take Any Course for Just $99 – One-Time Payment, Lifetime Access!",
+      "description": "Take Any Course for Just $99 - One-Time Payment, <b>Lifetime Access!</b>",
       "price": 99,
       "priceText": "per course",
       "paymentType": "One-Time Payment",
@@ -12,7 +12,7 @@
     },
     {
       "title": "Yearly Subscription",
-      "description": "Access All Courses for a Full Year with Unlimited Learning!",
+      "description": "<b>Unlimited Learning</b> - All Courses for $199/Year",
       "price": 199,
       "priceText": "All Courses",
       "paymentType": "Yearly",

@@ -198,8 +198,14 @@ const SubscriptionCards: React.FC = () => {
               <div className="bg-white border-1 border-gray-300 rounded-lg w-full p-6 flex flex-row justify-between mr-auto">
                 <div className="flex flex-col justify-between w-1/2">
                   <div>
-                    <h1 className="text-lg sm:text-xl font-bold text-black mb-2">{plan.title}</h1>
-                    <p className="text-gray-700 text-sm sm:text-base">{plan.description}</p>
+                    <h1
+                      className="text-lg sm:text-xl font-bold text-black mb-2"
+                      dangerouslySetInnerHTML={{ __html: plan.title }}
+                    />
+                    <p
+                      className="text-gray-700 text-sm sm:text-base"
+                      dangerouslySetInnerHTML={{ __html: plan.description }}
+                    />
                     {isLoggedIn && isManagerWithOrg() && (
                       <p className="mt-2 text-red-600 text-xs font-medium">Available for individual users only</p>
                     )}
@@ -229,7 +235,7 @@ const SubscriptionCards: React.FC = () => {
                 </div>
                 <div className="flex flex-col justify-between w-1/2">
                   <div className="flex flex-col items-end">
-                    <h1 className="text-white text-xs sm:text-sm uppercase bg-blue-500 w-fit rounded-lg px-2 py-1 self-end mb-2">
+                    <h1 className="text-white text-xs sm:text-sm uppercase bg-[#2490E0] w-fit rounded-lg px-2 py-1 self-end mb-2 font-bold">
                       {plan.paymentType}
                     </h1>
                   </div>
