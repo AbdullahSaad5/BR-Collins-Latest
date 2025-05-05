@@ -49,7 +49,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
           <section className="relative w-full">
             <div className="w-full">
               {isLoading || !firstCourse ? (
-                <div className="w-full h-[300px] lg:h-[500px] bg-gray-200 animate-pulse" />
+                <div className="w-full h-[350px] lg:h-[500px] bg-gray-200 animate-pulse" />
               ) : (
                 <Image
                   src={"/assets/homepagewall.png"}
