@@ -5,7 +5,6 @@ import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
 import { ICourse } from "@/app/types/course.contract";
 import { api } from "@/app/utils/axios";
-import { useQuery } from "@tanstack/react-query";
 
 import "swiper/css";
 import "swiper/css/autoplay";

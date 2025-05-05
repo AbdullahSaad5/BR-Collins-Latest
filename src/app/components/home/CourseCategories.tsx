@@ -49,7 +49,24 @@ const CourseCategories: React.FC = () => {
   );
 
   if (isLoading) {
-    return <div className="w-full flex justify-center items-center py-8">Loading categories...</div>;
+    return (
+      <section className="relative text-gray-900 mt-6">
+        <div className="w-full max-w-[1326px] relative">
+          <div className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
+            <div className="flex flex-nowrap gap-4 items-stretch">
+              {[...Array(6)].map((_, idx) => (
+                <div key={idx} className="flex-shrink-0 py-1 h-full">
+                  <div className="flex flex-col rounded-full mt-2 bg-gray-100 px-4 py-2 shadow-md border border-gray-100 h-full w-fit min-w-[200px] animate-pulse">
+                    <div className="h-5 w-20 bg-gray-200 rounded mb-2 mx-auto mt-2" />
+                    <div className="h-3 w-16 bg-gray-200 rounded mx-auto mt-1" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
   if (error) {
     return <div className="w-full flex justify-center items-center py-8 text-red-500">Failed to load categories.</div>;
