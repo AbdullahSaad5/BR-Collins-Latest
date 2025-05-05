@@ -146,7 +146,7 @@ const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "S
 
         .custom-swiper .swiper-scrollbar {
           max-width: 315px;
-          height: 1px;
+          height: 3px;
           background: rgba(0, 0, 0, 0.1);
           left: 50%;
           transform: translateX(-50%);

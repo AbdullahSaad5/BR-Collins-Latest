@@ -104,10 +104,10 @@ const CourseCategories: React.FC = () => {
             <SwiperSlide key={index} className="!h-auto !w-fit py-2">
               <Link
                 href={`/course?category=${item.categoryId}#courses-section`}
-                className="flex flex-col rounded-full gap-0.5 bg-gray-100 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
+                className="flex flex-col rounded-full bg-[#F4F6F8] px-8 py-3  transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[200px]"
               >
-                <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center ">{item.title}</h2>
-                <p className="text-xs text-gray-600">({item.courses}) courses</p>
+                <h2 className="font-bold  text-lg sm:text-lg text-black mb-0">{item.title}</h2>
+                <p className="text-base text-[#5F6F7C]">({item.courses}) courses</p>
               </Link>
             </SwiperSlide>
           ))}

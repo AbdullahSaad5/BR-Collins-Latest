@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
@@ -17,6 +17,17 @@ export const Homepage = () => {
   const [activeTab, setActiveTab] = useState<string>("e-learning");
   const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
+  const eLearningRef = useRef<HTMLButtonElement>(null);
+  const inPersonRef = useRef<HTMLButtonElement>(null);
+  const [sliderStyle, setSliderStyle] = useState({ left: 0, width: 0 });
+
+  useLayoutEffect(() => {
+    const activeBtn = activeTab === "e-learning" ? eLearningRef.current : inPersonRef.current;
+    if (activeBtn) {
+      const { offsetLeft, offsetWidth } = activeBtn;
+      setSliderStyle({ left: offsetLeft, width: offsetWidth });
+    }
+  }, [activeTab]);
 
   return (
     <>
@@ -32,23 +43,26 @@ export const Homepage = () => {
                 Your Complete Skill Set Starts Here
               </h2>
 
-              <div className="flex flex-wrap gap-4 sm:gap-6 my-3">
+              <div className="relative flex flex-wrap gap-4 sm:gap-6 mt-3">
+                {/* Sliding border */}
+                <span
+                  className="absolute bottom-0 h-1 bg-primary rounded transition-all duration-300"
+                  style={{ left: sliderStyle.left, width: sliderStyle.width }}
+                />
                 <button
+                  ref={eLearningRef}
                   onClick={() => setActiveTab("e-learning")}
                   className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "e-learning"
-                      ? "text-gray-800 font-bold border-b-4 border-primary"
-                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
                   }`}
                 >
                   E-Learning
                 </button>
                 <button
+                  ref={inPersonRef}
                   onClick={() => setActiveTab("blogs")}
                   className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "blogs"
-                      ? "text-gray-800 font-bold border-b-4 border-primary"
-                      : "text-gray-500 hover:text-gray-800 hover:border-b-4 hover:border-gray-300"
+                    activeTab === "blogs" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
                   }`}
                 >
                   In-Person

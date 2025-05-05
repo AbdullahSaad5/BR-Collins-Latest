@@ -33,7 +33,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       <div className="p-4 flex flex-col h-full">
         {/* Hours Badge */}
         <div className="mb-4">
-          <span className="bg-blue-400 text-white text-xs font-bold px-2.5 py-1 rounded-md">
+          <span className="bg-[#2490E0]  text-white text-xs font-bold px-2.5 py-1 rounded-md">
             {course.noOfHours} HRS
           </span>
         </div>
@@ -68,7 +68,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           {/* View Details Link */}
           <Link
             href={`/course/${course._id}`}
-            className="text-primary text-sm font-medium hover:text-primary-hover transition-colors"
+            className="text-primary text-sm font-medium hover:text-primary-hover transition-colors underline"
           >
             View Details
           </Link>
