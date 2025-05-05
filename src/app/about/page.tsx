@@ -6,6 +6,8 @@ import Image from "next/image";
 import AboutBgImage from "../../../public/assets/ourStoryImg.svg";
 import axios from "axios";
 import images from "../../../public/assets/images/images";
+import StatsSection from "../components/home/StatsSection";
+
 interface Testimonial {
   message: string;
   avatar: string;
@@ -43,8 +45,7 @@ const Page = () => {
         const containerWidth = container.offsetWidth;
         const cardWidth = card.offsetWidth;
         const cardOffsetLeft = card.offsetLeft;
-        const centerPosition =
-          cardOffsetLeft - containerWidth / 2 + cardWidth / 2;
+        const centerPosition = cardOffsetLeft - containerWidth / 2 + cardWidth / 2;
         setTranslateX(-centerPosition);
       }
     }, 50);
@@ -72,9 +73,7 @@ const Page = () => {
   };
 
   const next = () => {
-    setIndex((prevIndex) =>
-      prevIndex === testimonials.length - 1 ? prevIndex : prevIndex + 1
-    );
+    setIndex((prevIndex) => (prevIndex === testimonials.length - 1 ? prevIndex : prevIndex + 1));
   };
 
   return (
@@ -103,12 +102,9 @@ const Page = () => {
       {/* Testimonials Section */}
       {testimonials.length > 0 && (
         <section className="bg-blue-50 py-12 text-center w-full">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            What Our Learners Say
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">What Our Learners Say</h2>
           <p className="text-gray-600 max-w-xl mx-auto mb-10 text-sm">
-            Learning communicates to the global world and builds a bright future
-            with our history.
+            Learning communicates to the global world and builds a bright future with our history.
           </p>
 
           <div className="overflow-hidden w-full">
@@ -126,27 +122,18 @@ const Page = () => {
           </div>
 
           <div className="mt-6 flex justify-center items-center gap-4">
-            <button
-              onClick={prev}
-              className="w-9 h-9 rounded-full bg-white shadow-md text-gray-600 hover:bg-gray-100"
-            >
+            <button onClick={prev} className="w-9 h-9 rounded-full bg-white shadow-md text-gray-600 hover:bg-gray-100">
               ←
             </button>
             <div className="w-50 h-1 bg-gray-200 rounded overflow-hidden relative">
               <div
                 className="h-full bg-[#1176C1] rounded transition-all duration-300"
                 style={{
-                  width: `${Math.min(
-                    100,
-                    (index / (testimonials.length - 1)) * 100
-                  )}%`,
+                  width: `${Math.min(100, (index / (testimonials.length - 1)) * 100)}%`,
                 }}
               ></div>
             </div>
-            <button
-              onClick={next}
-              className="w-9 h-9 rounded-full bg-white shadow-md text-gray-600 hover:bg-gray-100"
-            >
+            <button onClick={next} className="w-9 h-9 rounded-full bg-white shadow-md text-gray-600 hover:bg-gray-100">
               →
             </button>
           </div>
@@ -164,29 +151,22 @@ const Page = () => {
               Empowering Learners
             </h2>
             <p className="text-gray-700 text-xl md:text-base">
-           <strong>Established in 2024,</strong> B.R. Collins emerged from a vision to revolutionize online education. Recognizing the need for accessible, high-quality learning experiences, we set out to create a platform that combines expert training with real-world applicability.
+              <strong>Established in 2024,</strong> B.R. Collins emerged from a vision to revolutionize online
+              education. Recognizing the need for accessible, high-quality learning experiences, we set out to create a
+              platform that combines expert training with real-world applicability.
             </p>
           </div>
 
           <div className="w-full md:w-1/2 h-full flex  justify-center md:justify-end items-center max-w-[550px]">
-            <Image
-              src={AboutBgImage}
-              alt="ourStory_img"
-              width={90}
-              height={40}
-              className="w-[60%] h-[40%] "
-            />
+            <Image src={AboutBgImage} alt="ourStory_img" width={90} height={40} className="w-[60%] h-[40%] " />
           </div>
         </div>
 
         <div className="w-full flex flex-col justify-center items-center bg-[#1176c1] text-white rounded-2xl overflow-hidden">
           <div className="w-full h-full flex flex-col justify-center items-center p-5 md:p-20 bg-[url('/assets/BAlphabetIcon.svg')] bg-no-repeat">
-            <h3 className="text-2xl md:text-3xl font-bold mb-2 text-center">
-              Start Learning Today!
-            </h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-2 text-center">Start Learning Today!</h3>
             <p className="mb-6 text-sm md:text-base text-center">
-              At B.R. Collins, we believe in the transformative power of
-              education.
+              At B.R. Collins, we believe in the transformative power of education.
             </p>
             <Link
               href="/login"
@@ -201,10 +181,7 @@ const Page = () => {
   );
 };
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({
-  testimonial,
-  isActive,
-}) => {
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive }) => {
   return (
     <div
       className={`rounded-xl p-6 shadow-md transition-all duration-300 ease-in-out ${
@@ -212,13 +189,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
       }2xl:h-[420px] xl:h-[420px] lg:h-[420px] md:h-[420px] sm:h-[400px] 2xl:w-[422px] xl:w-[422px] lg:w-[422px] md:w-[422px] sm:w-[400px] h-[350px] w-[350px] flex flex-col justify-between`}
     >
       <p className="text-5xl mb-8 text-start text-gray-700">
-        <svg
-          width="32"
-          height="19"
-          viewBox="0 0 32 19"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        <svg width="32" height="19" viewBox="0 0 32 19" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip0_561_5173)">
             <path d="M32 0L24.16 19H16L19.68 0H32Z" fill="#C7D4DD" />
             <path d="M16 0L8.16 19H0L3.68 0H16Z" fill="#C7D4DD" />
@@ -230,42 +201,18 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
           </defs>
         </svg>
       </p>
-      <p
-        className={`text-2xl font-semibold mb-auto text-start ${
-          isActive ? "text-gray-50" : "text-gray-800"
-        }`}
-      >
+      <p className={`text-2xl font-semibold mb-auto text-start ${isActive ? "text-gray-50" : "text-gray-800"}`}>
         {testimonial.message}
       </p>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img
-            src={testimonial.avatar}
-            alt={testimonial.name}
-            className="w-8 h-8 rounded-full"
-          />
+          <img src={testimonial.avatar} alt={testimonial.name} className="w-8 h-8 rounded-full" />
           <div className="text-left">
-            <p
-              className={`font-semibold ${
-                isActive ? "text-gray-50" : "text-gray-800"
-              }`}
-            >
-              {testimonial.name}
-            </p>
-            <p
-              className={`text-xs ${
-                isActive ? "text-gray-50" : "text-gray-800"
-              }`}
-            >
-              {testimonial.role}
-            </p>
+            <p className={`font-semibold ${isActive ? "text-gray-50" : "text-gray-800"}`}>{testimonial.name}</p>
+            <p className={`text-xs ${isActive ? "text-gray-50" : "text-gray-800"}`}>{testimonial.role}</p>
           </div>
         </div>
-        <img
-          src={testimonial.platformLogo}
-          alt="Platform"
-          className="w-6 h-6"
-        />
+        <img src={testimonial.platformLogo} alt="Platform" className="w-6 h-6" />
       </div>
     </div>
   );
@@ -278,45 +225,15 @@ const ImpactSection = () => {
         Creating Impact Around The World
       </h2>
       <p className="text-gray-600 max-w-2xl mx-auto mb-10">
-        With our global catalog spanning the latest skills and topics, people
-        and organizations everywhere are able to adapt to change and thrive.
+        With our global catalog spanning the latest skills and topics, people and organizations everywhere are able to
+        adapt to change and thrive.
       </p>
 
       <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full">
         <div className="2xl:w-[650px] xl:w-[520px] lg:w-[450px] md:w-100 w-full rounded-xl overflow-hidden shadow-md h-[350px]">
-          <Image
-            src={images.Impact}
-            alt="Happy learner"
-            className="object-cover w-full h-[350px]"
-          />
+          <Image src={images.Impact} alt="Happy learner" className="object-cover w-full h-[350px]" />
         </div>
-
-        <div className="grid grid-cols-2 gap-3 md:gap-4 2xl:w-[640px] xl:w-[600px] lg:w-[430px] md:w-90 w-full h-[350px]">
-          <div className="bg-red-50 p-6 rounded-xl shadow-sm flex flex-col justify-center ">
-            <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900 mb-2">
-              500+
-            </h3>
-            <p className="text-sm text-gray-600">Learners & counting</p>
-          </div>
-          <div className="bg-blue-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
-            <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900">
-              800+
-            </h3>
-            <p className="text-sm text-gray-600">Courses & Video</p>
-          </div>
-          <div className="bg-blue-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
-            <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900">
-              100+
-            </h3>
-            <p className="text-sm text-gray-600">Registered Enrolls</p>
-          </div>
-          <div className="bg-red-50 p-6 rounded-xl shadow-sm flex flex-col justify-center">
-            <h3 className="text-2xl 2xl:text-5xl xl:text-4xl md:text-3xl sm:text-2xl font-semibold text-gray-900">
-              1000+
-            </h3>
-            <p className="text-sm text-gray-600">Certified Students</p>
-          </div>
-        </div>
+        <StatsSection />
       </div>
     </section>
   );
