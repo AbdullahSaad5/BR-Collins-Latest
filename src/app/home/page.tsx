@@ -1,30 +1,22 @@
 "use client";
-import React, { TouchEvent, useEffect, useRef, useState } from "react";
-import { FaBook, FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
-import Image from "next/image";
-import Link from "next/link";
+import { useRef, useState } from "react";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
-import CourseCard from "../components/Course/CourseCard";
-import CourseCardSlider from "../components/Course/CourseCardSlider";
+import { api } from "@/app/utils/axios";
+import { useQuery } from "@tanstack/react-query";
 
 import "swiper/css";
 import "swiper/css/autoplay";
-import { ICourseCategory } from "../types/course-category.contract";
-import CourseSwiper from "../components/Course/CourseSwiper";
 import { ArrowLeftIcon, ArrowRightIcon } from "../../../public/icons/home_page_icons";
-import TestimonialsSection from "../components/home/TestimonialsSection";
-import HeroSection from "../components/home/HeroSection";
-import FeatureCard from "../components/home/FeatureCard";
-import StatsSection from "../components/home/StatsSection";
-import OnSiteLearningSection from "../components/home/OnSiteLearningSection";
+import CourseSwiper from "../components/Course/CourseSwiper";
 import CommunitySection from "../components/home/CommunitySection";
+import HeroSection from "../components/home/HeroSection";
+import OnSiteLearningSection from "../components/home/OnSiteLearningSection";
+import TestimonialsSection from "../components/home/TestimonialsSection";
+import { ICourseCategory } from "../types/course-category.contract";
 
 interface SliderItem {
   title: string;
