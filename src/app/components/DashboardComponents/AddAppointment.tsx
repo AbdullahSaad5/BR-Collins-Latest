@@ -36,7 +36,6 @@ const fetchAvailableSlots = async (date: Date, refreshToken: string): Promise<Av
   const selectedMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 
   if (selectedMonth < currentMonth) {
-    console.log("Skipping API call for previous month");
     return [];
   }
 

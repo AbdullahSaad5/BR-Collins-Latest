@@ -86,13 +86,11 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
       return response.data;
     },
     onSuccess: (data) => {
-      console.log("data", data);
       setClientSecret(data.clientSecret);
       setError(null);
       setCurrentStep(2);
     },
     onError: (error) => {
-      console.log("error", error);
       setError("Failed to create payment intent. Please try again.");
       console.error("Error creating payment intent:", error);
     },

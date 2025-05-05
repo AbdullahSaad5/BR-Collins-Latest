@@ -12,8 +12,6 @@ const CourseDetailPage = async ({ params }: { params: Promise<{ slug: string }> 
   const res = await response.json();
   const course = res.data;
 
-  console.log(course);
-
   return <CourseDetailPageClient course={course} />;
 };
 

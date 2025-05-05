@@ -46,8 +46,6 @@ export default function NotFound() {
     const pageResults = PAGES.filter((p) => p.title.toLowerCase().includes(q));
     const courseResults = courses.filter((c) => c.title.toLowerCase().includes(q));
 
-    console.log(pageResults, courseResults);
-
     setResults([
       ...(pageResults.length > 0 ? [{ type: "Pages", items: pageResults }] : []),
       ...(courseResults.length > 0 ? [{ type: "Courses", items: courseResults }] : []),

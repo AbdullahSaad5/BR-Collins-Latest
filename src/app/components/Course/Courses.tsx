@@ -137,7 +137,6 @@ export default function Courses() {
           .filter((key) => ratingFilters[key])
           .map(Number);
 
-        console.log("selectedRatings", selectedRatings);
         if (selectedRatings.length > 0) {
           // If course rating is less than the minimum selected, filter out
           // But since these are "& up", we want to show if it matches ANY selected

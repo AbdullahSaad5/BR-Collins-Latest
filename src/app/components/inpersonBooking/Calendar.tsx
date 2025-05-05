@@ -82,10 +82,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
       // Check if the date has some slots booked
       const dateStr = date.toISOString().split("T")[0];
-      console.log("dateStr", dateStr);
-      console.log("availableSlots", availableSlots);
       const dateSlots = availableSlots.find((slot) => slot.date === dateStr);
-      console.log("dateSlots", dateSlots);
       const hasBookedSlots = dateSlots && dateSlots.availableSlots.length < 3;
 
       days.push(
