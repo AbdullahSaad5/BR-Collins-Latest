@@ -144,13 +144,13 @@ const Page = () => {
       <section className="max-w-[1326px] flex flex-col justify-center items-center gap-5 py-10 lg:py-25 lg:px-5 px-2">
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 mb-10">
           <div className="w-full md:w-1/2 h-full max-w-[650px]">
-            <p className="text-orange-600 font-semibold mb-2">OUR STORY</p>
-            <h2 className="text-gray-900 text-3xl md:text-4xl font-bold mb-4 leading-snug">
+            <p className="text-orange-600 font-semibold mb-4 text-[18px]">OUR STORY</p>
+            <h2 className="text-gray-900 text-3xl md:text-[50px] font-bold mb-4 leading-snug">
               Our Journey: <br />
               Revolutionizing Education, <br />
               Empowering Learners
             </h2>
-            <p className="text-gray-700 text-xl md:text-base">
+            <p className="text-gray-700 text-xl md:text-[22px] leading-[30px]">
               <strong>Established in 2024,</strong> B.R. Collins emerged from a vision to revolutionize online
               education. Recognizing the need for accessible, high-quality learning experiences, we set out to create a
               platform that combines expert training with real-world applicability.
