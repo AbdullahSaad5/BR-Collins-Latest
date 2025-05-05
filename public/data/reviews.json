@@ -1,73 +1,72 @@
 [
-    {
-      "name": "Valerie J.",
-      "role": "Creasman CEO",
-      "message": "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
-      "avatar": "https://randomuser.me/api/portraits/women/65.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/2111/2111604.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    },
-    {
-      "name": "Hannah R.",
-      "role": "Sutton CEO",
-      "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
-      "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
-      "platformLogo": "https://cdn-icons-png.flaticon.com/512/733/733547.png"
-    }
-  ]
-  
+  {
+    "name": "Valerie J.",
+    "role": "Creasman CEO",
+    "message": "The online learning platform is user-friendly, and the courses are top-quality. A great investment!",
+    "avatar": "https://randomuser.me/api/portraits/women/65.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/eedaec280656709f9f00fdc760c19c08697b6c7d?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  },
+  {
+    "name": "Hannah R.",
+    "role": "Sutton CEO",
+    "message": "B.R. Collins' business management course gave me the confidence to lead my team to success.",
+    "avatar": "https://randomuser.me/api/portraits/men/32.jpg",
+    "platformLogo": "https://cdn.builder.io/api/v1/image/assets/TEMP/bc212420f985ef7c5d1da3a7e132891c3bfb3ac4?placeholderIfAbsent=true&apiKey=46d0142291f54eac8dc073a4381485ca"
+  }
+]

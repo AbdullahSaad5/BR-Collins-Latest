@@ -54,7 +54,7 @@ const testimonials = [
   },
 ];
 
-const TestimonialCard = ({
+export const TestimonialCard = ({
   quote,
   author,
   role,

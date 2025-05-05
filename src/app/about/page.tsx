@@ -212,7 +212,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive
             <p className={`text-xs ${isActive ? "text-gray-50" : "text-gray-800"}`}>{testimonial.role}</p>
           </div>
         </div>
-        <img src={testimonial.platformLogo} alt="Platform" className="w-6 h-6" />
+        <img src={testimonial.platformLogo} alt="Platform" className="object-contain aspect-[2.51] w-20 md:w-[88px]" />
       </div>
     </div>
   );
