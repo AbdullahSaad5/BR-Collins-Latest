@@ -141,7 +141,7 @@ const Page = () => {
       )}
 
       {/* Journey Section */}
-      <section className="max-w-[1326px] flex flex-col justify-center items-center gap-5 py-10 lg:px-5 px-2">
+      <section className="max-w-[1326px] flex flex-col justify-center items-center gap-5 py-10 lg:py-25 lg:px-5 px-2">
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 mb-10">
           <div className="w-full md:w-1/2 h-full max-w-[650px]">
             <p className="text-orange-600 font-semibold mb-2">OUR STORY</p>
