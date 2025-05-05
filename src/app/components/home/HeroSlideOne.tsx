@@ -80,7 +80,7 @@ const HeroSlideOne: React.FC<HeroSlideOneProps> = ({ isLoading, firstCourse }) =
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <Link
               href={`/course/${firstCourse?._id}`}
-              className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
+              className="bg-primary hover:bg-primary-hover transition-all duration-200 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
             >
               Enroll Now
             </Link>

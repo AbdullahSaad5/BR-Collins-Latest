@@ -23,13 +23,13 @@ const HeroSlideTwo: React.FC = () => (
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <a
               href="/subscriptions"
-              className="bg-orange-500 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
+              className="bg-primary hover:bg-primary-hover transition-all duration-200 text-white rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
             >
               Plans for Individual
             </a>
             <a
               href="/subscriptions"
-              className="bg-transparent text-black border-1 border-gray-600 rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
+              className="bg-transparent hover:bg-gray-100 transition-all duration-200 text-black border-1 border-gray-600 rounded-full px-4 md:px-5 py-1 md:py-2 font-medium text-sm cursor-pointer"
             >
               Plans for Corporate
             </a>
