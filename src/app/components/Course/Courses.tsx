@@ -163,44 +163,43 @@ export default function Courses() {
       <main className="flex overflow-hidden flex-col bg-white">
         <HeroSection />
 
-        <section className="flex flex-col self-center  w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
-          <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
-            <FeatureCourseSlider />
-
-            <section className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
-              <h2 className="text-3xl font-bold max-md:max-w-full">Most Popular Courses</h2>
-              <p className="mt-3 text-lg max-md:max-w-full">Explore courses from experienced, real-world experts.</p>
-            </section>
-
-            {/* Tab Switcher */}
-            <div className="relative flex flex-wrap gap-8 items-center mt-14 text-xl whitespace-nowrap max-md:mt-10">
-              {/* Sliding border */}
-              <span
-                className="absolute bottom-0 h-1 bg-orange-500 rounded transition-all duration-300"
-                style={{ left: sliderStyle.left, width: sliderStyle.width }}
-              />
-              <button
-                ref={eLearningRef}
-                onClick={() => setActiveTab("e-learning")}
-                className={`pb-2 px-1 transition-all duration-300 z-10 ${
-                  activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                }`}
-              >
-                E-Learning
-              </button>
-              <button
-                ref={inPersonRef}
-                onClick={() => setActiveTab("in-person")}
-                className={`pb-2 px-1 transition-all duration-300 z-10 ${
-                  activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                }`}
-              >
-                In-Person
-              </button>
+        <section className="bg-gradient-to-b from-[#FFFFFF] to-[#F2F9FF] flex justify-center">
+          <div className="flex flex-col self-center  w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2  ">
+            <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
+              <FeatureCourseSlider />
+              <section className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
+                <h2 className="text-3xl font-bold max-md:max-w-full">Most Popular Courses</h2>
+                <p className="mt-3 text-lg max-md:max-w-full">Explore courses from experienced, real-world experts.</p>
+              </section>
+              {/* Tab Switcher */}
+              <div className="relative flex flex-wrap gap-8 items-center mt-14 text-xl whitespace-nowrap max-md:mt-10">
+                {/* Sliding border */}
+                <span
+                  className="absolute bottom-0 h-1 bg-orange-500 rounded transition-all duration-300"
+                  style={{ left: sliderStyle.left, width: sliderStyle.width }}
+                />
+                <button
+                  ref={eLearningRef}
+                  onClick={() => setActiveTab("e-learning")}
+                  className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                  }`}
+                >
+                  E-Learning
+                </button>
+                <button
+                  ref={inPersonRef}
+                  onClick={() => setActiveTab("in-person")}
+                  className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                    activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                  }`}
+                >
+                  In-Person
+                </button>
+              </div>
+              <hr className="border-gray-200 w-full" />
+              <CourseSwiper />
             </div>
-            <hr className="border-gray-200 w-full" />
-
-            <CourseSwiper />
           </div>
         </section>
 
