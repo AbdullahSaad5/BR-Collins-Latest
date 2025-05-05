@@ -90,3 +90,47 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
     </div>
   );
 };
+
+export const FeatureCourseSkeleton: React.FC = () => {
+  return (
+    <div className="flex flex-col md:flex-row items-start gap-6 px-4 pt-4 pb-4 w-full h-full bg-white rounded-2xl border border-solid border-zinc-200 shadow-[0px_4px_20px_rgba(0,0,0,0.05)] animate-pulse">
+      {/* Left side: Image Skeleton */}
+      <div className="relative w-full md:w-60 h-62 rounded-xl overflow-hidden bg-gray-200" />
+
+      {/* Right side: Content Skeleton */}
+      <div className="flex flex-col flex-1">
+        {/* Duration badge skeleton */}
+        <span className="mb-2 px-8 py-2 h-6 bg-gray-200 rounded-md w-24" />
+
+        {/* Title & Lessons skeleton */}
+        <div className="w-full mt-2">
+          <div className="h-7 w-3/4 bg-gray-200 rounded mb-3" />
+          <div className="flex gap-1.5 items-center mt-3.5">
+            <div className="w-4 h-4 bg-gray-200 rounded" />
+            <div className="h-5 w-24 bg-gray-200 rounded" />
+          </div>
+          <div className="mt-4 w-full h-[1px] bg-gray-200" />
+        </div>
+
+        {/* Rating skeleton */}
+        <div className="flex gap-1.5 items-center mt-4">
+          <div className="h-5 w-8 bg-gray-200 rounded" />
+          <div className="flex gap-px items-center">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="w-4 h-4 bg-gray-200 rounded" />
+            ))}
+          </div>
+        </div>
+
+        {/* Price & CTA skeleton */}
+        <div className="mt-6">
+          <div className="flex gap-2 items-center">
+            <div className="h-7 w-20 bg-gray-200 rounded" />
+            <div className="h-5 w-16 bg-gray-200 rounded" />
+          </div>
+          <div className="mt-4 h-5 w-28 bg-gray-200 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+};

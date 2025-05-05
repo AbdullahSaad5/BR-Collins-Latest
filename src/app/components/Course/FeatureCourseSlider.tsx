@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCourseContext } from "../context/CourseContext";
-import { FeatureCourse } from "./FetureCourse";
+import { FeatureCourse, FeatureCourseSkeleton } from "./FetureCourse";
 
 export const FeatureCourseSlider: React.FC = () => {
   const { courses, isLoading, error } = useCourseContext();
@@ -38,24 +38,32 @@ export const FeatureCourseSlider: React.FC = () => {
           }}
           className="featured-courses-swiper px-2"
         >
-          {courses.map((course, index) => {
-            const transformedCourse = {
-              ...course,
-              duration: `${course.noOfHours} Hrs`,
-              lessons: course.noOfLessons,
-              price: `$${course.discountPrice || course.price}`,
-              originalPrice: course.price ? `$${course.price}` : undefined,
-              isNew: course.bestSeller,
-              imageUrl: "/img/Course/Course.png",
-            };
-            return (
-              <SwiperSlide key={index} className="!h-auto">
-                <div className="h-full p-2">
-                  <FeatureCourse {...transformedCourse} />
-                </div>
-              </SwiperSlide>
-            );
-          })}
+          {isLoading
+            ? Array.from({ length: 3 }).map((_, idx) => (
+                <SwiperSlide key={"skeleton-" + idx} className="!h-auto">
+                  <div className="h-full p-2">
+                    <FeatureCourseSkeleton />
+                  </div>
+                </SwiperSlide>
+              ))
+            : courses.map((course, index) => {
+                const transformedCourse = {
+                  ...course,
+                  duration: `${course.noOfHours} Hrs`,
+                  lessons: course.noOfLessons,
+                  price: `$${course.discountPrice || course.price}`,
+                  originalPrice: course.price ? `$${course.price}` : undefined,
+                  isNew: course.bestSeller,
+                  imageUrl: "/img/Course/Course.png",
+                };
+                return (
+                  <SwiperSlide key={index} className="!h-auto">
+                    <div className="h-full p-2">
+                      <FeatureCourse {...transformedCourse} />
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
         </Swiper>
 
         {/* Navigation Arrows */}
