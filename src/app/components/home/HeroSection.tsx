@@ -70,8 +70,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
                       firstCourse.title
                     )}
                   </h2>
-                  <div className="flex md:flex-col sm:flex-row flex-row items-start sm:items-start gap-2">
-                    <Image src="/assets/person.png" width={40} height={40} alt="person" className="w-10 h-10" />
+                  <div className="flex flex-row items-center gap-2">
+                    <Image
+                      src="/assets/person.png"
+                      width={40}
+                      height={40}
+                      alt="person"
+                      className="w-10 h-10 hidden sm:block"
+                    />
                     <h1 className="font-light text-sm sm:text-base text-gray-800">
                       Instructor:
                       <span className="font-medium ml-1">
