@@ -141,7 +141,7 @@ const Page = () => {
       )}
 
       {/* Journey Section */}
-      <section className="min-h-[120vh] max-w-[1326px] flex flex-col justify-center items-center gap-5 py-10 lg:px-5 px-2">
+      <section className="max-w-[1326px] flex flex-col justify-center items-center gap-5 py-10 lg:px-5 px-2">
         <div className="flex flex-col md:flex-row justify-between items-center gap-5 mb-10">
           <div className="w-full md:w-1/2 h-full max-w-[650px]">
             <p className="text-orange-600 font-semibold mb-2">OUR STORY</p>
@@ -158,7 +158,7 @@ const Page = () => {
           </div>
 
           <div className="w-full md:w-1/2 h-full flex  justify-center md:justify-end items-center max-w-[550px]">
-            <Image src={AboutBgImage} alt="ourStory_img" width={90} height={40} className="w-[60%] h-[40%] " />
+            <Image src={AboutBgImage} alt="ourStory_img" width={90} height={40} className="w-full " />
           </div>
         </div>
 
