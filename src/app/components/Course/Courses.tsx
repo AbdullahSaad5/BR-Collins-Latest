@@ -1,19 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { TopBanner } from "../TopBanner";
-import { Navigation } from "../Navigation";
-import { HeroSection } from "./HeroSection";
-import FilterSection from "./FilterSection";
-import CourseSwiper from "./CourseSwiper";
-import { FeatureCourse } from "./FetureCourse";
-import { useCourseContext } from "../context/CourseContext";
-import { CategoryProvider } from "../context/CategoryContext";
-import CourseCardSlider from "./CourseCardSlider";
-import CourseCard from "./CourseCard";
-import { FeatureCourseSlider } from "./FeatureCourseSlider";
+import { ICourse } from "@/app/types/course.contract";
 import { useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
+import { CategoryProvider } from "../context/CategoryContext";
+import { useCourseContext } from "../context/CourseContext";
+import CourseCard from "./CourseCard";
 import CourseCardSkeleton from "./CourseCardSkeleton";
+import CourseSwiper from "./CourseSwiper";
+import { FeatureCourseSlider } from "./FeatureCourseSlider";
+import FilterSection from "./FilterSection";
+import { HeroSection } from "./HeroSection";
 
 export default function Courses() {
   const searchParams = useSearchParams();
@@ -120,56 +117,6 @@ export default function Courses() {
     }
   }, []);
 
-  if (isLoading) {
-    return (
-      <main className="flex overflow-hidden flex-col bg-white">
-        <HeroSection />
-        <section className="flex flex-col self-center w-full max-w-[1326px] max-md:mt-10 max-md:max-w-full pl-2 p-2">
-          <div className="flex flex-col items-start mr-0 w-full max-md:max-w-full p-2">
-            <div className="mt-20 text-neutral-900 max-md:mt-10 max-md:max-w-full">
-              <h2 className="text-3xl font-bold max-md:max-w-full">All Courses</h2>
-              <p className="mt-3 text-lg max-md:max-w-full">Explore courses from experienced, real-world experts.</p>
-            </div>
-            <div className="mt-16 max-md:mt-10 max-md:max-w-full p-5">
-              <div className="flex gap-5 max-md:flex-col">
-                <aside className="w-[31%] max-md:w-full">
-                  <FilterSection
-                    topicFilters={topicFilters}
-                    languageFilters={languageFilters}
-                    durationFilters={durationFilters}
-                    onTopicFilterChange={handleTopicFilterChange}
-                    onLanguageFilterChange={handleLanguageFilterChange}
-                    onDurationFilterChange={handleDurationFilterChange}
-                  />
-                </aside>
-                <main className="ml-5 w-[69%] max-md:ml-0 max-md:w-full">
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-                    {[...Array(8)].map((_, idx) => (
-                      <div key={idx} className="h-full">
-                        <CourseCardSkeleton />
-                      </div>
-                    ))}
-                  </div>
-                </main>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  if (error) {
-    return (
-      <main className="flex overflow-hidden flex-col bg-white">
-        <HeroSection />
-        <div className="flex justify-center items-center min-h-[400px]">
-          <div className="text-red-500 text-lg">{error}</div>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <CategoryProvider>
       <main className="flex overflow-hidden flex-col bg-white">
@@ -218,58 +165,21 @@ export default function Courses() {
               </aside>
 
               <main className="ml-5 w-[69%] max-md:ml-0 max-md:w-full">
-                {filteredCourses.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                    <div className="w-24 h-24 mb-6">
-                      <svg
-                        className="w-full h-full text-gray-300"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                        />
-                      </svg>
-                    </div>
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Courses Found</h3>
-                    <p className="text-gray-500 max-w-md">
-                      We couldn't find any courses matching your filters. Try adjusting your search criteria or clear
-                      the filters to see all available courses.
-                    </p>
-                    <button
-                      onClick={() => {
-                        setTopicFilters({});
-                        setLanguageFilters({});
-                        setDurationFilters({});
-                      }}
-                      className="mt-6 px-6 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
-                    >
-                      Clear All Filters
-                    </button>
-                  </div>
+                {/* Conditional rendering for loading, error, or courses */}
+                {isLoading ? (
+                  <CardsGridSkeleton />
+                ) : error ? (
+                  <CardsGridError error={error} />
+                ) : filteredCourses.length === 0 ? (
+                  <NoCoursesFound
+                    resetFilters={() => {
+                      setTopicFilters({});
+                      setLanguageFilters({});
+                      setDurationFilters({});
+                    }}
+                  />
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-                    {filteredCourses.map((course, index) => {
-                      const transformedCourse = {
-                        ...course,
-                        duration: `${course.noOfHours} Hrs`,
-                        lessons: course.noOfLessons,
-                        price: course.discountPrice || course.price,
-                        originalPrice: course.price ? `$${course.price}` : undefined,
-                        isNew: course.bestSeller,
-                        imageUrl: course.coverImageUrl || "/img/Course/Course.png",
-                      };
-                      return (
-                        <div key={index} className="h-full">
-                          <CourseCard course={transformedCourse} />
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <CardsGrid filteredCourses={filteredCourses} />
                 )}
               </main>
             </div>
@@ -279,3 +189,74 @@ export default function Courses() {
     </CategoryProvider>
   );
 }
+
+const CardsGridSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+      {[...Array(8)].map((_, idx) => (
+        <div key={idx} className="h-full">
+          <CourseCardSkeleton />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const CardsGridError = ({ error }: { error: string }) => {
+  return (
+    <div className="flex justify-center items-center min-h-[400px]">
+      <div className="text-red-500 text-lg">{error}</div>
+    </div>
+  );
+};
+
+const NoCoursesFound = ({ resetFilters }: { resetFilters: () => void }) => {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+      <div className="w-24 h-24 mb-6">
+        <svg className="w-full h-full text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+          />
+        </svg>
+      </div>
+      <h3 className="text-2xl font-semibold text-gray-900 mb-2">No Courses Found</h3>
+      <p className="text-gray-500 max-w-md">
+        We couldn't find any courses matching your filters. Try adjusting your search criteria or clear the filters to
+        see all available courses.
+      </p>
+      <button
+        onClick={resetFilters}
+        className="mt-6 px-6 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors"
+      >
+        Clear All Filters
+      </button>
+    </div>
+  );
+};
+
+const CardsGrid = ({ filteredCourses }: { filteredCourses: ICourse[] }) => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+      {filteredCourses.map((course, index) => {
+        const transformedCourse = {
+          ...course,
+          duration: `${course.noOfHours} Hrs`,
+          lessons: course.noOfLessons,
+          price: course.discountPrice || course.price,
+          originalPrice: course.price ? `$${course.price}` : undefined,
+          isNew: course.bestSeller,
+          imageUrl: course.coverImageUrl || "/img/Course/Course.png",
+        };
+        return (
+          <div key={index} className="h-full">
+            <CourseCard course={transformedCourse} />
+          </div>
+        );
+      })}
+    </div>
+  );
+};

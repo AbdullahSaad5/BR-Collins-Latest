@@ -10,7 +10,7 @@ import { useCourseContext } from "../context/CourseContext";
 import { FeatureCourse } from "./FetureCourse";
 
 export const FeatureCourseSlider: React.FC = () => {
-  const { courses } = useCourseContext();
+  const { courses, isLoading, error } = useCourseContext();
 
   return (
     <div className="text-neutral-900 max-md:max-w-full mt-10 relative">
@@ -34,7 +34,7 @@ export const FeatureCourseSlider: React.FC = () => {
             },
             1024: {
               slidesPerView: 2,
-            }
+            },
           }}
           className="featured-courses-swiper px-2"
         >
