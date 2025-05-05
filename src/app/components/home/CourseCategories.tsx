@@ -5,6 +5,10 @@ import React, { useMemo, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourseCategory } from "@/app/types/course-category.contract";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Scrollbar } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/scrollbar";
 
 const fetchCategories = async (): Promise<{
   data: (ICourseCategory & { coursesCount: number })[];
@@ -14,17 +18,17 @@ const fetchCategories = async (): Promise<{
 };
 
 const CourseCategories: React.FC = () => {
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const swiperRef = React.useRef<any>(null);
 
   const scrollLeft = (): void => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    if (swiperRef.current) {
+      swiperRef.current.slidePrev();
     }
   };
 
   const scrollRight = (): void => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    if (swiperRef.current) {
+      swiperRef.current.slideNext();
     }
   };
 
@@ -81,29 +85,61 @@ const CourseCategories: React.FC = () => {
         >
           <ArrowLeftIcon className="w-4 h-4" />
         </button>
-
-        <div ref={sliderRef} className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
-          <div className="flex flex-nowrap gap-4 items-stretch">
-            {sliderItems.map((item, index) => (
-              <div key={index} className="flex-shrink-0 py-2 h-full ">
-                <Link
-                  href={`/course?category=${item.categoryId}#courses-section`}
-                  className="flex flex-col rounded-full gap-0.5 bg-gray-100 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
-                >
-                  <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center ">{item.title}</h2>
-                  <p className="text-xs text-gray-600">({item.courses}) courses</p>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-
+        <Swiper
+          spaceBetween={24}
+          modules={[Scrollbar]}
+          // scrollbar={{ draggable: true, hide: false, dragSize: 64, snapOnRelease: true }}
+          breakpoints={{
+            0: { slidesPerView: 2, spaceBetween: 12 },
+            640: { slidesPerView: 3, spaceBetween: 16 },
+            1024: { slidesPerView: 5, spaceBetween: 24 },
+            1280: { slidesPerView: 6, spaceBetween: 24 },
+          }}
+          className="category-swiper pb-8"
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+        >
+          {sliderItems.map((item, index) => (
+            <SwiperSlide key={index} className="!h-auto !w-fit py-2">
+              <Link
+                href={`/course?category=${item.categoryId}#courses-section`}
+                className="flex flex-col rounded-full gap-0.5 bg-gray-100 px-8 py-3 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[120px]"
+              >
+                <h2 className="font-bold font-dm text-md sm:text-lg text-gray-800 mb-0 text-center ">{item.title}</h2>
+                <p className="text-xs text-gray-600">({item.courses}) courses</p>
+              </Link>
+            </SwiperSlide>
+          ))}
+        </Swiper>
         <button
           onClick={scrollRight}
           className="hidden md:flex absolute -mt-1 right-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
         >
           <ArrowRightIcon className="w-4 h-4" />
         </button>
+        <style jsx global>{`
+          .category-swiper {
+            width: 100%;
+            overflow: hidden;
+          }
+          .category-swiper .swiper-scrollbar {
+            max-width: 315px;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 8px;
+          }
+          .category-swiper .swiper-scrollbar-drag {
+            background: #2490e0;
+            height: 3px;
+            cursor: pointer;
+          }
+          .category-swiper .swiper-slide {
+            height: auto;
+          }
+        `}</style>
       </div>
     </section>
   );
