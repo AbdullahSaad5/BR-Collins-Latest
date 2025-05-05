@@ -8,6 +8,7 @@ import { useCourseContext } from "../context/CourseContext";
 import "swiper/css";
 import "swiper/css/autoplay";
 import Link from "next/link";
+import { BookIcon } from "lucide-react";
 
 interface HeroSectionProps {
   activeIndex: number;
@@ -78,7 +79,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
                       alt="person"
                       className="w-10 h-10 hidden sm:block"
                     />
-                    <h1 className="font-light text-sm sm:text-base text-gray-800">
+                    <div className="font-light text-sm sm:text-base text-gray-800">
                       Instructor:
                       <span className="font-medium ml-1">
                         {isLoading || !firstCourse ? (
@@ -87,7 +88,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
                           firstCourse.instructor
                         )}
                       </span>
-                    </h1>
+                    </div>
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
                     <div className="flex items-center bg-orange-300 rounded-lg text-sm px-3 py-1 border border-gray-300 text-black font-medium">
@@ -100,19 +101,26 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
                       />
                       <h3>Bestseller</h3>
                     </div>
-                    <h1 className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
+                    <div className="font-medium text-sm sm:text-base flex items-center gap-2 text-gray-900">
                       {isLoading || !firstCourse ? (
                         <span className="bg-gray-200 rounded w-8 h-4 inline-block animate-pulse" />
                       ) : (
                         firstCourse.rating
                       )}
-                      <span className="text-yellow-500 flex items-center text-sm">
+                      <div className="text-yellow-500 flex items-center text-sm">
                         {[...Array(4)].map((_, i) => (
                           <FaStar key={i} />
                         ))}
                         <FaStarHalfAlt />
-                      </span>
-                    </h1>
+                      </div>
+
+                      <div className="text-black">10+ ratings</div>
+                      <div className="w-px h-4 bg-black/30"></div>
+                      <div className="text-black flex items-center gap-2">
+                        <BookIcon className="w-5 h-5" />
+                        <p>{firstCourse?.noOfLessons} lessons</p>
+                      </div>
+                    </div>
                   </div>
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                     <Link
