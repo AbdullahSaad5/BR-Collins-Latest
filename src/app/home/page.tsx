@@ -3,8 +3,6 @@ import { useRef, useState } from "react";
 
 import SubscriptionCards from "../components/pricing/SubscriptionCards";
 // import CourseSwiper from "../components/Course/CourseSwiper";
-import { ICourse } from "@/app/types/course.contract";
-import { api } from "@/app/utils/axios";
 
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -14,26 +12,6 @@ import CourseCategories from "../components/home/CourseCategories";
 import HeroSection from "../components/home/HeroSection";
 import OnSiteLearningSection from "../components/home/OnSiteLearningSection";
 import TestimonialsSection from "../components/home/TestimonialsSection";
-import { ICourseCategory } from "../types/course-category.contract";
-
-interface SliderItem {
-  title: string;
-  courses: number;
-}
-
-const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
-  const response = await api.get("/courses");
-  return response.data;
-};
-
-const fetchCategories = async (): Promise<{
-  data: (ICourseCategory & {
-    coursesCount: number;
-  })[];
-}> => {
-  const response = await api.get("/course-categories/with-courses-count");
-  return response.data;
-};
 
 export const Homepage = () => {
   const [activeTab, setActiveTab] = useState<string>("e-learning");
