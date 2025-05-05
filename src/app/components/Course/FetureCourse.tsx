@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { FaStarHalfAlt } from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa6";
 
 interface CourseCardProps {
   duration: string;
@@ -29,6 +31,23 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
   imageUrl,
   _id,
 }) => {
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<FaStar key={i} className="text-[#F86537] text-base" />);
+      } else if (i === fullStars + 1 && hasHalfStar) {
+        stars.push(<FaStarHalfAlt key={i} className="text-[#F86537] text-base" />);
+      } else {
+        stars.push(<FaRegStar key={i} className="text-[#F86537] text-base" />);
+      }
+    }
+    return stars;
+  };
+
   return (
     <div className="h-[280px] w-full flex items-center gap-6 p-2  bg-white rounded-2xl border border-zinc-200 ">
       {/* Left: Image with 'New' badge */}
@@ -72,21 +91,8 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
           </div>
           {/* Rating */}
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-base text-neutral-900 font-semibold">{rating || "5.0"}</span>
-            <div className="flex gap-px items-center">
-              {[...Array(5)].map((_, i) => (
-                <img
-                  key={i}
-                  src={`https://cdn.builder.io/api/v1/image/assets/TEMP/${
-                    i < Math.floor(rating)
-                      ? "cbe5a472d765e221c9aabf502e5a61f589060766"
-                      : "c8fa37fbcebebcd120b4ccf029f77f04da351558"
-                  }?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5`}
-                  className="w-4 h-4"
-                  alt={i < Math.floor(rating) ? "Filled star" : "Empty star"}
-                />
-              ))}
-            </div>
+            <span className="text-base text-neutral-900 font-semibold">{rating || "4.5"}</span>
+            <div className="flex gap-px items-center">{renderStars(rating || 4.5)}</div>
           </div>
         </div>
         {/* Price and CTA */}

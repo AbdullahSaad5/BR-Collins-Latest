@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -11,6 +11,20 @@ import { FeatureCourse, FeatureCourseSkeleton } from "./FetureCourse";
 
 export const FeatureCourseSlider: React.FC = () => {
   const { courses, isLoading, error } = useCourseContext();
+  const prevRef = useRef<HTMLButtonElement | null>(null);
+  const nextRef = useRef<HTMLButtonElement | null>(null);
+  const swiperRef = useRef<any>(null);
+
+  // Update swiper on resize to fix breakpoints/nav
+  useEffect(() => {
+    const handleResize = () => {
+      if (swiperRef.current) {
+        swiperRef.current.update();
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="text-neutral-900 max-md:max-w-full mt-10 relative">
@@ -22,9 +36,26 @@ export const FeatureCourseSlider: React.FC = () => {
       <div className="mt-10 w-full max-w-[1326px] mx-auto max-md:max-w-full relative group">
         <Swiper
           modules={[Navigation]}
+          onBeforeInit={(swiper) => {
+            // @ts-ignore
+            swiper.params.navigation.prevEl = prevRef.current;
+            // @ts-ignore
+            swiper.params.navigation.nextEl = nextRef.current;
+          }}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            // Re-init navigation after refs are set
+            setTimeout(() => {
+              if (swiper.params.navigation) {
+                swiper.navigation.destroy();
+                swiper.navigation.init();
+                swiper.navigation.update();
+              }
+            });
+          }}
           navigation={{
-            nextEl: ".featured-swiper-next",
-            prevEl: ".featured-swiper-prev",
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
           }}
           spaceBetween={24}
           slidesPerView={1}
@@ -32,16 +63,17 @@ export const FeatureCourseSlider: React.FC = () => {
             768: {
               slidesPerView: 1,
             },
-            1024: {
+
+            1280: {
               slidesPerView: 2,
             },
           }}
-          className="featured-courses-swiper px-2"
+          className="featured-courses-swiper px-2 w-full"
         >
           {isLoading
             ? Array.from({ length: 3 }).map((_, idx) => (
-                <SwiperSlide key={"skeleton-" + idx} className="!h-auto">
-                  <div className="h-full p-2">
+                <SwiperSlide key={"skeleton-" + idx} className="!h-auto w-full">
+                  <div className="h-full p-2 w-full">
                     <FeatureCourseSkeleton />
                   </div>
                 </SwiperSlide>
@@ -57,8 +89,8 @@ export const FeatureCourseSlider: React.FC = () => {
                   imageUrl: index % 2 === 1 ? "/img/Course/new-course-2.png" : "/img/Course/new-course.png",
                 };
                 return (
-                  <SwiperSlide key={index} className="!h-auto">
-                    <div className="h-full p-2">
+                  <SwiperSlide key={index} className="!h-auto w-full">
+                    <div className="h-full p-2 w-full">
                       <FeatureCourse {...transformedCourse} isNew={true} />
                     </div>
                   </SwiperSlide>
@@ -67,10 +99,16 @@ export const FeatureCourseSlider: React.FC = () => {
         </Swiper>
 
         {/* Navigation Arrows */}
-        <button className="featured-swiper-prev absolute left-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100">
+        <button
+          ref={prevRef}
+          className="featured-swiper-prev absolute left-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+        >
           <ChevronLeft className="w-5 h-5 text-black" strokeWidth={2.5} />
         </button>
-        <button className="featured-swiper-next absolute right-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100">
+        <button
+          ref={nextRef}
+          className="featured-swiper-next absolute right-1 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+        >
           <ChevronRight className="w-5 h-5 text-black" strokeWidth={2.5} />
         </button>
       </div>

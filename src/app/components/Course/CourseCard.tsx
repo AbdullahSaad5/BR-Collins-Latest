@@ -18,11 +18,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
 
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
-        stars.push(<FaStar key={i} className="text-yellow-500 text-base" />);
+        stars.push(<FaStar key={i} className="text-[#FFB346] text-base" />);
       } else if (i === fullStars + 1 && hasHalfStar) {
-        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500 text-base" />);
+        stars.push(<FaStarHalfAlt key={i} className="text-[#FFB346] text-base" />);
       } else {
-        stars.push(<FaRegStar key={i} className="text-yellow-500 text-base" />);
+        stars.push(<FaRegStar key={i} className="text-[#FFB346] text-base" />);
       }
     }
     return stars;
