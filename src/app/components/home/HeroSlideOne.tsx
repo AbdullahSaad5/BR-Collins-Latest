@@ -58,7 +58,7 @@ const HeroSlideOne: React.FC<HeroSlideOneProps> = ({ isLoading, firstCourse }) =
                 {isLoading || !firstCourse ? (
                   <span className="bg-gray-200 rounded w-8 h-4 inline-block animate-pulse" />
                 ) : (
-                  firstCourse.rating
+                  firstCourse.rating || 4.5
                 )}
                 <div className="text-yellow-500 flex items-center text-sm">
                   {[...Array(4)].map((_, i) => (
