@@ -8,7 +8,8 @@ import { api } from "@/app/utils/axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { PaymentForm } from "./PaymentForm";
 import { useAppSelector } from "@/app/store/hooks";
-import { getRefreshToken } from "@/app/store/features/users/userSlice";
+import { getRefreshToken, getAccessToken } from "@/app/store/features/users/userSlice";
+import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
 
 export interface BookingState {
   courseDuration: "half-day" | "full-day";
@@ -36,7 +37,8 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
 
   const [showPaymentForm, setShowPaymentForm] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(true);
-  const accessToken = useAppSelector(getRefreshToken);
+  const [showLoginModal, setShowLoginModal] = React.useState(false);
+  const accessToken = useAppSelector(getAccessToken);
 
   const fetchAvailableSlots = async (date: Date) => {
     // Check if the month is previous to current month
@@ -102,6 +104,10 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
   };
 
   const handleProceedToPayment = () => {
+    if (!accessToken) {
+      setShowLoginModal(true);
+      return;
+    }
     setIsVisible(false);
     setTimeout(() => {
       setShowPaymentForm(true);
@@ -156,6 +162,11 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
         </div>
       )}
       {showPaymentForm && <PaymentForm bookingState={bookingState} onClose={handlePaymentClose} />}
+      <LoginRequiredModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        reason="to book an in-person training"
+      />
       <div className={`transition-opacity duration-300 ${isVisible ? "opacity-100" : "opacity-0"}`}>
         <button className="absolute top-4 right-4 z-10" onClick={onClose}>
           <img
