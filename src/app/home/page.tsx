@@ -82,6 +82,12 @@ export const Homepage = () => {
         <CourseSwiper activeTab={activeTab} />
       </section>
 
+      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[750px] py-12">
+        {/* On Site Learning Section */}
+        <OnSiteLearningSection />
+        {/* Community Section */}
+      </div>
+
       {/* Pricing Section */}
       <section className="bg-[#081B25]  px-1 py-20 md:px-0">
         <div className="w-full p-4 md:p-4 xl:p-0 flex flex-col justify-center gap-5 h-full py-10 items-center mx-auto max-w-[1326px]">
@@ -97,9 +103,7 @@ export const Homepage = () => {
       {/* Testimonials Section */}
 
       <TestimonialsSection />
-      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[1502px] py-12">
-        {/* On Site Learning Section */}
-        <OnSiteLearningSection />
+      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[750px] py-12">
         {/* Community Section */}
         <CommunitySection />
       </div>
