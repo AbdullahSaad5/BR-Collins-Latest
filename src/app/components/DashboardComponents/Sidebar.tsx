@@ -73,7 +73,12 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
     if (item === "logout") {
       dispatch(clearCart());
       dispatch(logout());
-      router.push("/login");
+      router.replace("/login");
+      if (typeof window !== "undefined") {
+        setTimeout(() => {
+          window.location.replace("/login");
+        }, 100);
+      }
     } else {
       onItemClick(item);
       router.push(`/dashboard?item=${item}`);

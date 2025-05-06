@@ -80,7 +80,13 @@ export const Navigation = () => {
   const handleLogout = () => {
     dispatch(clearCart());
     dispatch(logout());
-    router.push("/");
+    // Use both router.replace and window.location.replace for extra safety
+    router.replace("/");
+    if (typeof window !== "undefined") {
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 100);
+    }
   };
 
   const handleOpenCart = () => {
