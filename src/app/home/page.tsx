@@ -14,7 +14,7 @@ import OnSiteLearningSection from "../components/home/OnSiteLearningSection";
 import TestimonialsSection from "../components/home/TestimonialsSection";
 
 export const Homepage = () => {
-  const [activeTab, setActiveTab] = useState<string>("e-learning");
+  const [activeTab, setActiveTab] = useState<string>("in-person");
   const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
   const eLearningRef = useRef<HTMLButtonElement>(null);
@@ -49,15 +49,7 @@ export const Homepage = () => {
                   className="absolute bottom-0 h-1 bg-primary rounded transition-all duration-300"
                   style={{ left: sliderStyle.left, width: sliderStyle.width }}
                 />
-                <button
-                  ref={eLearningRef}
-                  onClick={() => setActiveTab("e-learning")}
-                  className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  E-Learning
-                </button>
+
                 <button
                   ref={inPersonRef}
                   onClick={() => setActiveTab("in-person")}
@@ -66,6 +58,15 @@ export const Homepage = () => {
                   }`}
                 >
                   In-Person
+                </button>
+                <button
+                  ref={eLearningRef}
+                  onClick={() => setActiveTab("e-learning")}
+                  className={`pb-2 px-1 transition-all duration-300 ${
+                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                  }`}
+                >
+                  E-Learning
                 </button>
               </div>
 

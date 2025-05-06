@@ -29,7 +29,7 @@ export default function Courses() {
   const [ratingFilters, setRatingFilters] = React.useState<{ [key: string]: boolean }>({});
 
   // Tab switching logic (copied from homepage)
-  const [activeTab, setActiveTab] = React.useState<string>("e-learning");
+  const [activeTab, setActiveTab] = React.useState<string>("in-person");
   const sliderRef = React.useRef<HTMLDivElement>(null);
   const eLearningRef = React.useRef<HTMLButtonElement>(null);
   const inPersonRef = React.useRef<HTMLButtonElement>(null);
@@ -178,15 +178,7 @@ export default function Courses() {
                   className="absolute bottom-0 h-1 bg-orange-500 rounded transition-all duration-300"
                   style={{ left: sliderStyle.left, width: sliderStyle.width }}
                 />
-                <button
-                  ref={eLearningRef}
-                  onClick={() => setActiveTab("e-learning")}
-                  className={`pb-2 px-1 transition-all duration-300 z-10 ${
-                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                  }`}
-                >
-                  E-Learning
-                </button>
+
                 <button
                   ref={inPersonRef}
                   onClick={() => setActiveTab("in-person")}
@@ -195,6 +187,15 @@ export default function Courses() {
                   }`}
                 >
                   In-Person
+                </button>
+                <button
+                  ref={eLearningRef}
+                  onClick={() => setActiveTab("e-learning")}
+                  className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                  }`}
+                >
+                  E-Learning
                 </button>
               </div>
               <hr className="border-gray-200 w-full" />
