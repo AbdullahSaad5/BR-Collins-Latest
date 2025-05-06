@@ -221,10 +221,10 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial, isActive
 const ImpactSection = () => {
   return (
     <section className="flex flex-col items-center justify-center py-12 md:py-20 bg-white text-center max-w-[1326px] px-2">
-      <h2 className="text-2xl lg:text-5xl xl:text-6xl  md:text-4xl font-bold text-gray-900 mb-4">
+      <h2 className="text-2xl lg:text-5xl  md:text-4xl font-bold text-gray-900 mb-4">
         Creating Impact Around The World
       </h2>
-      <p className="text-gray-600 max-w-2xl mx-auto mb-10">
+      <p className="text-gray-600 max-w-4xl mx-auto mb-10 text-base lg:text-[22px]">
         With our global catalog spanning the latest skills and topics, people and organizations everywhere are able to
         adapt to change and thrive.
       </p>
