@@ -40,6 +40,7 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
   const [isVisible, setIsVisible] = React.useState(true);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const accessToken = useAppSelector(getAccessToken);
+  const [courseError, setCourseError] = React.useState("");
 
   // Fetch all courses for dropdown
   const { data: courses = [], isLoading: isCoursesLoading } = useQuery({
@@ -68,6 +69,9 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
       currentMonth: new Date(),
       courseId: newCourseId,
     });
+    if (newCourseId) {
+      setCourseError("");
+    }
   };
 
   const fetchAvailableSlots = async (date: Date) => {
@@ -134,6 +138,10 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
   };
 
   const handleProceedToPayment = () => {
+    if (!bookingState.courseId) {
+      setCourseError("Please select a course before proceeding to payment.");
+      return;
+    }
     if (!accessToken) {
       setShowLoginModal(true);
       return;
@@ -247,6 +255,11 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                       </div>
+                      {courseError && (
+                        <div className="mt-2 text-red-600 text-base font-medium bg-red-50 border border-red-200 rounded px-3 py-2">
+                          {courseError}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

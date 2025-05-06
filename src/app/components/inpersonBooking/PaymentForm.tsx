@@ -204,16 +204,6 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
     </div>
   );
 
-  if (success) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <CheckCircle2 className="w-16 h-16 text-emerald-500 mb-4" />
-        <h2 className="text-2xl font-semibold text-neutral-900 mb-2">Payment Successful!</h2>
-        <p className="text-gray-500">Your booking has been confirmed.</p>
-      </div>
-    );
-  }
-
   const renderBookingForm = () => (
     <form onSubmit={handleBookingSubmit(onBookingSubmit)} className="space-y-4">
       <div className="mb-6 p-4 bg-slate-50 rounded-lg">
@@ -410,7 +400,7 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
           </div>
           <div className="flex justify-between pt-2 border-t border-gray-200">
             <span className="text-gray-600">Total Amount:</span>
-            <span className="font-bold text-lg">${bookingState.price * (watchBooking("maxParticipants") || 1)}</span>
+            <span className="font-bold text-lg">${bookingState.price}</span>
           </div>
         </div>
       </div>
@@ -486,40 +476,48 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
 
   return (
     <div
-      className={`fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}
+      className={`fixed inset-0 flex items-center justify-center z-50 transition-opacity duration-300 ${
+        isVisible || success ? "opacity-100" : "opacity-0"
+      } ${success ? "bg-white" : "bg-opacity-50"}`}
     >
-      <div
-        className={`bg-white rounded-2xl max-w-lg w-full mx-4 transform transition-all duration-300 ${
-          isVisible ? "scale-100" : "scale-95"
-        }`}
-      >
-        <div className="sticky top-0 bg-white rounded-t-2xl p-8 pb-4 border-b border-gray-200">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-neutral-900">
-              {currentStep === 1 ? "Booking Information" : "Payment Details"}
-            </h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+      {success ? (
+        <div className="flex flex-col items-center justify-center py-12 bg-white rounded-2xl shadow-lg max-w-lg w-full mx-4">
+          <CheckCircle2 className="w-16 h-16 text-emerald-500 mb-4" />
+          <h2 className="text-2xl font-semibold text-neutral-900 mb-2">Payment Successful!</h2>
+          <p className="text-gray-500">Your booking has been confirmed.</p>
+        </div>
+      ) : (
+        <div
+          className={`bg-white rounded-2xl max-w-lg w-full mx-4 transform transition-all duration-300 ${
+            isVisible ? "scale-100" : "scale-95"
+          }`}
+        >
+          <div className="sticky top-0 bg-white rounded-t-2xl p-8 pb-4 border-b border-gray-200">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-neutral-900">
+                {currentStep === 1 ? "Booking Information" : "Payment Details"}
+              </h2>
+              <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {renderStepIndicator()}
           </div>
 
-          {renderStepIndicator()}
+          <div className="max-h-[70vh] overflow-y-auto p-8 pt-4">
+            {currentStep === 1 ? renderBookingForm() : renderPaymentForm()}
+          </div>
         </div>
-
-        <div className="max-h-[70vh] overflow-y-auto p-8 pt-4">
-          {currentStep === 1 ? renderBookingForm() : renderPaymentForm()}
-        </div>
-      </div>
+      )}
     </div>
   );
 };
