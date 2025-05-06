@@ -279,6 +279,7 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
               <p className="mt-1 text-sm text-red-600">{bookingErrors.location.city.message}</p>
             )}
           </div>
+
           <div>
             <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
               State *
