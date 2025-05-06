@@ -59,7 +59,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "important-information"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   Important Information About Using Our Services
@@ -70,7 +70,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "information-we-collect"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   Information We Collect
@@ -80,7 +80,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "how-we-share-information"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   How We Share Information
@@ -90,7 +90,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "third-party-links"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   Third Party Links
@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "children-privacy"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   Children&#39;s Privacy
@@ -110,7 +110,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "how-we-protect-information"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   How We Protect Information
@@ -120,7 +120,7 @@ export default function PrivacyPolicy() {
                   className={`relative block w-full text-left py-2 pl-5 transition-all duration-200 ${
                     activeSection === "policy-changes"
                       ? "text-blue-600 font-semibold underline before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-[6px] before:h-7 before:bg-primary"
-                      : "text-gray-700 hover:bg-gray-100"
+                      : "text-gray-700 hover:bg-gray-100 underline"
                   }`}
                 >
                   Policy Changes
