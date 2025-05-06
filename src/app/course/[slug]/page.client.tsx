@@ -54,6 +54,7 @@ const CourseDetailPageClient = ({
   const instructorRef = useRef<HTMLDivElement>(null);
   const reviewRef = useRef<HTMLDivElement>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const alreadyInCart = items.some((item) => item._id === course._id);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -117,7 +118,7 @@ const CourseDetailPageClient = ({
     if (type === "in-person") {
       setShowInPersonPopup(true);
     } else if (type === "e-learning") {
-      handleAddToCart();
+      handleAddToCart(true);
     }
   }, []);
 
@@ -137,12 +138,16 @@ const CourseDetailPageClient = ({
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (shouldShowSuccessModal: boolean = false) => {
     const isCourseInCart = items.some((item) => item._id === course._id);
     if (!isCourseInCart) {
       dispatch(addToCart(course));
       setShowSuccessModal(true);
+      return;
       // setTimeout(() => setShowSuccessModal(false), 2500);
+    }
+    if (shouldShowSuccessModal) {
+      setShowSuccessModal(true);
     }
   };
 
@@ -268,8 +273,9 @@ const CourseDetailPageClient = ({
             </div>
             <div className="px-6 py-8 flex flex-col items-center">
               <p className="text-gray-700 text-base text-center mb-8">
-                The course has been successfully added to your cart. You can continue browsing or go to your cart to
-                checkout.
+                {alreadyInCart
+                  ? "The course has been successfully added to your cart. You can continue browsing or go to your cart to checkout."
+                  : "The course has been successfully added to your cart. You can continue browsing or go to your cart to checkout."}
               </p>
               <button
                 className="w-full py-2 px-4 bg-primary text-white rounded-lg font-semibold shadow hover:bg-primary-hover transition-colors text-base"
@@ -594,7 +600,7 @@ const CourseDetailPageClient = ({
                   ) : (
                     <div className="relative group w-full">
                       <button
-                        onClick={handleAddToCart}
+                        onClick={() => handleAddToCart(false)}
                         className={`w-full min-h-[58px] rounded-[58px] ${
                           items.some((item) => item._id === course._id) || !course.onlineLearning
                             ? "bg-gray-400 cursor-not-allowed"
