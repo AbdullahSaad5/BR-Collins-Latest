@@ -91,7 +91,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
     if (isMenuOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setMenuPosition({
-        top: rect.bottom + window.scrollY,
+        top: rect.bottom,
         left: rect.left + window.scrollX,
         width: rect.width,
       });
