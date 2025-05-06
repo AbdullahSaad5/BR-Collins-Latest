@@ -60,6 +60,8 @@ type CourseFormData = Omit<
 > & {
   whatYouWillLearn: FieldArrayValue[];
   requirements: FieldArrayValue[];
+  isELearning: boolean;
+  isOnSiteLearning: boolean;
 };
 
 const courseSchema = z.object({
@@ -99,6 +101,8 @@ const courseSchema = z.object({
   hasCertificate: z.boolean(),
   passPercentage: z.number().min(0).max(100, "Pass percentage must be between 0 and 100"),
   categoryId: z.string().min(1, "Category is required"),
+  isELearning: z.boolean(),
+  isOnSiteLearning: z.boolean(),
 });
 
 export default function AddCourseStepper() {
@@ -168,6 +172,8 @@ export default function AddCourseStepper() {
       hasCertificate: false,
       passPercentage: 70,
       categoryId: "",
+      isELearning: false,
+      isOnSiteLearning: false,
     },
   });
 
@@ -625,6 +631,43 @@ export default function AddCourseStepper() {
               {...register("previewVideoUrl")}
               error={errors.previewVideoUrl?.message}
             />
+
+            <div className="@container mt-6 max-w-full w-[705px]">
+              <div className="flex flex-wrap flex-col @[480px]:flex-row gap-2 @[480px]:gap-10">
+                <div className="grow shrink-0 basis-0 w-full">
+                  <label className="text-base text-neutral-900">Learning Modes</label>
+                  <p className="mt-1 text-sm text-gray-500">Select how this course is available</p>
+                </div>
+                <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
+                  <div className="space-y-4">
+                    <Controller
+                      name="isELearning"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleOption
+                          label="E-Learning"
+                          description="This course is available for E-Learning"
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="isOnSiteLearning"
+                      control={control}
+                      render={({ field }) => (
+                        <ToggleOption
+                          label="On-Site Learning"
+                          description="This course is available for On-Site Learning"
+                          checked={field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </>
         );
       default:
