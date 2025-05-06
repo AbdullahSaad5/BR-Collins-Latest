@@ -169,7 +169,7 @@ const ViewCart = () => {
             ) : (
               <>
                 {items.map((item: ICourse, index: number) => (
-                  <div key={index} className="rounded-lg  border-gray-200 border-y mb-4 p-4">
+                  <div key={index} className="rounded-lg  border-gray-200 border-y mb-4 px-4 py-10">
                     <div className="flex gap-4 flex-col md:flex-row">
                       <div className="flex-shrink-0 w-40 h-32">
                         <Image
