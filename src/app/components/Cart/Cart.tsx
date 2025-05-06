@@ -131,9 +131,13 @@ const Cart = () => {
               >
                 View Cart
               </Link>
-              <button className="flex-1 p-3 rounded-full border border-primary bg-primary text-sm md:text-md text-white hover:bg-primary-hover transition">
+              <Link
+                href="/viewcart"
+                onClick={handleCloseCart}
+                className="text-center flex-1 p-3 rounded-full border border-primary bg-primary text-sm md:text-md text-white hover:bg-primary-hover transition"
+              >
                 {`Proceed to checkout →`}
-              </button>
+              </Link>
             </div>
           </div>
         )}

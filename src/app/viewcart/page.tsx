@@ -18,6 +18,7 @@ import { useAppSelector } from "@/app/store/hooks";
 import { getAccessToken, isUserLoggedIn } from "@/app/store/features/users/userSlice";
 import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
 import Link from "next/link";
+import { BookIcon } from "lucide-react";
 
 const ViewCart = () => {
   const dispatch = useDispatch();
@@ -168,38 +169,43 @@ const ViewCart = () => {
             ) : (
               <>
                 {items.map((item: ICourse, index: number) => (
-                  <div key={index} className="bg-white rounded-lg shadow-sm mb-4 p-4">
+                  <div key={index} className="rounded-lg  border-gray-200 border-y mb-4 p-4">
                     <div className="flex gap-4 flex-col md:flex-row">
-                      <div className="flex-shrink-0 w-48 h-32">
+                      <div className="flex-shrink-0 w-40 h-32">
                         <Image
-                          src={"/img/Course/Course.png"}
+                          src={"/img/Course/new-course.png"}
                           alt={item.title}
-                          width={192}
-                          height={128}
+                          width={200}
+                          height={200}
                           className="w-full h-full object-cover rounded-lg"
                         />
                       </div>
                       <div className="flex-1">
-                        <div className="flex justify-between items-start ">
-                          <div>
-                            <span className="inline-block bg-blue-600 text-white text-xs px-2 py-1 rounded-md mb-2">
-                              {item.noOfHours}HRS
+                        <div className="flex justify-between items-stretch">
+                          <div className="flex flex-col gap-1 items-start">
+                            <span className="inline-block font-bold bg-[#2490E0] text-white text-xs px-2 py-1 rounded-md mb-2">
+                              {item.noOfHours} HRS
                             </span>
                             <h2 className="text-sm lg:text-lg font-semibold text-gray-900 mb-2">{item.title}</h2>
                             <div className="flex items-center md:gap-3 text-sm text-gray-600">
                               <div className="flex items-center gap-1">
                                 <Image
-                                  src="/default-instructor-image.jpg"
+                                  src="/assets/person.png"
                                   alt={item.instructor}
-                                  width={20}
-                                  height={20}
+                                  width={30}
+                                  height={30}
                                   className="rounded-full"
                                 />
                                 <span>by: </span>
-                                <span className="text-blue-500 hover:underline cursor-pointer">{item.instructor}</span>
+                                <span className="text-[#2490E0] hover:underline cursor-pointer">{item.instructor}</span>
                               </div>
-                              <span>•</span>
-                              <span>{item.noOfLessons} Lessons</span>
+                              <div className="w-px h-4 bg-gray-300"></div>
+                              <div className="flex items-center gap-1">
+                                <BookIcon className="text-gray-400 text-sm" />
+                                <span>{item.noOfLessons} Lessons</span>
+                              </div>
+                              <div className="w-px h-4 bg-gray-300"></div>
+
                               <div className="flex items-center gap-1">
                                 <span className="font-medium">{item.rating}</span>
                                 <div className="flex">
@@ -221,17 +227,18 @@ const ViewCart = () => {
                               </div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <p className="text-xl font-bold text-blue-600">${item.discountPrice || item.price}.00</p>
-                            {item.discountPrice && (
-                              <p className="text-sm text-gray-400 line-through">${item.price}.00</p>
-                            )}
+                          <div className="text-right flex flex-col items-end justify-between">
+                            <div>
+                              <p className="text-xl font-bold text-[#2490E0]">${item.discountPrice || item.price}.00</p>
+                              {item.discountPrice && (
+                                <p className="text-sm text-gray-400 line-through">${item.price}.00</p>
+                              )}
+                            </div>
                             <button
                               onClick={() => handleRemoveItem(item._id)}
                               className="mt-5 text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 ml-auto"
                             >
                               <Image src={TrashIcon} alt="Remove" width={21} height={21} />
-                              <span className="hidden md:flex">Remove</span>
                             </button>
                           </div>
                         </div>
@@ -239,40 +246,43 @@ const ViewCart = () => {
                     </div>
                   </div>
                 ))}
-                {/* Checkout Summary */}
-                <div className="w-full lg:w-[400px] flex-shrink-0">
-                  <div className="bg-white rounded-lg shadow-lg p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-semibold text-gray-900">Total:</h3>
-                      <p className="text-3xl font-bold text-gray-900">${bill.totalDiscounted}.00</p>
-                    </div>
-                    {bill.discountPercentage > 0 && (
-                      <div className="mb-4 text-sm">
-                        <p className="text-gray-500">
-                          Original Price: <span className="line-through">${bill.totalOriginal}.00</span>
-                        </p>
-                        <p className="text-green-600">You save: {Math.round(bill.discountPercentage)}%</p>
-                      </div>
-                    )}
-                    <button
-                      onClick={handleCheckout}
-                      className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-6 rounded-full transition-colors flex items-center justify-center gap-2"
-                    >
-                      Proceed to Checkout
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
               </>
             )}
           </div>
+          {/* Checkout Summary (always on the right) */}
+          {items.length > 0 && (
+            <div className="w-full lg:w-[400px] flex-shrink-0">
+              <div className="bg-white  shadow-[0px_4px_75px_0px_rgba(0,0,0,0.06)] p-6 rounded-2xl">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold text-[#2490E0]">Total:</h3>
+                  <p className="text-[42px] font-bold text-gray-900">${bill.totalDiscounted}.00</p>
+                </div>
+                {bill.discountPercentage > 0 && (
+                  <div className="mb-4 text-sm">
+                    <p className="text-[#8C8C8C] text-right">
+                      <span className="line-through">${bill.totalOriginal - bill.totalDiscounted}.00</span>
+                    </p>
+                    <p className="text-neutral-900 text-right">
+                      Discount:{" "}
+                      <span>
+                        ${(((bill.totalOriginal - bill.totalDiscounted) / bill.totalOriginal) * 100).toFixed(2)}%
+                      </span>{" "}
+                      off
+                    </p>
+                  </div>
+                )}
+                <button
+                  onClick={handleCheckout}
+                  className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-6 rounded-full transition-colors flex items-center justify-center gap-2"
+                >
+                  Proceed to Checkout
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
