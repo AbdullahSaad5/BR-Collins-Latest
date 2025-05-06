@@ -82,7 +82,7 @@ const Register: React.FC = () => {
           <div className="absolute bottom-0 w-full lg:w-[712px]">
             <Image src={B} alt="Decorative background element" className="w-full" />
           </div>
-          <div className="w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start lg:h-full relative z-10">
+          <div className="w-full px-6 lg:w-[630px] mx-auto flex flex-col gap-8 justify-center items-start lg:h-full relative z-10 py-8">
             <Link href="/login" className="w-12 h-12 rounded-full bg-secondary-dark flex items-center justify-center">
               <IoArrowBackOutline className="w-7 h-7 text-white" />
             </Link>
