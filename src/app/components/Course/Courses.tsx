@@ -198,7 +198,7 @@ export default function Courses() {
                 </button>
               </div>
               <hr className="border-gray-200 w-full" />
-              <CourseSwiper />
+              <CourseSwiper activeTab={activeTab} />
             </div>
           </div>
         </section>

@@ -9,6 +9,7 @@ import "swiper/css/scrollbar";
 import { useCourseContext } from "../context/CourseContext";
 import CourseCard from "./CourseCard";
 import CourseCardSkeleton from "./CourseCardSkeleton";
+import { ICourse } from "@/app/types/course.contract";
 
 interface Course {
   id: string;
@@ -28,15 +29,25 @@ interface Course {
 interface CourseSwiperProps {
   excludeCourseId?: string; // Optional prop
   title?: string; // Optional custom title
+  activeTab?: string;
 }
 
-const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "See More Courses" }) => {
+const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "See More Courses", activeTab }) => {
   const { courses: allCourses, isLoading } = useCourseContext();
 
   // Filter courses if excludeCourseId is provided
   const displayedCourses = excludeCourseId
     ? allCourses?.filter((course) => course._id !== excludeCourseId && course.id !== excludeCourseId)
     : allCourses;
+
+  let filteredCourses: ICourse[] = [];
+  if (activeTab === "all" || !activeTab) {
+    filteredCourses = displayedCourses;
+  } else if (activeTab === "e-learning") {
+    filteredCourses = displayedCourses?.filter((course) => course.onlineLearning);
+  } else if (activeTab === "in-person") {
+    filteredCourses = displayedCourses?.filter((course) => course.inPersonLearning);
+  }
 
   if (isLoading) {
     return (
@@ -74,7 +85,7 @@ const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "S
     );
   }
 
-  if (!displayedCourses || displayedCourses.length === 0) {
+  if (!filteredCourses || filteredCourses.length === 0) {
     return <p className="mt-10 text-gray-500">No courses available.</p>;
   }
 
@@ -115,7 +126,7 @@ const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "S
         }}
         className="custom-swiper"
       >
-        {displayedCourses.map((course, index) => {
+        {filteredCourses.map((course, index) => {
           const transformedCourse = {
             ...course,
             duration: `${course.noOfHours} Hrs`,

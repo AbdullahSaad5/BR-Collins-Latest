@@ -60,9 +60,9 @@ export const Homepage = () => {
                 </button>
                 <button
                   ref={inPersonRef}
-                  onClick={() => setActiveTab("blogs")}
+                  onClick={() => setActiveTab("in-person")}
                   className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "blogs" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                    activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
                   }`}
                 >
                   In-Person
@@ -78,7 +78,7 @@ export const Homepage = () => {
 
         <CourseCategories />
 
-        <CourseSwiper />
+        <CourseSwiper activeTab={activeTab} />
       </section>
 
       {/* Pricing Section */}
