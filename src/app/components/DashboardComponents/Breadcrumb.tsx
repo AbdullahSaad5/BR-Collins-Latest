@@ -8,7 +8,7 @@ const Breadcrumb = () => {
       <ChevronRight className="object-contain shrink-0 aspect-square w-[18px] text-teal-950" />
       <a href="/login">Login</a>
       <ChevronRight className="object-contain shrink-0 aspect-square w-[18px] text-teal-950" />
-      <span className="font-semibold text-sky-500">Admin Dashboard</span>
+      <span className="font-semibold text-sky-500">Dashboard</span>
     </nav>
   );
 };
