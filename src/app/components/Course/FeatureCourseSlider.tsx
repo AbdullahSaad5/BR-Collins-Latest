@@ -37,18 +37,23 @@ export const FeatureCourseSlider: React.FC = () => {
         <Swiper
           modules={[Navigation]}
           onBeforeInit={(swiper) => {
-            // @ts-ignore
-            swiper.params.navigation.prevEl = prevRef.current;
-            // @ts-ignore
-            swiper.params.navigation.nextEl = nextRef.current;
+            if (swiper && swiper.params && swiper.params.navigation) {
+              // @ts-ignore
+              swiper.params.navigation.prevEl = prevRef.current;
+              // @ts-ignore
+              swiper.params.navigation.nextEl = nextRef.current;
+            }
           }}
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
             // Re-init navigation after refs are set
             setTimeout(() => {
-              if (swiper.params.navigation) {
+              if (swiper?.params?.navigation) {
+                // @ts-ignore
                 swiper.navigation.destroy();
+                // @ts-ignore
                 swiper.navigation.init();
+                // @ts-ignore
                 swiper.navigation.update();
               }
             });
