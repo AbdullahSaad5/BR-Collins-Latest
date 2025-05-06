@@ -60,8 +60,8 @@ type CourseFormData = Omit<
 > & {
   whatYouWillLearn: FieldArrayValue[];
   requirements: FieldArrayValue[];
-  isELearning: boolean;
-  isOnSiteLearning: boolean;
+  onlineLearning: boolean;
+  inPersonLearning: boolean;
 };
 
 const courseSchema = z.object({
@@ -101,8 +101,8 @@ const courseSchema = z.object({
   hasCertificate: z.boolean(),
   passPercentage: z.number().min(0).max(100, "Pass percentage must be between 0 and 100"),
   categoryId: z.string().min(1, "Category is required"),
-  isELearning: z.boolean(),
-  isOnSiteLearning: z.boolean(),
+  onlineLearning: z.boolean(),
+  inPersonLearning: z.boolean(),
 });
 
 export default function AddCourseStepper() {
@@ -172,8 +172,8 @@ export default function AddCourseStepper() {
       hasCertificate: false,
       passPercentage: 70,
       categoryId: "",
-      isELearning: false,
-      isOnSiteLearning: false,
+      onlineLearning: true,
+      inPersonLearning: true,
     },
   });
 
@@ -641,7 +641,7 @@ export default function AddCourseStepper() {
                 <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
                   <div className="space-y-4">
                     <Controller
-                      name="isELearning"
+                      name="onlineLearning"
                       control={control}
                       render={({ field }) => (
                         <ToggleOption
@@ -653,7 +653,7 @@ export default function AddCourseStepper() {
                       )}
                     />
                     <Controller
-                      name="isOnSiteLearning"
+                      name="inPersonLearning"
                       control={control}
                       render={({ field }) => (
                         <ToggleOption
