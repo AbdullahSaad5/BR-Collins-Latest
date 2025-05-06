@@ -90,6 +90,8 @@ const Appointments = () => {
     queryKey: ["adminOffDays"],
     queryFn: () => fetchOffDays(refreshToken!),
     select: (data) => data.data,
+    enabled: !!refreshToken,
+    initialData: { data: [] },
   });
 
   const updateAppointmentMutation = useMutation({
@@ -176,7 +178,7 @@ const Appointments = () => {
   }, []);
 
   const isDateDisabled = (date: Date) => {
-    return adminOffDays.some((offDay) => {
+    return adminOffDays?.some((offDay) => {
       const offDayDate = new Date(offDay.date);
       const isSameDay =
         date.getDate() === offDayDate.getDate() &&

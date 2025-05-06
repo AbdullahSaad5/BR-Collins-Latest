@@ -190,6 +190,9 @@ export default function AddAppointment() {
       });
       return response.data.data;
     },
+    select: (data) => data.data,
+    enabled: !!refreshToken,
+    initialData: { data: [] },
   });
 
   const {
@@ -307,7 +310,7 @@ export default function AddAppointment() {
     }
 
     // If no slot found, check if the date is blocked by recurring off days
-    const isBlockedByRecurringOffDay = adminOffDays?.some((offDay: IAdminOffDay) => {
+    const isBlockedByRecurringOffDay = (adminOffDays || [])?.some((offDay: IAdminOffDay) => {
       if (!offDay.isRecurring) return false;
 
       const offDayDate = new Date(offDay.date);
