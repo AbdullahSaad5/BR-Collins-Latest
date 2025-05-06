@@ -274,10 +274,8 @@ const SubscriptionCards: React.FC = () => {
                       isLoggedIn && (!isManagerWithOrg() || isAdmin()) ? "cursor-not-allowed" : "cursor-pointer"
                     }`}
                     onClick={() =>
-                      isLoggedIn &&
                       !isSubscribed() &&
-                      isManagerWithOrg() &&
-                      !isAdmin() &&
+                      (!isLoggedIn || (isManagerWithOrg() && !isAdmin())) &&
                       setSelectedCorporatePlan(index)
                     }
                   >
@@ -294,10 +292,8 @@ const SubscriptionCards: React.FC = () => {
                             className="peer hidden"
                             checked={selectedCorporatePlan === index}
                             onChange={() =>
-                              isLoggedIn &&
                               !isSubscribed() &&
-                              isManagerWithOrg() &&
-                              !isAdmin() &&
+                              (!isLoggedIn || (isManagerWithOrg() && !isAdmin())) &&
                               setSelectedCorporatePlan(index)
                             }
                             disabled={isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))}
