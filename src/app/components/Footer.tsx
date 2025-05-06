@@ -255,18 +255,34 @@ const Footer = () => {
 
           {/* Right Block - Fills Remaining Space */}
           <div className="flex justify-end max-sm:justify-start max-[521px]:mt-4 w-fit  gap-4 items-center  min-h-[52px]">
-            <div className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full ">
+            <Link
+              href="https://www.facebook.com/"
+              className="w-12 h-12 p-2 text-gray-400 bg-[#16313f] rounded-full"
+              target="_blank"
+            >
               <FacebookIcon className="w-8 h-7" />
-            </div>
-            <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
+            </Link>
+            <Link
+              href="https://www.x.com/"
+              className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full "
+              target="_blank"
+            >
               <XIcon className="w-6 h-6" />
-            </div>
-            <div className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full ">
+            </Link>
+            <Link
+              href="https://www.linkedin.com/"
+              className="w-12 h-12 p-3 text-gray-400 bg-[#16313f] rounded-full "
+              target="_blank"
+            >
               <LinkedInIcon className="w-6 h-6" />
-            </div>
-            <div className="w-12 h-12 p-3  text-gray-400 bg-[#16313f] rounded-full ">
+            </Link>
+            <Link
+              href="https://www.instagram.com/"
+              className="w-12 h-12 p-3  text-gray-400 bg-[#16313f] rounded-full "
+              target="_blank"
+            >
               <InstagramIcon className="w-6 h-6" />
-            </div>
+            </Link>
           </div>
         </div>
 
