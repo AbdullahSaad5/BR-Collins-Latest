@@ -72,6 +72,9 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
     },
+    updateUser: (state, action: PayloadAction<IUser>) => {
+      state.user = { ...state.user, ...action.payload };
+    },
     setAccessToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
     },
@@ -118,7 +121,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser, setAccessToken, setRefreshToken, logout } = userSlice.actions;
+export const { setUser, setAccessToken, setRefreshToken, logout, updateUser } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.user;
 

@@ -4,6 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import FormField from "./FormField";
+import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
+import { selectUser, updateUser, getRefreshToken } from "@/app/store/features/users/userSlice";
+import { showToast } from "@/app/utils/toast";
+import { api } from "@/app/utils/axios";
+import { AxiosError } from "axios";
 
 const profileSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -51,7 +56,7 @@ const PasswordField = ({
           <div className="flex flex-1 shrink gap-10 justify-between items-end self-stretch my-auto w-full basis-0 min-w-60">
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full bg-transparent border-none outline-none"
+              className="w-full bg-transparent border-none outline-none text-black"
               {...props}
             />
             <button
@@ -103,6 +108,9 @@ const PasswordField = ({
 };
 
 const SettingsForm = () => {
+  const user = useAppSelector(selectUser) as any;
+  const refreshToken = useAppSelector(getRefreshToken);
+  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -112,13 +120,14 @@ const SettingsForm = () => {
     register: registerProfile,
     handleSubmit: handleProfileSubmit,
     formState: { errors: profileErrors, isSubmitting: isProfileSubmitting },
+    reset: resetProfile,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      bio: "",
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      bio: user?.bio || "",
     },
   });
 
@@ -130,22 +139,52 @@ const SettingsForm = () => {
     resolver: zodResolver(passwordSchema),
   });
 
+  // Update form values if user changes
+  React.useEffect(() => {
+    resetProfile({
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      email: user?.email || "",
+      bio: user?.bio || "",
+    });
+  }, [user, resetProfile]);
+
   const onProfileSubmit = async (data: ProfileFormData) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Profile updated:", data);
-    } catch (error) {
+      const response = await api.patch("/auth/update-profile", data, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      showToast("Profile updated successfully!", "success");
+      dispatch(updateUser(response.data.data));
+    } catch (error: any) {
+      showToast(error?.response?.data?.message || "Error updating profile.", "error");
       console.error("Error updating profile:", error);
     }
   };
 
   const onPasswordSubmit = async (data: PasswordFormData) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Password updated:", data);
-    } catch (error) {
+      const payload = {
+        oldPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      };
+      const response = await api.patch("/auth/update-password", payload, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      showToast("Password updated successfully!", "success");
+      dispatch(updateUser(response.data.data));
+    } catch (error: any) {
+      if (error instanceof AxiosError) {
+        if (error.status === 401) {
+          showToast("Invalid current password.", "error");
+          return;
+        }
+      }
+      showToast(error?.response?.data?.message || "Error updating password.", "error");
       console.error("Error updating password:", error);
     }
   };
@@ -206,6 +245,7 @@ const SettingsForm = () => {
               error={profileErrors.email?.message}
               type="email"
               required
+              disabled
             />
 
             <FormField
