@@ -82,7 +82,7 @@ export const Homepage = () => {
         <CourseSwiper activeTab={activeTab} />
       </section>
 
-      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto lg:h-[750px] py-12">
+      <div className="w-full px-4 h-auto items-center justify-around p-4 md:p-4 xl:p-0 lg:px-4 mx-auto flex flex-col max-w-[1326px] md:h-auto  py-12">
         {/* On Site Learning Section */}
         <OnSiteLearningSection />
         {/* Community Section */}

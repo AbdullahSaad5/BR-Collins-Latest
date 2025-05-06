@@ -73,7 +73,7 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
               return (
                 <label
                   key={slot.value}
-                  className={`flex items-center gap-3 ${
+                  className={`flex items-start gap-3 ${
                     isAvailable ? "cursor-pointer" : "cursor-not-allowed opacity-50"
                   }`}
                 >
@@ -83,9 +83,9 @@ export const TimeSlots: React.FC<TimeSlotsProps> = ({
                     checked={selectedSlot === slot.value}
                     onChange={() => isAvailable && onSelect(slot.value)}
                     disabled={!isAvailable}
-                    className="w-5 h-5 text-sky-500 border-gray-300 focus:ring-sky-500 cursor-pointer"
+                    className="w-5 h-5 mt-1 text-sky-500 border-gray-300 focus:ring-sky-500 cursor-pointer"
                   />
-                  <div className="flex gap-2.5 items-center">
+                  <div className="flex flex-wrap gap-2.5 items-center">
                     <span>{slot.label}:</span>
                     <span className="font-bold">{slot.time}</span>
                     {!isAvailable && (

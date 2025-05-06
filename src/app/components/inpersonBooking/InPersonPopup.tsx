@@ -10,6 +10,7 @@ import { PaymentForm } from "./PaymentForm";
 import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken, getAccessToken } from "@/app/store/features/users/userSlice";
 import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
+import { ICourse } from "@/app/types/course.contract";
 
 export interface BookingState {
   courseDuration: "half-day" | "full-day";
@@ -22,7 +23,7 @@ export interface BookingState {
 
 interface InPersonPopupProps {
   onClose: () => void;
-  courseId: string;
+  courseId?: string;
 }
 
 function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
@@ -32,13 +33,42 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
     selectedDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
     selectedSlot: "Morning, 8:00 AM - 12:00 PM",
     currentMonth: new Date(),
-    courseId,
+    courseId: courseId || "",
   });
 
   const [showPaymentForm, setShowPaymentForm] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(true);
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const accessToken = useAppSelector(getAccessToken);
+
+  // Fetch all courses for dropdown
+  const { data: courses = [], isLoading: isCoursesLoading } = useQuery({
+    queryKey: ["courses-dropdown"],
+    queryFn: async () => {
+      const response = await api.get("/courses");
+      return response.data.data;
+    },
+  });
+
+  // Find the selected course object
+  const selectedCourse = React.useMemo(
+    () => courses.find((c: ICourse) => c._id === bookingState.courseId),
+    [courses, bookingState.courseId]
+  );
+
+  // Handle course change from dropdown
+  const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newCourseId = e.target.value;
+    const newCourse = courses.find((c: ICourse) => c._id === newCourseId);
+    setBookingState({
+      courseDuration: "half-day",
+      price: 1495,
+      selectedDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+      selectedSlot: "Morning, 8:00 AM - 12:00 PM",
+      currentMonth: new Date(),
+      courseId: newCourseId,
+    });
+  };
 
   const fetchAvailableSlots = async (date: Date) => {
     // Check if the month is previous to current month
@@ -175,12 +205,52 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
             className="w-[18px] aspect-square"
           />
         </button>
-        <div className="flex h-full max-md:flex-col max-md:min-h-[80vh]">
-          <div className="w-[70%] max-md:ml-0 max-md:w-full max-md:h-auto">
-            <div className="flex flex-col h-full py-12 pr-5 pl-14 mx-auto w-full rounded-l-3xl max-md:rounded-t-3xl max-md:rounded-b-none bg-slate-100 max-md:pl-5 max-md:max-w-full max-md:overflow-y-auto">
-              <h1 className="self-start text-4xl font-bold text-neutral-900 max-md:max-w-full">
+        <div className="flex items-stretch h-full max-lg:flex-col max-lg:min-h-[80vh]">
+          <div className="w-[70%] max-lg:ml-0 max-lg:w-full max-lg:h-auto">
+            <div className="flex flex-col h-full py-12 pr-5 pl-14 mx-auto w-full rounded-l-3xl max-lg:rounded-t-3xl max-lg:rounded-b-none bg-slate-100 max-lg:pl-5 max-lg:max-w-full max-lg:overflow-y-auto">
+              <h1 className="self-center lg:self-start text-4xl font-bold text-neutral-900 max-lg:max-w-full">
                 In-Person Training Booking
               </h1>
+
+              {/* Course Dropdown (only if courseId is not provided as a prop) */}
+              {(!courseId || courseId === "") && (
+                <div className="mt-6 mb-6 relative w-full">
+                  <label htmlFor="course-dropdown" className="block text-2xl font-bold mb-2 text-neutral-900">
+                    Select Course:
+                  </label>
+                  {isCoursesLoading ? (
+                    <div className="text-gray-500 text-base">Loading courses...</div>
+                  ) : (
+                    <div className="relative">
+                      <select
+                        id="course-dropdown"
+                        className="appearance-none w-full px-5 py-3 pr-12 rounded-xl border border-zinc-200 bg-white shadow focus:ring-2 focus:ring-primary focus:border-primary text-lg font-medium text-neutral-900 transition-all duration-200 outline-none cursor-pointer hover:border-primary"
+                        value={bookingState.courseId}
+                        onChange={handleCourseChange}
+                      >
+                        <option value="">Select Course</option>
+                        {courses.map((course: ICourse) => (
+                          <option key={course._id} value={course._id} className="text-base">
+                            {course.title} {course.price ? `($${course.price})` : ""}
+                          </option>
+                        ))}
+                      </select>
+                      {/* Chevron Icon */}
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
+                        <svg
+                          className="w-6 h-6 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <CourseSelection onSelect={handleCourseSelection} selectedDuration={bookingState.courseDuration} />
 
@@ -196,7 +266,7 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
                       </p>
                     </div>
                   </div>
-                  <div className="ml-5 w-7/12 max-md:ml-0 max-md:w-full">
+                  <div className="ml-5 w-7/12 max-md:ml-0 max-md:w-full max-lg:flex max-lg:justify-center">
                     <Calendar
                       selectedDate={bookingState.selectedDate}
                       onDateSelect={handleDateSelection}
@@ -219,9 +289,9 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
             </div>
           </div>
 
-          <div className="w-[30%] max-md:ml-0 max-md:w-full max-md:overflow-y-auto">
-            <div className="h-full flex flex-col grow pt-7 pb-14 w-full text-lg bg-white rounded-r-3xl max-md:rounded-t-none max-md:rounded-b-3xl text-neutral-900">
-              <div className="flex flex-col px-6 mt-4 w-full max-md:px-5">
+          <div className="w-[30%] max-lg:ml-0 max-lg:w-full max-lg:overflow-y-auto">
+            <div className="h-full flex flex-col justify-stretch grow py-7 w-full text-lg bg-white rounded-r-3xl max-lg:rounded-t-none max-lg:rounded-b-3xl text-neutral-900">
+              <div className="flex flex-col px-6 mt-4 w-full max-md:px-5 h-full">
                 <h2 className="self-start text-2xl font-bold">Details Overview</h2>
                 <div className="mt-16 max-md:mt-10 max-md:mr-2">
                   <div className="flex flex-col justify-center max-w-full min-h-[53px]">
@@ -250,20 +320,22 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
                   </div>
                 </div>
 
-                <button
-                  onClick={handleProceedToPayment}
-                  disabled={!isSelectedSlotAvailable}
-                  className={`flex overflow-hidden gap-1.5 justify-center items-center px-5 py-3 mt-22 font-medium text-white bg-primary hover:bg-primary-hover transition-all duration-200 min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10 ${
-                    !isSelectedSlotAvailable ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  <span className="self-stretch my-auto">Proceed to Payment</span>
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/0889cf0590565dbb9aabef07a57290e2c923c555?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
-                    alt="Arrow right"
-                    className="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"
-                  />
-                </button>
+                <div className="mt-auto pt-8 w-full">
+                  <button
+                    onClick={handleProceedToPayment}
+                    disabled={!isSelectedSlotAvailable}
+                    className={`flex w-full overflow-hidden gap-1.5 justify-center items-center px-5 py-3  mb-4 font-medium text-white bg-primary hover:bg-primary-hover transition-all duration-200 min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10 ${
+                      !isSelectedSlotAvailable ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    <span className="self-stretch my-auto">Proceed to Payment</span>
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets/TEMP/0889cf0590565dbb9aabef07a57290e2c923c555?placeholderIfAbsent=true&apiKey=5551d33fb4bb4e9e906ff9c9a5d07fe5"
+                      alt="Arrow right"
+                      className="object-contain shrink-0 self-stretch my-auto w-5 aspect-square"
+                    />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
