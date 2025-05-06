@@ -449,6 +449,9 @@ const Appointments = () => {
           onEdit={() => handleEditAppointment(row)}
           viewTooltip="View Appointment Details"
           editTooltip="Edit Appointment"
+          disabled={{
+            edit: row.status === "cancelled" || row.status === "completed",
+          }}
         />
       ),
       grow: 0.5,
