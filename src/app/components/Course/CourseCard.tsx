@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 interface CourseCardProps {
   course: ICourse;
   showInPersonButton?: boolean;
+  showButton?: boolean;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = true }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = true, showButton = true }) => {
   const router = useRouter();
   const renderStars = (rating: number) => {
     const stars = [];
@@ -72,17 +73,19 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = tr
               View Details
             </Link> */}
             {/* In Person/Enroll Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                router.push(`/course/${course._id}?type=${showInPersonButton ? "in-person" : "e-learning"}`);
-              }}
-              className="mt-4 w-full mb-2 py-2 px-4 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-hover transition-colors"
-              type="button"
-            >
-              {showInPersonButton ? "In Person Training" : "Enroll Now"}
-            </button>
+            {showButton && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  router.push(`/course/${course._id}?type=${showInPersonButton ? "in-person" : "e-learning"}`);
+                }}
+                className="mt-4 w-full mb-2 py-2 px-4 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-hover transition-colors"
+                type="button"
+              >
+                {showInPersonButton ? "In Person Training" : "Enroll Now"}
+              </button>
+            )}
           </div>
         </div>
       </Link>

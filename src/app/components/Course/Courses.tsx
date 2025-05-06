@@ -317,7 +317,7 @@ const CardsGrid = ({ filteredCourses }: { filteredCourses: ICourse[] }) => {
         };
         return (
           <div key={index} className="h-full">
-            <CourseCard course={transformedCourse} />
+            <CourseCard course={transformedCourse} showButton={false} />
           </div>
         );
       })}
