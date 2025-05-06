@@ -8,7 +8,7 @@ import { api } from "@/app/utils/axios";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { PaymentForm } from "./PaymentForm";
 import { useAppSelector } from "@/app/store/hooks";
-import { getRefreshToken, getAccessToken } from "@/app/store/features/users/userSlice";
+import { getRefreshToken, getAccessToken, selectUser } from "@/app/store/features/users/userSlice";
 import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
 import { ICourse } from "@/app/types/course.contract";
 
@@ -41,6 +41,8 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const accessToken = useAppSelector(getAccessToken);
   const [courseError, setCourseError] = React.useState("");
+  const user = useAppSelector(selectUser) as any;
+  const isAdmin = user && typeof user === "object" && "role" in user && user.role === "admin";
 
   // Fetch all courses for dropdown
   const { data: courses = [], isLoading: isCoursesLoading } = useQuery({
@@ -138,6 +140,9 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
   };
 
   const handleProceedToPayment = () => {
+    if (isAdmin) {
+      return;
+    }
     if (!bookingState.courseId) {
       setCourseError("Please select a course before proceeding to payment.");
       return;
@@ -334,11 +339,16 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
                 </div>
 
                 <div className="mt-auto pt-8 w-full">
+                  {isAdmin && (
+                    <div className="mb-4 w-full text-center text-base font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg py-3 px-4">
+                      Admin users cannot book an appointment.
+                    </div>
+                  )}
                   <button
                     onClick={handleProceedToPayment}
-                    disabled={!isSelectedSlotAvailable}
+                    disabled={!isSelectedSlotAvailable || isAdmin}
                     className={`flex w-full overflow-hidden gap-1.5 justify-center items-center px-5 py-3  mb-4 font-medium text-white bg-primary hover:bg-primary-hover transition-all duration-200 min-h-[58px] rounded-[58px] max-md:px-5 max-md:mt-10 ${
-                      !isSelectedSlotAvailable ? "opacity-50 cursor-not-allowed" : ""
+                      !isSelectedSlotAvailable || isAdmin ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                   >
                     <span className="self-stretch my-auto">Proceed to Payment</span>
