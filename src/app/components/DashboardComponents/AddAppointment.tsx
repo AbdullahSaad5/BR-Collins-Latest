@@ -264,7 +264,7 @@ export default function AddAppointment() {
   });
 
   useEffect(() => {
-    if (appointment) {
+    if (appointment && courses && !isLoadingCourses) {
       const formattedDate = new Date(appointment.date).toISOString().split("T")[0];
       reset({
         courseId: appointment.courseId,
@@ -276,7 +276,7 @@ export default function AddAppointment() {
         notes: appointment.notes,
       });
     }
-  }, [appointment, reset]);
+  }, [appointment, courses, isLoadingCourses, reset]);
 
   // Watch the date field
   const selectedDate = watch("date");
