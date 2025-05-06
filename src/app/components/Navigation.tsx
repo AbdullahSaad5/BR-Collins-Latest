@@ -295,7 +295,7 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
+        className={`lg:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
           isMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
