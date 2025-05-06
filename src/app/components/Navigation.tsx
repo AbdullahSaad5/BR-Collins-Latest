@@ -7,7 +7,7 @@ import Cart from "./Cart/Cart";
 import { ShoppingCart, Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { logout } from "@/app/store/features/users/userSlice";
-import { toggleCart, toggleCartVisiblity } from "@/app/store/features/cart/cartSlice";
+import { toggleCart, toggleCartVisiblity, clearCart } from "@/app/store/features/cart/cartSlice";
 import { IUser } from "../types/user.contract";
 import Image from "next/image";
 
@@ -78,6 +78,7 @@ export const Navigation = () => {
   };
 
   const handleLogout = () => {
+    dispatch(clearCart());
     dispatch(logout());
     router.push("/");
   };

@@ -31,6 +31,8 @@ import React, { useState } from "react";
 import SidebarItem from "./SidebarItem";
 import { IconType } from "react-icons/lib";
 import { ENUMS } from "@/app/constants/enum";
+import { clearCart } from "@/app/store/features/cart/cartSlice";
+
 type SidebarItem = {
   icon: IconType;
   label: string;
@@ -69,6 +71,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
 
   const handleItemClick = (item: string) => {
     if (item === "logout") {
+      dispatch(clearCart());
       dispatch(logout());
       router.push("/login");
     } else {
