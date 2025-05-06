@@ -4,13 +4,13 @@ import { InstructorSection } from "../../components/CourseDetail/InstructorSecti
 import { ReviewSection } from "../../components/CourseDetail/ReviewSection";
 import CourseDetail from "../../components/CourseDetail/CourseDetail";
 import { StarRating } from "@/app/components/CourseDetail/StarRating";
-import { Send, Facebook, Instagram, Linkedin, Twitter, MapPin, Globe } from "lucide-react";
+import { Send, Facebook, Instagram, Linkedin, Twitter, MapPin, Globe, X } from "lucide-react";
 import { ICourse } from "@/app/types/course.contract";
 import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 import { addToCart } from "@/app/store/features/cart/cartSlice";
 import InPersonPopup from "@/app/components/inpersonBooking/InPersonPopup";
 import { selectUser, getSubscription } from "@/app/store/features/users/userSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { IUser } from "@/app/types/user.contract";
 import { ISubscription } from "@/app/types/subscription.contract";
 
@@ -46,12 +46,14 @@ const CourseDetailPageClient = ({
   const user = useAppSelector(selectUser) as IUser;
   const subscription = useAppSelector(getSubscription) as ISubscription;
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const overviewRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
   const instructorRef = useRef<HTMLDivElement>(null);
   const reviewRef = useRef<HTMLDivElement>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -107,6 +109,18 @@ const CourseDetailPageClient = ({
     }
   }, [showInPersonPopup]);
 
+  useEffect(() => {
+    console.log("searchParams", searchParams);
+    const type = searchParams.get("type");
+
+    console.log(type);
+    if (type === "in-person") {
+      setShowInPersonPopup(true);
+    } else if (type === "e-learning") {
+      handleAddToCart();
+    }
+  }, []);
+
   const handleSectionClick = (section: string) => {
     setActiveSection(section);
     const refs = {
@@ -127,6 +141,8 @@ const CourseDetailPageClient = ({
     const isCourseInCart = items.some((item) => item._id === course._id);
     if (!isCourseInCart) {
       dispatch(addToCart(course));
+      setShowSuccessModal(true);
+      // setTimeout(() => setShowSuccessModal(false), 2500);
     }
   };
 
@@ -213,6 +229,55 @@ const CourseDetailPageClient = ({
             onClick={(e) => e.stopPropagation()}
           >
             <InPersonPopup onClose={handleClosePopup} courseId={course._id} />
+          </div>
+        </div>
+      )}
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn"
+          onClick={() => setShowSuccessModal(false)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 animate-slideIn relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center border-b border-gray-100 px-6 pt-6 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                  <svg
+                    className="w-6 h-6 text-green-500"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="none" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12l3 3 5-5" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-semibold text-neutral-900">Course Added to Cart</h2>
+              </div>
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors p-2 hover:bg-gray-100 rounded-full"
+                aria-label="Close modal"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="px-6 py-8 flex flex-col items-center">
+              <p className="text-gray-700 text-base text-center mb-8">
+                The course has been successfully added to your cart. You can continue browsing or go to your cart to
+                checkout.
+              </p>
+              <button
+                className="w-full py-2 px-4 bg-primary text-white rounded-lg font-semibold shadow hover:bg-primary-hover transition-colors text-base"
+                onClick={() => setShowSuccessModal(false)}
+              >
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -472,6 +537,32 @@ const CourseDetailPageClient = ({
                   {user.role === "admin" && (
                     <p className="text-sm text-gray-500 mb-4">As an admin, you cannot purchase or own courses</p>
                   )}
+
+                  {user.role === "admin" ? (
+                    <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
+                      In-Person
+                    </button>
+                  ) : (
+                    <div className="relative group w-full">
+                      <button
+                        {...(course.inPersonLearning ? { onClick: () => setShowInPersonPopup(true) } : {})}
+                        className={`w-full min-h-[58px] rounded-[58px] ${
+                          course.inPersonLearning
+                            ? "bg-sky-500 hover:bg-sky-600 transition-colors"
+                            : "bg-gray-400 cursor-not-allowed"
+                        }`}
+                        disabled={!course.inPersonLearning}
+                        type="button"
+                      >
+                        In-Person
+                      </button>
+                      {!course.inPersonLearning && (
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 whitespace-nowrap shadow-lg">
+                          In-Person mode is not offered for this course
+                        </div>
+                      )}
+                    </div>
+                  )}
                   {user.role === "admin" ? (
                     <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
                       E-Learning
@@ -517,31 +608,6 @@ const CourseDetailPageClient = ({
                       {!course.onlineLearning && (
                         <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 whitespace-nowrap shadow-lg">
                           E-Learning mode is not offered for this course
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  {user.role === "admin" ? (
-                    <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
-                      In-Person
-                    </button>
-                  ) : (
-                    <div className="relative group w-full">
-                      <button
-                        {...(course.inPersonLearning ? { onClick: () => setShowInPersonPopup(true) } : {})}
-                        className={`w-full min-h-[58px] rounded-[58px] ${
-                          course.inPersonLearning
-                            ? "bg-sky-500 hover:bg-sky-600 transition-colors"
-                            : "bg-gray-400 cursor-not-allowed"
-                        }`}
-                        disabled={!course.inPersonLearning}
-                        type="button"
-                      >
-                        In-Person
-                      </button>
-                      {!course.inPersonLearning && (
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 whitespace-nowrap shadow-lg">
-                          In-Person mode is not offered for this course
                         </div>
                       )}
                     </div>
