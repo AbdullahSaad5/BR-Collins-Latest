@@ -247,7 +247,7 @@ const Appointments = () => {
         extendedProps: {
           location: appointment.location,
           maxParticipants: appointment.maxParticipants,
-          price: appointment.price,
+
           status: appointment.status,
           isAppointment: true,
         },
@@ -427,13 +427,6 @@ const Appointments = () => {
       sortable: true,
       grow: 1,
       cell: (row: IAppointment) => <div className="text-sm text-left text-neutral-900">{row.maxParticipants}</div>,
-    },
-    {
-      name: "Price",
-      selector: (row: IAppointment) => row.price,
-      sortable: true,
-      grow: 1,
-      cell: (row: IAppointment) => <div className="text-sm text-left text-neutral-900">${row.price}</div>,
     },
     {
       name: "Status",
@@ -682,10 +675,7 @@ const Appointments = () => {
                             <span class="text-gray-500">Participants:</span>
                             <span>${info.event.extendedProps.maxParticipants}</span>
                           </div>
-                          <div class="flex items-center gap-2">
-                            <span class="text-gray-500">Price:</span>
-                            <span>$${info.event.extendedProps.price}</span>
-                          </div>
+
                           <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
                             <span class="text-gray-500">Status:</span>
                             <span class="px-2 py-0.5 rounded-full text-xs font-medium" style="background-color: ${getStatusColor(

@@ -95,7 +95,13 @@ const ViewAppointmentModal: React.FC<ViewAppointmentModalProps> = ({ appointment
                   <DollarSign className="w-5 h-5 text-gray-500" />
                   <label className="text-sm font-medium text-gray-500">Price</label>
                 </div>
-                <p className="text-base text-neutral-900">${appointment.price}</p>
+                <p className="text-base text-neutral-900">
+                  $
+                  {appointment.appointmentType === AppointmentType.HALF_DAY_MORNING ||
+                  appointment.appointmentType === AppointmentType.HALF_DAY_AFTERNOON
+                    ? "1495"
+                    : "1995"}
+                </p>
               </div>
 
               <div className="p-4 bg-gray-50 rounded-lg">

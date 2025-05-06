@@ -152,16 +152,10 @@ const appointmentSchema = z.object({
       invalid_type_error: "Maximum participants must be a number",
     })
     .min(1, "Maximum participants is required"),
-  price: z
-    .number({
-      required_error: "Price is required",
-      invalid_type_error: "Price must be a number",
-    })
-    .min(0, "Price must be a positive number"),
   notes: z.string().min(1, "Notes are required"),
 });
 
-type AppointmentFormData = z.infer<typeof appointmentSchema>;
+type AppointmentFormData = Omit<z.infer<typeof appointmentSchema>, "price">;
 
 export default function AddAppointment() {
   const router = useRouter();
@@ -272,7 +266,6 @@ export default function AddAppointment() {
         date: formattedDate,
         appointmentType: appointment.appointmentType,
         maxParticipants: appointment.maxParticipants,
-        price: appointment.price,
         notes: appointment.notes,
       });
     }
@@ -569,16 +562,6 @@ export default function AddAppointment() {
           {...register("maxParticipants", { valueAsNumber: true })}
           error={errors.maxParticipants?.message}
           placeholder="e.g., 10"
-          type="number"
-          required
-        />
-
-        <FormField
-          label="Price *"
-          description="Price per participant"
-          {...register("price", { valueAsNumber: true })}
-          error={errors.price?.message}
-          placeholder="e.g., 100"
           type="number"
           required
         />
