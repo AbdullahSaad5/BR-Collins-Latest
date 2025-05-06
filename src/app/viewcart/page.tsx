@@ -17,6 +17,7 @@ import { showToast } from "@/app/utils/toast";
 import { useAppSelector } from "@/app/store/hooks";
 import { getAccessToken, isUserLoggedIn } from "@/app/store/features/users/userSlice";
 import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
+import Link from "next/link";
 
 const ViewCart = () => {
   const dispatch = useDispatch();
@@ -80,9 +81,9 @@ const ViewCart = () => {
     <div className="w-full min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Breadcrumb */}
-        <nav className="text-sm mb-8">
+        <nav className="mb-8">
           <ol className="list-none p-0 inline-flex text-gray-600">
-            <li className="flex items-center">
+            <Link href="/" className="flex items-center">
               Home
               <svg className="h-4 w-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -91,8 +92,8 @@ const ViewCart = () => {
                   clipRule="evenodd"
                 />
               </svg>
-            </li>
-            <li className="flex items-center">
+            </Link>
+            <Link href="/course" className="flex items-center">
               Courses
               <svg className="h-4 w-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -101,8 +102,8 @@ const ViewCart = () => {
                   clipRule="evenodd"
                 />
               </svg>
-            </li>
-            <li className="text-blue-500">Cart</li>
+            </Link>
+            <li className="text-blue-500 font-medium">Cart</li>
           </ol>
         </nav>
 
