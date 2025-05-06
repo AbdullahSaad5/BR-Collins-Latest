@@ -76,7 +76,7 @@ const Register: React.FC = () => {
 
   return (
     <section className="">
-      <div className="flex flex-col lg:flex-row w-full bg-org">
+      <div className="flex flex-col lg:flex-row w-full bg-primary">
         {/* Left Side */}
         <div className="w-full lg:w-2/3 bg-secondary text-white relative py-12 lg:py-0">
           <div className="absolute bottom-0 w-full lg:w-[712px]">
@@ -112,7 +112,7 @@ const Register: React.FC = () => {
                 {(["student", "manager"] as const).map((type) => (
                   <label key={type} className="inline-flex items-center cursor-pointer">
                     <input type="radio" value={type} {...register("userType")} className="peer hidden" />
-                    <div className="h-6 w-6 rounded-full border-2 border-gray-300 flex items-center justify-center peer-checked:bg-org peer-checked:border-org transition-colors">
+                    <div className="h-6 w-6 rounded-full border-2 border-gray-300 flex items-center justify-center peer-checked:bg-primary peer-checked:border-org transition-colors">
                       <svg
                         className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
                         viewBox="0 0 24 24"
@@ -268,7 +268,7 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || registerMutation.isPending}
-                className="bg-org text-white py-3 px-6 rounded-full font-bold hover:bg-opacity-90 transition-colors disabled:opacity-50 bg-primary hover:bg-primary-dark duration-300"
+                className="bg-primary text-white py-3 px-6 rounded-full font-bold hover:bg-opacity-90 transition-colors disabled:opacity-50 bg-primary hover:bg-primary-dark duration-300"
               >
                 {isSubmitting || registerMutation.isPending ? "Registering..." : "Register"}
               </button>
