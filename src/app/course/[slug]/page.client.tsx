@@ -479,37 +479,69 @@ const CourseDetailPageClient = ({
                         Already Owned
                       </button>
                     ) : (
-                      <button
-                        onClick={handleSubscriptionRedirect}
-                        className="w-full min-h-[58px] bg-primary rounded-[58px] hover:bg-primary-hover transition-colors"
-                      >
-                        Buy Subscription
-                      </button>
+                      <div className="relative group w-full">
+                        <button
+                          onClick={handleSubscriptionRedirect}
+                          className={`w-full min-h-[58px] rounded-[58px] bg-primary hover:bg-primary-hover transition-colors ${
+                            !course.onlineLearning ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
+                          }`}
+                          disabled={!course.onlineLearning}
+                          type="button"
+                        >
+                          Buy Subscription
+                        </button>
+                        {!course.onlineLearning && (
+                          <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 whitespace-nowrap shadow-lg">
+                            E-Learning mode is not offered for this course
+                          </div>
+                        )}
+                      </div>
                     )
                   ) : (
-                    <button
-                      onClick={handleAddToCart}
-                      className={`w-full min-h-[58px] rounded-[58px] ${
-                        items.some((item) => item._id === course._id)
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-primary hover:bg-primary-hover"
-                      }`}
-                      disabled={items.some((item) => item._id === course._id)}
-                    >
-                      {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
-                    </button>
+                    <div className="relative group w-full">
+                      <button
+                        onClick={handleAddToCart}
+                        className={`w-full min-h-[58px] rounded-[58px] ${
+                          items.some((item) => item._id === course._id) || !course.onlineLearning
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-primary hover:bg-primary-hover"
+                        }`}
+                        disabled={items.some((item) => item._id === course._id) || !course.onlineLearning}
+                        type="button"
+                      >
+                        {items.some((item) => item._id === course._id) ? "Already in Cart" : "E-Learning"}
+                      </button>
+                      {!course.onlineLearning && (
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 whitespace-nowrap shadow-lg">
+                          E-Learning mode is not offered for this course
+                        </div>
+                      )}
+                    </div>
                   )}
                   {user.role === "admin" ? (
                     <button disabled className="w-full min-h-[58px] bg-gray-400 cursor-not-allowed rounded-[58px]">
                       In-Person
                     </button>
                   ) : (
-                    <button
-                      onClick={() => setShowInPersonPopup(true)}
-                      className="w-full min-h-[58px] bg-sky-500 rounded-[58px] hover:bg-sky-600 transition-colors"
-                    >
-                      In-Person
-                    </button>
+                    <div className="relative group w-full">
+                      <button
+                        {...(course.inPersonLearning ? { onClick: () => setShowInPersonPopup(true) } : {})}
+                        className={`w-full min-h-[58px] rounded-[58px] ${
+                          course.inPersonLearning
+                            ? "bg-sky-500 hover:bg-sky-600 transition-colors"
+                            : "bg-gray-400 cursor-not-allowed"
+                        }`}
+                        disabled={!course.inPersonLearning}
+                        type="button"
+                      >
+                        In-Person
+                      </button>
+                      {!course.inPersonLearning && (
+                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 z-10 hidden group-hover:block bg-black text-white text-xs rounded px-3 py-2 whitespace-nowrap shadow-lg">
+                          In-Person mode is not offered for this course
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
                 <p className="mt-5 text-base font-medium text-neutral-400">30-Day Money-Back Guarantee</p>
