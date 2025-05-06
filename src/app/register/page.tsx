@@ -268,7 +268,7 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || registerMutation.isPending}
-                className="bg-org text-white py-3 px-6 rounded-full font-bold hover:bg-opacity-90 transition-colors disabled:opacity-50"
+                className="bg-org text-white py-3 px-6 rounded-full font-bold hover:bg-opacity-90 transition-colors disabled:opacity-50 bg-primary hover:bg-primary-dark duration-300"
               >
                 {isSubmitting || registerMutation.isPending ? "Registering..." : "Register"}
               </button>

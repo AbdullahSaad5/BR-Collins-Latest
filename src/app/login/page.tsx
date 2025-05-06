@@ -153,7 +153,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSubmitting || loginMutation.isPending}
-                className="bg-org text-white gap-2 items-center flex flex-row py-3 px-6 rounded-full font-base hover:bg-opacity-90 w-fit transition-colors disabled:opacity-50"
+                className="bg-org text-white gap-2 items-center flex flex-row py-3 px-6 rounded-full font-base hover:bg-opacity-90 w-fit transition-colors disabled:opacity-50 bg-primary"
               >
                 {isSubmitting || loginMutation.isPending ? "Logging in..." : "Login"}{" "}
                 <span>
