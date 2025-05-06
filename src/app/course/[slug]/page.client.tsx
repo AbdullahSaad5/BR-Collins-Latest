@@ -143,11 +143,12 @@ const CourseDetailPageClient = ({
     if (!isCourseInCart) {
       dispatch(addToCart(course));
       setShowSuccessModal(true);
-      return;
+
       // setTimeout(() => setShowSuccessModal(false), 2500);
-    }
-    if (shouldShowSuccessModal) {
-      setShowSuccessModal(true);
+    } else {
+      if (shouldShowSuccessModal) {
+        setShowSuccessModal(true);
+      }
     }
   };
 
