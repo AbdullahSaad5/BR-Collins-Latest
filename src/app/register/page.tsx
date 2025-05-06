@@ -15,6 +15,8 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/app/store/hooks";
+import { isUserLoggedIn } from "@/app/store/features/users/userSlice";
 
 const registerSchema = z
   .object({
@@ -39,6 +41,14 @@ const Register: React.FC = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const isLoggedIn = useAppSelector(isUserLoggedIn);
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isLoggedIn, router]);
+
   const {
     register,
     handleSubmit,

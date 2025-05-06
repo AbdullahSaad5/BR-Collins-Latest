@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
 import { setUser, setAccessToken, setRefreshToken } from "@/app/store/features/users/userSlice";
+import { useAppSelector } from "@/app/store/hooks";
+import { isUserLoggedIn } from "@/app/store/features/users/userSlice";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -31,6 +33,7 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
+  const isLoggedIn = useAppSelector(isUserLoggedIn);
 
   const {
     register,
@@ -71,6 +74,12 @@ const Login: React.FC = () => {
   const onSubmit = (data: LoginFormData) => {
     loginMutation.mutate(data);
   };
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/dashboard");
+    }
+  }, [isLoggedIn, router]);
 
   return (
     <section className="">
