@@ -159,6 +159,9 @@ const CourseDetailPageClient = ({
     lessons: course.noOfLessons,
     rating: course.rating,
     price: course.discountPrice ? course.discountPrice : course.price,
+    percentageOff: course.discountPrice
+      ? Math.round((1 - parseFloat(course.discountPrice.toString()) / parseFloat(course.price.toString())) * 100)
+      : 0,
     originalPrice: course.price,
     isNew: course.bestSeller,
     // imageUrl: course.coverImageUrl,
@@ -451,16 +454,16 @@ const CourseDetailPageClient = ({
                   })}
                 </span>
                 {displayCourse.originalPrice && (
-                  <span className="text-xl leading-tight line-through text-neutral-400">
+                  <span className="text-xl leading-tight line-through text-neutral-400 font-semibold">
                     {parseInt(displayCourse.originalPrice.toString()).toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
                   </span>
                 )}
-                {/* <span className="px-3 py-1.5 text-base text-black uppercase bg-orange-300 rounded-md">
-                  {Math.round((1 - parseFloat(course.price.replace('$', '')) / parseFloat(course.originalPrice.replace('$', ''))) * 100)}% off
-                </span> */}
+                <span className="px-3 py-1.5 text-base text-black uppercase bg-[#FFCA7E] rounded-lg">
+                  {displayCourse.percentageOff}% off
+                </span>
               </div>
 
               {/* Course Modes */}
