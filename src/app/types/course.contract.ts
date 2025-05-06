@@ -31,6 +31,8 @@ export interface ICourse {
   noOfQuizzes: number;
   hasCertificate: boolean;
   passPercentage: number;
+  inPersonLearning: boolean;
+  onlineLearning: boolean;
 }
 
 export interface ICourseMethods {
