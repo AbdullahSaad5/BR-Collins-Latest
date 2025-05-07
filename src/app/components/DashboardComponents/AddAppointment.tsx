@@ -224,8 +224,9 @@ export default function AddAppointment() {
       setSuccess(true);
       router.push("/dashboard?item=viewAppointments");
     },
-    onError: (error) => {
-      showToast("Failed to add appointment", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to add appointment";
+      showToast(message, "error");
       console.error("Error adding appointment:", error);
     },
   });
@@ -240,8 +241,9 @@ export default function AddAppointment() {
       setSuccess(true);
       router.push("/dashboard?item=viewAppointments");
     },
-    onError: (error) => {
-      showToast("Failed to update appointment", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to update appointment";
+      showToast(message, "error");
       console.error("Error updating appointment:", error);
     },
   });

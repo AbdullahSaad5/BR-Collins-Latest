@@ -54,8 +54,9 @@ const SubscriptionConfirmationModal: React.FC<SubscriptionConfirmationModalProps
       setClientSecret(data.clientSecret);
       setShowCheckout(true);
     },
-    onError: (error) => {
-      showToast("Failed to create subscription", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to create subscription";
+      showToast(message, "error");
       console.error("Error creating subscription:", error);
     },
   });

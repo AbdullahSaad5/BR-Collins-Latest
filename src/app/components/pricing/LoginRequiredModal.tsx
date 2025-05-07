@@ -54,8 +54,9 @@ const LoginRequiredModal: React.FC<LoginRequiredModalProps> = ({
       showToast("Login successful", "success");
       onClose();
     },
-    onError: (error) => {
-      showToast("Login failed. Please check your credentials.", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Login failed. Please check your credentials.";
+      showToast(message, "error");
       console.error("Login error:", error);
     },
   });

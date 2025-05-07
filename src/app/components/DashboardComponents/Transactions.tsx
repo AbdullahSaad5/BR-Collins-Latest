@@ -77,8 +77,9 @@ const Transactions = () => {
     onSuccess: (data) => {
       window.open(data.url, "_blank");
     },
-    onError: (error) => {
-      showToast("Failed to open Stripe portal", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to open Stripe portal";
+      showToast(message, "error");
       console.error("Error creating portal session:", error);
     },
   });

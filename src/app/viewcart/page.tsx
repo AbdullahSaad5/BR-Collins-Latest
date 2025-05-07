@@ -60,8 +60,9 @@ const ViewCart = () => {
       setClientSecret(data.clientSecret);
       setShowCheckout(true);
     },
-    onError: (error) => {
-      showToast("Failed to create payment intent", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to create payment intent";
+      showToast(message, "error");
       console.error("Error creating payment intent:", error);
     },
   });

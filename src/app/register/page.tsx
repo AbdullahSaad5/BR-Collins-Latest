@@ -74,8 +74,10 @@ const Register: React.FC = () => {
       showToast("Registration successful!", "success");
       router.push("/login");
     },
-    onError: (error) => {
-      showToast("Registration failed. Please try again.", "error");
+    onError: (error: any) => {
+      // showToast("Registration failed. Please try again.", "error");
+      const message = error.response?.data?.message || "Registration failed. Please try again.";
+      showToast(message, "error");
       console.error("Registration error:", error);
     },
   });

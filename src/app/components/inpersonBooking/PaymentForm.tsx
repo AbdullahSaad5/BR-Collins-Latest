@@ -90,8 +90,9 @@ const PaymentFormContent: React.FC<{ bookingState: BookingState; onClose: () => 
       setError(null);
       setCurrentStep(2);
     },
-    onError: (error) => {
-      setError("Failed to create payment intent. Please try again.");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to create payment intent. Please try again.";
+      setError(message);
       console.error("Error creating payment intent:", error);
     },
   });

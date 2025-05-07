@@ -119,9 +119,10 @@ const Appointments = () => {
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       showToast("Appointment status updated successfully", "success");
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to update appointment status";
+      showToast(message, "error");
       console.error("Error updating appointment status:", error);
-      showToast("Failed to update appointment status", "error");
     },
   });
 

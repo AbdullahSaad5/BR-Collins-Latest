@@ -277,8 +277,9 @@ export default function AddCourseStepper() {
       setSuccess(true);
       setIsSubmitting(false);
     },
-    onError: (error) => {
-      showToast(`Failed to ${isEditMode ? "update" : "create"} course`, "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || `Failed to ${isEditMode ? "update" : "create"} course`;
+      showToast(message, "error");
       console.error(`Error ${isEditMode ? "updating" : "creating"} course:`, error);
       setIsSubmitting(false);
     },

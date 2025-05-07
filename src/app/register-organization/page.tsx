@@ -91,8 +91,9 @@ const RegisterOrganization: React.FC = () => {
       showToast("Organization registration successful!", "success");
       router.push("/dashboard");
     },
-    onError: (error) => {
-      showToast("Registration failed. Please try again.", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Registration failed. Please try again.";
+      showToast(message, "error");
       console.error("Registration error:", error);
     },
   });

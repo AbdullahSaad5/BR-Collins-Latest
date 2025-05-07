@@ -114,8 +114,9 @@ const AdminOffDaysManager = () => {
       showToast("Off day added successfully", "success");
       setIsModalOpen(false);
     },
-    onError: () => {
-      showToast("Failed to add off day", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to add off day";
+      showToast(message, "error");
     },
   });
 
@@ -133,8 +134,9 @@ const AdminOffDaysManager = () => {
       showToast("Off day deleted successfully", "success");
       setIsViewModalOpen(false);
     },
-    onError: () => {
-      showToast("Failed to delete off day", "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to delete off day";
+      showToast(message, "error");
     },
   });
 

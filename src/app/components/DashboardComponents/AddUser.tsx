@@ -119,8 +119,9 @@ export default function AddUser() {
       setPreviewImage(null);
       router.push("/dashboard?item=viewUsers");
     },
-    onError: (error) => {
-      showToast(`Failed to ${isEditMode ? "update" : "create"} user`, "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || `Failed to ${isEditMode ? "update" : "create"} user`;
+      showToast(message, "error");
       console.error(`Error ${isEditMode ? "updating" : "creating"} user:`, error);
     },
   });

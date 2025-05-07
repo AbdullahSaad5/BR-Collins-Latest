@@ -134,8 +134,9 @@ export default function AddCourseContent() {
       setSuccess(true);
       router.push("/dashboard?item=viewCourseContent");
     },
-    onError: (error) => {
-      showToast(`Failed to ${isEditMode ? "update" : "add"} course content`, "error");
+    onError: (error: any) => {
+      const message = error.response?.data?.message || `Failed to ${isEditMode ? "update" : "add"} course content`;
+      showToast(message, "error");
       console.error(`Error ${isEditMode ? "updating" : "adding"} course content:`, error);
     },
   });
