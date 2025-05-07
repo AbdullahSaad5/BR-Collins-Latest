@@ -42,25 +42,25 @@ const ContactUs: React.FC = () => {
 
   return (
     <>
-      <section className="w-full bg-[#edf7fc] py-20 px-4 md:px-8 lg:px-0 ">
+      <section className="w-full py-20 px-4 md:px-8 lg:px-0 ">
         <div className="max-w-[1326px] mx-auto flex flex-col lg:flex-row gap-10 lg:px-3 px-4">
           {/* Left Section - Contact Info */}
-          <div className="flex flex-col gap-6 w-full lg:w-1/2 justify-center ">
+          <div className="flex flex-col gap-8 w-full lg:w-1/2 justify-center ">
             <div className="flex flex-col gap-4">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Get in Touch with Us</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-3xl md:text-4xl lg:text-[52px] font-bold text-gray-900">Get in Touch with Us</h1>
+              <p className="text-gray-600 mt-1 md:text-lg lg:text-xl">
                 The quickest way to get in touch with us is by using the contact information below.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 text-gray-800 md:mt-6">
-              <div className="flex flex-col gap-1">
-                <h2 className="font-medium">Phone:</h2>
-                <p className="font-bold">(406) 555-0120</p>
+            <div className="flex flex-col sm:flex-row gap-6 text-gray-800 md:mt-6">
+              <div className="flex flex-col gap-1.5">
+                <h2 className=" text-lg lg:text-xl">Phone:</h2>
+                <p className="font-bold text-xl lg:text-2xl">(406) 555-0120</p>
               </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="font-medium">Email:</h2>
-                <p className="underline text-blue-500">brcollins@brcollins.com</p>
+              <div className="flex flex-col gap-1.5">
+                <h2 className=" text-lg lg:text-xl">Email:</h2>
+                <p className="underline font-bold  text-[#2490E0] text-lg lg:text-xl">brcollins@brcollins.com</p>
               </div>
             </div>
 
@@ -78,8 +78,8 @@ const ContactUs: React.FC = () => {
           </div>
 
           {/* Right Section - Contact Form */}
-          <div className="w-full lg:w-1/2 bg-white p-6 sm:p-10 shadow-xl rounded-xl ">
-            <h2 className="text-2xl font-bold text-center text-gray-800 my-8">
+          <div className="w-full lg:w-1/2 flex flex-col justify-evenly bg-white p-6 sm:p-10 shadow-[0px_4px_75px_rgba(0,0,0,0.06)] rounded-2xl ">
+            <h2 className="text-[22px] font-bold text-center text-gray-800 mb-8">
               Get a Free Course You Can Contact With Us
             </h2>
 
