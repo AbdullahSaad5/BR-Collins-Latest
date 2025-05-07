@@ -26,8 +26,16 @@ export default function AddUser() {
 
   const userSchema = z
     .object({
-      firstName: z.string().min(1, "First name is required"),
-      lastName: z.string().min(1, "Last name is required"),
+      firstName: z
+        .string()
+        .min(1, "First name is required")
+        .max(30, "First name must be at most 30 characters")
+        .regex(/^[A-Za-z\s'-]+$/, "First name can only contain letters, spaces, apostrophes, and hyphens"),
+      lastName: z
+        .string()
+        .min(1, "Last name is required")
+        .max(30, "Last name must be at most 30 characters")
+        .regex(/^[A-Za-z\s'-]+$/, "Last name can only contain letters, spaces, apostrophes, and hyphens"),
       email: z.string().email("Invalid email address"),
       password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
       role: z.enum(ENUMS.USER_TYPES as unknown as [string, string, string]),
@@ -175,6 +183,7 @@ export default function AddUser() {
           label="First Name *"
           description="Enter the user's first name"
           placeholder="Enter first name"
+          maxLength={30}
           {...register("firstName")}
           error={errors.firstName?.message}
           required
@@ -184,6 +193,7 @@ export default function AddUser() {
           label="Last Name *"
           description="Enter the user's last name"
           placeholder="Enter last name"
+          maxLength={30}
           {...register("lastName")}
           error={errors.lastName?.message}
           required
