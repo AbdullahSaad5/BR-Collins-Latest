@@ -66,8 +66,6 @@ const ViewUserModal: React.FC<ViewUserModalProps> = ({ user, isOpen, onClose }) 
                   className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${
                     user.status === "active"
                       ? "text-green-600 bg-emerald-50"
-                      : user.status === "inactive"
-                      ? "text-gray-600 bg-gray-50"
                       : user.status === "blocked"
                       ? "text-red-600 bg-red-50"
                       : "text-gray-600 bg-gray-50"
