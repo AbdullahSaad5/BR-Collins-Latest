@@ -38,6 +38,8 @@ const CourseDetailPageClient = ({
     };
   };
 }) => {
+  console.log("course", course);
+
   const [showInPersonPopup, setShowInPersonPopup] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("Overview");
@@ -215,6 +217,9 @@ const CourseDetailPageClient = ({
         title: item.title,
         duration: `${parseInt(item.duration)} minutes`,
         type: item.contentType,
+        allowPreview: item.allowPreview,
+        contentUrl: item.contentUrl,
+        contentType: item.contentType,
       })),
     })),
   };

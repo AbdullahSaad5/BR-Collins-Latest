@@ -8,6 +8,9 @@ interface Lecture {
   title: string;
   duration: string;
   type: string;
+  allowPreview: boolean;
+  contentUrl: string;
+  contentType: string;
 }
 
 interface Section {
