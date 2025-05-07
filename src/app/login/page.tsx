@@ -200,7 +200,9 @@ const Login: React.FC = () => {
                   </label>
                 </div>
                 <div>
-                  <h2 className="underline font-light">Forgot your password?</h2>
+                  <Link href="/forgot-password" className="underline font-light">
+                    Forgot your password?
+                  </Link>
                 </div>
               </div>
               <button
