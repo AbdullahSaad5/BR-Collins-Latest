@@ -10,6 +10,7 @@ import { logout } from "@/app/store/features/users/userSlice";
 import { toggleCart, toggleCartVisiblity, clearCart } from "@/app/store/features/cart/cartSlice";
 import { IUser } from "../types/user.contract";
 import Image from "next/image";
+import { useCourseContext } from "./context/CourseContext";
 
 const isValidProfilePicture = (url: string | undefined): url is string => {
   return typeof url === "string" && url.length > 0;
@@ -42,6 +43,36 @@ export const Navigation = () => {
   const profilePicture = (user as IUser).profilePicture;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Courses");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mobileSearchQuery, setMobileSearchQuery] = useState("");
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [showMobileSearchDropdown, setShowMobileSearchDropdown] = useState(false);
+  const searchDropdownRef = useRef<HTMLDivElement>(null);
+  const mobileSearchDropdownRef = useRef<HTMLDivElement>(null);
+  const { courses, isLoading: isCoursesLoading } = useCourseContext();
+
+  // Filtered results for desktop
+  const filteredCourses = searchQuery.trim()
+    ? courses.filter((c) => c.title.toLowerCase().includes(searchQuery.trim().toLowerCase()))
+    : [];
+  // Filtered results for mobile
+  const filteredMobileCourses = mobileSearchQuery.trim()
+    ? courses.filter((c) => c.title.toLowerCase().includes(mobileSearchQuery.trim().toLowerCase()))
+    : [];
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchDropdownRef.current && !searchDropdownRef.current.contains(event.target as Node)) {
+        setShowSearchDropdown(false);
+      }
+      if (mobileSearchDropdownRef.current && !mobileSearchDropdownRef.current.contains(event.target as Node)) {
+        setShowMobileSearchDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     switch (pathname) {
@@ -101,6 +132,14 @@ export const Navigation = () => {
     dispatch(toggleCartVisiblity());
   };
 
+  const handleSearch = () => {
+    setShowSearchDropdown(true);
+  };
+
+  const handleMobileSearch = () => {
+    setShowMobileSearchDropdown(true);
+  };
+
   return (
     <nav className="relative text-gray-900 flex items-center justify-between my-5 w-full max-w-[1326px] mx-auto lg:px-5 xl:px-0 ">
       {/* Mobile Header */}
@@ -146,15 +185,58 @@ export const Navigation = () => {
           </a>
 
           <div className="flex gap-2.5 items-center w-full max-w-[500px]">
-            <div className="flex flex-col justify-center items-start px-5 py-3 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
+            <div className="flex flex-col justify-center items-start px-5 py-3 w-full bg-white border border-solid border-zinc-200 rounded-[66px] relative">
               <div className="flex gap-2 justify-center items-center w-full">
                 <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
                 <input
                   type="text"
                   placeholder="Search for anything"
-                  className="w-full border-none focus:outline-none text-sm placeholder-gray-500"
+                  className="w-full border-none focus:outline-none text-sm placeholder-gray-500 bg-transparent"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowSearchDropdown(true);
+                  }}
+                  onFocus={() => setShowSearchDropdown(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
                 />
               </div>
+              {/* Search Dropdown (Desktop) */}
+              {showSearchDropdown && (searchQuery.trim() || isCoursesLoading) && (
+                <div
+                  ref={searchDropdownRef}
+                  className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto"
+                  style={{ minWidth: 0 }}
+                >
+                  {isCoursesLoading ? (
+                    <div className="p-4 text-center text-gray-500">Loading courses...</div>
+                  ) : filteredCourses.length > 0 ? (
+                    <ul className="divide-y divide-gray-100">
+                      {filteredCourses.map((course) => (
+                        <li key={course._id}>
+                          <Link
+                            href={`/course/${course._id}`}
+                            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                            onClick={() => setShowSearchDropdown(false)}
+                          >
+                            <img
+                              // src={course.coverImageUrl || "/img/Course/Course.png"}
+                              src={"/img/Course/Course.png"}
+                              alt={course.title}
+                              className="w-8 h-8 object-cover rounded"
+                            />
+                            <span className="text-gray-900">{course.title}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">No results found.</div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="relative w-full flex flex-row items-center justify-center max-w-[120px] m-auto mr-2">
@@ -319,29 +401,60 @@ export const Navigation = () => {
 
           {/* Search and Courses in Mobile Menu */}
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px]">
+            <div className="flex flex-col justify-center items-start px-6 py-4 w-full bg-white border border-solid border-zinc-200 rounded-[66px] relative">
               <div className="flex gap-2 justify-center items-center w-full">
                 <img src="/img/search.svg" className="object-contain w-5 aspect-square" alt="Search icon" />
                 <input
                   type="text"
                   placeholder="Search for anything"
-                  className="w-full border-none focus:outline-none text-sm placeholder-gray-500"
+                  className="w-full border-none focus:outline-none text-sm placeholder-gray-500 bg-transparent"
+                  value={mobileSearchQuery}
+                  onChange={(e) => {
+                    setMobileSearchQuery(e.target.value);
+                    setShowMobileSearchDropdown(true);
+                  }}
+                  onFocus={() => setShowMobileSearchDropdown(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleMobileSearch();
+                  }}
                 />
               </div>
+              {/* Search Dropdown (Mobile) */}
+              {showMobileSearchDropdown && (mobileSearchQuery.trim() || isCoursesLoading) && (
+                <div
+                  ref={mobileSearchDropdownRef}
+                  className="absolute left-0 top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-72 overflow-y-auto"
+                  style={{ minWidth: 0 }}
+                >
+                  {isCoursesLoading ? (
+                    <div className="p-4 text-center text-gray-500">Loading courses...</div>
+                  ) : filteredMobileCourses.length > 0 ? (
+                    <ul className="divide-y divide-gray-100">
+                      {filteredMobileCourses.map((course) => (
+                        <li key={course._id}>
+                          <Link
+                            href={`/course/${course._id}`}
+                            className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                            onClick={() => setShowMobileSearchDropdown(false)}
+                          >
+                            <img
+                              // src={course.coverImageUrl || "/img/Course/Course.png"}
+                              src={"/img/Course/Course.png"}
+                              alt={course.title}
+                              className="w-8 h-8 object-cover rounded"
+                            />
+                            <span className="text-gray-900">{course.title}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">No results found.</div>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* <div className="relative w-full">
-              <select className="w-full appearance-none flex gap-1.5 justify-center items-center px-5 py-1 text-lg text-orange-500 bg-white border border-orange-500 border-solid min-h-[52px] rounded-[58px] cursor-pointer">
-                <option value="">Courses</option>
-                <option value="course1">Course 1</option>
-                <option value="course2">Course 2</option>
-              </select>
-              <img
-                src="/img/downarrow.svg"
-                className="pointer-events-none absolute right-5 top-1/2 transform -translate-y-1/2 w-5 aspect-square"
-                alt="Dropdown icon"
-              />
-            </div> */}
             <div className="relative w-full">
               <div
                 onClick={() => setIsDropdownOpenMobile(!isDropdownOpenMobile)}
