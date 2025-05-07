@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ArrowLeftIcon, ArrowRightIcon } from "../../../../public/icons/home_page_icons";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourseCategory } from "@/app/types/course-category.contract";
@@ -19,6 +19,22 @@ const fetchCategories = async (): Promise<{
 
 const CourseCategories: React.FC = () => {
   const swiperRef = React.useRef<any>(null);
+
+  // Responsive offset state
+  const [slidesOffset, setSlidesOffset] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSlidesOffset(48);
+      } else {
+        setSlidesOffset(0);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const scrollLeft = (): void => {
     if (swiperRef.current) {
@@ -55,7 +71,7 @@ const CourseCategories: React.FC = () => {
   if (isLoading) {
     return (
       <section className="relative text-gray-900 mt-6">
-        <div className="w-full max-w-[1326px] relative">
+        <div className="w-full max-w-[1326px] relative px-12 md:px-14">
           <div className="flex flex-row overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth no-scrollbar">
             <div className="flex flex-nowrap gap-4 items-stretch">
               {[...Array(6)].map((_, idx) => (
@@ -78,16 +94,18 @@ const CourseCategories: React.FC = () => {
 
   return (
     <section className="relative text-gray-900 mt-6">
-      <div className="w-full max-w-[1326px] relative">
+      <div className="w-full max-w-[1326px] relative md:px-14">
         <button
           onClick={scrollLeft}
-          className="hidden md:flex absolute -mt-1 left-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+          className="hidden md:flex absolute -mt-1 left-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
         >
           <ArrowLeftIcon className="w-4 h-4" />
         </button>
         <Swiper
           spaceBetween={24}
           modules={[Scrollbar]}
+          slidesOffsetBefore={slidesOffset}
+          slidesOffsetAfter={slidesOffset}
           // scrollbar={{ draggable: true, hide: false, dragSize: 64, snapOnRelease: true }}
           breakpoints={{
             0: { slidesPerView: 2, spaceBetween: 12 },
@@ -114,7 +132,7 @@ const CourseCategories: React.FC = () => {
         </Swiper>
         <button
           onClick={scrollRight}
-          className="hidden md:flex absolute -mt-1 right-[-56px] top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+          className="hidden md:flex absolute -mt-1 right-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
         >
           <ArrowRightIcon className="w-4 h-4" />
         </button>

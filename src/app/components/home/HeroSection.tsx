@@ -23,7 +23,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ activeIndex, setActiveIndex }
         spaceBetween={0}
         slidesPerView={1}
         autoplay={{
-          delay: 2000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         modules={[Autoplay]}
