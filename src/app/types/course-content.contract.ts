@@ -15,6 +15,6 @@ export interface ICourseContent {
   status: "active" | "blocked";
 }
 
-export type CourseContentCreatePayload = Omit<ICourseContent, "id" | "_id">;
+export type CourseContentCreatePayload = Omit<ICourseContent, "id" | "_id" | "status">;
 
 export type CourseContentUpdatePayload = Partial<CourseContentCreatePayload>;

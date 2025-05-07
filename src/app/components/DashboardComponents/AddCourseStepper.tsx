@@ -133,7 +133,7 @@ export default function AddCourseStepper() {
   const { data: categories } = useQuery({
     queryKey: ["course-categories-list"],
     queryFn: async () => {
-      const response = await api.get("/course-categories");
+      const response = await api.get("/course-categories?showBlocked=false");
       return response.data.data;
     },
     initialData: [],
