@@ -1,5 +1,10 @@
 import React from "react";
 import { ICourse } from "@/app/types/course.contract";
+import { useAppSelector } from "@/app/store/hooks";
+import { getAccessToken } from "@/app/store/features/users/userSlice";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/utils/axios";
+import { showToast } from "@/app/utils/toast";
 
 interface CourseDetailsModalProps {
   course: ICourse;
@@ -20,6 +25,32 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
   status = "not-started",
   lessonsCompleted,
 }) => {
+  const accessToken = useAppSelector(getAccessToken);
+
+  const { mutate: startLearningMutation, isPending: isStarting } = useMutation({
+    mutationFn: async () => {
+      if (!accessToken) throw new Error("No access token");
+      const response = await api.post(
+        "/user-course-progress",
+        { courseId: course.id },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      showToast("Course started!", "success");
+      onStartLearning();
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || error.message || "Failed to start course.";
+      showToast(message, "error");
+    },
+  });
+
   if (!isOpen) return null;
 
   return (
@@ -161,10 +192,13 @@ const CourseDetailsModal: React.FC<CourseDetailsModalProps> = ({
                   Close
                 </button>
                 <button
-                  onClick={onStartLearning}
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200"
+                  onClick={() => startLearningMutation()}
+                  disabled={isStarting}
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {status === "not-started"
+                  {isStarting
+                    ? "Starting..."
+                    : status === "not-started"
                     ? "Start Learning"
                     : status === "completed"
                     ? "View Certificate"

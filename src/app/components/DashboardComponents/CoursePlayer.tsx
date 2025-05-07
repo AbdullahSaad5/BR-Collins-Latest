@@ -19,15 +19,25 @@ interface CoursePlayerProps {
   content: ICourseContent[];
   onBack: () => void;
   onCompleteLesson: (contentId: string) => void;
+  completedContentIds: string[];
+  currentContentIndex: number;
+  setCurrentContentIndex: React.Dispatch<React.SetStateAction<number>>;
+  completionPercentage: number;
 }
 
-const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, onCompleteLesson }) => {
-  const [currentContentIndex, setCurrentContentIndex] = useState(0);
-  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+const CoursePlayer: React.FC<CoursePlayerProps> = ({
+  course,
+  content,
+  onBack,
+  onCompleteLesson,
+  completedContentIds,
+  currentContentIndex,
+  setCurrentContentIndex,
+  completionPercentage,
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const currentContent = content[currentContentIndex];
-  const progress = (completedLessons.length / content.length) * 100;
 
   const handlePrevious = () => {
     if (currentContentIndex > 0) {
@@ -42,8 +52,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
   };
 
   const handleCompleteLesson = () => {
-    if (!completedLessons.includes(currentContent._id)) {
-      setCompletedLessons([...completedLessons, currentContent._id]);
+    if (!completedContentIds.includes(currentContent._id)) {
       onCompleteLesson(currentContent._id);
     }
   };
@@ -69,7 +78,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
             <div className="hidden items-center gap-2 rounded-lg bg-white p-2 shadow-sm md:flex">
               <div className="flex items-center gap-2">
                 <div className="h-2.5 w-2.5 rounded-full bg-primary"></div>
-                <span className="text-sm text-gray-600">{Math.round(progress)}% Complete</span>
+                <span className="text-sm text-gray-600">{completionPercentage}% Complete</span>
               </div>
             </div>
             <button
@@ -151,10 +160,10 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
               </button>
               <button
                 onClick={handleCompleteLesson}
-                disabled={completedLessons.includes(currentContent._id)}
+                disabled={completedContentIds.includes(currentContent._id)}
                 className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
               >
-                {completedLessons.includes(currentContent._id) ? "Completed" : "Mark as Complete"}
+                {completedContentIds.includes(currentContent._id) ? "Completed" : "Mark as Complete"}
               </button>
               <button
                 onClick={handleNext}
@@ -179,11 +188,11 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
             <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
               <div
                 className="h-full rounded-full bg-primary transition-all duration-300"
-                style={{ width: `${progress}%` }}
+                style={{ width: `${completionPercentage}%` }}
               />
             </div>
             <p className="mt-2 text-sm text-gray-500">
-              {completedLessons.length} of {content.length} lessons completed
+              {completedContentIds.length} of {content.length} lessons completed
             </p>
           </div>
           <div className="p-4">
@@ -195,7 +204,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
                   className={`flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors duration-200 ${
                     currentContentIndex === index
                       ? "bg-primary text-white"
-                      : completedLessons.includes(item._id)
+                      : completedContentIds.includes(item._id)
                       ? "bg-orange-50 text-gray-900"
                       : "hover:bg-gray-50"
                   }`}
@@ -205,7 +214,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
                       currentContentIndex === index ? "bg-white/10" : "bg-white shadow-sm"
                     }`}
                   >
-                    {completedLessons.includes(item._id) ? (
+                    {completedContentIds.includes(item._id) ? (
                       <CheckCircle
                         className={`h-4 w-4 ${currentContentIndex === index ? "text-white" : "text-green-500"}`}
                       />
@@ -226,7 +235,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({ course, content, onBack, on
                       {item.title}
                     </p>
                     <p className={`text-xs ${currentContentIndex === index ? "text-white/80" : "text-gray-500"}`}>
-                      {item.duration}
+                      {item.duration} mins
                     </p>
                   </div>
                 </button>

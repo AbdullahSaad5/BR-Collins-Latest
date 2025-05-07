@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueries } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { useAppSelector } from "@/app/store/hooks";
 import { getAccessToken } from "@/app/store/features/users/userSlice";
@@ -8,6 +8,7 @@ import { IUser } from "@/app/types/user.contract";
 import CourseDetailsModal from "./CourseDetailsModal";
 import { useRouter } from "next/navigation";
 import Pagination from "../common/Pagination";
+import { showToast } from "@/app/utils/toast";
 
 interface EnrolledCourse {
   userId: IUser;
@@ -44,6 +45,58 @@ const EnrolledCourses = () => {
       return response.data.data;
     },
     enabled: !!accessToken,
+  });
+
+  // Fetch progress for all enrolled courses
+  const progressQueries = useQueries({
+    queries:
+      enrolledCourses?.map((course) => ({
+        queryKey: ["user-course-progress", course.courseId._id],
+        queryFn: async () => {
+          const response = await api.get(`/user-course-progress/${course.courseId._id}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+          return response.data.data;
+        },
+        enabled: !!accessToken && !!course.courseId._id,
+      })) || [],
+  });
+
+  // Map courseId to progress percentage
+  const courseProgressMap: Record<string, number> = {};
+  progressQueries.forEach((q, idx) => {
+    if (q.data && enrolledCourses) {
+      const courseId = enrolledCourses[idx].courseId._id;
+      const completed = q.data.completedContentIds?.length || 0;
+      const total = q.data.totalContentCount || enrolledCourses[idx].courseId.noOfLessons || 1;
+      courseProgressMap[courseId] = Math.round((completed / total) * 100);
+    }
+  });
+
+  const { mutate: startLearningMutation, isPending: isStarting } = useMutation({
+    mutationFn: async (courseId: string) => {
+      if (!accessToken) throw new Error("No access token");
+      const response = await api.post(
+        "/user-course-progress",
+        { courseId },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: (_data, courseId) => {
+      showToast("Course started!", "success");
+      router.push(`/courses/learn/${courseId}`);
+    },
+    onError: (error: any) => {
+      const message = error?.response?.data?.message || error.message || "Failed to start course.";
+      showToast(message, "error");
+    },
   });
 
   const handleViewDetails = (course: EnrolledCourse) => {
@@ -152,88 +205,106 @@ const EnrolledCourses = () => {
       </div>
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {currentCourses.map((course) => (
-          <div
-            key={course._id}
-            className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
-          >
-            <div className="relative h-48 w-full overflow-hidden">
-              <img
-                src="/img/Course/Course.png"
-                alt={course.courseId.title}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4">
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      course.status === "completed" ? "bg-[#ECFDF5] text-[#10B981]" : "bg-[#FFF5E6] text-primary"
-                    }`}
-                  >
-                    {course.status === "completed" ? "Completed" : "In Progress"}
+        {currentCourses.map((course, idx) => {
+          // Find the index of this course in enrolledCourses to get the right progress query
+          const globalIdx = enrolledCourses?.findIndex((c) => c._id === course._id) ?? idx;
+          const progressQuery = progressQueries[globalIdx];
+          const progress = courseProgressMap[course.courseId._id] ?? course.progress ?? 0;
+          return (
+            <div
+              key={course._id}
+              className="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
+            >
+              <div className="relative h-48 w-full overflow-hidden">
+                <img
+                  src="/img/Course/Course.png"
+                  alt={course.courseId.title}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                        course.status === "completed" ? "bg-[#ECFDF5] text-[#10B981]" : "bg-[#FFF5E6] text-primary"
+                      }`}
+                    >
+                      {course.status === "completed" ? "Completed" : "In Progress"}
+                    </span>
+                    <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-[#6366F1]">
+                      {course.courseId.noOfLessons} Lessons
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-1 flex-col p-6">
+                <div className="mb-4">
+                  <h3 className="mb-2 text-xl font-semibold text-gray-900 line-clamp-2">{course.courseId.title}</h3>
+                  <p className="text-sm text-[#6B7280]">{course.courseId.instructor}</p>
+                </div>
+
+                <div className="mb-6 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-[#EEF2FF] px-3 py-1 text-xs font-medium text-[#6366F1]">
+                    {course.courseId.skillLevel}
                   </span>
-                  <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-[#6366F1]">
-                    {course.courseId.noOfLessons} Lessons
+                  <span className="rounded-full bg-[#F0FDF4] px-3 py-1 text-xs font-medium text-[#22C55E]">
+                    {course.courseId.language}
                   </span>
+                </div>
+
+                <div className="mt-auto">
+                  <div className="mb-3">
+                    <div className="mb-2 flex justify-between text-sm text-gray-600">
+                      <span>Course Progress</span>
+                      <span>{progress}%</span>
+                    </div>
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                      <div
+                        className={`h-full rounded-full ${
+                          course.status === "completed" ? "bg-[#10B981]" : "bg-primary"
+                        }`}
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                    <div className="mt-1 text-xs text-[#6B7280]">
+                      {progressQuery?.data?.completedContentIds?.length ?? course.lessonsCompleted} of{" "}
+                      {progressQuery?.data?.totalContentCount ?? course.courseId.noOfLessons} lessons completed
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => {
+                        if (course.status === "not-started") {
+                          startLearningMutation(course.courseId._id);
+                        } else {
+                          router.push(`/courses/learn/${course.courseId._id}`);
+                        }
+                      }}
+                      disabled={isStarting}
+                      className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {isStarting && course.status === "not-started"
+                        ? "Starting..."
+                        : course.status === "not-started"
+                        ? "Start Learning"
+                        : course.status === "completed"
+                        ? "View Certificate"
+                        : "Continue Learning"}
+                    </button>
+                    <button
+                      onClick={() => handleViewDetails(course)}
+                      className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-[#4B5563] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    >
+                      Details
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div className="flex flex-1 flex-col p-6">
-              <div className="mb-4">
-                <h3 className="mb-2 text-xl font-semibold text-gray-900 line-clamp-2">{course.courseId.title}</h3>
-                <p className="text-sm text-[#6B7280]">{course.courseId.instructor}</p>
-              </div>
-
-              <div className="mb-6 flex flex-wrap gap-2">
-                <span className="rounded-full bg-[#EEF2FF] px-3 py-1 text-xs font-medium text-[#6366F1]">
-                  {course.courseId.skillLevel}
-                </span>
-                <span className="rounded-full bg-[#F0FDF4] px-3 py-1 text-xs font-medium text-[#22C55E]">
-                  {course.courseId.language}
-                </span>
-              </div>
-
-              <div className="mt-auto">
-                <div className="mb-3">
-                  <div className="mb-2 flex justify-between text-sm text-gray-600">
-                    <span>Course Progress</span>
-                    <span>{course.progress}%</span>
-                  </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
-                    <div
-                      className={`h-full rounded-full ${course.status === "completed" ? "bg-[#10B981]" : "bg-primary"}`}
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <div className="mt-1 text-xs text-[#6B7280]">
-                    {course.lessonsCompleted} of {course.courseId.noOfLessons} lessons completed
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleStartLearning(course)}
-                    className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  >
-                    {course.status === "not-started"
-                      ? "Start Learning"
-                      : course.status === "completed"
-                      ? "View Certificate"
-                      : "Continue Learning"}
-                  </button>
-                  <button
-                    onClick={() => handleViewDetails(course)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-[#4B5563] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  >
-                    Details
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Pagination */}
