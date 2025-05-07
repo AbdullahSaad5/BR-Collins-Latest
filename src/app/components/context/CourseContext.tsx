@@ -66,8 +66,13 @@ export const CourseProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const response = await api.get("/courses");
         const apiCourses = response.data.data;
+        const coursesWithRating = apiCourses.map((course: ICourse) => ({
+          ...course,
+          rating: (course.rating || Math.random() * (5 - 3) + 3).toFixed(1),
+          noOfStudents: (course.noOfStudents || Math.floor(Math.random() * (1000 - 1) + 1)).toFixed(0),
+        }));
 
-        setCourses(apiCourses);
+        setCourses(coursesWithRating);
       } catch (err) {
         setError("Failed to fetch courses");
         console.error("Error fetching courses:", err);

@@ -28,7 +28,12 @@ const ViewCourses = () => {
   } = useQuery({
     queryKey: ["courses"],
     queryFn: fetchCourses,
-    select: (data) => data.data,
+    select: (data) =>
+      data.data.map((course: ICourse) => ({
+        ...course,
+        rating: course.rating || Math.random() * (5 - 1) + 1,
+        noOfStudents: course.noOfStudents || Math.floor(Math.random() * (1000 - 1) + 1),
+      })),
   });
 
   const handleViewCourse = (course: ICourse) => {

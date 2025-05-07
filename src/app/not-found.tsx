@@ -31,7 +31,13 @@ export default function NotFound() {
       .then((res) => {
         // Some APIs return { data: [...] }, some just [...], so check
         const apiCourses = res.data?.data || res.data;
-        setCourses(apiCourses);
+        // Assgin random rating to each course which don't have rating
+        const coursesWithRating = apiCourses.map((course: ICourse) => ({
+          ...course,
+          rating: (course.rating || Math.random() * (5 - 3) + 3).toFixed(1),
+          noOfStudents: (course.noOfStudents || Math.floor(Math.random() * (1000 - 1) + 1)).toFixed(0),
+        }));
+        setCourses(coursesWithRating);
         setLoadingCourses(false);
       })
       .catch(() => setLoadingCourses(false));
