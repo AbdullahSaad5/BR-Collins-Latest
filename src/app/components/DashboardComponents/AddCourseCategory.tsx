@@ -3,11 +3,11 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast } from "react-hot-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import FormField from "./FormField";
 import { useRouter, useSearchParams } from "next/navigation";
+import { showToast } from "@/app/utils/toast";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -56,11 +56,11 @@ export default function AddCourseCategory() {
       return api.post("/course-categories", data);
     },
     onSuccess: () => {
-      toast.success(isEditMode ? "Category updated successfully" : "Category created successfully");
+      showToast("Category updated successfully", "success");
       router.push("/dashboard?item=viewCourseCategory");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      showToast(error.response?.data?.message || "Something went wrong", "error");
     },
   });
 

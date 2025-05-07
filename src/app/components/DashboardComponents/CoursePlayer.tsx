@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,6 +13,7 @@ import {
 import { ICourse } from "@/app/types/course.contract";
 import { ICourseContent } from "@/app/types/course-content.contract";
 import ReactPlayer from "react-player";
+import { useRouter } from "next/navigation";
 
 interface CoursePlayerProps {
   course: ICourse;
@@ -36,18 +37,28 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
   completionPercentage,
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const router = useRouter();
 
-  const currentContent = content[currentContentIndex];
+  // If all lessons are completed, always start from the first lesson
+  useEffect(() => {
+    if (content && completedContentIds && content.length > 0 && completedContentIds.length === content.length) {
+      setCurrentContentIndex(0);
+    }
+  }, [content, completedContentIds, setCurrentContentIndex]);
+
+  // Prevent out-of-bounds access
+  const safeContentIndex = currentContentIndex >= 0 && currentContentIndex < content.length ? currentContentIndex : 0;
+  const currentContent = content[safeContentIndex];
 
   const handlePrevious = () => {
-    if (currentContentIndex > 0) {
-      setCurrentContentIndex(currentContentIndex - 1);
+    if (safeContentIndex > 0) {
+      setCurrentContentIndex(safeContentIndex - 1);
     }
   };
 
   const handleNext = () => {
-    if (currentContentIndex < content.length - 1) {
-      setCurrentContentIndex(currentContentIndex + 1);
+    if (safeContentIndex < content.length - 1) {
+      setCurrentContentIndex(safeContentIndex + 1);
     }
   };
 
@@ -56,6 +67,12 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
       onCompleteLesson(currentContent._id);
     }
   };
+
+  // useEffect(() => {
+  //   if (content && completedContentIds && content.length > 0 && completedContentIds.length === content.length) {
+  //     router.push("/dashboard?item=enrolledCourses");
+  //   }
+  // }, [completedContentIds, content, router]);
 
   return (
     <div className="relative flex min-h-screen flex-col bg-gray-50">
@@ -70,7 +87,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
             <div className="hidden md:block">
               <h1 className="text-lg font-semibold text-gray-900">{course.title}</h1>
               <p className="text-sm text-gray-500">
-                Lesson {currentContentIndex + 1} of {content.length}
+                Lesson {safeContentIndex + 1} of {content.length}
               </p>
             </div>
           </div>
@@ -152,7 +169,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
             <div className="mt-6 flex items-center justify-between">
               <button
                 onClick={handlePrevious}
-                disabled={currentContentIndex === 0}
+                disabled={safeContentIndex === 0}
                 className="flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-gray-600 hover:bg-gray-50 disabled:opacity-50"
               >
                 <ChevronLeft className="h-5 w-5" />
@@ -167,7 +184,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
               </button>
               <button
                 onClick={handleNext}
-                disabled={currentContentIndex === content.length - 1}
+                disabled={safeContentIndex === content.length - 1}
                 className="flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-gray-600 hover:bg-gray-50 disabled:opacity-50"
               >
                 Next Lesson
@@ -202,7 +219,7 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
                   key={item._id}
                   onClick={() => setCurrentContentIndex(index)}
                   className={`flex w-full items-center gap-3 rounded-lg p-3 text-left transition-colors duration-200 ${
-                    currentContentIndex === index
+                    safeContentIndex === index
                       ? "bg-primary text-white"
                       : completedContentIds.includes(item._id)
                       ? "bg-orange-50 text-gray-900"
@@ -211,12 +228,12 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
                 >
                   <div
                     className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                      currentContentIndex === index ? "bg-white/10" : "bg-white shadow-sm"
+                      safeContentIndex === index ? "bg-white/10" : "bg-white shadow-sm"
                     }`}
                   >
                     {completedContentIds.includes(item._id) ? (
                       <CheckCircle
-                        className={`h-4 w-4 ${currentContentIndex === index ? "text-white" : "text-green-500"}`}
+                        className={`h-4 w-4 ${safeContentIndex === index ? "text-white" : "text-green-500"}`}
                       />
                     ) : item.contentType === "video" ? (
                       <BookOpen className="h-4 w-4" />
@@ -228,14 +245,12 @@ const CoursePlayer: React.FC<CoursePlayerProps> = ({
                   </div>
                   <div className="flex-1 min-w-0">
                     <p
-                      className={`font-medium truncate ${
-                        currentContentIndex === index ? "text-white" : "text-gray-900"
-                      }`}
+                      className={`font-medium truncate ${safeContentIndex === index ? "text-white" : "text-gray-900"}`}
                     >
                       {item.title}
                     </p>
-                    <p className={`text-xs ${currentContentIndex === index ? "text-white/80" : "text-gray-500"}`}>
-                      {item.duration} mins
+                    <p className={`text-xs ${safeContentIndex === index ? "text-white/80" : "text-gray-500"}`}>
+                      {item.duration}
                     </p>
                   </div>
                 </button>

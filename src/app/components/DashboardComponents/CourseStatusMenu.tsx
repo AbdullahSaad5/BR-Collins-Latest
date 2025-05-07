@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { MoreVertical, X } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { showToast } from "@/app/utils/toast";
 import { createPortal } from "react-dom";
 
 interface CourseStatusMenuProps {
@@ -62,9 +62,12 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ status, onStatusCha
       setLoading(true);
       try {
         await onStatusChange(pendingStatus);
-        toast.success(pendingStatus === "blocked" ? "Course archived successfully" : "Course unarchived successfully");
+        showToast(
+          pendingStatus === "blocked" ? "Course archived successfully" : "Course unarchived successfully",
+          "success"
+        );
       } catch (error) {
-        toast.error("Failed to update course status");
+        showToast("Failed to update course status", "error");
       }
       setLoading(false);
     }

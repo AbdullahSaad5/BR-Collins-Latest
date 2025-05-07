@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { MoreVertical, X } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { showToast } from "@/app/utils/toast";
 import { createPortal } from "react-dom";
 
 interface StatusMenuProps {
@@ -63,9 +63,9 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ status, onStatusChange, disable
       setLoading(true);
       try {
         await onStatusChange(pendingStatus);
-        toast.success(`User status changed to ${pendingStatus}`);
+        showToast(`User status changed to ${pendingStatus}`, "success");
       } catch (error) {
-        toast.error("Failed to update user status");
+        showToast("Failed to update user status", "error");
       }
       setLoading(false);
     }

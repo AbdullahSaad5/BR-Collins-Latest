@@ -170,7 +170,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
     <aside className="flex flex-col p-0 mx-auto max-w-none bg-white w-[385px] max-md:px-4 max-md:py-0 max-md:w-full max-md:max-w-[991px] max-sm:px-3 max-sm:py-0 max-sm:max-w-screen-sm">
       <div className="flex flex-col gap-8">
         <h2 className="text-xl font-bold text-neutral-900 max-md:text-lg max-sm:text-base">Filter By</h2>
-
+        <div className="w-full h-px bg-[#D9E2E6]" />
         <FilterGroup title="Topic Categories">
           <div className="flex flex-col gap-3">
             {visibleCategories.map((category) => (
@@ -189,7 +189,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           />
         </FilterGroup>
 
-        <hr className="w-full h-px bg-zinc-200" />
+        <div className="w-full h-px bg-[#D9E2E6]" />
 
         <FilterGroup title="By Rating">
           <div className="flex flex-col gap-3">
@@ -210,7 +210,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           </div>
         </FilterGroup>
 
-        <hr className="w-full h-px bg-zinc-200" />
+        <div className="w-full h-px bg-[#D9E2E6]" />
 
         <FilterGroup title="By Language">
           <div className="flex flex-col gap-3">
@@ -227,7 +227,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({
           </div>
         </FilterGroup>
 
-        <hr className="w-full h-px bg-zinc-200" />
+        <div className="w-full h-px bg-[#D9E2E6]" />
 
         <FilterGroup title="By Video Duration">
           <div className="flex flex-col gap-3">

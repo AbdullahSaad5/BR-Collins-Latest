@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { MoreVertical, X } from "lucide-react";
-import { toast } from "react-hot-toast";
 import { createPortal } from "react-dom";
 import { api } from "@/app/utils/axios";
 import { useQuery } from "@tanstack/react-query";
+import { showToast } from "@/app/utils/toast";
 
 interface AvailableSlot {
   date: string;
@@ -117,9 +117,9 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
         } else {
           await onStatusChange(pendingStatus);
         }
-        toast.success(`Appointment status updated to ${pendingStatus}`);
+        showToast("Appointment status updated to " + pendingStatus, "success");
       } catch (error) {
-        toast.error("Failed to update appointment status");
+        showToast("Failed to update appointment status", "error");
       }
     }
     setShowConfirmation(false);

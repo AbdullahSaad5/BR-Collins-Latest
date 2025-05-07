@@ -11,6 +11,7 @@ import StatusMenu from "./StatusMenu";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/app/store/hooks";
 import { getRefreshToken } from "@/app/store/features/users/userSlice";
+import { showToast } from "@/app/utils/toast";
 
 interface CourseCategory {
   id: string;
@@ -129,7 +130,7 @@ export default function ViewCourseCategories() {
   ];
 
   if (error) {
-    toast.error("Failed to fetch course categories");
+    showToast("Failed to fetch course categories", "error");
   }
 
   return (

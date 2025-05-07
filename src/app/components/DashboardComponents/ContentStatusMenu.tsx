@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { MoreVertical, X } from "lucide-react";
-import { toast } from "react-hot-toast";
+import { showToast } from "@/app/utils/toast";
 import { createPortal } from "react-dom";
 
 interface ContentStatusMenuProps {
@@ -60,9 +60,12 @@ const ContentStatusMenu: React.FC<ContentStatusMenuProps> = ({ status, onStatusC
     if (pendingStatus !== null) {
       try {
         await onStatusChange(pendingStatus);
-        toast.success(pendingStatus === "blocked" ? "Content blocked successfully" : "Content unblocked successfully");
+        showToast(
+          pendingStatus === "blocked" ? "Content blocked successfully" : "Content unblocked successfully",
+          "success"
+        );
       } catch (error) {
-        toast.error("Failed to update content status");
+        showToast("Failed to update content status", "error");
       }
     }
     setShowConfirmation(false);

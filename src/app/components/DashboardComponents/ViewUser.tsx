@@ -12,7 +12,7 @@ import ActionIcons from "@/components/ActionIcons";
 import ViewUserModal from "./ViewUserModal";
 import { useRouter } from "next/navigation";
 import StatusMenu from "./StatusMenu";
-import { toast } from "react-hot-toast";
+import { showToast } from "@/app/utils/toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { ISubscription } from "@/app/types/subscription.contract";
 import { Users, AlertCircle } from "lucide-react";
@@ -91,7 +91,7 @@ const UserTable: React.FC = () => {
     if (users && subscription?.isActive && currentUser.role === "manager") {
       const userLimit = getUserLimit(subscription.plan);
       if (users.length >= userLimit) {
-        toast.error(`User limit of ${userLimit} reached. Please upgrade your plan to add more users.`);
+        showToast(`User limit of ${userLimit} reached. Please upgrade your plan to add more users.`, "error");
         return;
       }
     }
@@ -108,7 +108,7 @@ const UserTable: React.FC = () => {
       await updateUserStatus(user.id, newStatus, refreshToken!);
       queryClient.invalidateQueries({ queryKey: ["users"] });
     } catch (error) {
-      toast.error("Failed to update user status");
+      showToast("Failed to update user status", "error");
     }
   };
 
@@ -118,6 +118,7 @@ const UserTable: React.FC = () => {
       selector: (row: IUser) => `${row.firstName} ${row.lastName}`,
       sortable: true,
       grow: 1,
+      maxWidth: "250px",
       cell: (row: IUser) => (
         <div className="text-base text-left text-neutral-900 truncate" title={`${row.firstName} ${row.lastName}`}>
           {row.firstName} {row.lastName}
@@ -132,6 +133,7 @@ const UserTable: React.FC = () => {
       selector: (row: IUser) => row.email,
       sortable: true,
       grow: 1.5,
+      maxWidth: "250px",
       cell: (row: IUser) => (
         <div className="text-base text-left text-neutral-900 truncate" title={row.email}>
           {row.email}
@@ -143,6 +145,7 @@ const UserTable: React.FC = () => {
       selector: (row: IUser) => row.role,
       sortable: true,
       grow: 1,
+      maxWidth: "250px",
       cell: (row: IUser) => <div className="text-base text-left text-neutral-900">{transformUserType(row.role)}</div>,
     },
     {
@@ -150,6 +153,7 @@ const UserTable: React.FC = () => {
       selector: (row: IUser) => row.status,
       sortable: true,
       grow: 1,
+      maxWidth: "250px",
       cell: (row: IUser) => (
         <StatusMenu
           status={row.status}

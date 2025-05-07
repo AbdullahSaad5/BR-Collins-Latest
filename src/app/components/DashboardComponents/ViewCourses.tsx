@@ -7,7 +7,7 @@ import { ICourse } from "@/app/types/course.contract";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseModal from "./ViewCourseModal";
-import { toast } from "react-hot-toast";
+import { showToast } from "@/app/utils/toast";
 import { useRouter } from "next/navigation";
 import CourseStatusMenu from "./CourseStatusMenu";
 
@@ -147,7 +147,7 @@ const ViewCourses = () => {
   ];
 
   if (error) {
-    toast.error("Failed to fetch courses");
+    showToast("Failed to fetch courses", "error");
   }
 
   return (
