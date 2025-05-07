@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ViewIcon, EditIcon } from "./Icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { ICourseContent } from "@/app/types/course-content.contract";
@@ -32,6 +32,7 @@ const ViewCourseContent = () => {
   const [selectedContent, setSelectedContent] = useState<ICourseContent | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     data: contents,
@@ -57,14 +58,15 @@ const ViewCourseContent = () => {
     // TODO: Implement delete functionality
   };
 
-  const handleStatusChange = async (contentId: string, isBlocked: boolean) => {
+  const handleStatusChange = async (contentId: string, status: "active" | "blocked") => {
     try {
       const response = await api.patch(`/course-contents/${contentId}`, {
-        isBlocked,
+        status,
       });
 
       if (response.data) {
-        showToast(`Content ${isBlocked ? "blocked" : "unblocked"} successfully`, "success");
+        showToast(`Content ${status === "blocked" ? "blocked" : "unblocked"} successfully`, "success");
+        queryClient.invalidateQueries({ queryKey: ["course-contents"] });
       }
     } catch (error) {
       showToast("Failed to update content status", "error");
@@ -133,18 +135,15 @@ const ViewCourseContent = () => {
       grow: 1,
       cell: (row: ICourseContent) => <div className="text-base text-left text-neutral-900">{toOrdinal(row.order)}</div>,
     },
-    // {
-    //   name: "Status",
-    //   selector: (row: ICourseContent) => row.isBlocked,
-    //   sortable: true,
-    //   grow: 1,
-    //   cell: (row: ICourseContent) => (
-    //     <ContentStatusMenu
-    //       isBlocked={row.isBlocked}
-    //       onStatusChange={(isBlocked) => handleStatusChange(row._id, isBlocked)}
-    //     />
-    //   ),
-    // },
+    {
+      name: "Status",
+      selector: (row: ICourseContent) => row.status,
+      sortable: true,
+      grow: 1,
+      cell: (row: ICourseContent) => (
+        <ContentStatusMenu status={row.status} onStatusChange={(status) => handleStatusChange(row._id, status)} />
+      ),
+    },
     {
       name: "Actions",
       cell: (row: ICourseContent) => <ActionIcons onView={() => handleView(row)} onEdit={() => handleEdit(row)} />,

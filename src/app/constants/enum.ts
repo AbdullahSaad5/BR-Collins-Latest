@@ -6,7 +6,7 @@ export const ENUMS = {
     "manager",
   ] as const,
   DEVICE_TYPES: ["web", "android", "ios"] as const,
-  USER_STATUS: ["active", "inactive", "blocked", "deleted", "reported"] as const,
+  USER_STATUS: ["active", "blocked"] as const,
   BUSINESS_STATUS: ["active", "inactive", "blocked", "pending", "deleted", "rejected"] as const,
   NOTIFICATION_STATUS: ["on", "off", "mute"] as const,
   LOCATION_STATUS: ["on", "off"] as const,

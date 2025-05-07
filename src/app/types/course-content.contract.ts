@@ -12,6 +12,7 @@ export interface ICourseContent {
   allowDownload: boolean;
   allowPreview: boolean;
   sectionName: string;
+  status: "active" | "blocked";
 }
 
 export type CourseContentCreatePayload = Omit<ICourseContent, "id" | "_id">;

@@ -5,15 +5,16 @@ import { toast } from "react-hot-toast";
 import { createPortal } from "react-dom";
 
 interface StatusMenuProps {
-  isBlocked: boolean;
-  onStatusChange: (isBlocked: boolean) => Promise<void>;
+  status: "active" | "blocked";
+  onStatusChange: (status: "active" | "blocked") => Promise<void>;
   disabled?: boolean;
 }
 
-const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disabled = false }) => {
+const StatusMenu: React.FC<StatusMenuProps> = ({ status, onStatusChange, disabled = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState<boolean | null>(null);
+  const [pendingStatus, setPendingStatus] = useState<"active" | "blocked" | null>(null);
+  const [loading, setLoading] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
@@ -44,14 +45,14 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disa
     if (isMenuOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setMenuPosition({
-        top: rect.bottom + window.scrollY,
+        top: rect.bottom,
         left: rect.left + window.scrollX,
         width: rect.width,
       });
     }
   }, [isMenuOpen]);
 
-  const handleStatusClick = (newStatus: boolean) => {
+  const handleStatusClick = (newStatus: "active" | "blocked") => {
     setPendingStatus(newStatus);
     setShowConfirmation(true);
     setIsMenuOpen(false);
@@ -59,12 +60,14 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disa
 
   const handleConfirm = async () => {
     if (pendingStatus !== null) {
+      setLoading(true);
       try {
         await onStatusChange(pendingStatus);
-        toast.success(`Category ${pendingStatus ? "blocked" : "unblocked"} successfully`);
+        toast.success(`User status changed to ${pendingStatus}`);
       } catch (error) {
-        toast.error("Failed to update category status");
+        toast.error("Failed to update user status");
       }
+      setLoading(false);
     }
     setShowConfirmation(false);
     setPendingStatus(null);
@@ -83,11 +86,24 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disa
         ref={buttonRef}
         onClick={() => !disabled && setIsMenuOpen(!isMenuOpen)}
         className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full transition-colors ${
-          isBlocked ? "text-red-600 bg-red-50 hover:bg-red-100" : "text-green-600 bg-emerald-50 hover:bg-emerald-100"
+          status === "blocked"
+            ? "text-red-600 bg-red-50 hover:bg-red-100"
+            : "text-green-600 bg-emerald-50 hover:bg-emerald-100"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-        disabled={disabled}
+        disabled={disabled || loading}
       >
-        {isBlocked ? "Blocked" : "Active"}
+        {loading && (
+          <svg
+            className="animate-spin h-4 w-4 mr-2 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+        )}
+        {status === "blocked" ? "Blocked" : "Active"}
         <MoreVertical className="ml-1 w-3 h-3" />
       </button>
 
@@ -105,23 +121,21 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disa
           >
             <div className="bg-white rounded-lg shadow-lg border border-gray-200">
               <div className="py-0.5">
-                {isBlocked ? (
+                {status === "blocked" ? (
                   <button
                     onClick={(e) => {
-                      console.log("Unblocking");
                       e.stopPropagation();
-                      handleStatusClick(false);
+                      handleStatusClick("active");
                     }}
                     className="flex items-center w-full px-2 py-1 text-xs text-green-600 hover:bg-green-50"
                   >
-                    Unblock
+                    Set Active
                   </button>
                 ) : (
                   <button
                     onClick={(e) => {
-                      console.log("Blocking");
                       e.stopPropagation();
-                      handleStatusClick(true);
+                      handleStatusClick("blocked");
                     }}
                     className="flex items-center w-full px-2 py-1 text-xs text-red-600 hover:bg-red-50"
                   >
@@ -153,7 +167,7 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disa
                 <div className="space-y-6">
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <p className="text-base text-neutral-900">
-                      Are you sure you want to {pendingStatus ? "block" : "unblock"} this category?
+                      Are you sure you want to set this user as {pendingStatus === "blocked" ? "blocked" : "active"}?
                     </p>
                   </div>
                 </div>
@@ -168,10 +182,30 @@ const StatusMenu: React.FC<StatusMenuProps> = ({ isBlocked, onStatusChange, disa
                   <button
                     onClick={handleConfirm}
                     className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors ${
-                      pendingStatus ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
+                      pendingStatus === "blocked" ? "bg-red-600 hover:bg-red-700" : "bg-green-600 hover:bg-green-700"
                     }`}
+                    disabled={loading}
                   >
-                    Confirm
+                    {loading ? (
+                      <svg
+                        className="animate-spin h-4 w-4 mr-2 inline-block text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                    ) : (
+                      "Confirm"
+                    )}
                   </button>
                 </div>
               </div>

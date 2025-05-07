@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { AddUserIcon } from "./Icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import { ICourse } from "@/app/types/course.contract";
 import CustomDataTable from "./CustomDataTable";
@@ -20,6 +20,7 @@ const ViewCourses = () => {
   const [selectedCourse, setSelectedCourse] = useState<ICourse | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
     data: courses,
@@ -55,22 +56,10 @@ const ViewCourses = () => {
     console.log("Delete course:", course);
   };
 
-  const handleStatusChange = async (courseId: string, status: { isPublished?: boolean; isArchived?: boolean }) => {
+  const handleStatusChange = async (courseId: string, status: "active" | "blocked") => {
     try {
-      const response = await fetch(`/api/courses/${courseId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(status),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update course status");
-      }
-
-      // Refresh the courses list
-      fetchCourses();
+      await api.patch(`/courses/${courseId}`, { status });
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
     } catch (error) {
       console.error("Error updating course status:", error);
       throw error;
@@ -126,21 +115,17 @@ const ViewCourses = () => {
         </div>
       ),
     },
-    // {
-    //   name: "Status",
-    //   accessorKey: "status",
-    //   header: "Status",
-    //   cell: (row: ICourse) => {
-    //     console.log(row);
-    //     return (
-    //       <CourseStatusMenu
-    //         isPublished={row.isPublished}
-    //         isArchived={row.isArchived}
-    //         onStatusChange={(status) => handleStatusChange(row.id, status)}
-    //       />
-    //     );
-    //   },
-    // },
+    {
+      name: "Status",
+      cell: (row: ICourse) => (
+        <CourseStatusMenu
+          status={row.status}
+          onStatusChange={async (newStatus) => {
+            await handleStatusChange(row._id, newStatus);
+          }}
+        />
+      ),
+    },
     {
       name: "Actions",
       cell: (row: ICourse) => (

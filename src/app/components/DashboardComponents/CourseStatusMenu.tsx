@@ -5,15 +5,15 @@ import { toast } from "react-hot-toast";
 import { createPortal } from "react-dom";
 
 interface CourseStatusMenuProps {
-  isPublished: boolean;
-  isArchived: boolean;
-  onStatusChange: (status: { isPublished?: boolean; isArchived?: boolean }) => Promise<void>;
+  status: "active" | "blocked";
+  onStatusChange: (status: "active" | "blocked") => Promise<void>;
 }
 
-const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArchived, onStatusChange }) => {
+const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ status, onStatusChange }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState<{ isPublished?: boolean; isArchived?: boolean } | null>(null);
+  const [pendingStatus, setPendingStatus] = useState<"active" | "blocked" | null>(null);
+  const [loading, setLoading] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
@@ -44,33 +44,29 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArch
     if (isMenuOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setMenuPosition({
-        top: rect.bottom + window.scrollY,
+        top: rect.bottom,
         left: rect.left + window.scrollX,
         width: rect.width,
       });
     }
   }, [isMenuOpen]);
 
-  const handleStatusClick = (status: { isPublished?: boolean; isArchived?: boolean }) => {
-    setPendingStatus(status);
+  const handleStatusClick = (newStatus: "active" | "blocked") => {
+    setPendingStatus(newStatus);
     setShowConfirmation(true);
     setIsMenuOpen(false);
   };
 
   const handleConfirm = async () => {
     if (pendingStatus !== null) {
+      setLoading(true);
       try {
         await onStatusChange(pendingStatus);
-        toast.success(
-          pendingStatus.isPublished
-            ? "Course published successfully"
-            : pendingStatus.isArchived
-            ? "Course archived successfully"
-            : "Course status updated successfully"
-        );
+        toast.success(pendingStatus === "blocked" ? "Course archived successfully" : "Course unarchived successfully");
       } catch (error) {
         toast.error("Failed to update course status");
       }
+      setLoading(false);
     }
     setShowConfirmation(false);
     setPendingStatus(null);
@@ -84,15 +80,13 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArch
   if (!mounted) return null;
 
   const getStatusText = () => {
-    if (isArchived) return "Archived";
-    if (isPublished) return "Published";
-    return "Draft";
+    return status === "blocked" ? "Archived" : "Active";
   };
 
   const getStatusClass = () => {
-    if (isArchived) return "text-gray-600 bg-gray-50 hover:bg-gray-100";
-    if (isPublished) return "text-green-600 bg-emerald-50 hover:bg-emerald-100";
-    return "text-red-600 bg-red-50 hover:bg-red-100";
+    return status === "blocked"
+      ? "text-gray-600 bg-gray-50 hover:bg-gray-100"
+      : "text-green-600 bg-emerald-50 hover:bg-emerald-100";
   };
 
   return (
@@ -101,7 +95,19 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArch
         ref={buttonRef}
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className={`inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full transition-colors ${getStatusClass()}`}
+        disabled={loading}
       >
+        {loading && (
+          <svg
+            className="animate-spin h-4 w-4 mr-2 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          </svg>
+        )}
         {getStatusText()}
         <MoreVertical className="ml-1 w-3 h-3" />
       </button>
@@ -119,46 +125,23 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArch
           >
             <div className="bg-white rounded-lg shadow-lg border border-gray-200">
               <div className="py-0.5">
-                {!isPublished && !isArchived && (
+                {status === "active" ? (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleStatusClick({ isPublished: true });
-                    }}
-                    className="flex items-center w-full px-2 py-1 text-xs text-green-600 hover:bg-green-50"
-                  >
-                    Publish
-                  </button>
-                )}
-                {isPublished && !isArchived && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleStatusClick({ isPublished: false });
+                      handleStatusClick("blocked");
                     }}
                     className="flex items-center w-full px-2 py-1 text-xs text-red-600 hover:bg-red-50"
                   >
-                    Unpublish
-                  </button>
-                )}
-                {!isArchived && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleStatusClick({ isArchived: true });
-                    }}
-                    className="flex items-center w-full px-2 py-1 text-xs text-gray-600 hover:bg-gray-50"
-                  >
                     Archive
                   </button>
-                )}
-                {isArchived && (
+                ) : (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleStatusClick({ isArchived: false });
+                      handleStatusClick("active");
                     }}
-                    className="flex items-center w-full px-2 py-1 text-xs text-blue-600 hover:bg-blue-50"
+                    className="flex items-center w-full px-2 py-1 text-xs text-green-600 hover:bg-green-50"
                   >
                     Unarchive
                   </button>
@@ -188,9 +171,7 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArch
                 <div className="space-y-6">
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <p className="text-base text-neutral-900">
-                      Are you sure you want to{" "}
-                      {pendingStatus?.isPublished ? "publish" : pendingStatus?.isArchived ? "archive" : "unpublish"}{" "}
-                      this course?
+                      Are you sure you want to {pendingStatus === "blocked" ? "archive" : "unarchive"} this course?
                     </p>
                   </div>
                 </div>
@@ -205,14 +186,30 @@ const CourseStatusMenu: React.FC<CourseStatusMenuProps> = ({ isPublished, isArch
                   <button
                     onClick={handleConfirm}
                     className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors ${
-                      pendingStatus?.isPublished
-                        ? "bg-green-600 hover:bg-green-700"
-                        : pendingStatus?.isArchived
-                        ? "bg-gray-600 hover:bg-gray-700"
-                        : "bg-red-600 hover:bg-red-700"
+                      pendingStatus === "blocked" ? "bg-gray-600 hover:bg-gray-700" : "bg-blue-600 hover:bg-blue-700"
                     }`}
+                    disabled={loading}
                   >
-                    Confirm
+                    {loading ? (
+                      <svg
+                        className="animate-spin h-4 w-4 mr-2 inline-block text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                      </svg>
+                    ) : (
+                      "Confirm"
+                    )}
                   </button>
                 </div>
               </div>

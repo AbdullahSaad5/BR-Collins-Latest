@@ -2,13 +2,15 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { AddUserIcon } from "./Icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
 import CustomDataTable from "./CustomDataTable";
 import ActionIcons from "@/components/ActionIcons";
 import ViewCourseCategoryModal from "./ViewCourseCategoryModal";
 import StatusMenu from "./StatusMenu";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/app/store/hooks";
+import { getRefreshToken } from "@/app/store/features/users/userSlice";
 
 interface CourseCategory {
   id: string;
@@ -16,7 +18,7 @@ interface CourseCategory {
   name: string;
   description: string;
   createdAt: string;
-  isBlocked: boolean;
+  status: "active" | "blocked";
 }
 
 const fetchCategories = async (): Promise<{ data: CourseCategory[] }> => {
@@ -28,6 +30,8 @@ export default function ViewCourseCategories() {
   const [selectedCategory, setSelectedCategory] = useState<CourseCategory | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const router = useRouter();
+  const refreshToken = useAppSelector(getRefreshToken);
+  const queryClient = useQueryClient();
 
   const {
     data: categories,
@@ -58,11 +62,20 @@ export default function ViewCourseCategories() {
     console.log("Delete category:", category);
   };
 
-  const handleToggleStatus = async (category: CourseCategory, isBlocked: boolean) => {
+  const handleToggleStatus = async (category: CourseCategory, newStatus: "active" | "blocked") => {
     try {
-      await api.put(`/course-categories/${category._id}`, {
-        isBlocked,
-      });
+      await api.patch(
+        `/course-categories/${category._id}/change-status`,
+        {
+          status: newStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+      queryClient.invalidateQueries({ queryKey: ["course-categories"] });
     } catch (error) {
       throw new Error("Failed to update category status");
     }
@@ -83,15 +96,15 @@ export default function ViewCourseCategories() {
       grow: 2,
       cell: (row: CourseCategory) => <div className="text-base text-left text-neutral-900">{row.description}</div>,
     },
-    // {
-    //   name: "Status",
-    //   selector: (row: CourseCategory) => row.isBlocked,
-    //   sortable: true,
-    //   grow: 1,
-    //   cell: (row: CourseCategory) => (
-    //     <StatusMenu isBlocked={row.isBlocked} onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)} />
-    //   ),
-    // },
+    {
+      name: "Status",
+      selector: (row: CourseCategory) => row.status,
+      sortable: true,
+      grow: 1,
+      cell: (row: CourseCategory) => (
+        <StatusMenu status={row.status} onStatusChange={(newStatus) => handleToggleStatus(row, newStatus)} />
+      ),
+    },
     {
       name: "Created At",
       selector: (row: CourseCategory) => row.createdAt,

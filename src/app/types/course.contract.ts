@@ -33,6 +33,7 @@ export interface ICourse {
   passPercentage: number;
   inPersonLearning: boolean;
   onlineLearning: boolean;
+  status: "active" | "blocked";
 }
 
 export interface ICourseMethods {

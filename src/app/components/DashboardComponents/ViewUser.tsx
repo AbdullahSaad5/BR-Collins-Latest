@@ -26,10 +26,10 @@ const fetchUsers = async (refreshToken: string): Promise<{ data: IUser[] }> => {
   return response.data;
 };
 
-const updateUserStatus = async (userId: string, isBlocked: boolean, refreshToken: string): Promise<void> => {
-  await api.put(
-    `/users/${userId}`,
-    { isBlocked },
+const updateUserStatus = async (userId: string, status: "active" | "blocked", refreshToken: string): Promise<void> => {
+  await api.patch(
+    `/users/${userId}/change-status`,
+    { status },
     {
       headers: {
         Authorization: `Bearer ${refreshToken}`,
@@ -103,10 +103,9 @@ const UserTable: React.FC = () => {
     console.log("Delete user:", user);
   };
 
-  const handleToggleStatus = async (user: IUser, isBlocked: boolean) => {
+  const handleToggleStatus = async (user: IUser, newStatus: "active" | "blocked") => {
     try {
-      await updateUserStatus(user.id, isBlocked, refreshToken!);
-      // Refetch users to update the table
+      await updateUserStatus(user.id, newStatus, refreshToken!);
       queryClient.invalidateQueries({ queryKey: ["users"] });
     } catch (error) {
       toast.error("Failed to update user status");
@@ -146,19 +145,19 @@ const UserTable: React.FC = () => {
       grow: 1,
       cell: (row: IUser) => <div className="text-base text-left text-neutral-900">{transformUserType(row.role)}</div>,
     },
-    // {
-    //   name: "Status",
-    //   selector: (row: IUser) => row.isBlocked,
-    //   sortable: true,
-    //   grow: 1,
-    //   cell: (row: IUser) => (
-    //     <StatusMenu
-    //       isBlocked={row.isBlocked}
-    //       onStatusChange={(isBlocked) => handleToggleStatus(row, isBlocked)}
-    //       disabled={row.id === currentUser.id} // Disable status toggle for current user
-    //     />
-    //   ),
-    // },
+    {
+      name: "Status",
+      selector: (row: IUser) => row.status,
+      sortable: true,
+      grow: 1,
+      cell: (row: IUser) => (
+        <StatusMenu
+          status={row.status}
+          onStatusChange={(newStatus) => handleToggleStatus(row, newStatus)}
+          disabled={row.id === currentUser.id}
+        />
+      ),
+    },
     {
       name: "Actions",
       cell: (row: IUser) => (
