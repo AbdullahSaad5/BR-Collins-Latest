@@ -16,61 +16,67 @@ type FieldArrayValue = {
   value: string;
 };
 
-// interface CourseFormData {
-//   title: string;
-//   subtitle?: string;
-//   slug: string;
-//   noOfLessons: number;
-//   noOfHours: number;
-//   startDate: Date;
-//   language: string;
-//   lastUpdated: Date;
-//   bestSeller: boolean;
-//   price: number;
-//   discountPrice?: number;
-//   isDiscounted: boolean;
-//   isFeatured: boolean;
-//   isPublished: boolean;
-//   isArchived: boolean;
-//   isDeleted: boolean;
-//   previewVideoUrl?: string;
-//   coverImageUrl?: string;
-//   whatYouWillLearn: FieldArrayValue[];
-//   requirements: FieldArrayValue[];
-//   overview: string;
-//   description: string;
-//   instructor: string;
-//   skillLevel: string;
-//   noOfQuizzes: number;
-//   hasCertificate: boolean;
-//   passPercentage: number;
-// }
-
-type CourseFormData = Omit<
-  ICourse,
-  | "id"
-  | "rating"
-  | "noOfStudents"
-  | "createdAt"
-  | "updatedAt"
-  | "whatYouWillLearn"
-  | "requirements"
-  | "_id"
-  | "lastUpdated"
-> & {
+type CourseFormData = {
+  title: string;
+  subtitle?: string;
+  slug: string;
+  startDate: Date;
+  language: string;
+  bestSeller: boolean;
+  price: number;
+  discountPrice?: number;
+  isDiscounted: boolean;
+  isFeatured: boolean;
+  isPublished: boolean;
+  isArchived: boolean;
+  isDeleted: boolean;
+  previewVideoUrl?: string;
+  coverImageUrl?: string;
   whatYouWillLearn: FieldArrayValue[];
   requirements: FieldArrayValue[];
+  overview: string;
+  description: string;
+  instructor: string;
+  skillLevel: string;
+  noOfQuizzes: number;
+  hasCertificate: boolean;
+  passPercentage: number;
+  categoryId: string;
   onlineLearning: boolean;
   inPersonLearning: boolean;
 };
+
+const todayString = new Date().toISOString().split("T")[0];
 
 const courseSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
   subtitle: z.string().max(200, "Subtitle must be less than 200 characters").optional(),
   slug: z.string().min(1, "Slug is required").max(100, "Slug must be less than 100 characters"),
-  noOfLessons: z.number().min(1, "Number of lessons must be at least 1"),
-  noOfHours: z.number().min(1, "Number of hours must be at least 1"),
-  startDate: z.date(),
+  startDate: z.preprocess(
+    (val) => {
+      if (typeof val === "string" || val instanceof String) {
+        // If empty string, treat as undefined
+        if (val === "") return undefined;
+        return new Date(val as string);
+      }
+      return val;
+    },
+    z
+      .date({ required_error: "Start date is required", invalid_type_error: "Invalid date" })
+      .refine((date) => date instanceof Date && !isNaN(date.getTime()), {
+        message: "Start date is required",
+      })
+      .refine(
+        (date) => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return date >= today;
+        },
+        {
+          message: "Start date cannot be earlier than today",
+        }
+      )
+  ),
   language: z.string().min(1, "Language is required"),
   bestSeller: z.boolean(),
   price: z.number().min(1, "Price must be at least 1"),
@@ -143,13 +149,11 @@ export default function AddCourseStepper() {
     trigger,
     reset,
   } = useForm<CourseFormData>({
-    resolver: zodResolver(courseSchema),
+    resolver: zodResolver(courseSchema as z.ZodType<CourseFormData>),
     defaultValues: {
       title: "",
       subtitle: "",
       slug: "",
-      noOfLessons: 0,
-      noOfHours: 0,
       startDate: new Date(),
       language: "English",
       bestSeller: false,
@@ -194,7 +198,7 @@ export default function AddCourseStepper() {
     fields: learningPoints,
     append: appendLearningPoint,
     remove: removeLearningPoint,
-  } = useFieldArray<CourseFormData>({
+  } = useFieldArray({
     control,
     name: "whatYouWillLearn",
     rules: { required: true },
@@ -204,7 +208,7 @@ export default function AddCourseStepper() {
     fields: requirements,
     append: appendRequirement,
     remove: removeRequirement,
-  } = useFieldArray<CourseFormData>({
+  } = useFieldArray({
     control,
     name: "requirements",
     rules: { required: true },
@@ -237,7 +241,8 @@ export default function AddCourseStepper() {
       }
     }
 
-    if (isValid) {
+    // Only increment if not on the last step
+    if (isValid && activeStep < steps.length - 1) {
       setActiveStep((prev) => prev + 1);
     }
   };
@@ -247,7 +252,7 @@ export default function AddCourseStepper() {
       case 0:
         return ["title", "slug", "overview", "whatYouWillLearn", "requirements", "description", "instructor"];
       case 1:
-        return ["language", "skillLevel", "noOfLessons", "noOfHours", "startDate"];
+        return ["language", "skillLevel", "startDate"];
       case 2:
         return ["price", "discountPrice", "isDiscounted", "bestSeller", "isFeatured"];
       case 3:
@@ -481,30 +486,21 @@ export default function AddCourseStepper() {
               ]}
             />
             <FormField
-              label="Number of Lessons *"
-              description="Total number of lessons in the course."
-              placeholder="20"
-              {...register("noOfLessons", { valueAsNumber: true })}
-              error={errors.noOfLessons?.message}
-              type="number"
-              required
-            />
-            <FormField
-              label="Number of Hours *"
-              description="Total duration of the course in hours."
-              placeholder="10"
-              {...register("noOfHours", { valueAsNumber: true })}
-              error={errors.noOfHours?.message}
-              type="number"
-              required
-            />
-            <FormField
               label="Start Date *"
               description="When the course will be available."
-              {...register("startDate", { valueAsDate: true })}
               error={errors.startDate?.message}
-              type="date"
               required
+              type="date"
+              min={todayString}
+              value={(() => {
+                const val = watch("startDate");
+                if (!val) return todayString;
+                if (typeof val === "string") return val;
+                if (val instanceof Date && !isNaN(val.getTime())) return val.toISOString().split("T")[0];
+                return todayString;
+              })()}
+              onChange={(e) => setValue("startDate", new Date(e.target.value))}
+              name="startDate"
             />
           </>
         );
