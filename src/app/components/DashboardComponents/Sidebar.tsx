@@ -226,7 +226,7 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
       label: "Appointments",
       isActive: activeItem === "appointments",
       onClick: () => handleItemClick("appointments"),
-      access: ["manager"],
+      access: ["manager", "student"],
     },
     {
       icon: BookOpen,
