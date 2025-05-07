@@ -350,7 +350,7 @@ export default function AddCourseContent() {
             </div>
             <div className="grow shrink-0 text-base text-gray-400 basis-0 w-full">
               <div className="space-y-4">
-                <Controller
+                {/* <Controller
                   name="allowDownload"
                   control={control}
                   render={({ field }) => (
@@ -361,7 +361,7 @@ export default function AddCourseContent() {
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
                   )}
-                />
+                /> */}
                 <Controller
                   name="allowPreview"
                   control={control}
