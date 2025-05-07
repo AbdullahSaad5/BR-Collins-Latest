@@ -23,8 +23,12 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light-border.css";
 
-const fetchAppointments = async (): Promise<{ data: IAppointment[] }> => {
-  const response = await api.get("/appointments?populate=courseId");
+const fetchAppointments = async (refreshToken: string): Promise<{ data: IAppointment[] }> => {
+  const response = await api.get("/appointments?populate=courseId", {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
   return response.data;
 };
 
@@ -82,7 +86,7 @@ const Appointments = () => {
     error,
   } = useQuery({
     queryKey: ["appointments"],
-    queryFn: fetchAppointments,
+    queryFn: () => fetchAppointments(refreshToken!),
     select: (data) => data.data,
   });
 
