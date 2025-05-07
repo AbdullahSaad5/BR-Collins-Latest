@@ -276,22 +276,29 @@ const EnrolledCourses = () => {
                   <div className="flex gap-3">
                     <button
                       onClick={() => {
-                        if (course.status === "not-started") {
+                        if (progress === 0) {
                           startLearningMutation(course.courseId._id);
                         } else {
                           router.push(`/courses/learn/${course.courseId._id}`);
                         }
                       }}
                       disabled={isStarting}
-                      className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className={`flex-1 rounded-xl px-4 py-3 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed
+                        ${
+                          progress === 0
+                            ? "bg-primary hover:bg-primary-hover focus:ring-primary"
+                            : progress === 100
+                            ? "bg-green-600 hover:bg-green-700 focus:ring-green-600"
+                            : "bg-blue-500 hover:bg-blue-600 focus:ring-blue-500"
+                        }`}
                     >
-                      {isStarting && course.status === "not-started"
+                      {isStarting && progress === 0
                         ? "Starting..."
-                        : course.status === "not-started"
+                        : progress === 0
                         ? "Start Learning"
-                        : course.status === "completed"
-                        ? "View Certificate"
-                        : "Continue Learning"}
+                        : progress === 100
+                        ? "Course Completed"
+                        : "Continue Course"}
                     </button>
                     <button
                       onClick={() => handleViewDetails(course)}
@@ -323,9 +330,13 @@ const EnrolledCourses = () => {
             handleStartLearning(selectedCourse);
             handleCloseModal();
           }}
-          progress={selectedCourse.progress}
+          progress={courseProgressMap[selectedCourse.courseId._id] ?? selectedCourse.progress ?? 0}
+          lessonsCompleted={(() => {
+            const idx = enrolledCourses?.findIndex((c) => c._id === selectedCourse._id) ?? -1;
+            const progressQuery = progressQueries[idx];
+            return progressQuery?.data?.completedContentIds?.length ?? selectedCourse.lessonsCompleted;
+          })()}
           status={selectedCourse.status}
-          lessonsCompleted={selectedCourse.lessonsCompleted}
         />
       )}
     </div>
