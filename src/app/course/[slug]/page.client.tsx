@@ -406,7 +406,7 @@ const CourseDetailPageClient = ({
             {/* Course content */}
             <section className="mt-12 max-md:mt-10 ml-auto">
               <div className="flex gap-2 items-center text-3xl text-neutral-900">
-                <nav className="flex gap-3 items-center overflow-x-auto whitespace-nowrap max-md:max-w-full">
+                <nav className="flex gap-3 items-center overflow-x-auto whitespace-nowrap max-md:max-w-full bg-white border border-[#E0ECF2] shadow-[0px_4px_75px_rgba(0,0,0,0.06)] rounded-full p-2">
                   {[
                     { label: "Overview", active: activeSection === "Overview" },
                     {
@@ -424,7 +424,7 @@ const CourseDetailPageClient = ({
                       key={index}
                       onClick={() => handleSectionClick(item.label)}
                       className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${
-                        item.active ? "bg-sky-500 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        item.active ? "bg-[#2490E0] text-white" : "bg-white text-gray-500 hover:bg-gray-50 !font-normal"
                       } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
                     >
                       {item.label}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TrashIcon from "../../../public/img/cart/trash.svg";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import { getAccessToken, isUserLoggedIn } from "@/app/store/features/users/userS
 import LoginRequiredModal from "@/app/components/pricing/LoginRequiredModal";
 import Link from "next/link";
 import { BookIcon } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 const ViewCart = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ const ViewCart = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const accessToken = useAppSelector(getAccessToken);
   const isLoggedIn = useAppSelector(isUserLoggedIn);
+  const searchParams = useSearchParams();
 
   const bill = {
     totalOriginal,
@@ -78,6 +80,15 @@ const ViewCart = () => {
     }
     createPaymentIntentMutation.mutate();
   };
+
+  useEffect(() => {
+    if (searchParams.get("checkout") === "true") {
+      setTimeout(() => {
+        handleCheckout();
+      }, 500);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   return (
     <div className="w-full min-h-screen bg-gray-50 py-8">

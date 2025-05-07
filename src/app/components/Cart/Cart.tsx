@@ -82,34 +82,36 @@ const Cart = () => {
             </div>
           ) : (
             <div className="p-6 space-y-4">
-              {items.map((item: ICourse) => (
-                <div key={item._id} className="flex items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="w-[25%]">
-                    <Image
-                      src={"/img/Course/Course.png"}
-                      alt={item.title}
-                      width={100}
-                      height={100}
-                      className="object-cover rounded-lg"
-                    />
+              {items.map((item: ICourse, idx: number) => (
+                <React.Fragment key={item._id}>
+                  <div className="flex items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="w-[25%] relative aspect-[1.2]">
+                      <Image
+                        src={"/img/Course/new-course.png"}
+                        alt={item.title}
+                        fill
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
+                    <div className="w-[60%] pl-4 flex flex-col justify-start gap-1.5">
+                      <h2 className="text-sm md:text-[20px] font-bold line-clamp-2">{item.title}</h2>
+                      <p className="text-sm md:text-base text-gray-400">
+                        by: <span className="text-blue-400">{item.instructor}</span>
+                      </p>
+                      <p className="font-semibold text-sm md:text-[18px]">
+                        ${item.discountPrice || item.price}.00{" "}
+                        {item.discountPrice && <span className="text-gray-400 line-through">${item.price}.00</span>}
+                      </p>
+                    </div>
+                    <div
+                      onClick={() => handleRemoveItem(item._id)}
+                      className="w-[15%] flex justify-center items-center cursor-pointer hover:scale-110 transition-transform"
+                    >
+                      <Image src={TrashIcon} alt="Remove Item" width={20} height={20} />
+                    </div>
                   </div>
-                  <div className="w-[60%] pl-4 flex flex-col justify-start gap-1">
-                    <h2 className="text-sm md:text-md font-bold line-clamp-2">{item.title}</h2>
-                    <p className="text-sm text-gray-400">
-                      by: <span className="text-blue-400">{item.instructor}</span>
-                    </p>
-                    <p className="font-semibold text-sm">
-                      ${item.discountPrice || item.price}.00{" "}
-                      {item.discountPrice && <span className="text-gray-400 line-through">${item.price}.00</span>}
-                    </p>
-                  </div>
-                  <div
-                    onClick={() => handleRemoveItem(item._id)}
-                    className="w-[15%] flex justify-center items-center cursor-pointer hover:scale-110 transition-transform"
-                  >
-                    <Image src={TrashIcon} alt="Remove Item" width={20} height={20} />
-                  </div>
-                </div>
+                  {idx < items.length - 1 && <div className="border-t border-gray-200 my-4" />}
+                </React.Fragment>
               ))}
             </div>
           )}
@@ -132,7 +134,7 @@ const Cart = () => {
                 View Cart
               </Link>
               <Link
-                href="/viewcart"
+                href="/viewcart?checkout=true"
                 onClick={handleCloseCart}
                 className="text-center flex-1 p-3 rounded-full border border-primary bg-primary text-sm md:text-md text-white hover:bg-primary-hover transition"
               >
