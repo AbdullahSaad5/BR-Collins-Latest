@@ -88,7 +88,21 @@ const ContactUs: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Your name"
-                  {...register("name", { required: "Name is required" })}
+                  {...register("name", {
+                    required: "Name is required",
+                    minLength: {
+                      value: 2,
+                      message: "Name must be at least 2 characters",
+                    },
+                    maxLength: {
+                      value: 60,
+                      message: "Name must be at most 60 characters",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z\s]+$/,
+                      message: "Name can only contain letters and spaces",
+                    },
+                  })}
                   className="flex-1 px-4 py-3 rounded-lg border border-gray-300 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   disabled={isSubmitting}
                 />
@@ -116,7 +130,21 @@ const ContactUs: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Subject"
-                  {...register("subject", { required: "Subject is required" })}
+                  {...register("subject", {
+                    required: "Subject is required",
+                    minLength: {
+                      value: 3,
+                      message: "Subject must be at least 3 characters",
+                    },
+                    maxLength: {
+                      value: 100,
+                      message: "Subject must be at most 100 characters",
+                    },
+                    pattern: {
+                      value: /^[A-Za-z0-9 .,!?'-]+$/,
+                      message: "Subject can only contain letters, numbers, spaces, and . , ! ? ' - characters",
+                    },
+                  })}
                   className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
                   disabled={isSubmitting}
                 />
@@ -132,6 +160,10 @@ const ContactUs: React.FC = () => {
                     minLength: {
                       value: 10,
                       message: "Message must be at least 10 characters",
+                    },
+                    maxLength: {
+                      value: 500,
+                      message: "Message must be at most 500 characters",
                     },
                   })}
                   className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"

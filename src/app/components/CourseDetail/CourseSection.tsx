@@ -119,7 +119,7 @@ export const CourseSection: React.FC<CourseSectionProps> = ({
                 <CourseContentBookIcon width={24} height={24} className="mr-2.5" color="#7B878D" strokeWidth={1.8} />
               )}
               <span className="grow text-base text-neutral-900 max-md:text-sm max-sm:text-xs flex items-center gap-2">
-                {lecture.title}
+                Module {index + 1}: {lecture.title}
               </span>
               <div className="flex items-center gap-3">
                 {lecture.allowPreview && (
