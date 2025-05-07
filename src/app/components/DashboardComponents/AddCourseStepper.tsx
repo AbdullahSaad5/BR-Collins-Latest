@@ -120,6 +120,7 @@ export default function AddCourseStepper() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [submitClicked, setSubmitClicked] = useState(false);
 
   const { data: course } = useQuery({
     queryKey: ["course", courseId],
@@ -230,6 +231,9 @@ export default function AddCourseStepper() {
   };
 
   const handleNext = async () => {
+    // Prevent advancing if already on the last step
+    if (activeStep >= steps.length - 1) return;
+
     let isValid = true;
     const currentStepFields = getCurrentStepFields(activeStep);
 
@@ -291,7 +295,9 @@ export default function AddCourseStepper() {
   });
 
   const onSubmit = async (data: CourseFormData) => {
+    if (!submitClicked) return; // Only submit if button was actually clicked
     setIsSubmitting(true);
+    setSubmitClicked(false); // Reset for next time
     createCourseMutation.mutate(data);
   };
 
@@ -726,6 +732,7 @@ export default function AddCourseStepper() {
               type="submit"
               disabled={isSubmitting}
               className="px-6 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-hover disabled:opacity-50"
+              onClick={() => setSubmitClicked(true)}
             >
               {isSubmitting ? "Submitting..." : "Submit Course"}
             </button>
