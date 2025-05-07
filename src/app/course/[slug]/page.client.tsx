@@ -485,11 +485,11 @@ const CourseDetailPageClient = ({
                 />
               </div>
 
-              <div className="border-b border-gray-200 mt-8"></div>
+              {/* <div className="border-b border-gray-200 mt-8"></div> */}
 
-              <div ref={reviewRef} data-section="Review">
+              {/* <div ref={reviewRef} data-section="Review">
                 <ReviewSection />
-              </div>
+              </div> */}
             </section>
           </div>
         </div>
