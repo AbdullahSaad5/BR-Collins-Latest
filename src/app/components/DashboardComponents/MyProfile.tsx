@@ -7,7 +7,7 @@ import ProfileContent from "./ProfileContent";
 const MyProfile = () => {
   return (
     <div className="flex flex-col gap-6">
-      <ProfileSummary onItemClick={() => {}} />
+      <ProfileSummary onItemClick={() => { }} />
       <ProfileContent />
     </div>
   );

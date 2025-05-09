@@ -299,8 +299,8 @@ const SettingsForm = () => {
                 ? "Updating Profile..."
                 : "Update Profile"
               : isPasswordSubmitting
-              ? "Updating Password..."
-              : "Update Password"}
+                ? "Updating Password..."
+                : "Update Password"}
           </button>
         </div>
       </form>

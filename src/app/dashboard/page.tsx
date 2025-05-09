@@ -205,9 +205,8 @@ export default function Dashboard() {
             {/* <div className="hidden md:block w-px bg-slate-200" /> */}
 
             <div
-              className={`flex-1 overflow-auto transition-all duration-300 ${
-                sidebarCollapsed ? " md:w-[calc(100%-20px+44px)]" : "md:w-[calc(100%-256px)]"
-              }`}
+              className={`flex-1 overflow-auto transition-all duration-300 ${sidebarCollapsed ? " md:w-[calc(100%-20px+44px)]" : "md:w-[calc(100%-256px)]"
+                }`}
             >
               {renderContent()}
             </div>

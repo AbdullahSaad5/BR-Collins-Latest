@@ -269,15 +269,13 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
 
   return (
     <nav
-      className={`relative flex flex-col p-4 h-full bg-white rounded-xl shadow-sm transition-all duration-300 ${
-        collapsed ? "w-20" : "w-full md:w-68"
-      }`}
+      className={`relative flex flex-col p-4 h-full bg-white rounded-xl shadow-sm transition-all duration-300 ${collapsed ? "w-20" : "w-full md:w-68"
+        }`}
     >
       <button
         onClick={toggleSidebar}
-        className={` absolute -right-3 top-6 z-10 hidden md:flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md hover:bg-gray-100 transition-colors ${
-          collapsed ? "rotate-180" : ""
-        }`}
+        className={` absolute -right-3 top-6 z-10 hidden md:flex items-center justify-center w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md hover:bg-gray-100 transition-colors ${collapsed ? "rotate-180" : ""
+          }`}
       >
         {collapsed ? (
           <ChevronRight className="w-4 h-4 text-gray-600" />
@@ -302,9 +300,8 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
               return (
                 <div key={index} className="w-full">
                   <div
-                    className={`flex items-center w-full cursor-pointer group ${
-                      item.isActive ? "bg-gray-50 rounded-lg" : ""
-                    }`}
+                    className={`flex items-center w-full cursor-pointer group ${item.isActive ? "bg-gray-50 rounded-lg" : ""
+                      }`}
                     onClick={() => {
                       if (collapsed) {
                         item.onClick();
