@@ -93,7 +93,6 @@ export default function CoursePageClient({ courseId }: { courseId: string }) {
   const handleCompleteLesson = async (contentId: string) => {
     handleCompleteLessonMutation.mutate(contentId, {
       onSuccess: () => {
-        showToast("Lesson marked as complete!", "success");
         // Refetch progress
         progressQuery.refetch();
       },

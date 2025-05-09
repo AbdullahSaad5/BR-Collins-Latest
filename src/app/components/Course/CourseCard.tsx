@@ -31,8 +31,6 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = tr
     return stars;
   };
 
-  console.log(course);
-
   return (
     <div className="h-full min-w-[200px] w-full bg-white rounded-2xl shadow-md transition-all duration-300 border border-gray-200">
       <Link href={`/course/${course._id}`}>

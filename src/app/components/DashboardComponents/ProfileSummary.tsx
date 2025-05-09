@@ -5,6 +5,7 @@ import { useAppSelector } from "@/app/store/hooks";
 import { getSubscription, selectUser } from "@/app/store/features/users/userSlice";
 import { IUser } from "@/app/types/user.contract";
 import { ISubscription } from "@/app/types/subscription.contract";
+import CameraIcon from '../../../../public/assets/cameraIcon.svg';
 
 const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }) => {
   const user = useAppSelector(selectUser) as IUser;
@@ -18,14 +19,22 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
       {/* Profile Info */}
       <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center w-full sm:w-auto">
         {/* Avatar */}
-        <div className="relative shrink-0 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-xl bg-gradient-to-br from-blue-50 to-gray-100 overflow-hidden border-2 border-white shadow-md">
+        <div className="relative shrink-0 w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28">
           <Image
             src={user.profilePicture || "/assets/default-avatar.jpg"}
             width={112}
             height={112}
             alt="Profile Picture"
-            className="w-full h-full object-cover"
+            className="absolute w-full h-full object-cover rounded-xl"
           />
+          <div className="w-6 h-6 rounded-full bg-blue-500 absolute top-[10%] -right-[10%] flex justify-center items-center">
+            <Image
+              src={CameraIcon}
+              alt="cameraIcon"
+              width={15}
+              height={15}
+            />
+          </div>
         </div>
 
         {/* Details */}
@@ -73,7 +82,7 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
         className="flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 text-sm font-medium text-orange-500 hover:text-orange-600 border border-orange-500 hover:border-orange-600 rounded-full transition-all duration-200 hover:shadow-md whitespace-nowrap w-full sm:w-auto justify-center"
       >
         <Settings className="w-4 h-4" />
-        <span>My Profile</span>
+        <span>My Profile Settings</span>
       </button>
     </section>
   );
