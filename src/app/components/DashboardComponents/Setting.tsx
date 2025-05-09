@@ -288,7 +288,7 @@ const SettingsForm = () => {
           </>
         )}
 
-        <div className="flex justify-end mt-8">
+        <div className="flex justify-start mt-8">
           <button
             type="submit"
             disabled={activeTab === "profile" ? isProfileSubmitting : isPasswordSubmitting}

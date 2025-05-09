@@ -15,11 +15,11 @@ import { IUser } from "@/app/types/user.contract";
 import { ISubscription } from "@/app/types/subscription.contract";
 
 import CourseSwiper from "@/app/components/Course/CourseSwiper";
-import Image from "next/image";
+import Link from "next/link";
 import { ICourseContent } from "@/app/types/course-content.contract";
 import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../../public/icons/footer_icons";
 
-const socialIcons = [{ Icon: FacebookIcon }, { Icon: XIcon }, { Icon: LinkedInIcon }, { Icon: InstagramIcon }];
+const socialIcons = [{ Icon: FacebookIcon, link: 'https://www.facebook.com' }, { Icon: XIcon, link: 'https://www.x.org' }, { Icon: LinkedInIcon, link: 'https://www.linkedin.com' }, { Icon: InstagramIcon, link: 'https://www.instagram.com' }];
 
 const toTitleCase = (str: string) => {
   return str.replace(/\B([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
@@ -228,15 +228,13 @@ const CourseDetailPageClient = ({
     <>
       {showInPersonPopup && (
         <div
-          className={`fixed inset-0 bg-black/50 z-50 flex items-center p-4 justify-center transition-opacity duration-300 ease-in-out ${
-            isPopupVisible ? "opacity-100" : "opacity-0"
-          }`}
+          className={`fixed inset-0 bg-black/50 z-50 flex items-center p-4 justify-center transition-opacity duration-300 ease-in-out ${isPopupVisible ? "opacity-100" : "opacity-0"
+            }`}
           onClick={handleClosePopup}
         >
           <div
-            className={`transform transition-all duration-300 ease-in-out w-full md:w-auto ${
-              isPopupVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
-            }`}
+            className={`transform transition-all duration-300 ease-in-out w-full md:w-auto ${isPopupVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+              }`}
             onClick={(e) => e.stopPropagation()}
           >
             <InPersonPopup onClose={handleClosePopup} courseId={course._id} />
@@ -423,9 +421,8 @@ const CourseDetailPageClient = ({
                     <button
                       key={index}
                       onClick={() => handleSectionClick(item.label)}
-                      className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${
-                        item.active ? "bg-[#2490E0] text-white" : "bg-white text-gray-500 hover:bg-gray-50 !font-normal"
-                      } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
+                      className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${item.active ? "bg-[#2490E0] text-white" : "bg-white text-gray-500 hover:bg-gray-50 !font-normal"
+                        } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
                     >
                       {item.label}
                     </button>
@@ -558,11 +555,10 @@ const CourseDetailPageClient = ({
                     <div className="relative group w-full">
                       <button
                         {...(course.inPersonLearning ? { onClick: () => setShowInPersonPopup(true) } : {})}
-                        className={`w-full min-h-[58px] rounded-[58px] ${
-                          course.inPersonLearning
-                            ? "bg-sky-500 hover:bg-sky-600 transition-colors"
-                            : "bg-gray-400 cursor-not-allowed"
-                        }`}
+                        className={`w-full min-h-[58px] rounded-[58px] ${course.inPersonLearning
+                          ? "bg-sky-500 hover:bg-sky-600 transition-colors"
+                          : "bg-gray-400 cursor-not-allowed"
+                          }`}
                         disabled={!course.inPersonLearning}
                         type="button"
                       >
@@ -588,9 +584,8 @@ const CourseDetailPageClient = ({
                       <div className="relative group w-full">
                         <button
                           onClick={handleSubscriptionRedirect}
-                          className={`w-full min-h-[58px] rounded-[58px] bg-primary hover:bg-primary-hover transition-colors ${
-                            !course.onlineLearning ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
-                          }`}
+                          className={`w-full min-h-[58px] rounded-[58px] bg-primary hover:bg-primary-hover transition-colors ${!course.onlineLearning ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
+                            }`}
                           disabled={!course.onlineLearning}
                           type="button"
                         >
@@ -607,11 +602,10 @@ const CourseDetailPageClient = ({
                     <div className="relative group w-full">
                       <button
                         onClick={() => handleAddToCart(false)}
-                        className={`w-full min-h-[58px] rounded-[58px] ${
-                          items.some((item) => item._id === course._id) || !course.onlineLearning
-                            ? "bg-gray-400 cursor-not-allowed"
-                            : "bg-primary hover:bg-primary-hover"
-                        }`}
+                        className={`w-full min-h-[58px] rounded-[58px] ${items.some((item) => item._id === course._id) || !course.onlineLearning
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-primary hover:bg-primary-hover"
+                          }`}
                         disabled={items.some((item) => item._id === course._id) || !course.onlineLearning}
                         type="button"
                       >
@@ -661,18 +655,22 @@ const CourseDetailPageClient = ({
                 </p>
               </div>
               <div className="flex items-center justify-center mt-12 w-[178px] min-h-10 mx-auto max-md:mt-10 gap-1">
-                {socialIcons.map(({ Icon }, idx) => (
-                  <Icon
-                    key={idx}
-                    className="text-[#5e6f76] text-xl"
-                    style={{
-                      backgroundColor: "#fff",
-                      borderRadius: "9999px",
-                      padding: "12px",
-                      width: "40px",
-                      height: "45px",
-                    }}
-                  />
+                {socialIcons.map(({ Icon, link }, idx) => (
+                  <Link
+                    href={link}
+                  >
+                    <Icon
+                      key={idx}
+                      className="text-[#5e6f76] text-xl"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "9999px",
+                        padding: "12px",
+                        width: "40px",
+                        height: "45px",
+                      }}
+                    />
+                  </Link>
                 ))}
               </div>
             </div>
