@@ -11,6 +11,7 @@ import { api } from "@/app/utils/axios";
 import { showToast } from "@/app/utils/toast";
 import { ICourse } from "@/app/types/course.contract";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type FieldArrayValue = {
   value: string;
@@ -121,6 +122,8 @@ export default function AddCourseStepper() {
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [submitClicked, setSubmitClicked] = useState(false);
+
+  const router = useRouter();
 
   const { data: course } = useQuery({
     queryKey: ["course", courseId],
@@ -283,6 +286,7 @@ export default function AddCourseStepper() {
     },
     onSuccess: () => {
       showToast(`Course ${isEditMode ? "updated" : "created"} successfully`, "success");
+      router.push(`/dashboard?item=viewCourses`);
       setSuccess(true);
       setIsSubmitting(false);
     },
@@ -690,13 +694,12 @@ export default function AddCourseStepper() {
             <React.Fragment key={step}>
               <div className="flex items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    index === activeStep
-                      ? "bg-primary text-white"
-                      : index < activeStep
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${index === activeStep
+                    ? "bg-primary text-white"
+                    : index < activeStep
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-600"
-                  }`}
+                    }`}
                 >
                   {index + 1}
                 </div>

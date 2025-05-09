@@ -53,18 +53,16 @@ export const Homepage = () => {
                 <button
                   ref={inPersonRef}
                   onClick={() => setActiveTab("in-person")}
-                  className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                  }`}
+                  className={`pb-2 px-1 transition-all duration-300 ${activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                    }`}
                 >
                   In-Person
                 </button>
                 <button
                   ref={eLearningRef}
                   onClick={() => setActiveTab("e-learning")}
-                  className={`pb-2 px-1 transition-all duration-300 ${
-                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                  }`}
+                  className={`pb-2 px-1 transition-all duration-300 ${activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                    }`}
                 >
                   E-Learning
                 </button>

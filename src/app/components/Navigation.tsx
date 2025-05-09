@@ -334,18 +334,16 @@ export const Navigation = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${
-                      (user as IUser).lastName
-                    }`}</span>
+                    <span className="text-base font-semibold">{`${(user as IUser).firstName} ${(user as IUser).lastName
+                      }`}</span>
                     <span className="text-xs font-light text-gray-500">{`${toTitleCase((user as IUser).role)}`}</span>
                   </div>
                 </div>
                 {isProfileDropdownOpen && (
                   <div className="absolute right-0 top-16 bg-white border border-gray-200 rounded-lg shadow-lg py-2 w-56 z-[99999]">
                     <div className="px-4 py-2 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${
-                        (user as IUser).lastName
-                      }`}</p>
+                      <p className="text-sm font-medium text-gray-900">{`${(user as IUser).firstName} ${(user as IUser).lastName
+                        }`}</p>
                       <p className="text-xs text-gray-500">{`${toTitleCase((user as IUser).role)}`}</p>
                     </div>
                     <button
@@ -384,9 +382,8 @@ export const Navigation = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`lg:hidden fixed inset-0 z-40 bg-white transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-4 space-y-6 mt-4">
           {/* Mobile Menu Header */}
@@ -550,9 +547,8 @@ export const Navigation = () => {
 
       {/* Cart Overlay */}
       <div
-        className={`fixed inset-0 z-50 transition-all duration-300 ease-in-out ${
-          isCartOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 z-50 transition-all duration-300 ease-in-out ${isCartOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       >
         {/* Backdrop */}
         <div
@@ -562,9 +558,8 @@ export const Navigation = () => {
 
         {/* Cart Panel */}
         <div
-          className={`fixed right-0 top-0 h-screen w-full md:w-[90%] lg:w-[40%] transform transition-transform duration-300 ease-in-out ${
-            isCartOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`fixed right-0 top-0 h-screen w-full md:w-[90%] lg:w-[40%] transform transition-transform duration-300 ease-in-out ${isCartOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           <Cart />
         </div>
