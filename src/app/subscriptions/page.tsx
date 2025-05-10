@@ -80,7 +80,7 @@ const Subcription = () => {
                     onClick={() => setOpenIndex(index === openIndex ? -1 : index)}
                   >
                     <div className="flex justify-between items-center">
-                      <h3 className="text-base text-lg md:text-xl font-semibold">{faq.question}</h3>
+                      <h3 className="text-base md:text-xl font-semibold">{faq.question}</h3>
                       {isOpen ? (
                         <ChevronUp className="w-5 h-5 text-gray-600" />
                       ) : (

@@ -216,21 +216,20 @@ const SubscriptionCards: React.FC = () => {
                   <button
                     onClick={() => handlePlanClick(plan)}
                     disabled={isSubscribed() || (isLoggedIn && (isManagerWithOrg() || isAdmin()))}
-                    className={`bg-primary text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${
-                      isSubscribed() || (isLoggedIn && (isManagerWithOrg() || isAdmin()))
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer hover:bg-primary-hover transition-all duration-300"
-                    }`}
+                    className={`bg-primary text-sm sm:text-base text-white py-2 sm:py-3 font-medium px-6 rounded-4xl self-start mt-2 lg:mt-0 ${isSubscribed() || (isLoggedIn && (isManagerWithOrg() || isAdmin()))
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer hover:bg-primary-hover transition-all duration-300"
+                      }`}
                   >
                     {isCurrentPlan(plan)
                       ? "Current Plan"
                       : isSubscribed()
-                      ? "Already Subscribed"
-                      : isLoggedIn && isAdmin()
-                      ? "Not Available for Admins"
-                      : isLoggedIn && isManagerWithOrg()
-                      ? "Not Available"
-                      : plan.buttonText}
+                        ? "Already Subscribed"
+                        : isLoggedIn && isAdmin()
+                          ? "Not Available for Admins"
+                          : isLoggedIn && isManagerWithOrg()
+                            ? "Not Available"
+                            : plan.buttonText}
                   </button>
                 </div>
                 <div className="flex flex-col justify-between w-1/2">
@@ -251,11 +250,10 @@ const SubscriptionCards: React.FC = () => {
 
         {/* Right Column - Corporate Plans */}
         <div
-          className={`w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full ${
-            isLoggedIn && (!isManagerWithOrg() || isAdmin())
-              ? `${isAdmin() ? "opacity-100" : "opacity-50"} pointer-events-none`
-              : ""
-          }`}
+          className={`w-full lg:w-1/2 bg-white border border-gray-300 rounded-lg p-6 flex flex-col justify-between h-auto lg:h-full ${isLoggedIn && (!isManagerWithOrg() || isAdmin())
+            ? `${isAdmin() ? "opacity-100" : "opacity-50"} pointer-events-none`
+            : ""
+            }`}
         >
           <div>
             <h1 className="text-lg sm:text-2xl font-bold text-black mb-2">{data?.corporatePlans.title}</h1>
@@ -270,9 +268,8 @@ const SubscriptionCards: React.FC = () => {
               {data?.corporatePlans.plans.map((plan, index) => (
                 <React.Fragment key={index}>
                   <li
-                    className={`flex py-2 items-center ${
-                      isLoggedIn && (!isManagerWithOrg() || isAdmin()) ? "cursor-not-allowed" : "cursor-pointer"
-                    }`}
+                    className={`flex py-2 items-center ${isLoggedIn && (!isManagerWithOrg() || isAdmin()) ? "cursor-not-allowed" : "cursor-pointer"
+                      }`}
                     onClick={() =>
                       !isSubscribed() &&
                       (!isLoggedIn || (isManagerWithOrg() && !isAdmin())) &&
@@ -298,24 +295,8 @@ const SubscriptionCards: React.FC = () => {
                             }
                             disabled={isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))}
                           />
-                          <div
-                            className={`h-4 w-4 sm:h-5 sm:w-5 rounded-full border-2 border-gray-300 p-2 flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition ${
-                              isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
-                                ? "opacity-50 cursor-not-allowed"
-                                : ""
-                            }`}
-                          >
-                            <svg
-                              className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <polyline points="20 6 9 17 4 12" />
-                            </svg>
+                          <div className={`relative w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-blue-500 flex justify-center items-center bg-transparent ${isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin())) ? "opacity-50 cursor-not-allowed" : ""}`}>
+                            <div className={`w-3 h-3 rounded-full ${selectedCorporatePlan === index ? 'bg-blue-500 scale-100' : 'scale-0'}`}></div>
                           </div>
                         </label>
                       </div>
@@ -331,23 +312,22 @@ const SubscriptionCards: React.FC = () => {
             disabled={
               selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
             }
-            className={`bg-primary duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${
-              selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
-                ? "opacity-50 cursor-not-allowed"
-                : "cursor-pointer hover:bg-primary-hover"
-            }`}
+            className={`bg-primary duration-300 text-sm sm:text-base text-white py-2 sm:py-4 font-medium px-6 rounded-full w-full mt-2 lg:mt-0 ${selectedCorporatePlan === null || isSubscribed() || (isLoggedIn && (!isManagerWithOrg() || isAdmin()))
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer hover:bg-primary-hover"
+              }`}
           >
             {isSubscribed() &&
-            selectedCorporatePlan !== null &&
-            isCurrentPlan(data?.corporatePlans.plans[selectedCorporatePlan])
+              selectedCorporatePlan !== null &&
+              isCurrentPlan(data?.corporatePlans.plans[selectedCorporatePlan])
               ? "Current Plan"
               : isSubscribed()
-              ? "Already Subscribed"
-              : isLoggedIn && isAdmin()
-              ? "Not Available for Admins"
-              : isLoggedIn && !isManagerWithOrg()
-              ? "Not Available"
-              : data?.corporatePlans.buttonText}
+                ? "Already Subscribed"
+                : isLoggedIn && isAdmin()
+                  ? "Not Available for Admins"
+                  : isLoggedIn && !isManagerWithOrg()
+                    ? "Not Available"
+                    : data?.corporatePlans.buttonText}
           </button>
         </div>
       </div>
