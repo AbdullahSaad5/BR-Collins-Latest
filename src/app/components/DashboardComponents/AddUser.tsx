@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { UserCreatePayload, IUser } from "@/app/types/user.contract";
 import { ENUMS } from "@/app/constants/enum";
+import { REGEX } from "@/app/constants/regex";
 import FormField from "./FormField";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/app/utils/axios";
@@ -37,7 +38,15 @@ export default function AddUser() {
         .max(30, "Last name must be at most 30 characters")
         .regex(/^[A-Za-z\s'-]+$/, "Last name can only contain letters, spaces, apostrophes, and hyphens"),
       email: z.string().email("Invalid email address"),
-      password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
+      password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(
+          REGEX.PASSWORD,
+          "Password must be 8-15 characters, include at least one uppercase letter, one lowercase letter, and one number."
+        )
+        .optional()
+        .or(z.literal("")),
       role: z.enum(ENUMS.USER_TYPES as unknown as [string, string, string]),
       profilePicture: z.string().optional(),
     })

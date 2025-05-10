@@ -17,6 +17,7 @@ import { showToast } from "@/app/utils/toast";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/app/store/hooks";
 import { isUserLoggedIn } from "@/app/store/features/users/userSlice";
+import { REGEX } from "@/app/constants/regex";
 
 const registerSchema = z
   .object({
@@ -27,7 +28,13 @@ const registerSchema = z
     firstName: z.string().min(2, "First name must be at least 2 characters"),
     lastName: z.string().min(2, "Last name must be at least 2 characters"),
     email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(
+        REGEX.PASSWORD,
+        "Password must be 8-15 characters, include at least one uppercase letter, one lowercase letter, and one number."
+      ),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
