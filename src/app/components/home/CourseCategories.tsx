@@ -105,33 +105,25 @@ const CourseCategories: React.FC = () => {
         </div>
         <Swiper
           spaceBetween={24}
+          slidesPerView="auto"
           modules={[Scrollbar]}
           slidesOffsetBefore={slidesOffset}
           slidesOffsetAfter={slidesOffset}
-          // scrollbar={{ draggable: true, hide: false, dragSize: 64, snapOnRelease: true }}
-
-          breakpoints={{
-            0: { slidesPerView: 2, spaceBetween: 12 },
-            640: { slidesPerView: 3, spaceBetween: 16 },
-            1024: { slidesPerView: 5, spaceBetween: 24 },
-            1280: { slidesPerView: 6, spaceBetween: 24 },
-          }}
-
-          className="category-swiper w-full"
+          className="w-[90%]"
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
         >
           {sliderItems.map((item, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} className="!w-auto">
               <Link
                 href={`/course?category=${item.categoryId}#courses-section`}
-                className="flex flex-col justify-center rounded-full bg-[#F4F6F8] px-8 transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-[10vh] w-auto"
+                className="min-w-[200px] h-[10vh] flex flex-col justify-center rounded-full bg-[#F4F6F8] px-8 transition-all duration-300 border-gray-100 hover:border-gray-100 transform hover:-translate-y-1]"
               >
-                <h2 className="font-bold text-lg sm:text-lg text-black mb-0 truncate whitespace-nowrap">
+                <h2 className="font-bold text-lg sm:text-lg text-black mb-0">
                   {item.title}
                 </h2>
-                <p className="text-base text-[#5F6F7C] truncate whitespace-nowrap">
+                <p className="text-base text-[#5F6F7C]">
                   ({item.courses}) courses
                 </p>
               </Link>
@@ -146,32 +138,6 @@ const CourseCategories: React.FC = () => {
             <ArrowRightIcon className="w-4 h-4" />
           </button>
         </div>
-
-
-        <style jsx global>{`
-          .category-swiper {
-            width: 100%;
-            overflow: hidden;
-          }
-          .category-swiper .swiper-scrollbar {
-            max-width: 315px;
-            height: 1px;
-            background: rgba(0, 0, 0, 0.1);
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 8px;
-          }
-          .category-swiper .swiper-scrollbar-drag {
-            background: #2490e0;
-            height: 3px;
-            cursor: pointer;
-          }
-          .category-swiper .swiper-slide {
-            height: auto;
-          }
-        `}</style>
-
-
       </div>
     </section>
   );
