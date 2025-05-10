@@ -27,12 +27,12 @@ const ProfileSummary = ({ onItemClick }: { onItemClick: (item: string) => void }
             alt="Profile Picture"
             className="absolute w-full h-full object-cover rounded-xl"
           />
-          <div className="w-6 h-6 rounded-full bg-blue-500 absolute top-[10%] -right-[10%] flex justify-center items-center">
+          <div className="w-7 h-7 rounded-full bg-blue-500 absolute top-[10%] -right-[10%] flex justify-center items-center">
             <Image
               src={CameraIcon}
               alt="cameraIcon"
-              width={15}
-              height={15}
+              width={18}
+              height={18}
             />
           </div>
         </div>

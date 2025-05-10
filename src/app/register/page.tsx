@@ -144,7 +144,7 @@ const Register: React.FC = () => {
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     </div>
-                    <span className="ml-2 text-white capitalize">{type}</span>
+                    <span className="ml-2 text-white capitalize">{type === 'student' ? 'Student' : 'Organizaition'}</span>
                   </label>
                 ))}
               </div>

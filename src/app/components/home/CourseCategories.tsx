@@ -94,70 +94,50 @@ const CourseCategories: React.FC = () => {
 
   return (
     <section className="relative text-gray-900 mt-6">
-      <div className="w-full max-w-[1326px] relative md:px-14">
-        <button
-          onClick={scrollLeft}
-          className="hidden md:flex absolute -mt-1 left-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-        >
-          <ArrowLeftIcon className="w-4 h-4" />
-        </button>
+      <div className="w-full max-w-[1326px] flex justify-between items-center">
+        <div className="w-[5%] flex justify-start items-center">
+          <button
+            onClick={scrollLeft}
+            className="hidden md:flex absolute -mt-1 left-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+          >
+            <ArrowLeftIcon className="w-4 h-4" />
+          </button>
+        </div>
         <Swiper
           spaceBetween={24}
+          slidesPerView="auto"
           modules={[Scrollbar]}
           slidesOffsetBefore={slidesOffset}
           slidesOffsetAfter={slidesOffset}
-          // scrollbar={{ draggable: true, hide: false, dragSize: 64, snapOnRelease: true }}
-          breakpoints={{
-            0: { slidesPerView: 2, spaceBetween: 12 },
-            640: { slidesPerView: 3, spaceBetween: 16 },
-            1024: { slidesPerView: 5, spaceBetween: 24 },
-            1280: { slidesPerView: 6, spaceBetween: 24 },
-          }}
-          className="category-swiper pb-8"
+          className="w-[90%]"
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
           }}
         >
           {sliderItems.map((item, index) => (
-            <SwiperSlide key={index} className="!h-auto !w-fit py-2">
+            <SwiperSlide key={index} className="!w-auto">
               <Link
                 href={`/course?category=${item.categoryId}#courses-section`}
-                className="flex flex-col rounded-full bg-[#F4F6F8] px-8 py-3  transition-all duration-300 border border-gray-100 hover:border-gray-100 transform hover:-translate-y-1 h-full w-fit min-w-[200px]"
+                className="min-w-[200px] h-[10vh] flex flex-col justify-center rounded-full bg-[#F4F6F8] px-8 transition-all duration-300 border-gray-100 hover:border-gray-100 transform hover:-translate-y-1]"
               >
-                <h2 className="font-bold  text-lg sm:text-lg text-black mb-0">{item.title}</h2>
-                <p className="text-base text-[#5F6F7C]">({item.courses}) courses</p>
+                <h2 className="font-bold text-lg sm:text-lg text-black mb-0">
+                  {item.title}
+                </h2>
+                <p className="text-base text-[#5F6F7C]">
+                  ({item.courses}) courses
+                </p>
               </Link>
             </SwiperSlide>
           ))}
         </Swiper>
-        <button
-          onClick={scrollRight}
-          className="hidden md:flex absolute -mt-1 right-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
-        >
-          <ArrowRightIcon className="w-4 h-4" />
-        </button>
-        <style jsx global>{`
-          .category-swiper {
-            width: 100%;
-            overflow: hidden;
-          }
-          .category-swiper .swiper-scrollbar {
-            max-width: 315px;
-            height: 1px;
-            background: rgba(0, 0, 0, 0.1);
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: 8px;
-          }
-          .category-swiper .swiper-scrollbar-drag {
-            background: #2490e0;
-            height: 3px;
-            cursor: pointer;
-          }
-          .category-swiper .swiper-slide {
-            height: auto;
-          }
-        `}</style>
+        <div className="w-[5%] flex justify-start items-center">
+          <button
+            onClick={scrollRight}
+            className="hidden md:flex absolute -mt-1 right-2 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full w-10 h-10 items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 hover:border-gray-300"
+          >
+            <ArrowRightIcon className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </section>
   );
