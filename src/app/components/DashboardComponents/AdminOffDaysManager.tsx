@@ -19,6 +19,7 @@ interface OffDayFormData {
   date: Date;
   reason?: string;
   isRecurring: boolean;
+  recurringUntil?: Date;
   disabledSlots: ("half-day-morning" | "half-day-afternoon")[];
 }
 
@@ -168,8 +169,13 @@ const AdminOffDaysManager = () => {
     const startDate = new Date(offDay.date);
 
     if (offDay.isRecurring) {
-      const endDate = new Date();
-      endDate.setMonth(endDate.getMonth() + 6);
+      let endDate: Date;
+      if (offDay.recurringUntil) {
+        endDate = new Date(offDay.recurringUntil);
+      } else {
+        endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 6);
+      }
 
       let currentDate = new Date(startDate);
       while (currentDate <= endDate) {

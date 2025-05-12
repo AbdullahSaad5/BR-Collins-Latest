@@ -2,11 +2,13 @@ import React from "react";
 import { Dialog } from "@headlessui/react";
 import { IDisabledSlot } from "@/app/types/admin.contract";
 import { useForm, Controller } from "react-hook-form";
+import { toZonedTime, format } from "date-fns-tz";
 
 interface FormData {
   date: Date;
   reason: string;
-  isRecurring: boolean;
+  isRecurring: string;
+  recurringUntil?: Date;
   disabledSlots: string[];
 }
 
@@ -14,6 +16,7 @@ interface OffDayFormData {
   date: Date;
   reason?: string;
   isRecurring: boolean;
+  recurringUntil?: Date;
   disabledSlots: ("half-day-morning" | "half-day-afternoon")[];
 }
 
@@ -41,19 +44,33 @@ const AdminOffDayModal: React.FC<AdminOffDayModalProps> = ({ isOpen, onClose, se
     defaultValues: {
       date: selectedDate || new Date(),
       reason: "",
-      isRecurring: false,
+      isRecurring: "false",
+      recurringUntil: undefined,
       disabledSlots: [],
     },
   });
 
   const selectedSlots = watch("disabledSlots") || [];
+  const isRecurringRaw = watch("isRecurring");
+  const isRecurring = isRecurringRaw === "true";
+  const recurringUntil = watch("recurringUntil");
 
   const onSubmitForm = (formData: FormData) => {
     // Convert form data to JSON format
+    const usTimeZone = "America/New_York";
+    // Convert selectedDate and recurringUntil to US time zone and format as YYYY-MM-DD
+    const dateInUsTz = selectedDate
+      ? format(toZonedTime(selectedDate, usTimeZone), "yyyy-MM-dd", { timeZone: usTimeZone })
+      : format(toZonedTime(new Date(), usTimeZone), "yyyy-MM-dd", { timeZone: usTimeZone });
+    const recurringUntilInUsTz = formData.recurringUntil
+      ? format(toZonedTime(new Date(formData.recurringUntil), usTimeZone), "yyyy-MM-dd", { timeZone: usTimeZone })
+      : undefined;
+
     const jsonData: OffDayFormData = {
-      date: selectedDate || new Date(),
+      date: dateInUsTz as any, // Cast as any to match OffDayFormData, backend should expect string
       reason: formData.reason || undefined,
-      isRecurring: formData.isRecurring,
+      isRecurring: formData.isRecurring === "true",
+      recurringUntil: recurringUntilInUsTz as any,
       disabledSlots: formData.disabledSlots as ("half-day-morning" | "half-day-afternoon")[],
     };
 
@@ -94,6 +111,21 @@ const AdminOffDayModal: React.FC<AdminOffDayModalProps> = ({ isOpen, onClose, se
                 <option value="true">Weekly recurring</option>
               </select>
             </div>
+
+            {isRecurring ? (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Recurring Until</label>
+                <input
+                  type="date"
+                  {...register("recurringUntil", { required: isRecurring })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2"
+                  min={selectedDate ? selectedDate.toISOString().split("T")[0] : undefined}
+                />
+                {errors.recurringUntil && (
+                  <p className="text-red-500 text-sm mt-1">Please select an end date for recurrence</p>
+                )}
+              </div>
+            ) : null}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Disabled Slots</label>

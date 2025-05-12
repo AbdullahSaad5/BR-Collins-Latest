@@ -12,6 +12,7 @@ export interface IAdminOffDay {
   dayOfWeek?: number; // 0-6 for recurring days (0 = Sunday)
   createdAt?: Date;
   updatedAt?: Date;
+  recurringUntil?: Date;
 }
 
 export type AdminOffDayCreatePayload = Omit<IAdminOffDay, "_id" | "createdAt" | "updatedAt">;
