@@ -14,6 +14,8 @@ import ViewOffDayModal from "./ViewOffDayModal";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light-border.css";
+import { IAppointment, AppointmentType } from "@/app/types/appointment.contract";
+import { ICourse } from "@/app/types/course.contract";
 
 interface OffDayFormData {
   date: Date;
@@ -29,6 +31,16 @@ const fetchOffDays = async (refreshToken: string): Promise<{ data: IAdminOffDay[
       Authorization: `Bearer ${refreshToken}`,
     },
   });
+  return response.data;
+};
+
+const fetchAppointments = async (refreshToken: string): Promise<{ data: IAppointment[] }> => {
+  const response = await api.get("/appointments?populate=courseId&showCancelled=false", {
+    headers: {
+      Authorization: `Bearer ${refreshToken}`,
+    },
+  });
+
   return response.data;
 };
 
@@ -101,6 +113,14 @@ const AdminOffDaysManager = () => {
     select: (data) => data.data,
   });
 
+  const { data: appointments = [] } = useQuery({
+    queryKey: ["appointments"],
+    queryFn: () => fetchAppointments(refreshToken!),
+    select: (data) => data.data,
+    enabled: !!refreshToken,
+    initialData: { data: [] },
+  });
+
   const addOffDayMutation = useMutation({
     mutationFn: async (data: OffDayFormData) => {
       const response = await api.post("/admin-off-days", data, {
@@ -169,34 +189,123 @@ const AdminOffDaysManager = () => {
     deleteOffDayMutation.mutate(offDayId);
   };
 
-  const calendarEvents = offDays.flatMap((offDay) => {
-    const events = [];
-    const startDate = new Date(offDay.date);
+  const getAppointmentTimes = (appointment: IAppointment) => {
+    const date = new Date(appointment.date);
+    let startTime = new Date(date);
+    let endTime = new Date(date);
+    switch (appointment.appointmentType) {
+      case AppointmentType.HALF_DAY_MORNING:
+        startTime.setHours(8, 0, 0, 0);
+        endTime.setHours(12, 0, 0, 0);
+        break;
+      case AppointmentType.HALF_DAY_AFTERNOON:
+        startTime.setHours(13, 0, 0, 0);
+        endTime.setHours(17, 0, 0, 0);
+        break;
+      case AppointmentType.FULL_DAY:
+        startTime.setHours(8, 0, 0, 0);
+        endTime.setHours(17, 0, 0, 0);
+        break;
+    }
+    return { startTime, endTime };
+  };
 
-    if (offDay.isRecurring) {
-      let endDate: Date;
-      if (offDay.recurringUntil) {
-        endDate = new Date(offDay.recurringUntil);
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "scheduled":
+        return "#3B82F6"; // blue
+      case "in-progress":
+        return "#10B981"; // green
+      case "completed":
+        return "#059669"; // darker green
+      case "cancelled":
+        return "#EF4444"; // red
+      case "rescheduled":
+        return "#F59E0B"; // amber
+      default:
+        return "#6B7280"; // gray
+    }
+  };
+
+  const calendarEvents = [
+    // Appointments as events
+    ...(appointments?.map((appointment) => {
+      const { startTime, endTime } = getAppointmentTimes(appointment);
+      return {
+        id: appointment._id,
+        title: `${(appointment.courseId as unknown as ICourse).title}`,
+        start: startTime,
+        end: endTime,
+        allDay: false,
+        backgroundColor: getStatusColor(appointment.status),
+        borderColor: getStatusColor(appointment.status),
+        textColor: "#ffffff",
+        classNames: ["cursor-not-allowed"],
+        extendedProps: {
+          type: appointment.appointmentType,
+          location: appointment.location,
+          maxParticipants: appointment.maxParticipants,
+          status: appointment.status,
+          isAppointment: true,
+        },
+      };
+    }) || []),
+    // Off days as events
+    ...offDays.flatMap((offDay) => {
+      const events = [];
+      const startDate = new Date(offDay.date);
+      if (offDay.isRecurring) {
+        let endDate: Date;
+        if (offDay.recurringUntil) {
+          endDate = new Date(offDay.recurringUntil);
+        } else {
+          endDate = new Date(startDate);
+          endDate.setMonth(endDate.getMonth() + 6);
+        }
+        let currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+          events.push({
+            id: `off-day-${offDay._id}-${currentDate.toISOString()}`,
+            title: offDay.reason || "Recurring Off Day",
+            start: offDay.disabledSlots.includes("half-day-morning")
+              ? new Date(new Date(currentDate).setHours(8, 0, 0, 0))
+              : offDay.disabledSlots.includes("half-day-afternoon")
+              ? new Date(new Date(currentDate).setHours(13, 0, 0, 0))
+              : new Date(currentDate),
+            end: offDay.disabledSlots.includes("half-day-morning")
+              ? new Date(new Date(currentDate).setHours(12, 0, 0, 0))
+              : offDay.disabledSlots.includes("half-day-afternoon")
+              ? new Date(new Date(currentDate).setHours(17, 0, 0, 0))
+              : new Date(currentDate),
+            backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+            borderColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
+            textColor: "#ffffff",
+            classNames: ["cursor-pointer"],
+            extendedProps: {
+              originalId: offDay._id,
+              slots: offDay.disabledSlots,
+              isRecurring: offDay.isRecurring,
+              recurringDay: currentDate.toLocaleDateString("en-US", { weekday: "long" }),
+              originalDate: startDate.toISOString(),
+              isOffDay: true,
+            },
+          });
+          currentDate.setDate(currentDate.getDate() + 7);
+        }
       } else {
-        endDate = new Date(startDate);
-        endDate.setMonth(endDate.getMonth() + 6);
-      }
-
-      let currentDate = new Date(startDate);
-      while (currentDate <= endDate) {
         events.push({
-          id: `off-day-${offDay._id}-${currentDate.toISOString()}`,
-          title: offDay.reason || "Recurring Off Day",
+          id: `off-day-${offDay._id}`,
+          title: offDay.reason || "Off Day",
           start: offDay.disabledSlots.includes("half-day-morning")
-            ? new Date(new Date(currentDate).setHours(8, 0, 0, 0))
+            ? new Date(startDate.setHours(8, 0, 0, 0))
             : offDay.disabledSlots.includes("half-day-afternoon")
-            ? new Date(new Date(currentDate).setHours(13, 0, 0, 0))
-            : new Date(currentDate),
+            ? new Date(startDate.setHours(13, 0, 0, 0))
+            : startDate,
           end: offDay.disabledSlots.includes("half-day-morning")
-            ? new Date(new Date(currentDate).setHours(12, 0, 0, 0))
+            ? new Date(startDate.setHours(12, 0, 0, 0))
             : offDay.disabledSlots.includes("half-day-afternoon")
-            ? new Date(new Date(currentDate).setHours(17, 0, 0, 0))
-            : new Date(currentDate),
+            ? new Date(startDate.setHours(17, 0, 0, 0))
+            : startDate,
           backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
           borderColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
           textColor: "#ffffff",
@@ -205,41 +314,13 @@ const AdminOffDaysManager = () => {
             originalId: offDay._id,
             slots: offDay.disabledSlots,
             isRecurring: offDay.isRecurring,
-            recurringDay: currentDate.toLocaleDateString("en-US", { weekday: "long" }),
-            originalDate: startDate.toISOString(),
+            isOffDay: true,
           },
         });
-
-        currentDate.setDate(currentDate.getDate() + 7);
       }
-    } else {
-      events.push({
-        id: `off-day-${offDay._id}`,
-        title: offDay.reason || "Off Day",
-        start: offDay.disabledSlots.includes("half-day-morning")
-          ? new Date(startDate.setHours(8, 0, 0, 0))
-          : offDay.disabledSlots.includes("half-day-afternoon")
-          ? new Date(startDate.setHours(13, 0, 0, 0))
-          : startDate,
-        end: offDay.disabledSlots.includes("half-day-morning")
-          ? new Date(startDate.setHours(12, 0, 0, 0))
-          : offDay.disabledSlots.includes("half-day-afternoon")
-          ? new Date(startDate.setHours(17, 0, 0, 0))
-          : startDate,
-        backgroundColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
-        borderColor: offDay.disabledSlots?.length ? "#FDA4AF" : "#F43F5E",
-        textColor: "#ffffff",
-        classNames: ["cursor-pointer"],
-        extendedProps: {
-          originalId: offDay._id,
-          slots: offDay.disabledSlots,
-          isRecurring: offDay.isRecurring,
-        },
-      });
-    }
-
-    return events;
-  });
+      return events;
+    }),
+  ];
 
   console.log(calendarEvents);
 
@@ -280,17 +361,43 @@ const AdminOffDaysManager = () => {
             dateClick={handleDateClick}
             eventClick={handleEventClick}
             eventContent={(eventInfo) => {
+              if (eventInfo.event.extendedProps.isAppointment) {
+                const isMobile = window.innerWidth < 640;
+                return (
+                  <div className="w-full p-1">
+                    <div className="font-semibold text-xs sm:text-sm truncate">{eventInfo.event.title}</div>
+                    {!isMobile && (
+                      <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                        Appointment
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              // Off day event rendering (match Appointments.tsx style)
               const isRecurring = eventInfo.event.extendedProps.isRecurring;
+              const slots = eventInfo.event.extendedProps.slots || [];
+              let slotLabel = "Full Day";
+              let slotTime = "8 AM - 5 PM";
+              if (slots.length === 1) {
+                if (slots.includes("half-day-morning")) {
+                  slotLabel = "Morning";
+                  slotTime = "8 AM - 12 PM";
+                } else if (slots.includes("half-day-afternoon")) {
+                  slotLabel = "Afternoon";
+                  slotTime = "1 PM - 5 PM";
+                }
+              }
               const isMobile = window.innerWidth < 640;
               return (
-                <div className="w-full p-1">
-                  <div className="font-semibold text-xs sm:text-sm truncate">
-                    {eventInfo.event.title}
-                    {isRecurring && " 🔄"}
+                <div className="w-full p-1 flex flex-col items-start">
+                  <div className="font-semibold text-xs sm:text-sm truncate flex items-center gap-1">
+                    {isRecurring && <span>🔄</span>}
+                    <span>{eventInfo.event.title}</span>
                   </div>
                   {!isMobile && (
-                    <div className="text-xs mt-0.5 inline-block px-1.5 py-0.5 rounded-full bg-white/20">
-                      {eventInfo.event.extendedProps.slots?.length === 1 ? "Half Day" : "Full Day"}
+                    <div className="text-xs opacity-90 truncate mt-0.5">
+                      {slotLabel} <span className="mx-1">•</span> {slotTime}
                     </div>
                   )}
                 </div>
@@ -298,42 +405,44 @@ const AdminOffDaysManager = () => {
             }}
             eventDidMount={(info) => {
               const isRecurring = info.event.extendedProps.isRecurring;
+              const slots = info.event.extendedProps.slots || [];
+              let slotLabel = "Full Day";
+              let slotTime = "8 AM - 5 PM";
+              if (slots.length === 1) {
+                if (slots.includes("half-day-morning")) {
+                  slotLabel = "Morning";
+                  slotTime = "8 AM - 12 PM";
+                } else if (slots.includes("half-day-afternoon")) {
+                  slotLabel = "Afternoon";
+                  slotTime = "1 PM - 5 PM";
+                }
+              }
               tippy(info.el, {
                 content: `
-                  <div class="p-3 min-w-[280px]">
-                    <div class="font-semibold text-base mb-2">${info.event.title}</div>
-                    <div class="space-y-2">
-                      <div class="flex items-center gap-2">
-                        <span class="text-gray-500">Date:</span>
+                  <div class=\"p-3 min-w-[280px]\">
+                    <div class=\"font-semibold text-base mb-2\">${isRecurring ? "🔄 " : ""}${info.event.title}</div>
+                    <div class=\"space-y-2\">
+                      <div class=\"flex items-center gap-2\">
+                        <span class=\"text-gray-500\">Date:</span>
                         <span>${new Date(info.event.start!).toLocaleDateString()}</span>
                       </div>
-                      <div class="flex items-center gap-2">
-                        <span class="text-gray-500">Type:</span>
-                        <span>${info.event.extendedProps.slots?.length === 1 ? "Half Day" : "Full Day"}</span>
+                      <div class=\"flex items-center gap-2\">
+                        <span class=\"text-gray-500\">Type:</span>
+                        <span>${slotLabel}</span>
                       </div>
-                      ${
-                        info.event.extendedProps.slots?.length === 1
-                          ? `
-                        <div class="flex items-center gap-2">
-                          <span class="text-gray-500">Time:</span>
-                          <span>${
-                            info.event.extendedProps.slots.includes("half-day-morning")
-                              ? "Morning (8 AM - 12 PM)"
-                              : "Afternoon (1 PM - 5 PM)"
-                          }</span>
-                        </div>
-                      `
-                          : ""
-                      }
+                      <div class=\"flex items-center gap-2\">
+                        <span class=\"text-gray-500\">Time:</span>
+                        <span>${slotTime}</span>
+                      </div>
                       ${
                         isRecurring
                           ? `
-                        <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
-                          <span class="text-gray-500">Recurring:</span>
+                        <div class=\"flex items-center gap-2 mt-1 pt-2 border-t border-gray-200\">
+                          <span class=\"text-gray-500\">Recurring:</span>
                           <span>Every ${info.event.extendedProps.recurringDay}</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                          <span class="text-gray-500">First Set:</span>
+                        <div class=\"flex items-center gap-2\">
+                          <span class=\"text-gray-500\">First Set:</span>
                           <span>${new Date(info.event.extendedProps.originalDate).toLocaleDateString()}</span>
                         </div>
                       `
@@ -360,6 +469,31 @@ const AdminOffDaysManager = () => {
         onClose={() => setIsModalOpen(false)}
         selectedDate={selectedDate}
         onSubmit={handleModalSubmit}
+        appointmentSlotsForDate={(() => {
+          if (!selectedDate) return { morning: false, afternoon: false };
+          // Find appointments for this date
+          const morningBooked = appointments.some((appt) => {
+            const apptDate = new Date(appt.date);
+            return (
+              apptDate.getFullYear() === selectedDate.getFullYear() &&
+              apptDate.getMonth() === selectedDate.getMonth() &&
+              apptDate.getDate() === selectedDate.getDate() &&
+              (appt.appointmentType === AppointmentType.HALF_DAY_MORNING ||
+                appt.appointmentType === AppointmentType.FULL_DAY)
+            );
+          });
+          const afternoonBooked = appointments.some((appt) => {
+            const apptDate = new Date(appt.date);
+            return (
+              apptDate.getFullYear() === selectedDate.getFullYear() &&
+              apptDate.getMonth() === selectedDate.getMonth() &&
+              apptDate.getDate() === selectedDate.getDate() &&
+              (appt.appointmentType === AppointmentType.HALF_DAY_AFTERNOON ||
+                appt.appointmentType === AppointmentType.FULL_DAY)
+            );
+          });
+          return { morning: morningBooked, afternoon: afternoonBooked };
+        })()}
       />
 
       <ViewOffDayModal

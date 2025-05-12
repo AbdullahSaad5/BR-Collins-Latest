@@ -213,12 +213,12 @@ export default function Sidebar({ activeItem, onItemClick, onToggle }: SidebarPr
           isActive: activeItem === "appointments",
           onClick: () => handleItemClick("appointments"),
         },
-        {
-          icon: CalendarOff,
-          label: "Manage Off Days",
-          isActive: activeItem === "adminOffDays",
-          onClick: () => handleItemClick("adminOffDays"),
-        },
+        // {
+        //   icon: CalendarOff,
+        //   label: "Manage Off Days",
+        //   isActive: activeItem === "adminOffDays",
+        //   onClick: () => handleItemClick("adminOffDays"),
+        // },
       ],
     },
     {

@@ -22,6 +22,8 @@ import { IAdminOffDay } from "@/app/types/admin.contract";
 import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import "tippy.js/themes/light-border.css";
+import AdminOffDayModal from "./AdminOffDayModal";
+import ViewOffDayModal from "./ViewOffDayModal";
 
 const fetchAppointments = async (refreshToken: string): Promise<{ data: IAppointment[] }> => {
   const response = await api.get("/appointments?populate=courseId", {
@@ -79,6 +81,10 @@ const Appointments = () => {
   const user = useAppSelector(selectUser) as IUser;
   const refreshToken = useAppSelector(getRefreshToken);
   const queryClient = useQueryClient();
+  const [isOffDayModalOpen, setIsOffDayModalOpen] = useState(false);
+  const [isViewOffDayModalOpen, setIsViewOffDayModalOpen] = useState(false);
+  const [selectedOffDayDate, setSelectedOffDayDate] = useState<Date | null>(null);
+  const [selectedOffDay, setSelectedOffDay] = useState<IAdminOffDay | null>(null);
 
   const {
     data: appointments,
@@ -127,6 +133,46 @@ const Appointments = () => {
       const message = error.response?.data?.message || "Failed to update appointment status";
       showToast(message, "error");
       console.error("Error updating appointment status:", error);
+    },
+  });
+
+  const addOffDayMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await api.post("/admin-off-days", data, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminOffDays"] });
+      showToast("Off day added successfully", "success");
+      setIsOffDayModalOpen(false);
+    },
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to add off day";
+      showToast(message, "error");
+    },
+  });
+
+  const deleteOffDayMutation = useMutation({
+    mutationFn: async (offDayId: string) => {
+      const response = await api.delete(`/admin-off-days/${offDayId}`, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminOffDays"] });
+      showToast("Off day deleted successfully", "success");
+      setIsViewOffDayModalOpen(false);
+    },
+    onError: (error: any) => {
+      const message = error.response?.data?.message || "Failed to delete off day";
+      showToast(message, "error");
     },
   });
 
@@ -252,9 +298,9 @@ const Appointments = () => {
         extendedProps: {
           location: appointment.location,
           maxParticipants: appointment.maxParticipants,
-
           status: appointment.status,
           isAppointment: true,
+          type: appointment.appointmentType,
         },
       };
     }) || []),
@@ -375,6 +421,32 @@ const Appointments = () => {
     updateAppointmentMutation.mutate({ appointmentId, status, data });
   };
 
+  const handleCalendarDateClick = (info: any) => {
+    setSelectedOffDayDate(info.date);
+    setIsOffDayModalOpen(true);
+  };
+
+  const handleOffDayEventClick = (info: any) => {
+    if (info.event.extendedProps.isOffDay) {
+      const originalId = info.event.extendedProps.originalId;
+      const offDay = adminOffDays.find((day) => day._id === originalId);
+      if (offDay) {
+        setSelectedOffDay(offDay);
+        setIsViewOffDayModalOpen(true);
+      }
+    } else {
+      handleEventClick(info);
+    }
+  };
+
+  const handleOffDayModalSubmit = (data: any) => {
+    addOffDayMutation.mutate(data);
+  };
+
+  const handleDeleteOffDay = (offDayId: string) => {
+    deleteOffDayMutation.mutate(offDayId);
+  };
+
   const columns = [
     {
       name: "Course",
@@ -383,7 +455,10 @@ const Appointments = () => {
       grow: 1.5,
       minWidth: "200px",
       cell: (row: IAppointment) => (
-        <div className="text-sm text-left text-neutral-900 truncate" title={(row.courseId as unknown as ICourse).title}>
+        <div
+          className={`text-sm text-left text-neutral-900 truncate${row.status === "cancelled" ? " line-through" : ""}`}
+          title={(row.courseId as unknown as ICourse).title}
+        >
           {(row.courseId as unknown as ICourse).title}
         </div>
       ),
@@ -394,7 +469,10 @@ const Appointments = () => {
       sortable: true,
       grow: 1.5,
       cell: (row: IAppointment) => (
-        <div className="text-sm text-left text-neutral-900 truncate" title={row.location.venueName}>
+        <div
+          className={`text-sm text-left text-neutral-900 truncate${row.status === "cancelled" ? " line-through" : ""}`}
+          title={row.location.venueName}
+        >
           {row.location.venueName}
         </div>
       ),
@@ -420,7 +498,7 @@ const Appointments = () => {
       cell: (row: IAppointment) => {
         const { startTime, endTime } = getAppointmentTimes(row);
         return (
-          <div className="text-sm text-left text-neutral-900">
+          <div className={`text-sm text-left text-neutral-900${row.status === "cancelled" ? " line-through" : ""}`}>
             {startTime.toLocaleTimeString()} - {endTime.toLocaleTimeString()}
           </div>
         );
@@ -562,7 +640,7 @@ const Appointments = () => {
                 stickyHeaderDates={true}
                 expandRows={true}
                 events={calendarEvents}
-                eventClick={handleEventClick}
+                eventClick={handleOffDayEventClick}
                 eventTimeFormat={{
                   hour: "numeric",
                   minute: "2-digit",
@@ -579,6 +657,7 @@ const Appointments = () => {
                 selectAllow={(selectInfo) => {
                   return !isDateDisabled(selectInfo.start);
                 }}
+                dateClick={handleCalendarDateClick}
                 eventContent={(eventInfo) => {
                   if (eventInfo.event.extendedProps.isOffDay) {
                     const title = eventInfo.event.title;
@@ -599,9 +678,12 @@ const Appointments = () => {
                   }
 
                   const isMobile = window.innerWidth < 640;
+                  const isCancelled = eventInfo.event.extendedProps.status === "cancelled";
                   return (
                     <div className="w-full p-1">
-                      <div className="font-semibold text-xs sm:text-sm truncate">{eventInfo.event.title}</div>
+                      <div className={`font-semibold text-xs sm:text-sm truncate${isCancelled ? " line-through" : ""}`}>
+                        {eventInfo.event.title}
+                      </div>
                       {!isMobile && (
                         <>
                           <div className="text-xs opacity-90 truncate">
@@ -683,6 +765,16 @@ const Appointments = () => {
                             <span class="text-gray-500">Participants:</span>
                             <span>${info.event.extendedProps.maxParticipants}</span>
                           </div>
+                          <div class="flex items-center gap-2">
+                            <span class="text-gray-500">Date:</span>
+                            <span>${
+                              info.event.extendedProps.type === AppointmentType.HALF_DAY_MORNING
+                                ? "Morning (8:00 AM - 12:00 PM)"
+                                : info.event.extendedProps.type === AppointmentType.HALF_DAY_AFTERNOON
+                                ? "Afternoon (1:00 PM - 5:00 PM)"
+                                : "Full Day (8:00 AM - 5:00 PM)"
+                            }</span>
+                          </div>
 
                           <div class="flex items-center gap-2 mt-1 pt-2 border-t border-gray-200">
                             <span class="text-gray-500">Status:</span>
@@ -731,6 +823,43 @@ const Appointments = () => {
       )}
 
       <ViewAppointmentModal appointment={selectedAppointment} isOpen={isViewModalOpen} onClose={handleCloseViewModal} />
+      <AdminOffDayModal
+        isOpen={isOffDayModalOpen}
+        onClose={() => setIsOffDayModalOpen(false)}
+        selectedDate={selectedOffDayDate}
+        onSubmit={handleOffDayModalSubmit}
+        appointmentSlotsForDate={(() => {
+          if (!selectedOffDayDate) return { morning: false, afternoon: false };
+          // Find appointments for this date
+          const morningBooked = !!appointments?.some((appt) => {
+            const apptDate = new Date(appt.date);
+            return (
+              apptDate.getFullYear() === selectedOffDayDate.getFullYear() &&
+              apptDate.getMonth() === selectedOffDayDate.getMonth() &&
+              apptDate.getDate() === selectedOffDayDate.getDate() &&
+              (appt.appointmentType === AppointmentType.HALF_DAY_MORNING ||
+                appt.appointmentType === AppointmentType.FULL_DAY)
+            );
+          });
+          const afternoonBooked = !!appointments?.some((appt) => {
+            const apptDate = new Date(appt.date);
+            return (
+              apptDate.getFullYear() === selectedOffDayDate.getFullYear() &&
+              apptDate.getMonth() === selectedOffDayDate.getMonth() &&
+              apptDate.getDate() === selectedOffDayDate.getDate() &&
+              (appt.appointmentType === AppointmentType.HALF_DAY_AFTERNOON ||
+                appt.appointmentType === AppointmentType.FULL_DAY)
+            );
+          });
+          return { morning: morningBooked, afternoon: afternoonBooked };
+        })()}
+      />
+      <ViewOffDayModal
+        isOpen={isViewOffDayModalOpen}
+        onClose={() => setIsViewOffDayModalOpen(false)}
+        offDay={selectedOffDay}
+        onDelete={handleDeleteOffDay}
+      />
     </section>
   );
 };
