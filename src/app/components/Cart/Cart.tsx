@@ -83,7 +83,6 @@ const Cart = () => {
           ) : (
             <div className="p-6 space-y-4">
               {items.map((item: ICourse, idx: number) => {
-                console.log('Item in cart ', item);
                 return (
                   <React.Fragment key={item._id}>
                     <div className="flex items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
@@ -101,8 +100,10 @@ const Cart = () => {
                           by: <span className="text-blue-400">{item.instructor}</span>
                         </p>
                         <p className="font-semibold text-sm md:text-[18px]">
-                          ${item.discountPrice || item.price}.00{" "}
-                          {item.discountPrice && <span className="text-gray-400 line-through">${item.price}.00</span>}
+                          ${item.isDiscounted ? item.discountPrice : item.price}.00{" "}
+                          {item.isDiscounted && (
+                            <span className="text-gray-400 font-normal text-sm line-through">${item.price}.00</span>
+                          )}
                         </p>
                       </div>
                       <div
@@ -114,7 +115,7 @@ const Cart = () => {
                     </div>
                     {idx < items.length - 1 && <div className="border-t border-gray-200 my-4" />}
                   </React.Fragment>
-                )
+                );
               })}
             </div>
           )}
