@@ -11,6 +11,7 @@ import CourseSwiper from "./CourseSwiper";
 import { FeatureCourseSlider } from "./FeatureCourseSlider";
 import FilterSection from "./FilterSection";
 import { HeroSection } from "./HeroSection";
+import Pagination from "../common/Pagination";
 
 export default function Courses() {
   const searchParams = useSearchParams();
@@ -34,42 +35,6 @@ export default function Courses() {
   const eLearningRef = React.useRef<HTMLButtonElement>(null);
   const inPersonRef = React.useRef<HTMLButtonElement>(null);
   const [sliderStyle, setSliderStyle] = React.useState({ left: 0, width: 0 });
-
-  React.useLayoutEffect(() => {
-    const activeBtn = activeTab === "e-learning" ? eLearningRef.current : inPersonRef.current;
-    if (activeBtn) {
-      const { offsetLeft, offsetWidth } = activeBtn;
-      setSliderStyle({ left: offsetLeft, width: offsetWidth });
-    }
-  }, [activeTab]);
-
-  const handleTopicFilterChange = (topic: string, checked: boolean) => {
-    setTopicFilters((prev) => ({
-      ...prev,
-      [topic]: checked,
-    }));
-  };
-
-  const handleLanguageFilterChange = (language: string, checked: boolean) => {
-    setLanguageFilters((prev) => ({
-      ...prev,
-      [language]: checked,
-    }));
-  };
-
-  const handleDurationFilterChange = (duration: string, checked: boolean) => {
-    setDurationFilters((prev) => ({
-      ...prev,
-      [duration]: checked,
-    }));
-  };
-
-  const handleRatingFilterChange = (rating: string, checked: boolean) => {
-    setRatingFilters((prev) => ({
-      ...prev,
-      [rating]: checked,
-    }));
-  };
 
   // Filter courses based on selected filters
   const filteredCourses = React.useMemo(() => {
@@ -149,6 +114,55 @@ export default function Courses() {
     });
   }, [allCourses, topicFilters, languageFilters, durationFilters, ratingFilters]);
 
+  // Pagination logic (moved below filteredCourses)
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const COURSES_PER_PAGE = 12;
+  const totalPages = Math.ceil(filteredCourses.length / COURSES_PER_PAGE);
+  const paginatedCourses = React.useMemo(() => {
+    const startIdx = (currentPage - 1) * COURSES_PER_PAGE;
+    return filteredCourses.slice(startIdx, startIdx + COURSES_PER_PAGE);
+  }, [filteredCourses, currentPage]);
+
+  React.useLayoutEffect(() => {
+    const activeBtn = activeTab === "e-learning" ? eLearningRef.current : inPersonRef.current;
+    if (activeBtn) {
+      const { offsetLeft, offsetWidth } = activeBtn;
+      setSliderStyle({ left: offsetLeft, width: offsetWidth });
+    }
+  }, [activeTab]);
+
+  const handleTopicFilterChange = (topic: string, checked: boolean) => {
+    setTopicFilters((prev) => ({
+      ...prev,
+      [topic]: checked,
+    }));
+  };
+
+  const handleLanguageFilterChange = (language: string, checked: boolean) => {
+    setLanguageFilters((prev) => ({
+      ...prev,
+      [language]: checked,
+    }));
+  };
+
+  const handleDurationFilterChange = (duration: string, checked: boolean) => {
+    setDurationFilters((prev) => ({
+      ...prev,
+      [duration]: checked,
+    }));
+  };
+
+  const handleRatingFilterChange = (rating: string, checked: boolean) => {
+    setRatingFilters((prev) => ({
+      ...prev,
+      [rating]: checked,
+    }));
+  };
+
+  React.useEffect(() => {
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [topicFilters, languageFilters, durationFilters, ratingFilters]);
+
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash === "#courses-section") {
       const el = document.getElementById("courses-section");
@@ -182,16 +196,18 @@ export default function Courses() {
                 <button
                   ref={inPersonRef}
                   onClick={() => setActiveTab("in-person")}
-                  className={`pb-2 px-1 transition-all duration-300 z-10 ${activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                    }`}
+                  className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                    activeTab === "in-person" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                  }`}
                 >
                   In-Person
                 </button>
                 <button
                   ref={eLearningRef}
                   onClick={() => setActiveTab("e-learning")}
-                  className={`pb-2 px-1 transition-all duration-300 z-10 ${activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
-                    }`}
+                  className={`pb-2 px-1 transition-all duration-300 z-10 ${
+                    activeTab === "e-learning" ? "text-gray-800 font-bold" : "text-gray-500 hover:text-gray-800"
+                  }`}
                 >
                   E-Learning
                 </button>
@@ -241,7 +257,14 @@ export default function Courses() {
                     }}
                   />
                 ) : (
-                  <CardsGrid filteredCourses={filteredCourses} />
+                  <>
+                    <CardsGrid filteredCourses={paginatedCourses} />
+                    {totalPages > 1 && (
+                      <div className="flex justify-center mt-8">
+                        <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                      </div>
+                    )}
+                  </>
                 )}
               </main>
             </div>
@@ -304,18 +327,9 @@ const CardsGrid = ({ filteredCourses }: { filteredCourses: ICourse[] }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
       {filteredCourses.map((course, index) => {
-        const transformedCourse = {
-          ...course,
-          duration: `${course.noOfHours} Hrs`,
-          lessons: course.noOfLessons,
-          price: course.discountPrice || course.price,
-          originalPrice: course.price ? `$${course.price}` : undefined,
-          isNew: course.bestSeller,
-          imageUrl: course.coverImageUrl || "/img/Course/Course.png",
-        };
         return (
           <div key={index} className="h-full">
-            <CourseCard course={transformedCourse} showButton={false} />
+            <CourseCard course={course} showButton={false} />
           </div>
         );
       })}

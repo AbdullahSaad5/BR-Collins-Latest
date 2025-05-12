@@ -14,7 +14,7 @@ const initialState: CartState = {
   total: 0,
   discountTotal: 0,
   isCartOpen: false,
-  isCartVisible: false
+  isCartVisible: false,
 };
 
 const cartSlice = createSlice({
@@ -46,8 +46,8 @@ const cartSlice = createSlice({
       state.isCartOpen = !state.isCartOpen;
     },
     toggleCartVisiblity: (state) => {
-      state.isCartVisible = !state.isCartVisible
-    }
+      state.isCartVisible = !state.isCartVisible;
+    },
   },
 });
 

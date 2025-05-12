@@ -48,7 +48,7 @@ function InPersonPopup({ onClose, courseId }: InPersonPopupProps) {
   const { data: courses = [], isLoading: isCoursesLoading } = useQuery({
     queryKey: ["courses-dropdown"],
     queryFn: async () => {
-      const response = await api.get("/courses");
+      const response = await api.get("/courses?showBlocked=false");
       return response.data.data;
     },
   });

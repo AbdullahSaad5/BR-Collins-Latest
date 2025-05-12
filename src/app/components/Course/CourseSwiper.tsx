@@ -24,6 +24,7 @@ interface Course {
   price: number;
   bestSeller: boolean;
   coverImageUrl?: string;
+  isDiscounted: boolean;
 }
 
 interface CourseSwiperProps {
@@ -127,15 +128,6 @@ const CourseSwiper: React.FC<CourseSwiperProps> = ({ excludeCourseId, title = "S
         className="custom-swiper"
       >
         {filteredCourses.map((course, index) => {
-          const transformedCourse = {
-            ...course,
-            duration: `${course.noOfHours} Hrs`,
-            lessons: course.noOfLessons,
-            price: `$${course.discountPrice || course.price}`,
-            originalPrice: course.price ? `$${course.price}` : undefined,
-            isNew: course.bestSeller,
-            imageUrl: course.coverImageUrl || "/img/Course/Course.png",
-          };
           return (
             <SwiperSlide
               key={index}

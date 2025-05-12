@@ -88,8 +88,8 @@ export const FeatureCourseSlider: React.FC = () => {
                   ...course,
                   duration: `${course.noOfHours} Hrs`,
                   lessons: course.noOfLessons,
-                  price: (course.discountPrice || course.price).toString(),
-                  originalPrice: course.price ? course.price.toString() : undefined,
+                  price: `${course.isDiscounted && course.discountPrice ? course.discountPrice : course.price}`,
+                  originalPrice: `${course.price}`,
                   isNew: course.bestSeller,
                   imageUrl: index % 2 === 1 ? "/img/Course/new-course-2.png" : "/img/Course/new-course.png",
                 };

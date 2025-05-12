@@ -13,7 +13,7 @@ import "swiper/css/scrollbar";
 const fetchCategories = async (): Promise<{
   data: (ICourseCategory & { coursesCount: number })[];
 }> => {
-  const response = await api.get("/course-categories/with-courses-count");
+  const response = await api.get("/course-categories/with-courses-count?showBlocked=false");
   return response.data;
 };
 
@@ -120,12 +120,8 @@ const CourseCategories: React.FC = () => {
                 href={`/course?category=${item.categoryId}#courses-section`}
                 className="min-w-[200px] h-[10vh] flex flex-col justify-center rounded-full bg-[#F4F6F8] px-8 transition-all duration-300 border-gray-100 hover:border-gray-100 transform hover:-translate-y-1]"
               >
-                <h2 className="font-bold text-lg sm:text-lg text-black mb-0">
-                  {item.title}
-                </h2>
-                <p className="text-base text-[#5F6F7C]">
-                  ({item.courses}) courses
-                </p>
+                <h2 className="font-bold text-lg sm:text-lg text-black mb-0">{item.title}</h2>
+                <p className="text-base text-[#5F6F7C]">({item.courses}) courses</p>
               </Link>
             </SwiperSlide>
           ))}

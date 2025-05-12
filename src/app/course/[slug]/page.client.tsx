@@ -19,7 +19,12 @@ import Link from "next/link";
 import { ICourseContent } from "@/app/types/course-content.contract";
 import { FacebookIcon, InstagramIcon, LinkedInIcon, XIcon } from "../../../../public/icons/footer_icons";
 
-const socialIcons = [{ Icon: FacebookIcon, link: 'https://www.facebook.com' }, { Icon: XIcon, link: 'https://www.x.org' }, { Icon: LinkedInIcon, link: 'https://www.linkedin.com' }, { Icon: InstagramIcon, link: 'https://www.instagram.com' }];
+const socialIcons = [
+  { Icon: FacebookIcon, link: "https://www.facebook.com" },
+  { Icon: XIcon, link: "https://www.x.org" },
+  { Icon: LinkedInIcon, link: "https://www.linkedin.com" },
+  { Icon: InstagramIcon, link: "https://www.instagram.com" },
+];
 
 const toTitleCase = (str: string) => {
   return str.replace(/\B([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
@@ -182,25 +187,34 @@ const CourseDetailPageClient = ({
     instructor: course.instructor,
     lessons: course.noOfLessons,
     rating: course.rating,
-    price: course.discountPrice ? course.discountPrice : course.price,
-    percentageOff: course.discountPrice
-      ? Math.round((1 - parseFloat(course.discountPrice.toString()) / parseFloat(course.price.toString())) * 100)
+    price: course.isDiscounted && course.discountPrice ? course.discountPrice : course.price,
+    percentageOff: course.isDiscounted
+      ? course.discountPrice
+        ? Math.round((1 - parseFloat(course.discountPrice.toString()) / parseFloat(course.price.toString())) * 100)
+        : 0
       : 0,
     originalPrice: course.price,
     isNew: course.bestSeller,
+    isDiscounted: course.isDiscounted,
     // imageUrl: course.coverImageUrl,
     imageUrl: "/img/Course/Course.png",
     courseDetails: {
-      startDate:
-        course.startDate instanceof Date
+      startDate: course.startDate
+        ? course.startDate instanceof Date
           ? course.startDate.toLocaleDateString()
-          : new Date(course.startDate).toLocaleDateString(),
+          : new Date(course.startDate).toLocaleDateString()
+        : new Date().toLocaleDateString(),
       enrolled: course.noOfStudents || 100,
       lectures: course.noOfLessons,
       skillLevel: course.skillLevel,
       language: course.language,
       quizzes: course.noOfQuizzes,
       certificate: course.hasCertificate ? "Yes" : "No",
+      lastUpdated: course.lastUpdated
+        ? course.lastUpdated instanceof Date
+          ? course.lastUpdated.toLocaleDateString()
+          : new Date(course.lastUpdated).toLocaleDateString()
+        : new Date().toLocaleDateString(),
     },
     description: course.description,
     learningObjectives: course.whatYouWillLearn,
@@ -228,13 +242,15 @@ const CourseDetailPageClient = ({
     <>
       {showInPersonPopup && (
         <div
-          className={`fixed inset-0 bg-black/50 z-50 flex items-center p-4 justify-center transition-opacity duration-300 ease-in-out ${isPopupVisible ? "opacity-100" : "opacity-0"
-            }`}
+          className={`fixed inset-0 bg-black/50 z-50 flex items-center p-4 justify-center transition-opacity duration-300 ease-in-out ${
+            isPopupVisible ? "opacity-100" : "opacity-0"
+          }`}
           onClick={handleClosePopup}
         >
           <div
-            className={`transform transition-all duration-300 ease-in-out w-full md:w-auto ${isPopupVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
-              }`}
+            className={`transform transition-all duration-300 ease-in-out w-full md:w-auto ${
+              isPopupVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <InPersonPopup onClose={handleClosePopup} courseId={course._id} />
@@ -421,8 +437,9 @@ const CourseDetailPageClient = ({
                     <button
                       key={index}
                       onClick={() => handleSectionClick(item.label)}
-                      className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${item.active ? "bg-[#2490E0] text-white" : "bg-white text-gray-500 hover:bg-gray-50 !font-normal"
-                        } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
+                      className={`flex-shrink-0 px-6 py-2 min-h-[40px] rounded-full text-lg font-medium ${
+                        item.active ? "bg-[#2490E0] text-white" : "bg-white text-gray-500 hover:bg-gray-50 !font-normal"
+                      } transition-colors max-md:px-3 max-md:py-1.5 max-md:text-xs max-md:min-h-[36px]`}
                     >
                       {item.label}
                     </button>
@@ -527,7 +544,7 @@ const CourseDetailPageClient = ({
                     currency: "USD",
                   })}
                 </span>
-                {displayCourse.originalPrice && (
+                {displayCourse.originalPrice && displayCourse.isDiscounted && (
                   <span className="text-xl leading-tight line-through text-neutral-400 font-semibold">
                     {parseInt(displayCourse.originalPrice.toString()).toLocaleString("en-US", {
                       style: "currency",
@@ -535,9 +552,11 @@ const CourseDetailPageClient = ({
                     })}
                   </span>
                 )}
-                <span className="px-3 py-1.5 text-base text-black uppercase bg-[#FFCA7E] rounded-lg">
-                  {displayCourse.percentageOff}% off
-                </span>
+                {displayCourse.isDiscounted && (
+                  <span className="px-3 py-1.5 text-base text-black uppercase bg-[#FFCA7E] rounded-lg">
+                    {displayCourse.percentageOff}% off
+                  </span>
+                )}
               </div>
 
               {/* Course Modes */}
@@ -555,10 +574,11 @@ const CourseDetailPageClient = ({
                     <div className="relative group w-full">
                       <button
                         {...(course.inPersonLearning ? { onClick: () => setShowInPersonPopup(true) } : {})}
-                        className={`w-full min-h-[58px] rounded-[58px] ${course.inPersonLearning
-                          ? "bg-sky-500 hover:bg-sky-600 transition-colors"
-                          : "bg-gray-400 cursor-not-allowed"
-                          }`}
+                        className={`w-full min-h-[58px] rounded-[58px] ${
+                          course.inPersonLearning
+                            ? "bg-sky-500 hover:bg-sky-600 transition-colors"
+                            : "bg-gray-400 cursor-not-allowed"
+                        }`}
                         disabled={!course.inPersonLearning}
                         type="button"
                       >
@@ -584,8 +604,9 @@ const CourseDetailPageClient = ({
                       <div className="relative group w-full">
                         <button
                           onClick={handleSubscriptionRedirect}
-                          className={`w-full min-h-[58px] rounded-[58px] bg-primary hover:bg-primary-hover transition-colors ${!course.onlineLearning ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
-                            }`}
+                          className={`w-full min-h-[58px] rounded-[58px] bg-primary hover:bg-primary-hover transition-colors ${
+                            !course.onlineLearning ? "bg-gray-400 cursor-not-allowed hover:bg-gray-400" : ""
+                          }`}
                           disabled={!course.onlineLearning}
                           type="button"
                         >
@@ -602,10 +623,11 @@ const CourseDetailPageClient = ({
                     <div className="relative group w-full">
                       <button
                         onClick={() => handleAddToCart(false)}
-                        className={`w-full min-h-[58px] rounded-[58px] ${items.some((item) => item._id === course._id) || !course.onlineLearning
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-primary hover:bg-primary-hover"
-                          }`}
+                        className={`w-full min-h-[58px] rounded-[58px] ${
+                          items.some((item) => item._id === course._id) || !course.onlineLearning
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-primary hover:bg-primary-hover"
+                        }`}
                         disabled={items.some((item) => item._id === course._id) || !course.onlineLearning}
                         type="button"
                       >
@@ -656,9 +678,7 @@ const CourseDetailPageClient = ({
               </div>
               <div className="flex items-center justify-center mt-12 w-[178px] min-h-10 mx-auto max-md:mt-10 gap-1">
                 {socialIcons.map(({ Icon, link }, idx) => (
-                  <Link
-                    href={link}
-                  >
+                  <Link href={link}>
                     <Icon
                       key={idx}
                       className="text-[#5e6f76] text-xl"

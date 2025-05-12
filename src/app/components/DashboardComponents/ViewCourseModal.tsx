@@ -122,10 +122,20 @@ const ViewCourseModal: React.FC<ViewCourseModalProps> = ({ course, isOpen, onClo
               </div>
               <div className="space-y-1">
                 <p className="text-base text-neutral-900">
-                  Start Date: {new Date(course.startDate).toLocaleDateString()}
+                  Start Date:{" "}
+                  {(course.startDate ? new Date(course.startDate) : new Date()).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </p>
                 <p className="text-base text-neutral-900">
-                  Last Updated: {new Date(course.lastUpdated).toLocaleDateString()}
+                  Last Updated:{" "}
+                  {(course.lastUpdated ? new Date(course.lastUpdated) : new Date()).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </p>
               </div>
             </div>

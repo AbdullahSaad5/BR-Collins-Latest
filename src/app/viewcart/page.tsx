@@ -241,8 +241,10 @@ const ViewCart = () => {
                           </div>
                           <div className="text-right flex flex-col items-end justify-between">
                             <div>
-                              <p className="text-xl font-bold text-[#2490E0]">${item.discountPrice || item.price}.00</p>
-                              {item.discountPrice && (
+                              <p className="text-xl font-bold text-[#2490E0]">
+                                ${item.isDiscounted ? item.discountPrice : item.price}.00
+                              </p>
+                              {item.isDiscounted && (
                                 <p className="text-sm text-gray-400 line-through">${item.price}.00</p>
                               )}
                             </div>

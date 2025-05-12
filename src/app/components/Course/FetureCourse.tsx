@@ -16,6 +16,7 @@ interface CourseCardProps {
   isNew?: boolean;
   imageUrl?: string;
   _id: string;
+  isDiscounted: boolean;
 }
 
 export const FeatureCourse: React.FC<CourseCardProps> = ({
@@ -30,6 +31,7 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
   isNew,
   imageUrl,
   _id,
+  isDiscounted,
 }) => {
   const renderStars = (rating: number) => {
     const stars = [];
@@ -47,6 +49,8 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
     }
     return stars;
   };
+
+  console.log(isDiscounted, price, originalPrice);
 
   return (
     <div className="h-[280px] w-full flex items-center gap-6 p-2  bg-white rounded-2xl border border-zinc-200 ">
@@ -104,7 +108,7 @@ export const FeatureCourse: React.FC<CourseCardProps> = ({
                 currency: "USD",
               })}
             </span>
-            {originalPrice && (
+            {isDiscounted && originalPrice && (
               <span className="text-base line-through text-neutral-400">
                 {parseInt(originalPrice.toString()).toLocaleString("en-US", {
                   style: "currency",

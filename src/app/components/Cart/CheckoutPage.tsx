@@ -105,7 +105,8 @@ const CheckoutForm: React.FC<{ onBack: () => void; clientSecret: string }> = ({ 
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden">
                     <img
-                      src={item.coverImageUrl || "/img/Course/Course.png"}
+                      // src={item.coverImageUrl || "/img/Course/Course.png"}
+                      src={"/img/Course/new-course.png"}
                       alt={item.title}
                       className="w-full h-full object-cover"
                     />

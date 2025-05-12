@@ -27,7 +27,7 @@ export default function NotFound() {
   useEffect(() => {
     setLoadingCourses(true);
     api
-      .get("/courses")
+      .get("/courses?showBlocked=false")
       .then((res) => {
         // Some APIs return { data: [...] }, some just [...], so check
         const apiCourses = res.data?.data || res.data;

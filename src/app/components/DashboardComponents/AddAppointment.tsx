@@ -20,7 +20,7 @@ interface AvailableSlot {
 }
 
 const fetchCourses = async (): Promise<{ data: ICourse[] }> => {
-  const response = await api.get("/courses");
+  const response = await api.get("/courses?showBlocked=false");
   return response.data;
 };
 

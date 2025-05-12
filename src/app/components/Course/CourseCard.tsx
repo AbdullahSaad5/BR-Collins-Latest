@@ -31,8 +31,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = tr
     return stars;
   };
 
+  const isDiscounted = course.isDiscounted;
+  const discountPrice = course.discountPrice ?? course.price;
+  const originalPrice = course.price;
+
   return (
-    <div className="h-full min-w-[200px] w-full bg-white rounded-2xl shadow-md transition-all duration-300 border border-gray-200">
+    <div className="h-full min-w-[200px] w-full bg-white rounded-2xl shadow-md transition-all duration-300 border border-gray-200 relative">
       <Link href={`/course/${course._id}`}>
         <div className="p-4 flex flex-col h-full">
           {/* Hours Badge */}
@@ -50,6 +54,14 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = tr
           </div>
           {/* Divider */}
           <div className="w-full h-[1px] bg-gray-200 my-3"></div>
+          {/* Discount Badge above price */}
+          {isDiscounted && (
+            <div className="mb-2">
+              <span className="inline-block bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded">
+                Save {Math.round(100 - (discountPrice / originalPrice) * 100)}%
+              </span>
+            </div>
+          )}
           <div>
             {/* Rating */}
             <div className="flex items-center gap-2 mb-3">
@@ -60,10 +72,29 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, showInPersonButton = tr
           <div className="mt-auto pt-12">
             {/* Price */}
             <div className="font-bold text-xl text-gray-900 mb-2">
-              {parseInt(course.price.toString()).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-              })}
+              {isDiscounted ? (
+                <div className="flex flex-wrap items-center gap-2 w-full">
+                  <span className="text-2xl font-extrabold text-green-600">
+                    {parseInt(discountPrice.toString()).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </span>
+                  <span className="line-through text-gray-400 text-base font-medium">
+                    {parseInt(originalPrice.toString()).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </span>
+                </div>
+              ) : (
+                <span className="text-primary text-2xl font-bold">
+                  {parseInt(originalPrice.toString()).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </span>
+              )}
             </div>
             {/* View Details Link */}
             {/* <Link
