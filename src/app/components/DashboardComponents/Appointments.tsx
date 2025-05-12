@@ -521,6 +521,7 @@ const Appointments = () => {
           status={row.status}
           onStatusChange={(status) => handleStatusChange(row._id, status)}
           role={user.role}
+          originalAppointmentType={row.appointmentType}
         />
       ),
     },
