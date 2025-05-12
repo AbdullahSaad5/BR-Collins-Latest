@@ -837,8 +837,9 @@ const Appointments = () => {
         onSubmit={handleOffDayModalSubmit}
         appointmentSlotsForDate={(() => {
           if (!selectedOffDayDate) return { morning: false, afternoon: false };
-          // Find appointments for this date
+          // Find appointments for this date, ignoring cancelled ones
           const morningBooked = !!appointments?.some((appt) => {
+            if (appt.status === "cancelled") return false;
             const apptDate = new Date(appt.date);
             return (
               apptDate.getFullYear() === selectedOffDayDate.getFullYear() &&
@@ -849,6 +850,7 @@ const Appointments = () => {
             );
           });
           const afternoonBooked = !!appointments?.some((appt) => {
+            if (appt.status === "cancelled") return false;
             const apptDate = new Date(appt.date);
             return (
               apptDate.getFullYear() === selectedOffDayDate.getFullYear() &&
