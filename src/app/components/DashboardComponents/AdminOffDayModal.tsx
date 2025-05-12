@@ -57,22 +57,19 @@ const AdminOffDayModal: React.FC<AdminOffDayModalProps> = ({ isOpen, onClose, se
 
   const onSubmitForm = (formData: FormData) => {
     // Convert form data to JSON format
-    const usTimeZone = "America/New_York";
-    // Convert selectedDate and recurringUntil to US time zone and format as YYYY-MM-DD
-    const dateInUsTz = selectedDate
-      ? format(toZonedTime(selectedDate, usTimeZone), "yyyy-MM-dd", { timeZone: usTimeZone })
-      : format(toZonedTime(new Date(), usTimeZone), "yyyy-MM-dd", { timeZone: usTimeZone });
-    const recurringUntilInUsTz = formData.recurringUntil
-      ? format(toZonedTime(new Date(formData.recurringUntil), usTimeZone), "yyyy-MM-dd", { timeZone: usTimeZone })
-      : undefined;
 
+    // Convert selectedDate and recurringUntil to US time zone and format as ISO string (with offset)
+    const dateWithOffset = selectedDate?.toISOString();
+    const recurringUntilWithOffset = recurringUntil?.toISOString();
     const jsonData: OffDayFormData = {
-      date: dateInUsTz as any, // Cast as any to match OffDayFormData, backend should expect string
+      date: dateWithOffset as any, // Cast as any to match OffDayFormData, backend should expect string
       reason: formData.reason || undefined,
       isRecurring: formData.isRecurring === "true",
-      recurringUntil: recurringUntilInUsTz as any,
+      recurringUntil: recurringUntilWithOffset as any,
       disabledSlots: formData.disabledSlots as ("half-day-morning" | "half-day-afternoon")[],
     };
+
+    console.log(jsonData);
 
     onSubmit(jsonData);
     handleClose();

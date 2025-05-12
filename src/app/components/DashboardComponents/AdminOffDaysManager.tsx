@@ -142,8 +142,12 @@ const AdminOffDaysManager = () => {
   });
 
   const handleDateClick = (info: DateClickArg) => {
-    console.log(new Date(info.dateStr));
-    setSelectedDate(new Date(info.dateStr));
+    // info.dateStr is in 'YYYY-MM-DD' format
+    const [year, month, day] = info.dateStr.split("-").map(Number);
+    // JS months are 0-indexed
+    const localDate = new Date(year, month - 1, day, 0, 0, 0, 0);
+    console.log(localDate);
+    setSelectedDate(localDate);
     setIsModalOpen(true);
   };
 
@@ -157,6 +161,7 @@ const AdminOffDaysManager = () => {
   };
 
   const handleModalSubmit = (data: OffDayFormData) => {
+    console.log(data);
     addOffDayMutation.mutate(data);
   };
 
