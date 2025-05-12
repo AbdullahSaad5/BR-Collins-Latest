@@ -32,7 +32,7 @@ const ViewCourses = () => {
     select: (data) =>
       data.data.map((course: ICourse) => ({
         ...course,
-        rating: course.rating || Math.random() * (5 - 1) + 1,
+        rating: (course.rating || Math.random() * (5 - 3) + 3).toFixed(1),
         noOfStudents: course.noOfStudents || Math.floor(Math.random() * (1000 - 1) + 1),
       })),
   });
