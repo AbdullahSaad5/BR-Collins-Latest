@@ -423,7 +423,12 @@ const Appointments = () => {
   };
 
   const handleCalendarDateClick = (info: any) => {
-    setSelectedOffDayDate(info.date);
+    // setSelectedOffDayDate(info.date);
+    const [year, month, day] = info.dateStr.split("-").map(Number);
+    // JS months are 0-indexed
+    const localDate = new Date(year, month - 1, day, 0, 0, 0, 0);
+    console.log(localDate);
+    setSelectedOffDayDate(localDate);
     setIsOffDayModalOpen(true);
   };
 
