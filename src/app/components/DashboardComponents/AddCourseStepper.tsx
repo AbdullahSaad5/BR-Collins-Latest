@@ -240,6 +240,17 @@ export default function AddCourseStepper() {
     let isValid = true;
     const currentStepFields = getCurrentStepFields(activeStep);
 
+    // Additional check for categoryId on step 0
+    if (activeStep === 0) {
+      const categoryId = watch("categoryId");
+      const validCategoryIds = (categories || []).map((cat: { _id: string }) => cat._id);
+      if (!categoryId || !validCategoryIds.includes(categoryId)) {
+        isValid = false;
+        // Optionally, trigger validation for categoryId to show error
+        await trigger("categoryId");
+      }
+    }
+
     // Validate all fields in the current step
     for (const field of currentStepFields) {
       const result = await trigger(field as any);
@@ -694,12 +705,13 @@ export default function AddCourseStepper() {
             <React.Fragment key={step}>
               <div className="flex items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${index === activeStep
-                    ? "bg-primary text-white"
-                    : index < activeStep
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    index === activeStep
+                      ? "bg-primary text-white"
+                      : index < activeStep
                       ? "bg-green-500 text-white"
                       : "bg-gray-200 text-gray-600"
-                    }`}
+                  }`}
                 >
                   {index + 1}
                 </div>
