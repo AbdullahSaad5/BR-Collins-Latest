@@ -327,6 +327,8 @@ export default function AddCourseStepper() {
               label="Category *"
               description="Select the course category"
               {...register("categoryId")}
+              value={watch("categoryId")}
+              onChange={(e) => setValue("categoryId", e.target.value)}
               error={errors.categoryId?.message}
               select
               required
