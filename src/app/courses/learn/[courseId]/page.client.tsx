@@ -29,7 +29,7 @@ export default function CoursePageClient({ courseId }: { courseId: string }) {
   const { data: contentData, isLoading: contentLoading } = useQuery({
     queryKey: ["course-content", courseId],
     queryFn: async () => {
-      const response = await api.get(`/course-contents/course/${courseId}`, {
+      const response = await api.get(`/course-contents/course/${courseId}?showBlocked=false`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

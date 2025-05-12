@@ -14,13 +14,19 @@ interface AvailableSlot {
 interface AppointmentStatusMenuProps {
   status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled";
   role?: "student" | "admin" | "manager";
+  originalAppointmentType: "half-day-morning" | "half-day-afternoon" | "full-day";
   onStatusChange: (
     status: "scheduled" | "in-progress" | "completed" | "cancelled" | "rescheduled",
     data?: { date?: string; appointmentType?: "half-day-morning" | "half-day-afternoon" | "full-day"; reason?: string }
   ) => Promise<void>;
 }
 
-const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, role = "staff", onStatusChange }) => {
+const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({
+  status,
+  role = "staff",
+  originalAppointmentType,
+  onStatusChange,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<
@@ -36,6 +42,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, width: 0 });
   const [mounted, setMounted] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [showFullDayToHalfDayWarning, setShowFullDayToHalfDayWarning] = useState(false);
 
   // Add query for available slots
   const { data: availableSlots = [] } = useQuery({
@@ -64,6 +71,23 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
     const formattedDate = selectedDateObj.toISOString().split("T")[0];
     const dateSlots = availableSlots.find((slot: AvailableSlot) => slot.date === formattedDate);
     return dateSlots?.availableSlots?.includes(slotType) || false;
+  };
+
+  // Helper to determine allowed slot options
+  const getAllowedSlots = () => {
+    if (originalAppointmentType === "full-day") {
+      return ["half-day-morning", "half-day-afternoon", "full-day"];
+    } else {
+      return ["half-day-morning", "half-day-afternoon"];
+    }
+  };
+
+  // Helper to check if warning is needed
+  const isFullDayToHalfDay = () => {
+    return (
+      originalAppointmentType === "full-day" &&
+      (rescheduleData.slot === "half-day-morning" || rescheduleData.slot === "half-day-afternoon")
+    );
   };
 
   useEffect(() => {
@@ -105,6 +129,10 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
   };
 
   const handleConfirm = async () => {
+    if (pendingStatus === "rescheduled" && isFullDayToHalfDay() && !showFullDayToHalfDayWarning) {
+      setShowFullDayToHalfDayWarning(true);
+      return;
+    }
     if (pendingStatus !== null) {
       try {
         if (pendingStatus === "rescheduled") {
@@ -126,6 +154,7 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
     setPendingStatus(null);
     setRescheduleData({ newDate: "", slot: undefined });
     setCancelReason("");
+    setShowFullDayToHalfDayWarning(false);
   };
 
   const handleCancel = () => {
@@ -198,15 +227,21 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
                 required
               >
                 <option value="">Select a time slot</option>
-                <option value="half-day-morning" disabled={!isSlotAvailable("half-day-morning")}>
-                  Morning (8:00 AM - 12:00 PM)
-                </option>
-                <option value="half-day-afternoon" disabled={!isSlotAvailable("half-day-afternoon")}>
-                  Afternoon (1:00 PM - 5:00 PM)
-                </option>
-                <option value="full-day" disabled={!isSlotAvailable("full-day")}>
-                  Full Day (8:00 AM - 5:00 PM)
-                </option>
+                {getAllowedSlots().includes("half-day-morning") && (
+                  <option value="half-day-morning" disabled={!isSlotAvailable("half-day-morning")}>
+                    Morning (8:00 AM - 12:00 PM)
+                  </option>
+                )}
+                {getAllowedSlots().includes("half-day-afternoon") && (
+                  <option value="half-day-afternoon" disabled={!isSlotAvailable("half-day-afternoon")}>
+                    Afternoon (1:00 PM - 5:00 PM)
+                  </option>
+                )}
+                {getAllowedSlots().includes("full-day") && (
+                  <option value="full-day" disabled={!isSlotAvailable("full-day")}>
+                    Full Day (8:00 AM - 5:00 PM)
+                  </option>
+                )}
               </select>
             </div>
             {rescheduleData.newDate && (
@@ -399,6 +434,46 @@ const AppointmentStatusMenu: React.FC<AppointmentStatusMenuProps> = ({ status, r
                     } rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {showFullDayToHalfDayWarning &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 animate-slideIn">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-semibold text-neutral-900">Warning</h2>
+                  <button
+                    onClick={() => setShowFullDayToHalfDayWarning(false)}
+                    className="text-gray-500 hover:text-gray-700 transition-colors p-2 hover:bg-gray-100 rounded-full"
+                    aria-label="Close modal"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="p-4 bg-yellow-50 rounded-lg mb-4">
+                  <p className="text-base text-yellow-900">
+                    You are rescheduling a full-day appointment to a half-day slot. Are you sure you want to proceed?
+                  </p>
+                </div>
+                <div className="mt-8 flex justify-end gap-3">
+                  <button
+                    onClick={() => setShowFullDayToHalfDayWarning(false)}
+                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                  >
+                    Proceed
                   </button>
                 </div>
               </div>
