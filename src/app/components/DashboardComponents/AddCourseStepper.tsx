@@ -48,7 +48,10 @@ type CourseFormData = {
 };
 
 const courseSchema = z.object({
-  title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
+  title: z
+    .string()
+    .min(3, "Title is required and must be at least 3 characters")
+    .max(100, "Title must be less than 100 characters"),
   subtitle: z.string().max(200, "Subtitle must be less than 200 characters").optional(),
   slug: z.string().min(1, "Slug is required").max(100, "Slug must be less than 100 characters"),
   startDate: z.preprocess(
