@@ -47,8 +47,6 @@ type CourseFormData = {
   inPersonLearning: boolean;
 };
 
-const todayString = new Date().toISOString().split("T")[0];
-
 const courseSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title must be less than 100 characters"),
   subtitle: z.string().max(200, "Subtitle must be less than 200 characters").optional(),
@@ -198,6 +196,17 @@ export default function AddCourseStepper() {
     }
   }, [course, isEditMode, reset]);
 
+  useEffect(() => {
+    if (activeStep === 0) {
+      const categoryId = watch("categoryId");
+      const validCategoryIds = (categories || []).map((cat: { _id: string }) => cat._id);
+      if (categoryId && validCategoryIds.includes(categoryId)) {
+        trigger("categoryId");
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watch("categoryId"), activeStep, categories]);
+
   const {
     fields: learningPoints,
     append: appendLearningPoint,
@@ -315,8 +324,6 @@ export default function AddCourseStepper() {
     setSubmitClicked(false); // Reset for next time
     createCourseMutation.mutate(data);
   };
-
-  console.log(errors);
 
   const renderStepContent = (step: number) => {
     switch (step) {
@@ -514,15 +521,21 @@ export default function AddCourseStepper() {
               error={errors.startDate?.message}
               required
               type="date"
-              min={todayString}
+              min={new Date().toISOString().split("T")[0]}
               value={(() => {
                 const val = watch("startDate");
-                if (!val) return todayString;
+                if (!val) return "";
                 if (typeof val === "string") return val;
                 if (val instanceof Date && !isNaN(val.getTime())) return val.toISOString().split("T")[0];
-                return todayString;
+                return "";
               })()}
-              onChange={(e) => setValue("startDate", new Date(e.target.value))}
+              onChange={(e) => {
+                if (!e.target.value) {
+                  setValue("startDate", null as any);
+                } else {
+                  setValue("startDate", new Date(e.target.value));
+                }
+              }}
               name="startDate"
             />
           </>
